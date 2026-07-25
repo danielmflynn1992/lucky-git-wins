@@ -60,36 +60,36 @@
 :root {
   --radius: 0.375rem;
 
-  /* Brand — dark onyx + electric mint */
-  --ink: oklch(0.145 0 0);             /* #0A0A0A deep onyx bg */
-  --surface: oklch(0.205 0 0);         /* #171717 elevated surface */
-  --cream: oklch(0.985 0 0);           /* #FAFAFA near-white text */
-  --clover: oklch(0.795 0.18 158);     /* #00DF81 electric mint */
-  --clover-deep: oklch(0.68 0.16 158);
-  --gold: oklch(0.83 0.16 82);         /* #FBBF24 premium amber */
-  --gold-foreground: oklch(0.145 0 0);
-  --hot: oklch(0.66 0.22 25);          /* #EF4444 signal red */
-  --hot-foreground: oklch(1 0 0);
+  /* Brand — bright light theme, e-commerce focused */
+  --ink: #111827;                       /* Deep ink for text + dark accent surfaces (footer) */
+  --surface: #FFFFFF;                   /* Pure white cards */
+  --cream: #FFFFFF;                     /* Kept as white so cream-on-ink footer still contrasts */
+  --clover: #10B77F;                    /* Vibrant emerald CTA */
+  --clover-deep: #0E9E6C;
+  --gold: #F5B700;                      /* Lucky gold */
+  --gold-foreground: #111827;
+  --hot: #F97316;                       /* Bright tangerine urgency */
+  --hot-foreground: #FFFFFF;
 
-  /* Semantic mapping — dark by default */
-  --background: var(--ink);
-  --foreground: var(--cream);
-  --card: var(--surface);
-  --card-foreground: var(--cream);
-  --popover: var(--surface);
-  --popover-foreground: var(--cream);
+  /* Semantic mapping — light by default */
+  --background: #F3F4F6;                /* Cool light grey page bg */
+  --foreground: #111827;
+  --card: #FFFFFF;
+  --card-foreground: #111827;
+  --popover: #FFFFFF;
+  --popover-foreground: #111827;
   --primary: var(--clover);
-  --primary-foreground: oklch(0.145 0 0);
-  --secondary: oklch(0.26 0 0);
-  --secondary-foreground: var(--cream);
-  --muted: oklch(0.24 0 0);
-  --muted-foreground: oklch(0.68 0 0);
+  --primary-foreground: #FFFFFF;
+  --secondary: #F3F4F6;
+  --secondary-foreground: #111827;
+  --muted: #F3F4F6;
+  --muted-foreground: #6B7280;
   --accent: var(--gold);
   --accent-foreground: var(--gold-foreground);
   --destructive: var(--hot);
-  --destructive-foreground: oklch(1 0 0);
-  --border: oklch(0.28 0 0);           /* #27272A hairline */
-  --input: oklch(0.28 0 0);
+  --destructive-foreground: #FFFFFF;
+  --border: #E5E7EB;
+  --input: #E5E7EB;
   --ring: var(--clover);
 }
 
@@ -117,34 +117,33 @@
   }
 }
 
-/* Hero glow — mint & amber pooled into onyx */
+/* Hero backdrop — soft emerald wash on light grey */
 @utility bg-clover-pattern {
-  background-color: var(--ink);
+  background-color: #F3F4F6;
   background-image:
-    radial-gradient(circle at 15% 10%, rgba(0, 223, 129, 0.10) 0%, transparent 45%),
-    radial-gradient(circle at 85% 90%, rgba(251, 191, 36, 0.06) 0%, transparent 45%);
+    radial-gradient(circle at 15% 10%, rgba(16, 183, 127, 0.10) 0%, transparent 45%),
+    radial-gradient(circle at 85% 90%, rgba(245, 183, 0, 0.08) 0%, transparent 45%);
 }
 
-/* Ambient site-wide background glow — cinematic, very subtle */
+/* Ambient site-wide background — very subtle on light grey */
 @utility bg-ambient {
-  background-color: var(--ink);
+  background-color: #F3F4F6;
   background-image:
-    radial-gradient(ellipse 80% 60% at 20% 0%, rgba(0, 223, 129, 0.05) 0%, transparent 60%),
-    radial-gradient(ellipse 70% 50% at 90% 100%, rgba(0, 223, 129, 0.04) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 40% at 50% 50%, rgba(251, 191, 36, 0.025) 0%, transparent 70%);
+    radial-gradient(ellipse 80% 60% at 20% 0%, rgba(16, 183, 127, 0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 90% 100%, rgba(245, 183, 0, 0.05) 0%, transparent 60%);
   background-attachment: fixed;
 }
 
-/* Glassmorphism surface */
+/* "Glass" surface — repurposed as clean white card on light theme */
 @utility glass {
-  background-color: rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(14px) saturate(140%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background-color: #FFFFFF;
+  border: 1px solid var(--border);
+  box-shadow: 0 1px 2px rgba(17, 24, 39, 0.04), 0 1px 3px rgba(17, 24, 39, 0.05);
 }
 
-/* Cinematic gradient text — for the oversized H1 */
+/* Cinematic gradient text — ink to emerald */
 @utility text-gradient-mint {
-  background-image: linear-gradient(100deg, var(--cream) 0%, var(--cream) 40%, var(--clover) 100%);
+  background-image: linear-gradient(100deg, #111827 0%, #111827 55%, #10B77F 100%);
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
@@ -157,9 +156,9 @@
 @utility sticker-tilt-l { transform: none; }
 @utility sticker-tilt-r { transform: none; }
 
-/* Slim gradient progress fill — no shimmer animation */
+/* Slim gradient progress fill */
 @utility shimmer {
-  background: linear-gradient(90deg, var(--clover) 0%, color-mix(in oklab, var(--clover) 70%, var(--gold)) 100%);
+  background: linear-gradient(90deg, var(--clover) 0%, color-mix(in oklab, var(--clover) 60%, var(--gold)) 100%);
 }
 
 /* Restrained hover — opacity/colour only */
