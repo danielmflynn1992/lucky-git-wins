@@ -17,16 +17,16 @@ function NotFoundComponent() {
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <div className="font-mono text-xs tracking-[0.3em] text-muted-foreground">ERROR · 404</div>
-        <h1 className="mt-3 font-display text-4xl font-semibold text-foreground">Page not found</h1>
+        <h1 className="mt-3 font-display text-4xl font-semibold text-foreground">Nothing here, mate.</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist. Maybe it won a competition and cleared off.
+          Whatever you were after has done a runner. Probably won something and cleared off to Marbella.
         </p>
         <div className="mt-6">
           <Link
             to="/"
             className="inline-flex items-center justify-center rounded-md bg-clover text-primary-foreground px-5 py-2.5 text-sm font-semibold hover:bg-clover-deep"
           >
-            Go home
+            Right, take me home
           </Link>
         </div>
       </div>
@@ -44,11 +44,11 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
-        <h1 className="text-xl font-semibold tracking-tight text-foreground">
-          This page didn't load
+        <h1 className="font-display text-2xl font-semibold tracking-tight text-foreground">
+          Right, well that didn't work.
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Something went wrong on our end. You can try refreshing or head back home.
+          Something's fallen over on our end. Give it another go, or head home and pretend this never happened.
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
@@ -58,7 +58,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
             }}
             className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
-            Try again
+            Give it another go
           </button>
           <a
             href="/"
@@ -95,7 +95,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&display=swap",
       },
     ],
   }),
