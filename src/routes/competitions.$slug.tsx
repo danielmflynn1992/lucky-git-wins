@@ -7,6 +7,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { Countdown } from "@/components/Countdown";
 import { CompCard } from "@/components/CompCard";
 import { Button } from "@/components/ui/button";
+import { SkillQuestionModal } from "@/components/SkillQuestionModal";
 import { COMPETITIONS } from "@/lib/mock-comps";
 import { gbp, shortNumber } from "@/lib/format";
 import {
@@ -312,64 +313,15 @@ function CompDetail() {
       </main>
 
       {skillOpen && (
-        <div
-          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-end sm:items-center justify-center p-4"
-          onClick={() => !reserving && setSkillOpen(false)}
-        >
-          <div className="bg-background rounded-3xl border-2 border-white/10 w-full max-w-md p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
-            <div className="text-xs font-bold uppercase tracking-widest text-clover">Skill question · required</div>
-            <h3 className="mt-1 font-display text-2xl font-black">{c.skillQuestion.q}</h3>
-            <p className="text-xs text-muted-foreground mt-1">
-              You must answer correctly to reserve tickets — your answer is recorded with your order.
-            </p>
-            <div className="mt-4 space-y-2">
-              {c.skillQuestion.options.map((opt, i) => {
-                const chosen = answered === i;
-                const wrong = chosen && i !== c.skillQuestion.correct;
-                const right = chosen && i === c.skillQuestion.correct;
-                return (
-                  <button
-                    key={opt}
-                    onClick={() => setAnswered(i)}
-                    disabled={reserving}
-                    className={`w-full text-left rounded-xl border-2 px-4 py-3 font-semibold transition-colors flex items-center justify-between ${
-                      right ? "border-clover bg-clover/10" :
-                      wrong ? "border-hot bg-hot/10" :
-                      "border-white/10 bg-card hover:border-clover/40"
-                    }`}
-                  >
-                    <span>{String.fromCharCode(65 + i)}. {opt}</span>
-                    {right && <CheckCircle2 className="h-4 w-4 text-clover" />}
-                    {wrong && <AlertTriangle className="h-4 w-4 text-hot" />}
-                  </button>
-                );
-              })}
-            </div>
-            {answered !== null && (
-              <div className={`mt-3 text-sm font-bold ${canProceed ? "text-clover" : "text-hot"}`}>
-                {canProceed ? "Correct. You can continue." : "Not quite — pick another answer."}
-              </div>
-            )}
-            {reserveError && (
-              <div className="mt-3 text-xs text-hot flex items-start gap-1.5">
-                <AlertTriangle className="h-3.5 w-3.5 mt-0.5 shrink-0" />
-                <span>{reserveError}</span>
-              </div>
-            )}
-            <div className="mt-5 flex gap-2">
-              <Button variant="cream" onClick={() => setSkillOpen(false)} className="flex-1" disabled={reserving}>Cancel</Button>
-              <Button
-                variant="gold"
-                size="lg"
-                disabled={!canProceed || reserving}
-                onClick={handleReserve}
-                className="flex-1"
-              >
-                {reserving ? <><Loader2 className="h-4 w-4 animate-spin" /> Locking tickets…</> : "Reserve & checkout"}
-              </Button>
-            </div>
-          </div>
-        </div>
+        <SkillQuestionModal
+          question={c.skillQuestion}
+          answered={answered}
+          onAnswer={setAnswered}
+          onCancel={() => setSkillOpen(false)}
+          onConfirm={handleReserve}
+          reserving={reserving}
+          error={reserveError}
+        />
       )}
 
       <SiteFooter />
