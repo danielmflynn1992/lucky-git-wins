@@ -302,7 +302,7 @@ function Home() {
                 type="email"
                 required
                 placeholder="you@somewhere.co.uk"
-                className="flex-1 rounded-md bg-background/40 border border-cream/15 px-4 py-3 text-cream placeholder:text-cream/40 focus:outline-none focus:border-clover"
+                className="flex-1 rounded-md bg-background/40 border border-cream/15 px-4 py-3 text-cream placeholder:text-cream/70 focus:outline-none focus:border-clover"
               />
               <Button variant="git" size="lg" type="submit">Go on then</Button>
             </form>

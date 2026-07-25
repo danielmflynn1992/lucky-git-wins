@@ -106,9 +106,9 @@ function TickerItem({ c }: { c: LiveOdds }) {
       <TooltipContent
         side="bottom"
         align="start"
-        className="max-w-xs bg-ink text-cream border border-white/10 shadow-lg p-0 rounded-md"
+        className="max-w-xs bg-ink text-cream border border-border shadow-lg p-0 rounded-md"
       >
-        <div className="px-3 py-2 border-b border-white/10">
+        <div className="px-3 py-2 border-b border-border">
           <div className="text-[10px] font-mono uppercase tracking-[0.2em] text-clover">{c.category}</div>
           <div className="font-display text-sm font-bold text-cream leading-tight mt-0.5">{c.title}</div>
         </div>
@@ -140,7 +140,7 @@ function TickerItem({ c }: { c: LiveOdds }) {
             hint="Automatic draw as soon as the timer hits zero."
           />
         </dl>
-        <div className="px-3 py-2 border-t border-white/10 text-[10px] text-cream/60 leading-snug">
+        <div className="px-3 py-2 border-t border-border text-[10px] text-cream/60 leading-snug">
           Tap to open. Odds update live as tickets sell.
         </div>
       </TooltipContent>

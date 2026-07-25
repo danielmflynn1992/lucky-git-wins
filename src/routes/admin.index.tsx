@@ -34,8 +34,8 @@ function Admin() {
           <Stat label="Revenue" value={gbp(totalRevenue)} accent />
         </div>
 
-        <div className="mt-8 rounded-2xl bg-card border-2 border-white/5 overflow-hidden">
-          <div className="p-4 flex items-center justify-between border-b border-white/10">
+        <div className="mt-8 rounded-2xl bg-card border-2 border-border overflow-hidden">
+          <div className="p-4 flex items-center justify-between border-b border-border">
             <h2 className="font-display text-lg font-bold">Competitions</h2>
             <div className="flex gap-2">
               <Button variant="cream" size="sm"><Pause className="h-3.5 w-3.5" /> Pause selected</Button>
@@ -45,7 +45,7 @@ function Admin() {
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead className="bg-background">
-                <tr className="text-left text-xs uppercase tracking-wider text-foreground/60">
+                <tr className="text-left text-xs uppercase tracking-wider text-muted-foreground">
                   <th className="p-3"><input type="checkbox" /></th>
                   <th className="p-3">Prize</th>
                   <th className="p-3">Category</th>
@@ -57,7 +57,7 @@ function Admin() {
               </thead>
               <tbody>
                 {COMPETITIONS.map((c) => (
-                  <tr key={c.slug} className="border-t border-white/5">
+                  <tr key={c.slug} className="border-t border-border">
                     <td className="p-3"><input type="checkbox" /></td>
                     <td className="p-3">
                       <div className="flex items-center gap-2">
@@ -97,8 +97,8 @@ function Admin() {
 
 function Stat({ label, value, accent = false }: { label: string; value: string; accent?: boolean }) {
   return (
-    <div className={`rounded-2xl p-5 border-2 ${accent ? "bg-clover text-cream border-clover" : "bg-card border-white/5"}`}>
-      <div className={`text-xs uppercase tracking-widest font-bold ${accent ? "text-cream/70" : "text-foreground/60"}`}>{label}</div>
+    <div className={`rounded-2xl p-5 border-2 ${accent ? "bg-clover text-cream border-clover" : "bg-card border-border"}`}>
+      <div className={`text-xs uppercase tracking-widest font-bold ${accent ? "text-cream/70" : "text-muted-foreground"}`}>{label}</div>
       <div className="font-display text-3xl font-black mt-1">{value}</div>
     </div>
   );

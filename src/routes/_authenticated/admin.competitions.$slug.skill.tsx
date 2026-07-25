@@ -58,7 +58,7 @@ function SkillEditorGate() {
       <div className="min-h-screen flex flex-col">
         <SiteNav />
         <main className="mx-auto max-w-3xl px-4 py-16 flex-1 flex items-center justify-center">
-          <Loader2 className="h-5 w-5 animate-spin text-foreground/50" />
+          <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
         </main>
         <SiteFooter />
       </div>
@@ -84,7 +84,7 @@ function SkillEditorGate() {
               {claiming && <Loader2 className="h-4 w-4 animate-spin mr-2" />}
               Claim admin role
             </Button>
-            <Link to="/" className="text-sm text-foreground/60 hover:text-foreground">
+            <Link to="/" className="text-sm text-muted-foreground hover:text-foreground">
               Go home
             </Link>
           </div>
@@ -180,24 +180,24 @@ function SkillEditor() {
 
         <div className="mt-6 grid gap-6 lg:grid-cols-2">
           {/* Editor */}
-          <section className="rounded-2xl bg-card border-2 border-white/5 p-5">
+          <section className="rounded-2xl bg-card border-2 border-border p-5">
             <h2 className="font-display text-lg font-bold">Editor</h2>
             <p className="text-xs text-muted-foreground mt-1">
               A skill question is required by UK prize-comp law. Keep it easy but not trivial.
             </p>
 
-            <label className="block mt-5 text-xs uppercase tracking-widest font-bold text-foreground/60">Question</label>
+            <label className="block mt-5 text-xs uppercase tracking-widest font-bold text-muted-foreground">Question</label>
             <textarea
               value={question.q}
               onChange={(e) => setQuestion((q) => ({ ...q, q: e.target.value }))}
               rows={2}
               maxLength={300}
               placeholder="Which of these is a German car manufacturer?"
-              className="mt-1 w-full rounded-xl bg-background border-2 border-white/10 px-3 py-2 text-sm focus:outline-none focus:border-clover"
+              className="mt-1 w-full rounded-xl bg-background border-2 border-border px-3 py-2 text-sm focus:outline-none focus:border-clover"
             />
 
             <div className="mt-4 space-y-2">
-              <div className="text-xs uppercase tracking-widest font-bold text-foreground/60">
+              <div className="text-xs uppercase tracking-widest font-bold text-muted-foreground">
                 Answer options — pick the correct one
               </div>
               {question.options.map((opt, i) => (
@@ -218,7 +218,7 @@ function SkillEditor() {
                     maxLength={120}
                     placeholder={`Option ${String.fromCharCode(65 + i)}`}
                     className={`flex-1 rounded-xl bg-background border-2 px-3 py-2 text-sm focus:outline-none ${
-                      question.correct === i ? "border-clover" : "border-white/10 focus:border-clover/60"
+                      question.correct === i ? "border-clover" : "border-border focus:border-clover/60"
                     }`}
                   />
                   {question.correct === i && (
@@ -253,7 +253,7 @@ function SkillEditor() {
           </section>
 
           {/* Preview */}
-          <section className="rounded-2xl bg-card border-2 border-white/5 p-5">
+          <section className="rounded-2xl bg-card border-2 border-border p-5">
             <div className="flex items-center justify-between">
               <h2 className="font-display text-lg font-bold">Live preview</h2>
               <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
@@ -263,7 +263,7 @@ function SkillEditor() {
             <p className="text-xs text-muted-foreground mt-1">
               Click an answer to test — correct highlights green, wrong flashes red.
             </p>
-            <div className="mt-5 rounded-2xl bg-black/40 border border-white/5 p-4">
+            <div className="mt-5 rounded-2xl bg-black/40 border border-border p-4">
               <SkillQuestionModal
                 inline
                 question={question}

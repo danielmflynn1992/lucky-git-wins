@@ -3,7 +3,7 @@ import { Logo } from "./Logo";
 
 export function SiteFooter() {
   return (
-    <footer className="mt-24 bg-ink text-cream border-t border-white/10">
+    <footer className="mt-24 bg-ink text-cream border-t border-border">
       <div className="mx-auto max-w-7xl px-4 py-12 grid gap-10 md:grid-cols-4">
         <div className="md:col-span-1">
           <Logo variant="stacked" />
@@ -34,13 +34,13 @@ export function SiteFooter() {
             <li><Link to="/about" className="hover:text-gold">About</Link></li>
             <li><Link to="/contact" className="hover:text-gold">Contact & Support</Link></li>
           </ul>
-          <p className="mt-6 text-xs text-cream/40 leading-relaxed">
+          <p className="mt-6 text-xs text-cream/70 leading-relaxed">
             Lucky Git Comps Ltd. Registered in England & Wales.<br />
             18+ only. Please play responsibly.
           </p>
         </div>
       </div>
-      <div className="border-t border-cream/10 py-4 text-center text-[11px] font-mono tracking-wider text-cream/40">
+      <div className="border-t border-cream/10 py-4 text-center text-[11px] font-mono tracking-wider text-cream/70">
         © {new Date().getFullYear()} LUCKYGITCOMPS · SOMEONE'S GOT TO WIN IT
       </div>
     </footer>

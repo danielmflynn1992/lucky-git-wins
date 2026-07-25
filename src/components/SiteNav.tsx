@@ -46,7 +46,7 @@ export function SiteNav() {
               </Link>
               <button
                 onClick={() => supabase.auth.signOut()}
-                className="hidden sm:inline-flex px-3 py-2 rounded-md text-sm font-medium text-foreground/60 hover:text-foreground transition-colors"
+                className="hidden sm:inline-flex px-3 py-2 rounded-md text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
               >
                 Sign out
               </button>

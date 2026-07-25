@@ -70,7 +70,7 @@ function AuthPage() {
 
         <form onSubmit={submit} className="mt-6 space-y-4">
           <label className="block">
-            <div className="text-xs uppercase tracking-widest text-foreground/60 mb-1">Email</div>
+            <div className="text-xs uppercase tracking-widest text-muted-foreground mb-1">Email</div>
             <input
               type="email"
               required
@@ -80,7 +80,7 @@ function AuthPage() {
             />
           </label>
           <label className="block">
-            <div className="text-xs uppercase tracking-widest text-foreground/60 mb-1">Password</div>
+            <div className="text-xs uppercase tracking-widest text-muted-foreground mb-1">Password</div>
             <input
               type="password"
               required
@@ -99,14 +99,14 @@ function AuthPage() {
 
         <button
           onClick={() => setMode(mode === "signin" ? "signup" : "signin")}
-          className="mt-4 text-sm text-foreground/60 hover:text-foreground"
+          className="mt-4 text-sm text-muted-foreground hover:text-foreground"
         >
           {mode === "signin"
             ? "New here? Create an account"
             : "Already have an account? Sign in"}
         </button>
 
-        <p className="mt-6 text-xs text-foreground/50">
+        <p className="mt-6 text-xs text-muted-foreground">
           <Link to="/" className="underline">Back to home</Link>
         </p>
       </main>
