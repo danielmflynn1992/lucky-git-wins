@@ -10,9 +10,17 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WinnersRouteImport } from './routes/winners'
+import { Route as TermsRouteImport } from './routes/terms'
+import { Route as ResponsiblePlayRouteImport } from './routes/responsible-play'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as LiveDrawsRouteImport } from './routes/live-draws'
+import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as FreePostalEntryRouteImport } from './routes/free-postal-entry'
+import { Route as FaqRouteImport } from './routes/faq'
+import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CheckoutRouteImport } from './routes/checkout'
+import { Route as AccountRouteImport } from './routes/account'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CompetitionsIndexRouteImport } from './routes/competitions.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
@@ -24,9 +32,29 @@ const WinnersRoute = WinnersRouteImport.update({
   path: '/winners',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResponsiblePlayRoute = ResponsiblePlayRouteImport.update({
+  id: '/responsible-play',
+  path: '/responsible-play',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LiveDrawsRoute = LiveDrawsRouteImport.update({
   id: '/live-draws',
   path: '/live-draws',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HowItWorksRoute = HowItWorksRouteImport.update({
+  id: '/how-it-works',
+  path: '/how-it-works',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FreePostalEntryRoute = FreePostalEntryRouteImport.update({
@@ -34,9 +62,29 @@ const FreePostalEntryRoute = FreePostalEntryRouteImport.update({
   path: '/free-postal-entry',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CheckoutRoute = CheckoutRouteImport.update({
   id: '/checkout',
   path: '/checkout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AccountRoute = AccountRouteImport.update({
+  id: '/account',
+  path: '/account',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -67,9 +115,17 @@ const AdminCompetitionsNewRoute = AdminCompetitionsNewRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/account': typeof AccountRoute
   '/checkout': typeof CheckoutRoute
+  '/contact': typeof ContactRoute
+  '/faq': typeof FaqRoute
   '/free-postal-entry': typeof FreePostalEntryRoute
+  '/how-it-works': typeof HowItWorksRoute
   '/live-draws': typeof LiveDrawsRoute
+  '/privacy': typeof PrivacyRoute
+  '/responsible-play': typeof ResponsiblePlayRoute
+  '/terms': typeof TermsRoute
   '/winners': typeof WinnersRoute
   '/competitions/$slug': typeof CompetitionsSlugRoute
   '/admin/': typeof AdminIndexRoute
@@ -78,9 +134,17 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/account': typeof AccountRoute
   '/checkout': typeof CheckoutRoute
+  '/contact': typeof ContactRoute
+  '/faq': typeof FaqRoute
   '/free-postal-entry': typeof FreePostalEntryRoute
+  '/how-it-works': typeof HowItWorksRoute
   '/live-draws': typeof LiveDrawsRoute
+  '/privacy': typeof PrivacyRoute
+  '/responsible-play': typeof ResponsiblePlayRoute
+  '/terms': typeof TermsRoute
   '/winners': typeof WinnersRoute
   '/competitions/$slug': typeof CompetitionsSlugRoute
   '/admin': typeof AdminIndexRoute
@@ -90,9 +154,17 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/account': typeof AccountRoute
   '/checkout': typeof CheckoutRoute
+  '/contact': typeof ContactRoute
+  '/faq': typeof FaqRoute
   '/free-postal-entry': typeof FreePostalEntryRoute
+  '/how-it-works': typeof HowItWorksRoute
   '/live-draws': typeof LiveDrawsRoute
+  '/privacy': typeof PrivacyRoute
+  '/responsible-play': typeof ResponsiblePlayRoute
+  '/terms': typeof TermsRoute
   '/winners': typeof WinnersRoute
   '/competitions/$slug': typeof CompetitionsSlugRoute
   '/admin/': typeof AdminIndexRoute
@@ -103,9 +175,17 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/about'
+    | '/account'
     | '/checkout'
+    | '/contact'
+    | '/faq'
     | '/free-postal-entry'
+    | '/how-it-works'
     | '/live-draws'
+    | '/privacy'
+    | '/responsible-play'
+    | '/terms'
     | '/winners'
     | '/competitions/$slug'
     | '/admin/'
@@ -114,9 +194,17 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/about'
+    | '/account'
     | '/checkout'
+    | '/contact'
+    | '/faq'
     | '/free-postal-entry'
+    | '/how-it-works'
     | '/live-draws'
+    | '/privacy'
+    | '/responsible-play'
+    | '/terms'
     | '/winners'
     | '/competitions/$slug'
     | '/admin'
@@ -125,9 +213,17 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/about'
+    | '/account'
     | '/checkout'
+    | '/contact'
+    | '/faq'
     | '/free-postal-entry'
+    | '/how-it-works'
     | '/live-draws'
+    | '/privacy'
+    | '/responsible-play'
+    | '/terms'
     | '/winners'
     | '/competitions/$slug'
     | '/admin/'
@@ -137,9 +233,17 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  AccountRoute: typeof AccountRoute
   CheckoutRoute: typeof CheckoutRoute
+  ContactRoute: typeof ContactRoute
+  FaqRoute: typeof FaqRoute
   FreePostalEntryRoute: typeof FreePostalEntryRoute
+  HowItWorksRoute: typeof HowItWorksRoute
   LiveDrawsRoute: typeof LiveDrawsRoute
+  PrivacyRoute: typeof PrivacyRoute
+  ResponsiblePlayRoute: typeof ResponsiblePlayRoute
+  TermsRoute: typeof TermsRoute
   WinnersRoute: typeof WinnersRoute
   CompetitionsSlugRoute: typeof CompetitionsSlugRoute
   AdminIndexRoute: typeof AdminIndexRoute
@@ -156,11 +260,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WinnersRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/responsible-play': {
+      id: '/responsible-play'
+      path: '/responsible-play'
+      fullPath: '/responsible-play'
+      preLoaderRoute: typeof ResponsiblePlayRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/live-draws': {
       id: '/live-draws'
       path: '/live-draws'
       fullPath: '/live-draws'
       preLoaderRoute: typeof LiveDrawsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/how-it-works': {
+      id: '/how-it-works'
+      path: '/how-it-works'
+      fullPath: '/how-it-works'
+      preLoaderRoute: typeof HowItWorksRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/free-postal-entry': {
@@ -170,11 +302,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FreePostalEntryRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/checkout': {
       id: '/checkout'
       path: '/checkout'
       fullPath: '/checkout'
       preLoaderRoute: typeof CheckoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/account': {
+      id: '/account'
+      path: '/account'
+      fullPath: '/account'
+      preLoaderRoute: typeof AccountRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -217,9 +377,17 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  AccountRoute: AccountRoute,
   CheckoutRoute: CheckoutRoute,
+  ContactRoute: ContactRoute,
+  FaqRoute: FaqRoute,
   FreePostalEntryRoute: FreePostalEntryRoute,
+  HowItWorksRoute: HowItWorksRoute,
   LiveDrawsRoute: LiveDrawsRoute,
+  PrivacyRoute: PrivacyRoute,
+  ResponsiblePlayRoute: ResponsiblePlayRoute,
+  TermsRoute: TermsRoute,
   WinnersRoute: WinnersRoute,
   CompetitionsSlugRoute: CompetitionsSlugRoute,
   AdminIndexRoute: AdminIndexRoute,
@@ -229,3 +397,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
