@@ -1,13 +1,17 @@
 import { Link } from "@tanstack/react-router";
+import { useState } from "react";
 import type { Competition } from "@/lib/mock-comps";
 import { gbp } from "@/lib/format";
 import { Countdown } from "./Countdown";
-import { ChevronRight } from "lucide-react";
+import { QuickAddDialog } from "./QuickAddDialog";
+import { ChevronRight, Plus } from "lucide-react";
 
 export function CompRow({ c }: { c: Competition }) {
   const pct = Math.round((c.ticketsSold / c.totalTickets) * 100);
   const remaining = c.totalTickets - c.ticketsSold;
+  const [quickOpen, setQuickOpen] = useState(false);
   return (
+    <>
     <Link
       to="/competitions/$slug"
       params={{ slug: c.slug }}
@@ -37,10 +41,22 @@ export function CompRow({ c }: { c: Competition }) {
       {/* Right */}
       <div className="flex flex-col items-end gap-1.5 shrink-0">
         <Countdown target={c.endsAt} compact />
-        <div className="inline-flex items-center gap-1 rounded-md bg-clover text-primary-foreground px-3 py-2 text-xs font-bold uppercase tracking-wide group-hover:bg-clover-deep transition-colors">
-          Enter <ChevronRight className="h-3.5 w-3.5" />
+        <div className="flex items-center gap-1.5">
+          <button
+            type="button"
+            aria-label={`Quick add tickets for ${c.title}`}
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); setQuickOpen(true); }}
+            className="inline-flex items-center gap-1 rounded-md bg-gold text-gold-foreground px-2.5 py-2 text-xs font-bold uppercase tracking-wide hover:bg-gold/90 transition-colors"
+          >
+            <Plus className="h-3.5 w-3.5" /> Add
+          </button>
+          <div className="inline-flex items-center gap-1 rounded-md bg-clover text-primary-foreground px-3 py-2 text-xs font-bold uppercase tracking-wide group-hover:bg-clover-deep transition-colors">
+            Enter <ChevronRight className="h-3.5 w-3.5" />
+          </div>
         </div>
       </div>
     </Link>
+    <QuickAddDialog comp={c} open={quickOpen} onClose={() => setQuickOpen(false)} />
+    </>
   );
 }
