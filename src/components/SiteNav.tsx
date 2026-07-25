@@ -24,7 +24,7 @@ export function SiteNav() {
   return (
     <header className="sticky top-0 z-40 shadow-sm">
       {/* Tier 1 — promo strip */}
-      <div className="bg-hot text-hot-foreground text-center text-xs sm:text-sm font-semibold tracking-wide py-2 px-4">
+      <div className="bg-hot text-hot-foreground text-center text-[11px] sm:text-xs md:text-sm font-bold uppercase tracking-[0.14em] py-2.5 px-4">
         <Link to="/how-it-works" className="hover:underline underline-offset-4">
           REFER A MATE = FREE TICKETS
         </Link>
@@ -32,13 +32,13 @@ export function SiteNav() {
 
       {/* Tier 2 — utility (socials left, auth right) */}
       <div className="bg-ink text-cream">
-        <div className="mx-auto max-w-7xl px-4 h-9 flex items-center justify-between text-xs">
-          <div className="flex items-center gap-3 text-cream/80">
-            <a href="https://instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram" className="hover:text-gold transition-colors"><Instagram className="h-4 w-4" /></a>
-            <a href="https://facebook.com" target="_blank" rel="noreferrer" aria-label="Facebook" className="hover:text-gold transition-colors"><Facebook className="h-4 w-4" /></a>
-            <a href="mailto:hello@luckygitcomps.co.uk" aria-label="Email" className="hover:text-gold transition-colors"><Mail className="h-4 w-4" /></a>
+        <div className="mx-auto max-w-7xl px-4 h-10 flex items-center justify-between text-[11px] md:text-xs">
+          <div className="flex items-center gap-4 text-cream/80">
+            <a href="https://instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram" className="hover:text-gold transition-colors"><Instagram className="h-[15px] w-[15px]" /></a>
+            <a href="https://facebook.com" target="_blank" rel="noreferrer" aria-label="Facebook" className="hover:text-gold transition-colors"><Facebook className="h-[15px] w-[15px]" /></a>
+            <a href="mailto:hello@luckygitcomps.co.uk" aria-label="Email" className="hover:text-gold transition-colors"><Mail className="h-[15px] w-[15px]" /></a>
           </div>
-          <div className="flex items-center gap-4 uppercase tracking-wider font-semibold">
+          <div className="flex items-center gap-5 uppercase tracking-[0.16em] font-bold">
             {signedIn ? (
               <>
                 <Link to="/account" className="hover:text-gold transition-colors">Account</Link>
@@ -58,14 +58,14 @@ export function SiteNav() {
 
       {/* Tier 3 — main bar: nav | centered logo | cart */}
       <div className="bg-card/95 backdrop-blur-md border-b border-border">
-        <div className="mx-auto max-w-7xl px-4 h-20 grid grid-cols-[1fr_auto_1fr] items-center gap-4">
+        <div className="mx-auto max-w-7xl px-4 md:px-6 h-16 md:h-24 grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-4">
           {/* Left nav */}
-          <nav className="hidden lg:flex items-center justify-end gap-6">
+          <nav className="hidden lg:flex items-center justify-end gap-7 min-w-0">
             {leftLinks.map((l) => (
               <Link
                 key={l.to}
                 to={l.to}
-                className="text-sm font-semibold uppercase tracking-wider text-foreground/80 hover:text-clover transition-colors"
+                className="text-[13px] font-bold uppercase tracking-[0.14em] text-foreground/85 hover:text-clover transition-colors whitespace-nowrap"
                 activeProps={{ className: "text-clover" }}
               >
                 {l.label}
@@ -83,18 +83,18 @@ export function SiteNav() {
           </button>
 
           {/* Centered logo */}
-          <div className="justify-self-center">
+          <div className="justify-self-center shrink-0">
             <Logo />
           </div>
 
           {/* Right nav + cart */}
-          <div className="flex items-center justify-end gap-6">
-            <nav className="hidden lg:flex items-center gap-6">
+          <div className="flex items-center justify-end gap-5 md:gap-7 min-w-0">
+            <nav className="hidden lg:flex items-center gap-7">
               {rightLinks.map((l) => (
                 <Link
                   key={l.to + l.label}
                   to={l.to}
-                  className="text-sm font-semibold uppercase tracking-wider text-foreground/80 hover:text-clover transition-colors"
+                  className="text-[13px] font-bold uppercase tracking-[0.14em] text-foreground/85 hover:text-clover transition-colors whitespace-nowrap"
                   activeProps={{ className: "text-clover" }}
                 >
                   {l.label}
@@ -104,7 +104,7 @@ export function SiteNav() {
             <Link
               to="/checkout"
               aria-label="Basket"
-              className="relative inline-flex items-center justify-center h-10 w-10 rounded-full border border-border hover:border-clover hover:text-clover transition-colors"
+              className="relative inline-flex shrink-0 items-center justify-center h-10 w-10 rounded-full border border-border hover:border-clover hover:text-clover transition-colors"
             >
               <ShoppingBag className="h-5 w-5" />
               <span className="absolute -top-1 -right-1 h-4 min-w-4 px-1 rounded-full bg-clover text-primary-foreground text-[10px] font-bold flex items-center justify-center">0</span>
