@@ -93,21 +93,33 @@ export function newReservationToken(): string {
   return crypto.randomUUID();
 }
 
-export async function reserveLuckyDip(slug: string, qty: number, token: string): Promise<number[]> {
+export async function reserveLuckyDip(
+  slug: string,
+  qty: number,
+  token: string,
+  skillAnswer: number,
+): Promise<number[]> {
   const { data, error } = await supabase.rpc("reserve_lucky_dip", {
     p_slug: slug,
     p_qty: qty,
     p_token: token,
+    p_skill_answer: skillAnswer,
   });
   if (error) throw new Error(cleanRpcError(error.message));
   return (data as number[]) ?? [];
 }
 
-export async function reserveNumbers(slug: string, numbers: number[], token: string): Promise<number[]> {
+export async function reserveNumbers(
+  slug: string,
+  numbers: number[],
+  token: string,
+  skillAnswer: number,
+): Promise<number[]> {
   const { data, error } = await supabase.rpc("reserve_specific_numbers", {
     p_slug: slug,
     p_numbers: numbers,
     p_token: token,
+    p_skill_answer: skillAnswer,
   });
   if (error) throw new Error(cleanRpcError(error.message));
   return (data as number[]) ?? [];
