@@ -60,36 +60,37 @@
 :root {
   --radius: 0.375rem;
 
-  /* Brand — bright light theme, e-commerce focused */
-  --ink: #111827;                       /* Deep ink for text + dark accent surfaces (footer) */
-  --surface: #FFFFFF;                   /* Pure white cards */
-  --cream: #FFFFFF;                     /* Kept as white so cream-on-ink footer still contrasts */
-  --clover: #10B77F;                    /* Vibrant emerald CTA */
-  --clover-deep: #0E9E6C;
-  --gold: #F5B700;                      /* Lucky gold */
-  --gold-foreground: #111827;
-  --hot: #F97316;                       /* Bright tangerine urgency */
+  /* Brand — pulled directly from the mascot lockup:
+     deep sign-writer emerald, warm brass gold, cream sheepskin. */
+  --ink: #1B2A22;                       /* Warm near-black, tuned to emerald */
+  --surface: #FFFFFF;                   /* White cards */
+  --cream: #FBF3E2;                     /* Sheepskin cream */
+  --clover: #0F6B3F;                    /* Deep emerald — logo fill */
+  --clover-deep: #0A4F2E;               /* Darker emerald for hovers */
+  --gold: #E8B54D;                      /* Brass gold — logo outline */
+  --gold-foreground: #1B2A22;
+  --hot: #C0392B;                       /* Warm brick red — urgency that plays with emerald/gold */
   --hot-foreground: #FFFFFF;
 
   /* Semantic mapping — light by default */
-  --background: #F3F4F6;                /* Cool light grey page bg */
-  --foreground: #111827;
+  --background: #F6F1E4;                /* Warm cream page bg (paler sheepskin) */
+  --foreground: #1B2A22;
   --card: #FFFFFF;
-  --card-foreground: #111827;
+  --card-foreground: #1B2A22;
   --popover: #FFFFFF;
-  --popover-foreground: #111827;
+  --popover-foreground: #1B2A22;
   --primary: var(--clover);
   --primary-foreground: #FFFFFF;
-  --secondary: #F3F4F6;
-  --secondary-foreground: #111827;
-  --muted: #F3F4F6;
-  --muted-foreground: #6B7280;
+  --secondary: #EFE7D3;
+  --secondary-foreground: #1B2A22;
+  --muted: #EFE7D3;
+  --muted-foreground: #6B6152;
   --accent: var(--gold);
   --accent-foreground: var(--gold-foreground);
   --destructive: var(--hot);
   --destructive-foreground: #FFFFFF;
-  --border: #E5E7EB;
-  --input: #E5E7EB;
+  --border: #E4DAC2;
+  --input: #E4DAC2;
   --ring: var(--clover);
 }
 
@@ -119,18 +120,18 @@
 
 /* Hero backdrop — soft emerald wash on light grey */
 @utility bg-clover-pattern {
-  background-color: #F3F4F6;
+  background-color: #F6F1E4;
   background-image:
-    radial-gradient(circle at 15% 10%, rgba(16, 183, 127, 0.10) 0%, transparent 45%),
-    radial-gradient(circle at 85% 90%, rgba(245, 183, 0, 0.08) 0%, transparent 45%);
+    radial-gradient(circle at 15% 10%, rgba(15, 107, 63, 0.12) 0%, transparent 45%),
+    radial-gradient(circle at 85% 90%, rgba(232, 181, 77, 0.14) 0%, transparent 45%);
 }
 
 /* Ambient site-wide background — very subtle on light grey */
 @utility bg-ambient {
-  background-color: #F3F4F6;
+  background-color: #F6F1E4;
   background-image:
-    radial-gradient(ellipse 80% 60% at 20% 0%, rgba(16, 183, 127, 0.06) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 40% at 90% 100%, rgba(245, 183, 0, 0.05) 0%, transparent 60%);
+    radial-gradient(ellipse 80% 60% at 20% 0%, rgba(15, 107, 63, 0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 90% 100%, rgba(232, 181, 77, 0.09) 0%, transparent 60%);
   background-attachment: fixed;
 }
 
@@ -138,12 +139,12 @@
 @utility glass {
   background-color: #FFFFFF;
   border: 1px solid var(--border);
-  box-shadow: 0 1px 2px rgba(17, 24, 39, 0.04), 0 1px 3px rgba(17, 24, 39, 0.05);
+  box-shadow: 0 1px 2px rgba(27, 42, 34, 0.05), 0 1px 3px rgba(27, 42, 34, 0.06);
 }
 
 /* Cinematic gradient text — ink to emerald */
 @utility text-gradient-mint {
-  background-image: linear-gradient(100deg, #111827 0%, #111827 55%, #10B77F 100%);
+  background-image: linear-gradient(100deg, #1B2A22 0%, #1B2A22 50%, #0F6B3F 100%);
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
