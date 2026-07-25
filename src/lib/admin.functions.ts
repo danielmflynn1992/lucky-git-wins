@@ -76,3 +76,24 @@ export const createCompetition = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { id: newId as string, slug };
   });
+
+const skillInput = z.object({
+  slug: z.string().trim().min(1).max(80),
+  skillQuestion: z.object({
+    q: z.string().trim().min(3).max(300),
+    options: z.array(z.string().trim().min(1).max(120)).length(4),
+    correct: z.number().int().min(0).max(3),
+  }),
+});
+
+export const updateSkillQuestion = createServerFn({ method: "POST" })
+  .inputValidator((data: unknown) => skillInput.parse(data))
+  .handler(async ({ data }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { error } = await supabaseAdmin
+      .from("competitions")
+      .update({ skill_question: data.skillQuestion })
+      .eq("slug", data.slug);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
