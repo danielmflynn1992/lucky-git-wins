@@ -123,17 +123,7 @@ function PastDrawsPage() {
 
                   <div className="col-span-12 md:col-span-4">
                     <div className="font-display text-lg font-bold leading-tight">
-                      {d.competition_id ? (
-                        <Link
-                          to="/competitions/$slug"
-                          params={{ slug: d.competition_id }}
-                          className="hover:text-clover transition-colors"
-                        >
-                          {d.competition_title}
-                        </Link>
-                      ) : (
-                        d.competition_title
-                      )}
+                      {d.competition_title}
                     </div>
                     <div className="text-sm text-foreground/70 mt-0.5">🏆 {d.prize}</div>
                   </div>
