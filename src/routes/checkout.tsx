@@ -4,10 +4,10 @@ import { z } from "zod";
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
 import { Button } from "@/components/ui/button";
-import { GaryMascot } from "@/components/GaryMascot";
+import { LuckyMark } from "@/components/GaryMascot";
 import { getComp, COMPETITIONS } from "@/lib/mock-comps";
 import { gbp } from "@/lib/format";
-import { CreditCard, Lock, ShieldCheck, Share2 } from "lucide-react";
+import { CreditCard, Lock, ShieldCheck, Share2, CheckCircle2 } from "lucide-react";
 
 const searchSchema = z.object({
   slug: z.string().optional(),
@@ -135,25 +135,28 @@ function SuccessScreen({ compTitle, qty }: { compTitle: string; qty: number }) {
       <SiteNav />
       <main className="mx-auto max-w-2xl px-4 py-16 w-full text-center relative overflow-hidden">
         <Confetti />
-        <GaryMascot className="mx-auto w-40 h-40" />
-        <h1 className="mt-6 font-display text-4xl md:text-5xl font-black">You're in the draw,<br/><span className="text-clover">you lucky git.</span></h1>
-        <p className="mt-3 text-muted-foreground text-lg">Payment confirmed. Skill question passed. Numbers assigned.</p>
-        <div className="mt-8 rounded-2xl bg-white border-2 border-ink/5 p-6 text-left shadow-[var(--shadow-card)]">
-          <div className="text-xs font-bold uppercase tracking-widest text-clover">Your entry</div>
-          <div className="font-display text-xl font-black mt-1">{compTitle}</div>
+        <div className="mx-auto inline-flex h-16 w-16 items-center justify-center rounded-full bg-clover/15 text-clover">
+          <CheckCircle2 className="h-8 w-8" />
+        </div>
+        <div className="mt-6 text-[10px] font-mono uppercase tracking-[0.25em] text-clover">Entry confirmed · #{Math.floor(Math.random()*90000+10000)}</div>
+        <h1 className="mt-2 font-display text-4xl md:text-5xl font-semibold tracking-tight">You're in the draw,<br/><span className="text-clover">you lucky git.</span></h1>
+        <p className="mt-3 text-muted-foreground">Payment confirmed. Skill question passed. Numbers assigned.</p>
+        <div className="mt-8 rounded-md bg-white border border-ink/10 p-6 text-left">
+          <div className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground">Your entry</div>
+          <div className="font-display text-xl font-semibold mt-1">{compTitle}</div>
           <div className="mt-4">
-            <div className="text-xs font-bold uppercase tracking-widest text-ink/60 mb-2">Your ticket numbers</div>
+            <div className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground mb-2">Your ticket numbers</div>
             <div className="flex flex-wrap gap-1.5">
               {numbers.map((n, i) => (
-                <span key={i} className="rounded-lg bg-gold/20 border-2 border-gold px-2.5 py-1 font-bold text-sm tabular-nums">
-                  #{n.toString().padStart(5, "0")}
+                <span key={i} className="rounded-sm bg-ink text-cream px-2 py-1 font-mono text-xs tabular-nums">
+                  {n.toString().padStart(5, "0")}
                 </span>
               ))}
             </div>
           </div>
         </div>
         <div className="mt-6 flex flex-wrap gap-3 justify-center">
-          <Button variant="gold" size="lg"><Share2 className="h-4 w-4" /> Tell the group chat</Button>
+          <Button variant="git" size="lg"><Share2 className="h-4 w-4" /> Tell the group chat</Button>
           <Button asChild variant="cream" size="lg"><Link to="/">Back to comps</Link></Button>
         </div>
       </main>
@@ -164,7 +167,7 @@ function SuccessScreen({ compTitle, qty }: { compTitle: string; qty: number }) {
 
 function Confetti() {
   const bits = Array.from({ length: 40 });
-  const colors = ["#F5B700", "#0F5132", "#FF3D81", "#1A1A1A"];
+  const colors = ["#10B77F", "#E8B54D", "#0B1F17"];
   return (
     <div className="absolute inset-0 pointer-events-none" aria-hidden>
       {bits.map((_, i) => (

@@ -17,10 +17,10 @@ function Account() {
       <SiteNav />
       <main className="mx-auto max-w-5xl px-4 py-10 w-full flex-1">
         <div className="flex items-center gap-4">
-          <div className="h-16 w-16 rounded-full bg-clover text-cream flex items-center justify-center font-display text-3xl font-black">G</div>
+          <div className="h-14 w-14 rounded-sm bg-ink text-cream flex items-center justify-center font-display text-2xl font-semibold">G</div>
           <div>
-            <h1 className="font-display text-3xl font-black">Alright, Gary.</h1>
-            <p className="text-muted-foreground text-sm">Welcome back, you lucky git.</p>
+            <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-clover">Signed in</div>
+            <h1 className="font-display text-3xl font-semibold tracking-tight">Welcome back.</h1>
           </div>
         </div>
 
