@@ -197,3 +197,27 @@
   to { opacity: 1; transform: translateY(0); }
 }
 @utility rise-in { animation: riseIn 0.4s ease both; }
+
+/* Respect prefers-reduced-motion — pause loops, kill hover transforms,
+   collapse transitions. Users who ask for less motion get less motion. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  /* Ticker + LIVE dot ping stop dead */
+  .ticker-scroll { animation: none !important; transform: none !important; }
+  .animate-ping,
+  .animate-pulse,
+  .animate-spin,
+  .animate-bounce { animation: none !important; }
+  /* Hover translate/scale on cards and images — flatten */
+  .hover\:-translate-y-0\.5:hover,
+  .group:hover .group-hover\:scale-\[1\.04\],
+  .group:hover .group-hover\:scale-\[1\.05\],
+  .hover\:scale-105:hover { transform: none !important; }
+}
