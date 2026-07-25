@@ -18,8 +18,8 @@ export const Route = createFileRoute("/how-it-works")({
       <p>UK law says prize competitions must involve an element of skill or judgement. So each comp has one multiple-choice question. It's genuinely answerable — we're not being tricky.</p>
       <h2>3. We draw it live</h2>
       <p>Every draw is streamed live on YouTube and Facebook. A random number generator picks the winning ticket in front of your eyes. Winners are paid or shipped within 48 hours.</p>
-      <h2>Free postal entry</h2>
-      <p>Every competition can be entered free by post, at exactly the same odds. See the <a href="/free-postal-entry">Free Postal Entry Route</a> page.</p>
+      <h2>Automatic draws</h2>
+      <p>Every competition auto-draws the moment the timer hits zero (or the last ticket sells). The winning number is picked by a verifiable random process and published on the Winners Wall — no human waiting around, no wiggle room.</p>
     </StaticPage>
   ),
 });
