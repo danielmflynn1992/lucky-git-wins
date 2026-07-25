@@ -21,7 +21,7 @@
   --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
   --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "Space Mono", "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
-  --font-serif: "Newsreader", "Playfair Display", ui-serif, Georgia, serif;
+  --font-serif: var(--font-sans);
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
