@@ -10,7 +10,7 @@ import { SkillQuestionModal, type SkillQuestion } from "@/components/SkillQuesti
 import { competitionQueryOptions } from "@/lib/competitions-api";
 import { updateSkillQuestion } from "@/lib/admin.functions";
 
-export const Route = createFileRoute("/admin/competitions/$slug/skill")({
+export const Route = createFileRoute("/_authenticated/admin/competitions/$slug/skill")({
   loader: async ({ params, context }) => {
     const data = await context.queryClient.ensureQueryData(competitionQueryOptions(params.slug));
     if (!data) throw notFound();
