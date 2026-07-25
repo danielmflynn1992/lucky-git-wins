@@ -74,6 +74,62 @@ export type Database = {
         }
         Relationships: []
       }
+      draws: {
+        Row: {
+          competition_id: string | null
+          competition_title: string
+          created_at: string
+          draw_method: string
+          drawn_at: string
+          id: string
+          notes: string
+          prize: string
+          total_tickets: number
+          verification_hash: string
+          winner_display_name: string
+          winner_town: string
+          winning_number: number
+        }
+        Insert: {
+          competition_id?: string | null
+          competition_title: string
+          created_at?: string
+          draw_method?: string
+          drawn_at?: string
+          id?: string
+          notes?: string
+          prize: string
+          total_tickets: number
+          verification_hash?: string
+          winner_display_name: string
+          winner_town?: string
+          winning_number: number
+        }
+        Update: {
+          competition_id?: string | null
+          competition_title?: string
+          created_at?: string
+          draw_method?: string
+          drawn_at?: string
+          id?: string
+          notes?: string
+          prize?: string
+          total_tickets?: number
+          verification_hash?: string
+          winner_display_name?: string
+          winner_town?: string
+          winning_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "draws_competition_id_fkey"
+            columns: ["competition_id"]
+            isOneToOne: false
+            referencedRelation: "competitions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tickets: {
         Row: {
           competition_id: string
