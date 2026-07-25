@@ -65,7 +65,7 @@ export function CompCard({ c }: { c: Competition }) {
           <div className="flex items-end justify-between pt-1">
             <div>
               <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">Tickets from</div>
-              <div className="font-display font-black text-2xl leading-none tabular-nums text-foreground">{gbp(c.pricePerTicket)}</div>
+              <div className="font-display font-extrabold text-3xl leading-none tracking-[-0.04em] tabular-nums text-foreground">{gbp(c.pricePerTicket)}</div>
             </div>
             <div className="text-right">
               <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">Remaining</div>
@@ -75,9 +75,9 @@ export function CompCard({ c }: { c: Competition }) {
           </div>
         </div>
 
-        {/* CTA */}
-        <div className="rounded-md bg-clover text-primary-foreground text-center py-2.5 text-sm font-bold uppercase tracking-wide group-hover:bg-clover-deep transition-colors">
-          Enter Now
+        {/* CTA — screams to be clicked */}
+        <div className="rounded-md bg-clover text-primary-foreground text-center py-3 font-display font-extrabold text-base uppercase tracking-[-0.01em] group-hover:bg-clover-deep transition-colors">
+          Enter Now →
         </div>
 
         {/* Trust badges */}
