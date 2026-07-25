@@ -20,7 +20,7 @@ export function Logo({ variant = "horizontal", className = "" }: { variant?: "ho
   const sizing =
     variant === "stacked"
       ? "h-28 w-auto"
-      : "h-16 sm:h-20 md:h-24 w-auto -my-3 md:-my-5";
+      : "h-16 sm:h-20 md:h-24 w-auto -mt-1 -mb-5 md:-mt-2 md:-mb-7";
   return (
     <Link
       to="/"
@@ -30,7 +30,7 @@ export function Logo({ variant = "horizontal", className = "" }: { variant?: "ho
       <img
         src={logoLockup}
         alt="LuckyGitComps"
-        className={`${sizing} object-contain max-w-none translate-x-[9%]`}
+        className={`${sizing} object-contain max-w-none translate-y-1 md:translate-y-2`}
         width={1536}
         height={1024}
         loading="eager"
