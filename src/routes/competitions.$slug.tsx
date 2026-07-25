@@ -76,9 +76,9 @@ function CompDetail() {
           <div className="lg:col-span-3">
             <div className="relative rounded-3xl overflow-hidden bg-white border-2 border-ink/5 shadow-[var(--shadow-card)]">
               <img src={c.image} alt={c.title} width={1280} height={960} className="w-full aspect-[4/3] object-cover" />
-              <div className="absolute top-4 left-4 flex flex-col gap-1.5">
-                {c.hot && <span className="sticker-tilt-l bg-hot text-hot-foreground px-3 py-1.5 rounded-lg font-black uppercase text-sm shadow-[var(--shadow-sticker)]">🔥 Hot</span>}
-                {c.instantWin && <span className="sticker-tilt-r bg-gold text-gold-foreground px-3 py-1.5 rounded-lg font-black uppercase text-sm shadow-[var(--shadow-sticker)]">⚡ Instant Wins Inside</span>}
+              <div className="absolute top-4 left-4 flex gap-1.5">
+                {c.hot && <span className="rounded-sm bg-hot text-hot-foreground px-2 py-1 text-[10px] font-semibold uppercase tracking-wider">Hot</span>}
+                {c.instantWin && <span className="rounded-sm bg-gold text-gold-foreground px-2 py-1 text-[10px] font-semibold uppercase tracking-wider">Instant wins inside</span>}
               </div>
             </div>
           </div>
