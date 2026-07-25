@@ -16,7 +16,7 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Lucky Git Comps — Win Cars, Cash & Tech in the UK" },
-      { name: "description", content: "Live UK prize competitions with verified winners and live-streamed draws. Cars, tech, cash and holidays from £1. Free postal entry available." },
+      { name: "description", content: "UK prize competitions with verified winners and automatic random draws. Cars, tech, cash and holidays from £1." },
       { property: "og:title", content: "Lucky Git Comps — Someone's got to win it" },
       { property: "og:description", content: "Cars, cash, tech and holidays. Live draws. Chancers welcome." },
     ],
@@ -153,7 +153,7 @@ function Home() {
             { i: Radio, t: "Every draw streamed live" },
             { i: Shield, t: "Verified winners, real people" },
             { i: MessageSquareHeart, t: "UK company, UK support" },
-            { i: Ticket, t: "Free postal entry always" },
+            { i: Ticket, t: "Automatic random draws" },
           ].map(({ i: Icon, t }) => (
             <div key={t} className="flex items-center gap-3">
               <span className="h-8 w-8 rounded-sm bg-clover/10 text-clover flex items-center justify-center shrink-0">

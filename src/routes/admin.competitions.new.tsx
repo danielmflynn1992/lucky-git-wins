@@ -42,7 +42,6 @@ function NewComp() {
   const [instantWinPrize, setInstantWinPrize] = useState(50);
   const [answers, setAnswers] = useState(["", "", "", ""]);
   const [correct, setCorrect] = useState(0);
-  const [autoDraw, setAutoDraw] = useState(true);
   const [status, setStatus] = useState<"draft" | "live" | "paused">("draft");
 
   const derivedSlug = useMemo(() => {
@@ -188,10 +187,9 @@ function NewComp() {
                 <Field label="Cash alternative (£)" type="number" required className="sm:col-span-1" value={cashAlternative} onChange={(e) => setCashAlternative(Number(e.target.value))} />
                 <Field label="Closes at" type="datetime-local" required className="sm:col-span-2" value={endsAt} onChange={(e) => setEndsAt(e.target.value)} />
               </div>
-              <label className="mt-4 flex items-center gap-2 text-sm font-semibold">
-                <input type="checkbox" checked={autoDraw} onChange={(e) => setAutoDraw(e.target.checked)} className="h-4 w-4 accent-clover" />
-                Auto-draw when sold out or when timer hits zero (whichever first)
-              </label>
+              <p className="mt-4 text-xs text-muted-foreground">
+                All competitions auto-draw when the timer hits zero or the last ticket sells — no manual step.
+              </p>
             </Card>
 
             <Card title="Skill question">

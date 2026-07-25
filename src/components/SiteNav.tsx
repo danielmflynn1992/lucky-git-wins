@@ -7,7 +7,6 @@ const links = [
   { to: "/", label: "Home" },
   { to: "/competitions", label: "Live Comps" },
   { to: "/winners", label: "Winners" },
-  { to: "/live-draws", label: "Live Draws" },
   { to: "/how-it-works", label: "How it works" },
 ];
 

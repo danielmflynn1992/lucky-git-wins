@@ -78,7 +78,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Lucky Git Comps — UK Prize Competitions" },
-      { name: "description", content: "Cars, tech, cash and holidays up for grabs. Live draws, verified winners, and a free postal entry route. Go on then, you lucky git." },
+      { name: "description", content: "Cars, tech, cash and holidays up for grabs. Automatic random draws, verified winners. Go on then, you lucky git." },
       { name: "author", content: "Lucky Git Comps" },
       { property: "og:title", content: "Lucky Git Comps — UK Prize Competitions" },
       { property: "og:description", content: "Someone's got to win it. Chancers welcome." },
