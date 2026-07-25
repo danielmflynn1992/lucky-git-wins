@@ -66,15 +66,15 @@ function CompDetail() {
         <div className="text-xs font-semibold text-muted-foreground mb-4">
           <Link to="/" className="hover:text-clover">Home</Link>
           <span className="mx-2">/</span>
-          <span className="text-ink">{c.category}</span>
+          <span className="text-foreground">{c.category}</span>
           <span className="mx-2">/</span>
-          <span className="text-ink">{c.title}</span>
+          <span className="text-foreground">{c.title}</span>
         </div>
 
         <div className="grid gap-8 lg:grid-cols-5">
           {/* Gallery */}
           <div className="lg:col-span-3">
-            <div className="relative rounded-3xl overflow-hidden bg-white border-2 border-ink/5 shadow-[var(--shadow-card)]">
+            <div className="relative rounded-3xl overflow-hidden bg-card border-2 border-white/5 shadow-[var(--shadow-card)]">
               <img src={c.image} alt={c.title} width={1280} height={960} className="w-full aspect-[4/3] object-cover" />
               <div className="absolute top-4 left-4 flex gap-1.5">
                 {c.hot && <span className="rounded-sm bg-hot text-hot-foreground px-2 py-1 text-[10px] font-semibold uppercase tracking-wider">Hot</span>}
@@ -90,7 +90,7 @@ function CompDetail() {
             <p className="mt-2 text-muted-foreground">{c.subtitle}</p>
 
             <div className="mt-4 flex items-center gap-3">
-              <div className="rounded-xl bg-cream border-2 border-ink px-4 py-2">
+              <div className="rounded-xl bg-background border-2 border-white/10 px-4 py-2">
                 <div className="text-[10px] font-bold uppercase tracking-widest opacity-70">Ticket</div>
                 <div className="font-display font-black text-2xl leading-none">{gbp(c.pricePerTicket)}</div>
               </div>
@@ -105,21 +105,21 @@ function CompDetail() {
               <div className="h-3 rounded-full bg-secondary overflow-hidden">
                 <div className="h-full shimmer rounded-full" style={{ width: `${pct}%` }} />
               </div>
-              <div className="mt-1 text-xs text-muted-foreground">Current odds: <b className="text-ink">1 in {odds.toLocaleString()}</b></div>
+              <div className="mt-1 text-xs text-muted-foreground">Current odds: <b className="text-foreground">1 in {odds.toLocaleString()}</b></div>
             </div>
 
             {/* Picker */}
-            <div className="mt-6 rounded-2xl bg-white border-2 border-ink/5 p-4">
+            <div className="mt-6 rounded-2xl bg-card border-2 border-white/5 p-4">
               <div className="flex gap-2 mb-4">
                 <button
                   onClick={() => setPicker("lucky")}
-                  className={`flex-1 rounded-xl px-3 py-2.5 text-sm font-bold border-2 flex items-center justify-center gap-1.5 ${picker === "lucky" ? "bg-clover text-cream border-clover" : "bg-cream border-ink/10"}`}
+                  className={`flex-1 rounded-xl px-3 py-2.5 text-sm font-bold border-2 flex items-center justify-center gap-1.5 ${picker === "lucky" ? "bg-clover text-cream border-clover" : "bg-background border-white/10"}`}
                 >
                   <Shuffle className="h-4 w-4" /> Lucky Dip
                 </button>
                 <button
                   onClick={() => setPicker("manual")}
-                  className={`flex-1 rounded-xl px-3 py-2.5 text-sm font-bold border-2 flex items-center justify-center gap-1.5 ${picker === "manual" ? "bg-clover text-cream border-clover" : "bg-cream border-ink/10"}`}
+                  className={`flex-1 rounded-xl px-3 py-2.5 text-sm font-bold border-2 flex items-center justify-center gap-1.5 ${picker === "manual" ? "bg-clover text-cream border-clover" : "bg-background border-white/10"}`}
                 >
                   <Ticket className="h-4 w-4" /> Pick numbers
                 </button>
@@ -127,22 +127,22 @@ function CompDetail() {
 
               {picker === "lucky" ? (
                 <div>
-                  <label className="text-xs font-bold uppercase tracking-widest text-ink/60">How many tickets?</label>
+                  <label className="text-xs font-bold uppercase tracking-widest text-foreground/60">How many tickets?</label>
                   <div className="mt-2 flex items-center gap-3">
-                    <button onClick={() => setQty(Math.max(1, qty - 1))} className="h-11 w-11 rounded-xl border-2 border-ink/10 bg-cream font-bold text-lg">−</button>
+                    <button onClick={() => setQty(Math.max(1, qty - 1))} className="h-11 w-11 rounded-xl border-2 border-white/10 bg-background font-bold text-lg">−</button>
                     <input
                       type="number"
                       value={qty}
                       min={1}
                       max={c.maxPerPerson}
                       onChange={(e) => setQty(Math.max(1, Math.min(c.maxPerPerson, +e.target.value || 1)))}
-                      className="flex-1 h-11 rounded-xl border-2 border-ink/10 bg-cream text-center font-display font-black text-xl"
+                      className="flex-1 h-11 rounded-xl border-2 border-white/10 bg-background text-center font-display font-black text-xl"
                     />
-                    <button onClick={() => setQty(Math.min(c.maxPerPerson, qty + 1))} className="h-11 w-11 rounded-xl border-2 border-ink/10 bg-cream font-bold text-lg">+</button>
+                    <button onClick={() => setQty(Math.min(c.maxPerPerson, qty + 1))} className="h-11 w-11 rounded-xl border-2 border-white/10 bg-background font-bold text-lg">+</button>
                   </div>
                   <div className="mt-2 flex gap-1.5 flex-wrap">
                     {[1, 5, 10, 25, 50].map((n) => (
-                      <button key={n} onClick={() => setQty(n)} className="rounded-lg px-2.5 py-1 text-xs font-bold bg-cream border border-ink/10 hover:border-clover">
+                      <button key={n} onClick={() => setQty(n)} className="rounded-lg px-2.5 py-1 text-xs font-bold bg-background border border-white/10 hover:border-clover">
                         {n}
                       </button>
                     ))}
@@ -150,8 +150,8 @@ function CompDetail() {
                 </div>
               ) : (
                 <div>
-                  <div className="text-xs font-bold uppercase tracking-widest text-ink/60 mb-2">Tap to pick your numbers</div>
-                  <div className="max-h-56 overflow-y-auto rounded-xl border-2 border-ink/10 p-2 bg-cream grid grid-cols-8 gap-1">
+                  <div className="text-xs font-bold uppercase tracking-widest text-foreground/60 mb-2">Tap to pick your numbers</div>
+                  <div className="max-h-56 overflow-y-auto rounded-xl border-2 border-white/10 p-2 bg-background grid grid-cols-8 gap-1">
                     {Array.from({ length: Math.min(120, c.totalTickets) }, (_, i) => i + 1).map((n) => {
                       const taken = takenNumbers.has(n);
                       const isPicked = picked.has(n);
@@ -165,9 +165,9 @@ function CompDetail() {
                             setPicked(next);
                           }}
                           className={`text-[10px] font-bold aspect-square rounded ${
-                            taken ? "bg-ink/10 text-ink/30 line-through cursor-not-allowed" :
+                            taken ? "bg-white/10 text-foreground/30 line-through cursor-not-allowed" :
                             isPicked ? "bg-gold text-gold-foreground ring-2 ring-ink" :
-                            "bg-white hover:bg-clover/10"
+                            "bg-card hover:bg-clover/10"
                           }`}
                         >{n}</button>
                       );
@@ -177,9 +177,9 @@ function CompDetail() {
                 </div>
               )}
 
-              <div className="mt-4 pt-4 border-t border-ink/10 flex items-center justify-between">
+              <div className="mt-4 pt-4 border-t border-white/10 flex items-center justify-between">
                 <div>
-                  <div className="text-xs uppercase tracking-widest font-bold text-ink/60">Total</div>
+                  <div className="text-xs uppercase tracking-widest font-bold text-foreground/60">Total</div>
                   <div className="font-display font-black text-3xl leading-none">{gbp(c.pricePerTicket * displayNumbers)}</div>
                   <div className="text-xs text-muted-foreground">{displayNumbers} ticket{displayNumbers === 1 ? "" : "s"}</div>
                 </div>
@@ -202,10 +202,10 @@ function CompDetail() {
         <section className="mt-12 grid gap-8 lg:grid-cols-3">
           <div className="lg:col-span-2">
             <h2 className="font-display text-2xl font-black">About this prize</h2>
-            <p className="mt-3 text-ink/80 leading-relaxed">{c.description}</p>
+            <p className="mt-3 text-foreground/80 leading-relaxed">{c.description}</p>
 
             <h3 className="mt-8 font-display text-xl font-black">The important bits</h3>
-            <ul className="mt-3 space-y-2 text-sm text-ink/80">
+            <ul className="mt-3 space-y-2 text-sm text-foreground/80">
               <li className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-clover mt-0.5 shrink-0" /> Closing date: <b>{new Date(c.endsAt).toLocaleString("en-GB")}</b> — or when sold out, whichever comes first.</li>
               <li className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-clover mt-0.5 shrink-0" /> Cash alternative: <b>{gbp(c.cashAlternative)}</b> — take the cash instead, no questions asked.</li>
               <li className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-clover mt-0.5 shrink-0" /> Winner announced live on our stream within 24h of close.</li>
@@ -214,7 +214,7 @@ function CompDetail() {
           </div>
           <aside className="rounded-2xl bg-gold/10 border-2 border-gold/40 p-5">
             <h3 className="font-display text-lg font-black">Free postal entry</h3>
-            <p className="mt-2 text-sm text-ink/80">
+            <p className="mt-2 text-sm text-foreground/80">
               You can enter every competition for free by post. Same odds, same draw, no purchase required.
             </p>
             <Link to="/free-postal-entry" className="mt-3 inline-block font-bold text-clover underline">How to enter by post →</Link>
@@ -232,8 +232,8 @@ function CompDetail() {
 
       {/* Skill question modal */}
       {skillOpen && (
-        <div className="fixed inset-0 z-50 bg-ink/60 backdrop-blur-sm flex items-end sm:items-center justify-center p-4" onClick={() => setSkillOpen(false)}>
-          <div className="bg-cream rounded-3xl border-2 border-ink w-full max-w-md p-6 shadow-2xl rise-in" onClick={(e) => e.stopPropagation()}>
+        <div className="fixed inset-0 z-50 bg-white/60 backdrop-blur-sm flex items-end sm:items-center justify-center p-4" onClick={() => setSkillOpen(false)}>
+          <div className="bg-background rounded-3xl border-2 border-white/10 w-full max-w-md p-6 shadow-2xl rise-in" onClick={(e) => e.stopPropagation()}>
             <div className="text-xs font-bold uppercase tracking-widest text-clover">Skill question</div>
             <h3 className="mt-1 font-display text-2xl font-black">{c.skillQuestion.q}</h3>
             <p className="text-xs text-muted-foreground mt-1">(UK law requires this. Sorry not sorry.)</p>
@@ -245,7 +245,7 @@ function CompDetail() {
                   className={`w-full text-left rounded-xl border-2 px-4 py-3 font-semibold transition-colors ${
                     answered === i
                       ? (i === c.skillQuestion.correct ? "border-clover bg-clover/10" : "border-hot bg-hot/10")
-                      : "border-ink/10 bg-white hover:border-clover/40"
+                      : "border-white/10 bg-card hover:border-clover/40"
                   }`}
                 >
                   {String.fromCharCode(65 + i)}. {opt}

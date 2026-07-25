@@ -3,7 +3,7 @@ import { Logo } from "./Logo";
 
 export function SiteFooter() {
   return (
-    <footer className="mt-24 bg-ink text-cream border-t border-ink">
+    <footer className="mt-24 bg-ink text-cream border-t border-white/10">
       <div className="mx-auto max-w-7xl px-4 py-12 grid gap-10 md:grid-cols-4">
         <div className="md:col-span-1">
           <Logo variant="stacked" />

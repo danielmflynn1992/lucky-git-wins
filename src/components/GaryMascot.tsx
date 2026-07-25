@@ -18,16 +18,16 @@ export function GaryMascot(props: SVGProps<SVGSVGElement>) {
     >
       <defs>
         <linearGradient id="lg-emerald" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#14D28E" />
-          <stop offset="100%" stopColor="#0B7A55" />
+          <stop offset="0%" stopColor="#3BF5A5" />
+          <stop offset="100%" stopColor="#00A65E" />
         </linearGradient>
         <linearGradient id="lg-emerald-dark" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#0F9E71" />
-          <stop offset="100%" stopColor="#0B1F17" />
+          <stop offset="0%" stopColor="#00C170" />
+          <stop offset="100%" stopColor="#00563A" />
         </linearGradient>
         <linearGradient id="lg-gold" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#F0C86A" />
-          <stop offset="100%" stopColor="#B98A2E" />
+          <stop offset="0%" stopColor="#6EFFB8" />
+          <stop offset="100%" stopColor="#00DF81" />
         </linearGradient>
       </defs>
 

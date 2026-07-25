@@ -60,7 +60,7 @@ function Home() {
       <section className="relative bg-clover-pattern text-cream overflow-hidden">
         <div className="mx-auto max-w-7xl px-4 pt-12 pb-16 md:pt-20 md:pb-24 grid gap-10 md:grid-cols-2 items-center">
           <div>
-            <div className="inline-flex items-center gap-2 rounded-full border border-cream/15 bg-cream/5 px-3 py-1 text-[10px] font-mono uppercase tracking-[0.25em] text-cream/70">
+            <div className="inline-flex items-center gap-2 rounded-full border border-cream/15 bg-background/5 px-3 py-1 text-[10px] font-mono uppercase tracking-[0.25em] text-cream/70">
               <Sparkles className="h-3 w-3 text-gold" /> The odds, out in the open
             </div>
             <h1 className="mt-5 font-display text-4xl md:text-6xl font-semibold leading-[1.05] tracking-tight">
@@ -72,13 +72,13 @@ function Home() {
             </p>
 
             {/* Featured comp mini card */}
-            <div className="mt-6 rounded-md bg-cream text-ink p-4 max-w-md border border-cream/20">
+            <div className="mt-6 rounded-md bg-background text-foreground p-4 max-w-md border border-cream/20">
               <div className="flex gap-3">
                 <img src={featured.image} alt="" className="h-20 w-20 rounded object-cover" width={80} height={80} />
                 <div className="flex-1 min-w-0">
                   <div className="text-[10px] font-mono uppercase tracking-[0.15em] text-muted-foreground">{featured.category}</div>
                   <div className="font-display text-base leading-tight truncate">{featured.title}</div>
-                  <div className="mt-2 h-1 rounded-full bg-ink/5 overflow-hidden">
+                  <div className="mt-2 h-1 rounded-full bg-white/5 overflow-hidden">
                     <div className="h-full shimmer" style={{ width: `${featuredPct}%` }} />
                   </div>
                   <div className="mt-1 text-[11px] font-mono tabular-nums flex justify-between">
@@ -107,7 +107,7 @@ function Home() {
                   key={i}
                   aria-label={`Show featured ${i + 1}`}
                   onClick={() => setActive(i)}
-                  className={`h-1 rounded-full transition-all ${i === active ? "w-8 bg-clover" : "w-4 bg-cream/25"}`}
+                  className={`h-1 rounded-full transition-all ${i === active ? "w-8 bg-clover" : "w-4 bg-background/25"}`}
                 />
               ))}
             </div>
@@ -115,7 +115,7 @@ function Home() {
 
           {/* Live stats panel */}
           <div className="relative hidden md:block">
-            <div className="rounded-md border border-cream/10 bg-cream/[0.03] backdrop-blur p-6">
+            <div className="rounded-md border border-cream/10 bg-background/[0.03] backdrop-blur p-6">
               <div className="flex items-center justify-between">
                 <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-cream/50">Platform stats · Live</div>
                 <LuckyMark className="h-8 w-8" />
@@ -147,7 +147,7 @@ function Home() {
       </section>
 
       {/* TRUST STRIP */}
-      <section className="border-b border-ink/10 bg-white">
+      <section className="border-b border-white/10 bg-card">
         <div className="mx-auto max-w-7xl px-4 py-6 grid grid-cols-2 md:grid-cols-4 gap-6 text-sm">
           {[
             { i: Radio, t: "Every draw streamed live" },
@@ -159,7 +159,7 @@ function Home() {
               <span className="h-8 w-8 rounded-sm bg-clover/10 text-clover flex items-center justify-center shrink-0">
                 <Icon className="h-4 w-4" />
               </span>
-              <span className="font-medium text-ink/80">{t}</span>
+              <span className="font-medium text-foreground/80">{t}</span>
             </div>
           ))}
         </div>
@@ -177,7 +177,7 @@ function Home() {
             <select
               value={sort}
               onChange={(e) => setSort(e.target.value as typeof sort)}
-              className="rounded-md border border-ink/15 bg-white px-3 py-2 text-sm font-medium focus:outline-none focus:border-clover"
+              className="rounded-md border border-white/15 bg-card px-3 py-2 text-sm font-medium focus:outline-none focus:border-clover"
             >
               <option value="ending">Ending soonest</option>
               <option value="popular">Most popular</option>
@@ -192,7 +192,7 @@ function Home() {
               key={c}
               onClick={() => setCat(c)}
               className={`shrink-0 rounded-md px-3.5 py-1.5 text-sm font-medium border transition-colors ${
-                cat === c ? "bg-ink text-cream border-ink" : "bg-white text-ink/70 border-ink/15 hover:border-ink/40"
+                cat === c ? "bg-ink text-cream border-white/10" : "bg-card text-foreground/70 border-white/15 hover:border-white/40"
               }`}
             >
               {c}
@@ -211,7 +211,7 @@ function Home() {
 
       {/* HOW IT WORKS */}
       <section className="mx-auto max-w-7xl px-4 mt-24 w-full">
-        <div className="rounded-md bg-white border border-ink/10 p-8 md:p-12">
+        <div className="rounded-md bg-card border border-white/10 p-8 md:p-12">
           <div className="text-center">
             <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-clover">How it works</div>
             <h2 className="mt-2 font-display text-3xl md:text-4xl font-semibold tracking-tight">Three steps. One of them's paying us.</h2>
@@ -222,7 +222,7 @@ function Home() {
               { n: "02", t: "Answer the question", d: "One quick skill question to keep it above board." },
               { n: "03", t: "We draw it live", d: "Live-streamed random draw. Winners paid within 48 hours." },
             ].map((s) => (
-              <div key={s.n} className="rounded-md border border-ink/10 p-6">
+              <div key={s.n} className="rounded-md border border-white/10 p-6">
                 <div className="font-mono text-[11px] tracking-[0.25em] text-clover">STEP {s.n}</div>
                 <h3 className="mt-3 font-display text-xl font-semibold">{s.t}</h3>
                 <p className="text-sm text-muted-foreground mt-2 leading-relaxed">{s.d}</p>
@@ -244,7 +244,7 @@ function Home() {
         </div>
         <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {WINNERS.slice(0, 3).map((w) => (
-            <div key={w.name + w.prize} className="rounded-md bg-white p-5 border border-ink/10">
+            <div key={w.name + w.prize} className="rounded-md bg-card p-5 border border-white/10">
               <div className="flex items-center gap-3">
                 <div className="h-11 w-11 rounded-sm bg-ink text-cream flex items-center justify-center font-display text-lg font-semibold">
                   {w.name[0]}
@@ -254,11 +254,11 @@ function Home() {
                   <div className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground mt-0.5">{w.when}</div>
                 </div>
               </div>
-              <div className="mt-4 pt-3 border-t border-ink/10">
+              <div className="mt-4 pt-3 border-t border-white/10">
                 <div className="text-[10px] font-mono uppercase tracking-[0.15em] text-muted-foreground">Prize</div>
-                <div className="font-medium text-ink">{w.prize}</div>
+                <div className="font-medium text-foreground">{w.prize}</div>
               </div>
-              <p className="mt-3 text-sm text-ink/70 leading-relaxed">"{w.quote}"</p>
+              <p className="mt-3 text-sm text-foreground/70 leading-relaxed">"{w.quote}"</p>
             </div>
           ))}
         </div>
@@ -266,7 +266,7 @@ function Home() {
 
       {/* NEWSLETTER */}
       <section className="mx-auto max-w-7xl px-4 mt-24 w-full">
-        <div className="rounded-md bg-ink text-cream p-8 md:p-12 relative overflow-hidden border border-ink">
+        <div className="rounded-md bg-ink text-cream p-8 md:p-12 relative overflow-hidden border border-white/10">
           <div className="absolute top-6 right-6 opacity-30">
             <LuckyMark className="h-20 w-20" />
           </div>
@@ -279,7 +279,7 @@ function Home() {
                 type="email"
                 required
                 placeholder="you@somewhere.co.uk"
-                className="flex-1 rounded-md bg-cream/5 border border-cream/15 px-4 py-3 text-cream placeholder:text-cream/40 focus:outline-none focus:border-clover"
+                className="flex-1 rounded-md bg-background/5 border border-cream/15 px-4 py-3 text-cream placeholder:text-cream/40 focus:outline-none focus:border-clover"
               />
               <Button variant="git" size="lg" type="submit">Sign me up</Button>
             </form>

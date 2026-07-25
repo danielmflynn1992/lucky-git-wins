@@ -24,7 +24,7 @@ export const Route = createFileRoute("/live-draws")({
         <h1 className="mt-3 font-display text-4xl md:text-5xl font-black">Live Draws</h1>
         <p className="text-muted-foreground mt-1">Watch the winning ticket get pulled in real time. No edits, no funny business.</p>
 
-        <div className="mt-6 aspect-video rounded-2xl bg-ink text-cream flex items-center justify-center border-2 border-ink">
+        <div className="mt-6 aspect-video rounded-2xl bg-ink text-cream flex items-center justify-center border-2 border-white/10">
           <div className="text-center">
             <Radio className="h-10 w-10 mx-auto text-gold" />
             <div className="mt-2 font-display text-xl">Live stream embed goes here</div>
@@ -35,7 +35,7 @@ export const Route = createFileRoute("/live-draws")({
         <h2 className="mt-10 font-display text-2xl font-black">Upcoming draws</h2>
         <div className="mt-4 space-y-3">
           {COMPETITIONS.slice(0, 4).map((c) => (
-            <div key={c.slug} className="flex items-center gap-4 rounded-2xl bg-white border-2 border-ink/5 p-4">
+            <div key={c.slug} className="flex items-center gap-4 rounded-2xl bg-card border-2 border-white/5 p-4">
               <img src={c.image} className="h-14 w-14 rounded-lg object-cover" alt="" />
               <div className="flex-1 min-w-0">
                 <div className="font-display text-lg truncate">{c.title}</div>
