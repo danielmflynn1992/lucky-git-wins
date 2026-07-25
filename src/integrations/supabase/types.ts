@@ -14,13 +14,125 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      competitions: {
+        Row: {
+          cash_alternative: number
+          category: string
+          created_at: string
+          description: string
+          ends_at: string
+          hot: boolean
+          id: string
+          image: string
+          instant_win: boolean
+          max_per_person: number
+          price_per_ticket: number
+          skill_question: Json
+          slug: string
+          status: string
+          subtitle: string
+          title: string
+          total_tickets: number
+        }
+        Insert: {
+          cash_alternative?: number
+          category: string
+          created_at?: string
+          description?: string
+          ends_at: string
+          hot?: boolean
+          id?: string
+          image?: string
+          instant_win?: boolean
+          max_per_person?: number
+          price_per_ticket: number
+          skill_question?: Json
+          slug: string
+          status?: string
+          subtitle?: string
+          title: string
+          total_tickets: number
+        }
+        Update: {
+          cash_alternative?: number
+          category?: string
+          created_at?: string
+          description?: string
+          ends_at?: string
+          hot?: boolean
+          id?: string
+          image?: string
+          instant_win?: boolean
+          max_per_person?: number
+          price_per_ticket?: number
+          skill_question?: Json
+          slug?: string
+          status?: string
+          subtitle?: string
+          title?: string
+          total_tickets?: number
+        }
+        Relationships: []
+      }
+      tickets: {
+        Row: {
+          competition_id: string
+          created_at: string
+          id: string
+          number: number
+          order_id: string | null
+          owner_id: string | null
+          reservation_token: string | null
+          reserved_until: string | null
+          status: string
+        }
+        Insert: {
+          competition_id: string
+          created_at?: string
+          id?: string
+          number: number
+          order_id?: string | null
+          owner_id?: string | null
+          reservation_token?: string | null
+          reserved_until?: string | null
+          status?: string
+        }
+        Update: {
+          competition_id?: string
+          created_at?: string
+          id?: string
+          number?: number
+          order_id?: string | null
+          owner_id?: string | null
+          reservation_token?: string | null
+          reserved_until?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tickets_competition_id_fkey"
+            columns: ["competition_id"]
+            isOneToOne: false
+            referencedRelation: "competitions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      release_reservation: { Args: { p_token: string }; Returns: undefined }
+      reserve_lucky_dip: {
+        Args: { p_qty: number; p_slug: string; p_token: string }
+        Returns: number[]
+      }
+      reserve_specific_numbers: {
+        Args: { p_numbers: number[]; p_slug: string; p_token: string }
+        Returns: number[]
+      }
+      sweep_expired_reservations: { Args: never; Returns: undefined }
     }
     Enums: {
       [_ in never]: never
