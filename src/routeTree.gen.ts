@@ -9,9 +9,16 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CompetitionsSlugRouteImport } from './routes/competitions.$slug'
+import { Route as AdminCompetitionsNewRouteImport } from './routes/admin.competitions.new'
 
+const CheckoutRoute = CheckoutRouteImport.update({
+  id: '/checkout',
+  path: '/checkout',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -22,35 +29,64 @@ const CompetitionsSlugRoute = CompetitionsSlugRouteImport.update({
   path: '/competitions/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminCompetitionsNewRoute = AdminCompetitionsNewRouteImport.update({
+  id: '/admin/competitions/new',
+  path: '/admin/competitions/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/checkout': typeof CheckoutRoute
   '/competitions/$slug': typeof CompetitionsSlugRoute
+  '/admin/competitions/new': typeof AdminCompetitionsNewRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/checkout': typeof CheckoutRoute
   '/competitions/$slug': typeof CompetitionsSlugRoute
+  '/admin/competitions/new': typeof AdminCompetitionsNewRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/checkout': typeof CheckoutRoute
   '/competitions/$slug': typeof CompetitionsSlugRoute
+  '/admin/competitions/new': typeof AdminCompetitionsNewRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/competitions/$slug'
+  fullPaths:
+    | '/'
+    | '/checkout'
+    | '/competitions/$slug'
+    | '/admin/competitions/new'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/competitions/$slug'
-  id: '__root__' | '/' | '/competitions/$slug'
+  to: '/' | '/checkout' | '/competitions/$slug' | '/admin/competitions/new'
+  id:
+    | '__root__'
+    | '/'
+    | '/checkout'
+    | '/competitions/$slug'
+    | '/admin/competitions/new'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CheckoutRoute: typeof CheckoutRoute
   CompetitionsSlugRoute: typeof CompetitionsSlugRoute
+  AdminCompetitionsNewRoute: typeof AdminCompetitionsNewRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/checkout': {
+      id: '/checkout'
+      path: '/checkout'
+      fullPath: '/checkout'
+      preLoaderRoute: typeof CheckoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -65,12 +101,21 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CompetitionsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/competitions/new': {
+      id: '/admin/competitions/new'
+      path: '/admin/competitions/new'
+      fullPath: '/admin/competitions/new'
+      preLoaderRoute: typeof AdminCompetitionsNewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CheckoutRoute: CheckoutRoute,
   CompetitionsSlugRoute: CompetitionsSlugRoute,
+  AdminCompetitionsNewRoute: AdminCompetitionsNewRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

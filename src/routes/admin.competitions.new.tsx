@@ -54,7 +54,7 @@ function NewComp() {
             <Card title="The prize">
               <div className="grid gap-3 sm:grid-cols-3">
                 <Field label="Prize name" required className="sm:col-span-2" placeholder="e.g. Audi RS3 (or £45k cash)" />
-                <SelectField label="Category" required>
+                <SelectField label="Category">
                   {CATEGORIES.map((c) => <option key={c}>{c}</option>)}
                 </SelectField>
                 <Field label="Short subtitle" className="sm:col-span-3" placeholder="One-liner shown on cards" />
