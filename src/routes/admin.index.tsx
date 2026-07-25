@@ -4,7 +4,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { Button } from "@/components/ui/button";
 import { COMPETITIONS } from "@/lib/mock-comps";
 import { gbp, shortNumber } from "@/lib/format";
-import { Copy, Plus, Play, Pause, Trophy } from "lucide-react";
+import { Copy, Plus, Play, Pause, Trophy, HelpCircle } from "lucide-react";
 
 export const Route = createFileRoute("/admin/")({
   head: () => ({ meta: [{ title: "Admin — Lucky Git Comps" }, { name: "robots", content: "noindex" }] }),
@@ -72,6 +72,14 @@ function Admin() {
                     <td className="p-3">
                       <div className="flex gap-1">
                         <button className="p-2 rounded-lg hover:bg-background" title="Duplicate"><Copy className="h-4 w-4" /></button>
+                        <Link
+                          to="/admin/competitions/$slug/skill"
+                          params={{ slug: c.slug }}
+                          className="p-2 rounded-lg hover:bg-background inline-flex"
+                          title="Edit skill question"
+                        >
+                          <HelpCircle className="h-4 w-4" />
+                        </Link>
                         <button className="p-2 rounded-lg hover:bg-background" title="Draw winner"><Trophy className="h-4 w-4" /></button>
                       </div>
                     </td>
