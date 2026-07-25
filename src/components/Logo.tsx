@@ -17,7 +17,10 @@ export function SmugSmile({ className = "" }: { className?: string }) {
 }
 
 export function Logo({ variant = "horizontal", className = "" }: { variant?: "horizontal" | "stacked"; className?: string }) {
-  const sizing = variant === "stacked" ? "h-28 w-auto" : "h-20 w-auto -my-4";
+  const sizing =
+    variant === "stacked"
+      ? "h-28 w-auto"
+      : "h-16 sm:h-20 md:h-24 w-auto -my-3 md:-my-5";
   return (
     <Link
       to="/"
