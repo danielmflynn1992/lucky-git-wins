@@ -38,7 +38,7 @@ function CompetitionsPage() {
           <ViewToggle view={view} onChange={setView} />
         </div>
         {view === "grid" ? (
-          <div className="mt-8 grid gap-5 grid-cols-1 sm:grid-cols-2">
+          <div className="mt-8 grid gap-3 sm:gap-5 grid-cols-2 lg:grid-cols-3">
             {COMPETITIONS.map((c) => <CompCard key={c.slug} c={c} />)}
           </div>
         ) : (
