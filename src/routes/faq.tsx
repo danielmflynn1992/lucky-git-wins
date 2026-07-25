@@ -2,12 +2,12 @@ import { createFileRoute } from "@tanstack/react-router";
 import { StaticPage } from "@/components/StaticPage";
 
 const QAs = [
-  ["Is this actually legit?", "Yes. Lucky Git Comps is a UK-registered company, all draws are streamed live, all winners are verified and photographed, and every competition has a free postal entry route."],
+  ["Is this actually legit?", "Yes. Lucky Git Comps is a UK-registered company. Every competition is auto-drawn by a verifiable random process the moment the timer hits zero, and every winner is verified and photographed."],
   ["What happens if the competition doesn't sell out?", "The draw still goes ahead on the closing date. Everyone who entered has the same shot regardless of how many tickets sold."],
   ["When do I get my prize?", "Cash prizes are paid by bank transfer within 48 hours of the winner being verified. Physical prizes are shipped or hand-delivered within 7 working days."],
   ["Can I take the cash instead of the prize?", "Yes, every competition shows a cash alternative on the prize page. Winners can take that instead — no questions asked."],
   ["What if I answer the skill question wrong?", "You can retry. The correct answer must be given before your entry counts."],
-  ["Can I enter for free?", "Yes. See the Free Postal Entry Route page. Same odds, same draw, no purchase needed."],
+  ["How is the winner picked?", "Automatically. As soon as the timer hits zero (or the last ticket sells), the system draws a random winning number from the sold tickets and publishes it on the Winners Wall."],
 ];
 
 export const Route = createFileRoute("/faq")({
