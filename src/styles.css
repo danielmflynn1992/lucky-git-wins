@@ -116,6 +116,30 @@
   .font-mono, .tabular-nums {
     font-variant-numeric: tabular-nums;
   }
+  /* Form controls & SVG text inherit site typography */
+  input, button, textarea, select, optgroup {
+    font-family: inherit;
+    font-feature-settings: inherit;
+  }
+  svg text, svg tspan {
+    font-family: var(--font-sans);
+  }
+  /* Recharts / chart labels use mono for numerals */
+  .recharts-text,
+  .recharts-cartesian-axis-tick text,
+  .recharts-legend-item-text,
+  .recharts-label,
+  .recharts-tooltip-label,
+  .recharts-tooltip-item-name,
+  .recharts-tooltip-item-value {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+  /* Embedded frames — zero chrome, inherit color-scheme */
+  iframe, embed, object, video {
+    font-family: var(--font-sans);
+    color-scheme: light;
+  }
 }
 
 /* Hero backdrop — soft emerald wash on light grey */
