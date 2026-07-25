@@ -49,6 +49,7 @@ function Checkout() {
       const r = JSON.parse(raw) as Reservation;
       if (r.expires < Date.now()) {
         sessionStorage.removeItem("lgc:reservation");
+        window.dispatchEvent(new Event("lgc:basket-change"));
         return;
       }
       if (slug && r.slug !== slug) return;
@@ -95,6 +96,7 @@ function Checkout() {
             e.preventDefault();
             setDone(true);
             sessionStorage.removeItem("lgc:reservation");
+            window.dispatchEvent(new Event("lgc:basket-change"));
           }}
         >
           <div>
