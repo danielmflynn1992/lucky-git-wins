@@ -1,5 +1,34 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+
+async function assertAdmin(context: { supabase: any; userId: string }) {
+  const { data, error } = await context.supabase.rpc("has_role", {
+    _user_id: context.userId,
+    _role: "admin",
+  });
+  if (error) throw new Error(error.message);
+  if (!data) throw new Error("Forbidden: admin role required");
+}
+
+export const getIsAdmin = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { data, error } = await context.supabase.rpc("has_role", {
+      _user_id: context.userId,
+      _role: "admin",
+    });
+    if (error) throw new Error(error.message);
+    return { isAdmin: !!data, userId: context.userId };
+  });
+
+export const claimAdminIfEmpty = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { data, error } = await context.supabase.rpc("claim_admin_if_empty");
+    if (error) throw new Error(error.message);
+    return { claimed: !!data };
+  });
 
 const slugify = (s: string) =>
   s
@@ -34,8 +63,10 @@ const createInput = z.object({
 });
 
 export const createCompetition = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((data: unknown) => createInput.parse(data))
-  .handler(async ({ data }) => {
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
     const slug = slugify(data.slug || data.title);
@@ -87,8 +118,10 @@ const skillInput = z.object({
 });
 
 export const updateSkillQuestion = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((data: unknown) => skillInput.parse(data))
-  .handler(async ({ data }) => {
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { error } = await supabaseAdmin
       .from("competitions")

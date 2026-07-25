@@ -18,14 +18,16 @@ import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CheckoutRouteImport } from './routes/checkout'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AccountRouteImport } from './routes/account'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CompetitionsIndexRouteImport } from './routes/competitions.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as CompetitionsSlugRouteImport } from './routes/competitions.$slug'
 import { Route as AdminCompetitionsNewRouteImport } from './routes/admin.competitions.new'
-import { Route as AdminCompetitionsSlugSkillRouteImport } from './routes/admin.competitions.$slug.skill'
+import { Route as AuthenticatedAdminCompetitionsSlugSkillRouteImport } from './routes/_authenticated/admin.competitions.$slug.skill'
 
 const WinnersRoute = WinnersRouteImport.update({
   id: '/winners',
@@ -72,6 +74,11 @@ const CheckoutRoute = CheckoutRouteImport.update({
   path: '/checkout',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AccountRoute = AccountRouteImport.update({
   id: '/account',
   path: '/account',
@@ -80,6 +87,10 @@ const AccountRoute = AccountRouteImport.update({
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -107,17 +118,18 @@ const AdminCompetitionsNewRoute = AdminCompetitionsNewRouteImport.update({
   path: '/admin/competitions/new',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdminCompetitionsSlugSkillRoute =
-  AdminCompetitionsSlugSkillRouteImport.update({
+const AuthenticatedAdminCompetitionsSlugSkillRoute =
+  AuthenticatedAdminCompetitionsSlugSkillRouteImport.update({
     id: '/admin/competitions/$slug/skill',
     path: '/admin/competitions/$slug/skill',
-    getParentRoute: () => rootRouteImport,
+    getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/account': typeof AccountRoute
+  '/auth': typeof AuthRoute
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
@@ -131,12 +143,13 @@ export interface FileRoutesByFullPath {
   '/admin/': typeof AdminIndexRoute
   '/competitions/': typeof CompetitionsIndexRoute
   '/admin/competitions/new': typeof AdminCompetitionsNewRoute
-  '/admin/competitions/$slug/skill': typeof AdminCompetitionsSlugSkillRoute
+  '/admin/competitions/$slug/skill': typeof AuthenticatedAdminCompetitionsSlugSkillRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/account': typeof AccountRoute
+  '/auth': typeof AuthRoute
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
@@ -150,13 +163,15 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminIndexRoute
   '/competitions': typeof CompetitionsIndexRoute
   '/admin/competitions/new': typeof AdminCompetitionsNewRoute
-  '/admin/competitions/$slug/skill': typeof AdminCompetitionsSlugSkillRoute
+  '/admin/competitions/$slug/skill': typeof AuthenticatedAdminCompetitionsSlugSkillRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/about': typeof AboutRoute
   '/account': typeof AccountRoute
+  '/auth': typeof AuthRoute
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
@@ -170,7 +185,7 @@ export interface FileRoutesById {
   '/admin/': typeof AdminIndexRoute
   '/competitions/': typeof CompetitionsIndexRoute
   '/admin/competitions/new': typeof AdminCompetitionsNewRoute
-  '/admin/competitions/$slug/skill': typeof AdminCompetitionsSlugSkillRoute
+  '/_authenticated/admin/competitions/$slug/skill': typeof AuthenticatedAdminCompetitionsSlugSkillRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -178,6 +193,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/account'
+    | '/auth'
     | '/checkout'
     | '/contact'
     | '/faq'
@@ -197,6 +213,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/account'
+    | '/auth'
     | '/checkout'
     | '/contact'
     | '/faq'
@@ -214,8 +231,10 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/_authenticated'
     | '/about'
     | '/account'
+    | '/auth'
     | '/checkout'
     | '/contact'
     | '/faq'
@@ -229,13 +248,15 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/competitions/'
     | '/admin/competitions/new'
-    | '/admin/competitions/$slug/skill'
+    | '/_authenticated/admin/competitions/$slug/skill'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
   AccountRoute: typeof AccountRoute
+  AuthRoute: typeof AuthRoute
   CheckoutRoute: typeof CheckoutRoute
   ContactRoute: typeof ContactRoute
   FaqRoute: typeof FaqRoute
@@ -249,7 +270,6 @@ export interface RootRouteChildren {
   AdminIndexRoute: typeof AdminIndexRoute
   CompetitionsIndexRoute: typeof CompetitionsIndexRoute
   AdminCompetitionsNewRoute: typeof AdminCompetitionsNewRoute
-  AdminCompetitionsSlugSkillRoute: typeof AdminCompetitionsSlugSkillRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -317,6 +337,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CheckoutRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/account': {
       id: '/account'
       path: '/account'
@@ -329,6 +356,13 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -366,20 +400,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminCompetitionsNewRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin/competitions/$slug/skill': {
-      id: '/admin/competitions/$slug/skill'
+    '/_authenticated/admin/competitions/$slug/skill': {
+      id: '/_authenticated/admin/competitions/$slug/skill'
       path: '/admin/competitions/$slug/skill'
       fullPath: '/admin/competitions/$slug/skill'
-      preLoaderRoute: typeof AdminCompetitionsSlugSkillRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedAdminCompetitionsSlugSkillRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminCompetitionsSlugSkillRoute: typeof AuthenticatedAdminCompetitionsSlugSkillRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAdminCompetitionsSlugSkillRoute:
+    AuthenticatedAdminCompetitionsSlugSkillRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AboutRoute: AboutRoute,
   AccountRoute: AccountRoute,
+  AuthRoute: AuthRoute,
   CheckoutRoute: CheckoutRoute,
   ContactRoute: ContactRoute,
   FaqRoute: FaqRoute,
@@ -393,7 +441,6 @@ const rootRouteChildren: RootRouteChildren = {
   AdminIndexRoute: AdminIndexRoute,
   CompetitionsIndexRoute: CompetitionsIndexRoute,
   AdminCompetitionsNewRoute: AdminCompetitionsNewRoute,
-  AdminCompetitionsSlugSkillRoute: AdminCompetitionsSlugSkillRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

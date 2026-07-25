@@ -2,6 +2,8 @@ import { Link } from "@tanstack/react-router";
 import { Menu, Ticket, User } from "lucide-react";
 import { useState } from "react";
 import { Logo } from "./Logo";
+import { useAuth } from "@/hooks/use-auth";
+import { supabase } from "@/integrations/supabase/client";
 
 const links = [
   { to: "/", label: "Home" },
@@ -13,6 +15,8 @@ const links = [
 
 export function SiteNav() {
   const [open, setOpen] = useState(false);
+  const { session, loading } = useAuth();
+  const signedIn = !!session;
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur-md">
       <div className="mx-auto max-w-7xl px-4 h-16 flex items-center justify-between gap-4">
@@ -32,12 +36,31 @@ export function SiteNav() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <Link
-            to="/account"
-            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-md text-sm font-medium text-foreground/70 hover:text-foreground transition-colors"
-          >
-            <User className="h-4 w-4" /> Account
-          </Link>
+          {signedIn ? (
+            <>
+              <Link
+                to="/account"
+                className="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-md text-sm font-medium text-foreground/70 hover:text-foreground transition-colors"
+              >
+                <User className="h-4 w-4" /> Account
+              </Link>
+              <button
+                onClick={() => supabase.auth.signOut()}
+                className="hidden sm:inline-flex px-3 py-2 rounded-md text-sm font-medium text-foreground/60 hover:text-foreground transition-colors"
+              >
+                Sign out
+              </button>
+            </>
+          ) : (
+            !loading && (
+              <Link
+                to="/auth"
+                className="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-md text-sm font-medium text-foreground/70 hover:text-foreground transition-colors"
+              >
+                <User className="h-4 w-4" /> Sign in
+              </Link>
+            )
+          )}
           <Link
             to="/checkout"
             className="relative inline-flex items-center gap-1.5 rounded-md bg-clover text-primary-foreground px-3.5 py-2 text-sm font-semibold hover:bg-clover-deep transition-colors"
