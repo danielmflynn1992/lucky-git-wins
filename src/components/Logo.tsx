@@ -20,7 +20,7 @@ export function Logo({ variant = "horizontal", className = "" }: { variant?: "ho
   const sizing =
     variant === "stacked"
       ? "h-28 w-auto"
-      : "h-16 sm:h-20 md:h-24 w-auto -mt-1 -mb-5 md:-mt-2 md:-mb-7";
+      : "h-24 sm:h-28 md:h-32 w-auto -my-6 md:-my-8";
   return (
     <Link
       to="/"
