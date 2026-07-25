@@ -88,7 +88,24 @@ export function SiteNav() {
               {l.label}
             </Link>
           ))}
-          <Link to="/account" onClick={() => setOpen(false)} className="px-3 py-3 text-sm font-medium rounded-md hover:bg-white/5 text-foreground/80">Account</Link>
+          {signedIn ? (
+            <>
+              <Link to="/account" onClick={() => setOpen(false)} className="px-3 py-3 text-sm font-medium rounded-md hover:bg-white/5 text-foreground/80">Account</Link>
+              <button
+                onClick={async () => {
+                  await supabase.auth.signOut();
+                  setOpen(false);
+                }}
+                className="text-left px-3 py-3 text-sm font-medium rounded-md hover:bg-white/5 text-foreground/80"
+              >
+                Sign out
+              </button>
+            </>
+          ) : (
+            !loading && (
+              <Link to="/auth" onClick={() => setOpen(false)} className="px-3 py-3 text-sm font-medium rounded-md hover:bg-white/5 text-foreground/80">Sign in</Link>
+            )
+          )}
         </nav>
       )}
     </header>
