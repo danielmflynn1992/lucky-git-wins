@@ -206,6 +206,16 @@ export function SiteNav() {
         </div>
       </div>
 
+      {/* Screen-reader live region — announces basket changes globally */}
+      <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      >
+        {liveMsg}
+      </div>
+
       {/* Mobile menu */}
       {open && (
         <div
