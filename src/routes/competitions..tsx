@@ -18,7 +18,7 @@ import {
   type DbCompetition,
 } from "@/lib/competitions-api";
 
-export const Route = createFileRoute("/competitions/$slug")({
+export const Route = createFileRoute("/competitions/")({
   loader: async ({ params, context }) => {
     const data = await context.queryClient.ensureQueryData(competitionQueryOptions(params.slug));
     if (!data) throw notFound();
