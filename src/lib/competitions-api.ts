@@ -87,6 +87,77 @@ export const competitionQueryOptions = (slug: string) =>
     staleTime: 15_000,
   });
 
+// --- Live odds for the ticker ------------------------------------------------
+
+export interface LiveOdds {
+  id: string;
+  slug: string;
+  title: string;
+  category: string;
+  pricePerTicket: number;
+  totalTickets: number;
+  ticketsSold: number;
+  ticketsReserved: number;
+  ticketsAvailable: number;
+  odds: number; // 1 : odds
+  pctSold: number;
+  endsAt: string;
+}
+
+export async function fetchLiveOdds(): Promise<LiveOdds[]> {
+  const { data: comps, error } = await supabase
+    .from("competitions")
+    .select("id, slug, title, category, price_per_ticket, total_tickets, ends_at")
+    .eq("status", "live")
+    .gt("ends_at", new Date().toISOString())
+    .order("ends_at", { ascending: true });
+  if (error) throw error;
+  if (!comps || comps.length === 0) return [];
+
+  const ids = comps.map((c) => c.id);
+  const { data: tickets, error: tErr } = await supabase
+    .from("tickets")
+    .select("competition_id, status")
+    .in("competition_id", ids)
+    .neq("status", "available");
+  if (tErr) throw tErr;
+
+  const counts = new Map<string, { sold: number; reserved: number }>();
+  for (const t of tickets ?? []) {
+    const c = counts.get(t.competition_id) ?? { sold: 0, reserved: 0 };
+    if (t.status === "sold") c.sold += 1;
+    else if (t.status === "reserved") c.reserved += 1;
+    counts.set(t.competition_id, c);
+  }
+
+  return comps.map((c) => {
+    const { sold = 0, reserved = 0 } = counts.get(c.id) ?? {};
+    const total = c.total_tickets;
+    const soldEffective = Math.max(1, sold);
+    return {
+      id: c.id,
+      slug: c.slug,
+      title: c.title,
+      category: c.category,
+      pricePerTicket: Number(c.price_per_ticket),
+      totalTickets: total,
+      ticketsSold: sold,
+      ticketsReserved: reserved,
+      ticketsAvailable: total - sold - reserved,
+      odds: Math.max(1, Math.round(total / soldEffective)),
+      pctSold: Math.round((sold / Math.max(1, total)) * 100),
+      endsAt: c.ends_at,
+    };
+  });
+}
+
+export const liveOddsQueryOptions = queryOptions({
+  queryKey: ["live-odds"],
+  queryFn: fetchLiveOdds,
+  staleTime: 15_000,
+  refetchInterval: 30_000,
+});
+
 // --- Reservation helpers ------------------------------------------------------
 
 export function newReservationToken(): string {

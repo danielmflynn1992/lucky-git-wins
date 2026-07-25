@@ -1,50 +1,174 @@
-import { COMPETITIONS, WINNERS } from "@/lib/mock-comps";
-import { Trophy, Timer } from "lucide-react";
+import { useEffect } from "react";
+import { Link } from "@tanstack/react-router";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { Ticket, TrendingUp, Clock, Users } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { liveOddsQueryOptions, type LiveOdds } from "@/lib/competitions-api";
+import { gbp, timeLeft } from "@/lib/format";
+import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 
 /**
- * Bright "Latest Winners / Draws Tonight" ticker.
- * White strip under nav, bold black text, emerald dividers.
+ * Bright ticker showing live odds pulled from the database.
+ * Auto-refreshes every 30s and subscribes to ticket changes for realtime updates.
+ * Each item shows a tooltip on hover/tap explaining what the numbers mean.
  */
 export function LiveOddsTicker() {
-  const drawsTonight = [...COMPETITIONS]
-    .sort((a, b) => +new Date(a.endsAt) - +new Date(b.endsAt))
-    .slice(0, 3)
-    .map((c) => ({ type: "draw" as const, text: `${c.title.toUpperCase()} — DRAWING SOON` }));
+  const qc = useQueryClient();
+  const { data } = useQuery(liveOddsQueryOptions);
 
-  const winners = WINNERS.slice(0, 5).map((w) => ({
-    type: "win" as const,
-    text: `${w.name.toUpperCase()} FROM ${w.town.toUpperCase()} WON ${w.prize.toUpperCase()}`,
-  }));
+  // Realtime: invalidate the ticker when any ticket row changes.
+  useEffect(() => {
+    const channel = supabase
+      .channel("ticker-tickets")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "tickets" },
+        () => {
+          qc.invalidateQueries({ queryKey: ["live-odds"] });
+        },
+      )
+      .subscribe();
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [qc]);
 
-  const items = [...winners, ...drawsTonight];
-  const loop = [...items, ...items];
+  const items = (data ?? []).filter((c) => c.totalTickets > 0);
 
-  return (
-    <div className="relative overflow-hidden bg-white border-b border-border">
-      <div className="flex items-stretch">
-        <span className="shrink-0 inline-flex items-center gap-2 bg-clover px-3 py-2 text-[10px] font-black uppercase tracking-[0.25em] text-primary-foreground">
-          <span className="relative flex h-2 w-2">
-            <span className="absolute inline-flex h-full w-full rounded-full bg-white opacity-70 animate-ping" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-white" />
-          </span>
-          LIVE
-        </span>
-        <div className="relative flex-1 overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_4%,#000_96%,transparent)] py-2">
-          <div className="ticker-scroll flex gap-8 whitespace-nowrap text-xs font-bold tracking-wide text-ink">
-            {loop.map((it, i) => (
-              <span key={i} className="inline-flex items-center gap-3 shrink-0">
-                {it.type === "win" ? (
-                  <Trophy className="h-3.5 w-3.5 text-gold" />
-                ) : (
-                  <Timer className="h-3.5 w-3.5 text-hot" />
-                )}
-                <span>{it.text}</span>
-                <span className="text-clover font-black">●</span>
-              </span>
-            ))}
+  // Empty / loading state — still render the shell so layout doesn't jump.
+  if (items.length === 0) {
+    return (
+      <div className="relative overflow-hidden bg-white border-b border-border">
+        <div className="flex items-stretch">
+          <LiveChip />
+          <div className="flex-1 px-4 py-2 text-xs font-bold text-muted-foreground tracking-wide">
+            No live competitions right now. New ones drop weekly.
           </div>
         </div>
       </div>
+    );
+  }
+
+  // Duplicate the list so the scroll can loop seamlessly.
+  const loop = [...items, ...items];
+
+  return (
+    <TooltipProvider delayDuration={150}>
+      <div className="relative overflow-hidden bg-white border-b border-border">
+        <div className="flex items-stretch">
+          <LiveChip />
+          <div className="relative flex-1 overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_4%,#000_96%,transparent)] py-2">
+            <div className="ticker-scroll flex gap-8 whitespace-nowrap text-xs font-bold tracking-wide text-ink">
+              {loop.map((it, i) => (
+                <TickerItem key={`${it.id}-${i}`} c={it} />
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </TooltipProvider>
+  );
+}
+
+function LiveChip() {
+  return (
+    <span className="shrink-0 inline-flex items-center gap-2 bg-clover px-3 py-2 text-[10px] font-black uppercase tracking-[0.25em] text-primary-foreground">
+      <span className="relative flex h-2 w-2">
+        <span className="absolute inline-flex h-full w-full rounded-full bg-white opacity-70 animate-ping" />
+        <span className="relative inline-flex h-2 w-2 rounded-full bg-white" />
+      </span>
+      LIVE
+    </span>
+  );
+}
+
+function TickerItem({ c }: { c: LiveOdds }) {
+  const t = timeLeft(c.endsAt);
+  const closes = `${String(t.d).padStart(2, "0")}d ${String(t.h).padStart(2, "0")}h ${String(t.m).padStart(2, "0")}m`;
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Link
+          to="/competitions/$slug"
+          params={{ slug: c.slug }}
+          className="inline-flex items-center gap-3 shrink-0 hover:text-clover-deep focus:text-clover-deep focus:outline-none"
+        >
+          <span>{c.title.toUpperCase()}</span>
+          <span className="text-muted-foreground font-mono tabular-nums">
+            {c.ticketsSold.toLocaleString()}/{c.totalTickets.toLocaleString()} SOLD
+          </span>
+          <span className="text-clover font-mono tabular-nums">
+            ODDS 1:{c.odds.toLocaleString()}
+          </span>
+          <span className="text-clover font-black">●</span>
+        </Link>
+      </TooltipTrigger>
+      <TooltipContent
+        side="bottom"
+        align="start"
+        className="max-w-xs bg-ink text-cream border border-white/10 shadow-lg p-0 rounded-md"
+      >
+        <div className="px-3 py-2 border-b border-white/10">
+          <div className="text-[10px] font-mono uppercase tracking-[0.2em] text-clover">{c.category}</div>
+          <div className="font-display text-sm font-bold text-cream leading-tight mt-0.5">{c.title}</div>
+        </div>
+        <dl className="px-3 py-2 space-y-1.5 text-[11px] font-mono tabular-nums">
+          <TooltipRow
+            icon={<Ticket className="h-3 w-3 text-clover" />}
+            label="Tickets sold"
+            value={`${c.ticketsSold.toLocaleString()} / ${c.totalTickets.toLocaleString()} (${c.pctSold}%)`}
+            hint="How many tickets have been paid for so far."
+          />
+          {c.ticketsReserved > 0 && (
+            <TooltipRow
+              icon={<Users className="h-3 w-3 text-gold" />}
+              label="Reserved"
+              value={c.ticketsReserved.toLocaleString()}
+              hint="Held in other people's baskets for the next 15 minutes."
+            />
+          )}
+          <TooltipRow
+            icon={<TrendingUp className="h-3 w-3 text-clover" />}
+            label={`Odds 1:${c.odds.toLocaleString()}`}
+            value={`${gbp(c.pricePerTicket)}/ticket`}
+            hint="Right now, roughly 1 in every this many tickets wins."
+          />
+          <TooltipRow
+            icon={<Clock className="h-3 w-3 text-hot" />}
+            label="Closes in"
+            value={closes}
+            hint="Automatic draw as soon as the timer hits zero."
+          />
+        </dl>
+        <div className="px-3 py-2 border-t border-white/10 text-[10px] text-cream/60 leading-snug">
+          Tap to open. Odds update live as tickets sell.
+        </div>
+      </TooltipContent>
+    </Tooltip>
+  );
+}
+
+function TooltipRow({
+  icon,
+  label,
+  value,
+  hint,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: string;
+  hint: string;
+}) {
+  return (
+    <div>
+      <div className="flex items-center justify-between gap-4">
+        <span className="inline-flex items-center gap-1.5 text-cream/70">
+          {icon}
+          {label}
+        </span>
+        <span className="text-cream font-bold">{value}</span>
+      </div>
+      <div className="text-[10px] text-cream/50 leading-snug mt-0.5 font-sans">{hint}</div>
     </div>
   );
 }
