@@ -6,18 +6,18 @@ export function Logo({ variant = "horizontal", className = "" }: { variant?: "ho
   if (dark) {
     return (
       <Link to="/" className={`inline-flex flex-col items-center gap-2 ${className}`}>
-        <LuckyMark className="h-12 w-12" />
-        <div className="font-display text-xl font-semibold tracking-tight text-cream leading-none">
-          LuckyGit<span className="text-clover">Comps</span>
+        <LuckyMark className="h-10 w-10" />
+        <div className="font-display text-lg font-semibold tracking-[-0.03em] text-foreground leading-none">
+          LuckyGitComps
         </div>
       </Link>
     );
   }
   return (
     <Link to="/" className={`inline-flex items-center gap-2 ${className}`}>
-      <LuckyMark className="h-8 w-8 shrink-0" />
-      <div className="font-display text-lg font-semibold tracking-tight text-foreground leading-none">
-        LuckyGit<span className="text-clover">Comps</span>
+      <LuckyMark className="h-7 w-7 shrink-0" />
+      <div className="font-display text-[15px] font-semibold tracking-[-0.03em] text-foreground leading-none">
+        LuckyGitComps
       </div>
     </Link>
   );
