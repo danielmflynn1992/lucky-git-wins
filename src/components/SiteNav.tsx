@@ -79,7 +79,7 @@ export function SiteNav() {
             className="lg:hidden justify-self-start p-2 rounded-md hover:bg-muted text-foreground/80"
             aria-label="Menu"
           >
-            <Menu className="h-5 w-5" />
+            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
 
           {/* Centered logo */}
