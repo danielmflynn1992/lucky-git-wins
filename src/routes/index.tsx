@@ -206,7 +206,7 @@ function Home() {
         </div>
 
         {view === "grid" ? (
-          <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-6 grid gap-5 grid-cols-1 sm:grid-cols-2">
             {filtered.map((c) => (
               <div key={c.slug} className="rise-in">
                 <CompCard c={c} />
