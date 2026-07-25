@@ -17,7 +17,7 @@ export function SmugSmile({ className = "" }: { className?: string }) {
 }
 
 export function Logo({ variant = "horizontal", className = "" }: { variant?: "horizontal" | "stacked"; className?: string }) {
-  const sizing = variant === "stacked" ? "h-20 w-auto" : "h-11 w-auto";
+  const sizing = variant === "stacked" ? "h-28 w-auto" : "h-20 w-auto -my-4";
   return (
     <Link
       to="/"
@@ -27,7 +27,7 @@ export function Logo({ variant = "horizontal", className = "" }: { variant?: "ho
       <img
         src={logoLockup}
         alt="LuckyGitComps"
-        className={`${sizing} object-contain`}
+        className={`${sizing} object-contain max-w-none`}
         width={1536}
         height={1024}
         loading="eager"
