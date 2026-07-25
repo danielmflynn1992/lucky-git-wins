@@ -28,7 +28,7 @@ function NewComp() {
   const [title, setTitle] = useState("");
   const [slug, setSlug] = useState("");
   const [subtitle, setSubtitle] = useState("");
-  const [category, setCategory] = useState(CATEGORIES[0] ?? "Cars");
+  const [category, setCategory] = useState<string>(CATEGORIES[0] ?? "Cars");
   const [description, setDescription] = useState("");
   const [pricePerTicket, setPricePerTicket] = useState(1.99);
   const [totalTickets, setTotalTickets] = useState(5000);
