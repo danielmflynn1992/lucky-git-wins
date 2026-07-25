@@ -25,7 +25,7 @@ export const Route = createFileRoute("/competitions/$slug")({
   head: () => ({
     meta: [
       { title: "Enter now — Lucky Git Comps" },
-      { name: "description", content: "Pick your tickets, answer the skill question, in the draw. Free postal entry available." },
+      { name: "description", content: "Pick your tickets, answer the skill question, in the draw. Auto-drawn on close." },
       { property: "og:title", content: "Enter now — Lucky Git Comps" },
     ],
   }),
@@ -278,7 +278,7 @@ function CompDetail() {
               <div className="flex items-center gap-2"><Shield className="h-4 w-4 text-clover" /> Live streamed draw</div>
               <div className="flex items-center gap-2"><PoundSterling className="h-4 w-4 text-clover" /> Cash alt: {gbp(c.cashAlternative)}</div>
               <div className="flex items-center gap-2"><Ticket className="h-4 w-4 text-clover" /> Max {c.maxPerPerson} per person</div>
-              <div className="flex items-center gap-2"><Info className="h-4 w-4 text-clover" /> <Link to="/free-postal-entry" className="underline font-semibold">Free entry route</Link></div>
+              <div className="flex items-center gap-2"><Info className="h-4 w-4 text-clover" /> Auto-drawn on close</div>
             </div>
           </div>
         </div>
@@ -292,14 +292,14 @@ function CompDetail() {
             <ul className="mt-3 space-y-2 text-sm text-foreground/80">
               <li className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-clover mt-0.5 shrink-0" /> Closing: <b>{new Date(c.endsAt).toLocaleString("en-GB")}</b> — or when sold out.</li>
               <li className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-clover mt-0.5 shrink-0" /> Cash alternative: <b>{gbp(c.cashAlternative)}</b>.</li>
-              <li className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-clover mt-0.5 shrink-0" /> Winner announced live within 24h of close.</li>
+              <li className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-clover mt-0.5 shrink-0" /> Winner automatically drawn and announced within 24h of close.</li>
               <li className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-clover mt-0.5 shrink-0" /> UK entrants only, 18+. <Link to="/terms" className="underline">T&Cs apply</Link>.</li>
             </ul>
           </div>
           <aside className="rounded-2xl bg-gold/10 border-2 border-gold/40 p-5">
-            <h3 className="font-display text-lg font-black">Free postal entry</h3>
-            <p className="mt-2 text-sm text-foreground/80">Every competition can be entered by post. Same odds, no purchase.</p>
-            <Link to="/free-postal-entry" className="mt-3 inline-block font-bold text-clover underline">How to enter by post →</Link>
+            <h3 className="font-display text-lg font-black">Automatic draw</h3>
+            <p className="mt-2 text-sm text-foreground/80">Winners are picked automatically the moment the timer hits zero (or the last ticket sells). Provably random, verified, and published on the Winners Wall.</p>
+            <Link to="/winners" className="mt-3 inline-block font-bold text-clover underline">See recent winners →</Link>
           </aside>
         </section>
 
