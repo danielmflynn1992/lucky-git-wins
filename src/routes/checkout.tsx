@@ -72,12 +72,12 @@ function Checkout() {
           <div className="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-full bg-hot/15 text-hot">
             <AlertTriangle className="h-7 w-7" />
           </div>
-          <h1 className="mt-6 font-display text-3xl font-black">Skill question required.</h1>
+          <h1 className="mt-6 font-display text-3xl font-semibold tracking-tight">Your basket is tragically empty.</h1>
           <p className="mt-2 text-muted-foreground">
-            No reserved tickets on this device. Head back, pick your tickets, and answer the skill question — checkout unlocks after that.
+            You can't win if you don't play. Head back, pick your tickets, answer the skill question — then checkout unlocks. Simple as.
           </p>
           <Button asChild variant="gold" size="lg" className="mt-6">
-            <Link to="/competitions/$slug" params={{ slug: slug ?? comp.slug }}>Back to the comp</Link>
+            <Link to="/competitions/$slug" params={{ slug: slug ?? comp.slug }}>Right, take me back</Link>
           </Button>
         </main>
         <SiteFooter />
@@ -98,8 +98,8 @@ function Checkout() {
           }}
         >
           <div>
-            <h1 className="font-display text-3xl font-black">Right then, checkout.</h1>
-            <p className="text-muted-foreground mt-1">You're seconds away from being in the draw.</p>
+            <h1 className="font-display text-3xl md:text-4xl font-semibold tracking-tight">Right then, checkout.</h1>
+            <p className="text-muted-foreground mt-1">Card details, a quick tick-box, and you're in the draw. That's the lot.</p>
           </div>
 
           <fieldset className="rounded-2xl bg-clover/5 border-2 border-clover/30 p-4">
@@ -144,7 +144,7 @@ function Checkout() {
           </label>
 
           <Button type="submit" variant="gold" size="xl" className="w-full">
-            Pay {gbp(subtotal)} — I'm feeling lucky
+            Cough Up {gbp(subtotal)} (Securely)
           </Button>
           <div className="text-xs text-muted-foreground text-center flex items-center justify-center gap-1.5">
             <ShieldCheck className="h-3.5 w-3.5" /> Secure checkout. Skill question passed.

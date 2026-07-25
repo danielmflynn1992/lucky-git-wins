@@ -11,7 +11,7 @@ export function CompCard({ c }: { c: Competition }) {
     <Link
       to="/competitions/$slug"
       params={{ slug: c.slug }}
-      className="group relative flex flex-col rounded-lg bg-card overflow-hidden border border-border hover:border-clover/50 transition-colors duration-150"
+      className="group relative flex flex-col rounded-xl glass overflow-hidden hover:border-clover/50 hover:shadow-[0_0_40px_-12px_rgba(0,223,129,0.35)] hover:-translate-y-0.5 transition-all duration-300"
     >
       {/* Tag row — flat, single-accent */}
       <div className="absolute top-3 left-3 z-10 flex gap-1.5">
@@ -34,7 +34,7 @@ export function CompCard({ c }: { c: Competition }) {
           loading="lazy"
           width={1280}
           height={960}
-          className="h-full w-full object-cover transition-opacity group-hover:opacity-90"
+          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
         />
       </div>
 
