@@ -13,9 +13,7 @@ import { Route as WinnersRouteImport } from './routes/winners'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as ResponsiblePlayRouteImport } from './routes/responsible-play'
 import { Route as PrivacyRouteImport } from './routes/privacy'
-import { Route as LiveDrawsRouteImport } from './routes/live-draws'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
-import { Route as FreePostalEntryRouteImport } from './routes/free-postal-entry'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CheckoutRouteImport } from './routes/checkout'
@@ -47,19 +45,9 @@ const PrivacyRoute = PrivacyRouteImport.update({
   path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
-const LiveDrawsRoute = LiveDrawsRouteImport.update({
-  id: '/live-draws',
-  path: '/live-draws',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const HowItWorksRoute = HowItWorksRouteImport.update({
   id: '/how-it-works',
   path: '/how-it-works',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FreePostalEntryRoute = FreePostalEntryRouteImport.update({
-  id: '/free-postal-entry',
-  path: '/free-postal-entry',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FaqRoute = FaqRouteImport.update({
@@ -120,9 +108,7 @@ export interface FileRoutesByFullPath {
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
-  '/free-postal-entry': typeof FreePostalEntryRoute
   '/how-it-works': typeof HowItWorksRoute
-  '/live-draws': typeof LiveDrawsRoute
   '/privacy': typeof PrivacyRoute
   '/responsible-play': typeof ResponsiblePlayRoute
   '/terms': typeof TermsRoute
@@ -139,9 +125,7 @@ export interface FileRoutesByTo {
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
-  '/free-postal-entry': typeof FreePostalEntryRoute
   '/how-it-works': typeof HowItWorksRoute
-  '/live-draws': typeof LiveDrawsRoute
   '/privacy': typeof PrivacyRoute
   '/responsible-play': typeof ResponsiblePlayRoute
   '/terms': typeof TermsRoute
@@ -159,9 +143,7 @@ export interface FileRoutesById {
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
-  '/free-postal-entry': typeof FreePostalEntryRoute
   '/how-it-works': typeof HowItWorksRoute
-  '/live-draws': typeof LiveDrawsRoute
   '/privacy': typeof PrivacyRoute
   '/responsible-play': typeof ResponsiblePlayRoute
   '/terms': typeof TermsRoute
@@ -180,9 +162,7 @@ export interface FileRouteTypes {
     | '/checkout'
     | '/contact'
     | '/faq'
-    | '/free-postal-entry'
     | '/how-it-works'
-    | '/live-draws'
     | '/privacy'
     | '/responsible-play'
     | '/terms'
@@ -199,9 +179,7 @@ export interface FileRouteTypes {
     | '/checkout'
     | '/contact'
     | '/faq'
-    | '/free-postal-entry'
     | '/how-it-works'
-    | '/live-draws'
     | '/privacy'
     | '/responsible-play'
     | '/terms'
@@ -218,9 +196,7 @@ export interface FileRouteTypes {
     | '/checkout'
     | '/contact'
     | '/faq'
-    | '/free-postal-entry'
     | '/how-it-works'
-    | '/live-draws'
     | '/privacy'
     | '/responsible-play'
     | '/terms'
@@ -238,9 +214,7 @@ export interface RootRouteChildren {
   CheckoutRoute: typeof CheckoutRoute
   ContactRoute: typeof ContactRoute
   FaqRoute: typeof FaqRoute
-  FreePostalEntryRoute: typeof FreePostalEntryRoute
   HowItWorksRoute: typeof HowItWorksRoute
-  LiveDrawsRoute: typeof LiveDrawsRoute
   PrivacyRoute: typeof PrivacyRoute
   ResponsiblePlayRoute: typeof ResponsiblePlayRoute
   TermsRoute: typeof TermsRoute
@@ -281,25 +255,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/live-draws': {
-      id: '/live-draws'
-      path: '/live-draws'
-      fullPath: '/live-draws'
-      preLoaderRoute: typeof LiveDrawsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/how-it-works': {
       id: '/how-it-works'
       path: '/how-it-works'
       fullPath: '/how-it-works'
       preLoaderRoute: typeof HowItWorksRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/free-postal-entry': {
-      id: '/free-postal-entry'
-      path: '/free-postal-entry'
-      fullPath: '/free-postal-entry'
-      preLoaderRoute: typeof FreePostalEntryRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/faq': {
@@ -382,9 +342,7 @@ const rootRouteChildren: RootRouteChildren = {
   CheckoutRoute: CheckoutRoute,
   ContactRoute: ContactRoute,
   FaqRoute: FaqRoute,
-  FreePostalEntryRoute: FreePostalEntryRoute,
   HowItWorksRoute: HowItWorksRoute,
-  LiveDrawsRoute: LiveDrawsRoute,
   PrivacyRoute: PrivacyRoute,
   ResponsiblePlayRoute: ResponsiblePlayRoute,
   TermsRoute: TermsRoute,
