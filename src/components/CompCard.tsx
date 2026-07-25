@@ -80,17 +80,17 @@ export function CompCard({ c }: { c: Competition }) {
         </div>
 
         {/* CTA row — View + Quick add */}
-        <div className="flex gap-2">
-          <div className="flex-1 rounded-md bg-clover text-primary-foreground text-center py-3 font-display font-extrabold text-base uppercase tracking-[-0.01em] group-hover:bg-clover-deep transition-colors">
+        <div className="flex gap-1.5">
+          <div className="flex-1 min-w-0 rounded-md bg-clover text-primary-foreground text-center py-2 sm:py-2.5 px-2 font-display font-extrabold text-xs sm:text-sm uppercase tracking-[-0.01em] group-hover:bg-clover-deep transition-colors truncate">
             Enter Now →
           </div>
           <button
             type="button"
             aria-label={`Quick add tickets for ${c.title}`}
             onClick={(e) => { e.preventDefault(); e.stopPropagation(); setQuickOpen(true); }}
-            className="shrink-0 rounded-md bg-gold text-gold-foreground px-4 py-3 font-display font-extrabold uppercase tracking-[-0.01em] inline-flex items-center gap-1.5 hover:bg-gold/90 transition-colors"
+            className="shrink-0 rounded-md bg-gold text-gold-foreground px-2.5 sm:px-3 py-2 sm:py-2.5 font-display font-extrabold text-xs sm:text-sm uppercase tracking-[-0.01em] inline-flex items-center gap-1 hover:bg-gold/90 transition-colors"
           >
-            <Plus className="h-4 w-4" /> Add
+            <Plus className="h-3.5 w-3.5" /> Add
           </button>
         </div>
 
