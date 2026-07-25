@@ -15,7 +15,6 @@ export function SiteFooter() {
           <h4 className="text-[10px] font-mono uppercase tracking-[0.2em] text-cream/50 mb-4">Play</h4>
           <ul className="space-y-2.5 text-sm">
             <li><Link to="/competitions" className="hover:text-gold">Live Competitions</Link></li>
-            <li><Link to="/live-draws" className="hover:text-gold">Live Draws</Link></li>
             <li><Link to="/winners" className="hover:text-gold">Winners Wall</Link></li>
             <li><Link to="/how-it-works" className="hover:text-gold">How it works</Link></li>
           </ul>
@@ -23,7 +22,6 @@ export function SiteFooter() {
         <div>
           <h4 className="text-[10px] font-mono uppercase tracking-[0.2em] text-cream/50 mb-4">Legit</h4>
           <ul className="space-y-2.5 text-sm">
-            <li><Link to="/free-postal-entry" className="hover:text-gold font-semibold">Free Postal Entry Route</Link></li>
             <li><Link to="/terms" className="hover:text-gold">Terms & Conditions</Link></li>
             <li><Link to="/privacy" className="hover:text-gold">Privacy Policy</Link></li>
             <li><Link to="/responsible-play" className="hover:text-gold">Responsible Play</Link></li>
