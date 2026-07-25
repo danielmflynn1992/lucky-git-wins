@@ -84,6 +84,7 @@ export type Database = {
           owner_id: string | null
           reservation_token: string | null
           reserved_until: string | null
+          skill_answer: number | null
           status: string
         }
         Insert: {
@@ -95,6 +96,7 @@ export type Database = {
           owner_id?: string | null
           reservation_token?: string | null
           reserved_until?: string | null
+          skill_answer?: number | null
           status?: string
         }
         Update: {
@@ -106,6 +108,7 @@ export type Database = {
           owner_id?: string | null
           reservation_token?: string | null
           reserved_until?: string | null
+          skill_answer?: number | null
           status?: string
         }
         Relationships: [
@@ -125,11 +128,21 @@ export type Database = {
     Functions: {
       release_reservation: { Args: { p_token: string }; Returns: undefined }
       reserve_lucky_dip: {
-        Args: { p_qty: number; p_slug: string; p_token: string }
+        Args: {
+          p_qty: number
+          p_skill_answer: number
+          p_slug: string
+          p_token: string
+        }
         Returns: number[]
       }
       reserve_specific_numbers: {
-        Args: { p_numbers: number[]; p_slug: string; p_token: string }
+        Args: {
+          p_numbers: number[]
+          p_skill_answer: number
+          p_slug: string
+          p_token: string
+        }
         Returns: number[]
       }
       sweep_expired_reservations: { Args: never; Returns: undefined }
