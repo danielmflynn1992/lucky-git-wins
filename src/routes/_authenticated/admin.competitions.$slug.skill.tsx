@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate, notFound } from "@tanstack/react-router";
 import { useState } from "react";
-import { useSuspenseQuery, useQueryClient } from "@tanstack/react-query";
+import { useSuspenseQuery, useQueryClient, useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { ArrowLeft, Eye, Save, Loader2, CheckCircle2, AlertTriangle } from "lucide-react";
 import { SiteNav } from "@/components/SiteNav";
@@ -8,7 +8,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { Button } from "@/components/ui/button";
 import { SkillQuestionModal, type SkillQuestion } from "@/components/SkillQuestionModal";
 import { competitionQueryOptions } from "@/lib/competitions-api";
-import { updateSkillQuestion } from "@/lib/admin.functions";
+import { updateSkillQuestion, getIsAdmin, claimAdminIfEmpty } from "@/lib/admin.functions";
 
 export const Route = createFileRoute("/_authenticated/admin/competitions/$slug/skill")({
   loader: async ({ params, context }) => {
@@ -21,8 +21,82 @@ export const Route = createFileRoute("/_authenticated/admin/competitions/$slug/s
       { name: "robots", content: "noindex" },
     ],
   }),
-  component: SkillEditor,
+  component: SkillEditorGate,
 });
+
+function SkillEditorGate() {
+  const isAdminFn = useServerFn(getIsAdmin);
+  const claimFn = useServerFn(claimAdminIfEmpty);
+  const adminQ = useQuery({
+    queryKey: ["is-admin"],
+    queryFn: () => isAdminFn(),
+    staleTime: 30_000,
+  });
+  const [claiming, setClaiming] = useState(false);
+  const [claimMsg, setClaimMsg] = useState<string | null>(null);
+
+  const handleClaim = async () => {
+    setClaiming(true);
+    setClaimMsg(null);
+    try {
+      const res = await claimFn();
+      if (res.claimed) {
+        setClaimMsg("You're now the admin.");
+        await adminQ.refetch();
+      } else {
+        setClaimMsg("An admin already exists. Ask them to grant you access.");
+      }
+    } catch (e: any) {
+      setClaimMsg(e?.message ?? "Could not claim admin.");
+    } finally {
+      setClaiming(false);
+    }
+  };
+
+  if (adminQ.isLoading) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <SiteNav />
+        <main className="mx-auto max-w-3xl px-4 py-16 flex-1 flex items-center justify-center">
+          <Loader2 className="h-5 w-5 animate-spin text-foreground/50" />
+        </main>
+        <SiteFooter />
+      </div>
+    );
+  }
+
+  if (!adminQ.data?.isAdmin) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <SiteNav />
+        <main className="mx-auto max-w-2xl px-4 py-16 flex-1">
+          <div className="text-xs font-mono uppercase tracking-widest text-signal">
+            403 · Forbidden
+          </div>
+          <h1 className="mt-2 font-display text-3xl font-black">Admins only</h1>
+          <p className="mt-2 text-foreground/70">
+            You're signed in, but this page is restricted to admin accounts. If
+            you're the site owner and no admin exists yet, you can claim the
+            role now.
+          </p>
+          <div className="mt-6 flex gap-2 items-center">
+            <Button onClick={handleClaim} disabled={claiming}>
+              {claiming && <Loader2 className="h-4 w-4 animate-spin mr-2" />}
+              Claim admin role
+            </Button>
+            <Link to="/" className="text-sm text-foreground/60 hover:text-foreground">
+              Go home
+            </Link>
+          </div>
+          {claimMsg && <div className="mt-3 text-sm text-foreground/70">{claimMsg}</div>}
+        </main>
+        <SiteFooter />
+      </div>
+    );
+  }
+
+  return <SkillEditor />;
+}
 
 function SkillEditor() {
   const { slug } = Route.useParams();
