@@ -11,7 +11,7 @@ export function CompCard({ c }: { c: Competition }) {
     <Link
       to="/competitions/$slug"
       params={{ slug: c.slug }}
-      className="group relative flex flex-col rounded-md bg-card overflow-hidden border border-ink/10 hover:border-clover/60 transition-colors duration-150"
+      className="group relative flex flex-col rounded-md bg-card overflow-hidden border border-white/10 hover:border-clover/60 transition-colors duration-150"
     >
       {/* Tag row — flat, single-accent */}
       <div className="absolute top-3 left-3 z-10 flex gap-1.5">
@@ -52,16 +52,16 @@ export function CompCard({ c }: { c: Competition }) {
 
         {/* Progress — slim line + tabular readout */}
         <div>
-          <div className="flex justify-between text-[11px] font-mono tabular-nums text-ink/70 mb-1">
+          <div className="flex justify-between text-[11px] font-mono tabular-nums text-foreground/70 mb-1">
             <span>{c.ticketsSold.toLocaleString()} / {c.totalTickets.toLocaleString()}</span>
             <span className="text-clover">{pct}%</span>
           </div>
-          <div className="h-1 rounded-full bg-ink/5 overflow-hidden">
+          <div className="h-1 rounded-full bg-white/5 overflow-hidden">
             <div className="h-full shimmer" style={{ width: `${pct}%` }} />
           </div>
         </div>
 
-        <div className="flex items-center justify-between gap-2 pt-1 border-t border-ink/5">
+        <div className="flex items-center justify-between gap-2 pt-1 border-t border-white/5">
           <div>
             <div className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground">Odds</div>
             <div className="font-mono tabular-nums text-sm">1 : {odds.toLocaleString()}</div>

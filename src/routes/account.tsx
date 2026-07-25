@@ -33,7 +33,7 @@ function Account() {
         <h2 className="mt-10 font-display text-2xl font-black">My Entries</h2>
         <div className="mt-4 space-y-3">
           {entries.map((c) => (
-            <div key={c.slug} className="rounded-2xl bg-white border-2 border-ink/5 p-4 flex items-center gap-4">
+            <div key={c.slug} className="rounded-2xl bg-card border-2 border-white/5 p-4 flex items-center gap-4">
               <img src={c.image} alt="" className="h-16 w-16 rounded-lg object-cover" />
               <div className="flex-1 min-w-0">
                 <div className="font-display text-lg truncate">{c.title}</div>
@@ -66,8 +66,8 @@ function Account() {
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-2xl bg-white border-2 border-ink/5 p-4">
-      <div className="text-xs uppercase tracking-widest font-bold text-ink/60">{label}</div>
+    <div className="rounded-2xl bg-card border-2 border-white/5 p-4">
+      <div className="text-xs uppercase tracking-widest font-bold text-foreground/60">{label}</div>
       <div className="font-display text-2xl font-black mt-1">{value}</div>
     </div>
   );

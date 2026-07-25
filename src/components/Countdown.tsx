@@ -20,7 +20,7 @@ export function Countdown({ target, compact = false }: { target: string; compact
     <div
       className={`inline-flex items-center gap-2 rounded border px-2.5 py-1 font-mono tabular-nums ${
         compact ? "text-xs" : "text-sm"
-      } ${urgent ? "border-hot text-hot bg-hot/5" : "border-ink/10 text-ink bg-white"}`}
+      } ${urgent ? "border-hot text-hot bg-hot/5" : "border-white/10 text-foreground bg-card"}`}
     >
       <span className={`h-1.5 w-1.5 rounded-full ${urgent ? "bg-hot" : "bg-clover"}`} />
       <span className="font-medium">{digits}</span>

@@ -23,7 +23,7 @@ const buttonVariants = cva(
         hot:
           "bg-hot text-hot-foreground font-semibold hover:brightness-110",
         cream:
-          "bg-white text-ink font-semibold border border-ink/10 hover:border-ink/20",
+          "bg-card text-foreground font-semibold border border-white/10 hover:border-white/20",
       },
       size: {
         default: "h-9 px-4 py-2",

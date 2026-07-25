@@ -52,7 +52,7 @@ function Checkout() {
             <p className="text-muted-foreground mt-1">You're seconds away from being in the draw.</p>
           </div>
 
-          <fieldset className="rounded-2xl bg-white border-2 border-ink/5 p-5 space-y-4">
+          <fieldset className="rounded-2xl bg-card border-2 border-white/5 p-5 space-y-4">
             <legend className="px-2 font-display text-lg font-bold">Your details</legend>
             <div className="grid gap-3 sm:grid-cols-2">
               <Input label="First name" required placeholder="Gary" />
@@ -66,11 +66,11 @@ function Checkout() {
             </label>
           </fieldset>
 
-          <fieldset className="rounded-2xl bg-white border-2 border-ink/5 p-5 space-y-4">
+          <fieldset className="rounded-2xl bg-card border-2 border-white/5 p-5 space-y-4">
             <legend className="px-2 font-display text-lg font-bold flex items-center gap-2">
               <Lock className="h-4 w-4" /> Payment
             </legend>
-            <div className="rounded-xl bg-cream border-2 border-ink/10 p-4 text-sm text-muted-foreground">
+            <div className="rounded-xl bg-background border-2 border-white/10 p-4 text-sm text-muted-foreground">
               <CreditCard className="inline h-4 w-4 mr-1.5" />
               Stripe payment form goes here (wired in Phase 2 — no real card charged today).
             </div>
@@ -90,7 +90,7 @@ function Checkout() {
         </form>
 
         <aside className="md:col-span-2">
-          <div className="rounded-2xl bg-white border-2 border-ink/5 p-5 sticky top-24">
+          <div className="rounded-2xl bg-card border-2 border-white/5 p-5 sticky top-24">
             <h2 className="font-display text-lg font-bold">Your order</h2>
             <div className="mt-4 flex gap-3">
               <img src={comp.image} alt="" width={72} height={72} className="h-16 w-16 rounded-lg object-cover" />
@@ -103,7 +103,7 @@ function Checkout() {
             <dl className="mt-5 space-y-2 text-sm">
               <div className="flex justify-between"><dt className="text-muted-foreground">Subtotal</dt><dd className="font-semibold">{gbp(subtotal)}</dd></div>
               <div className="flex justify-between"><dt className="text-muted-foreground">Fees</dt><dd className="font-semibold">{gbp(0)}</dd></div>
-              <div className="flex justify-between border-t border-ink/10 pt-2 mt-2">
+              <div className="flex justify-between border-t border-white/10 pt-2 mt-2">
                 <dt className="font-display font-bold">Total</dt>
                 <dd className="font-display font-black text-2xl leading-none">{gbp(subtotal)}</dd>
               </div>
@@ -119,10 +119,10 @@ function Checkout() {
 function Input({ label, className = "", ...props }: React.InputHTMLAttributes<HTMLInputElement> & { label: string }) {
   return (
     <label className={`block ${className}`}>
-      <span className="text-xs font-bold uppercase tracking-widest text-ink/60">{label}</span>
+      <span className="text-xs font-bold uppercase tracking-widest text-foreground/60">{label}</span>
       <input
         {...props}
-        className="mt-1 w-full h-11 rounded-xl border-2 border-ink/10 bg-cream px-3 font-semibold focus:outline-none focus:border-clover"
+        className="mt-1 w-full h-11 rounded-xl border-2 border-white/10 bg-background px-3 font-semibold focus:outline-none focus:border-clover"
       />
     </label>
   );
@@ -141,7 +141,7 @@ function SuccessScreen({ compTitle, qty }: { compTitle: string; qty: number }) {
         <div className="mt-6 text-[10px] font-mono uppercase tracking-[0.25em] text-clover">Entry confirmed · #{Math.floor(Math.random()*90000+10000)}</div>
         <h1 className="mt-2 font-display text-4xl md:text-5xl font-semibold tracking-tight">You're in the draw,<br/><span className="text-clover">you lucky git.</span></h1>
         <p className="mt-3 text-muted-foreground">Payment confirmed. Skill question passed. Numbers assigned.</p>
-        <div className="mt-8 rounded-md bg-white border border-ink/10 p-6 text-left">
+        <div className="mt-8 rounded-md bg-card border border-white/10 p-6 text-left">
           <div className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground">Your entry</div>
           <div className="font-display text-xl font-semibold mt-1">{compTitle}</div>
           <div className="mt-4">

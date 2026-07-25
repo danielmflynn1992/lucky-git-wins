@@ -21,7 +21,7 @@ export const Route = createFileRoute("/competitions/")({
         <p className="text-muted-foreground mt-1">All the current lot. Sort them, filter them, buy the lot.</p>
         <div className="mt-4 flex gap-2 flex-wrap">
           {CATEGORIES.map((c) => (
-            <span key={c} className="rounded-full bg-white border-2 border-ink/10 px-3 py-1 text-xs font-bold">{c}</span>
+            <span key={c} className="rounded-full bg-card border-2 border-white/10 px-3 py-1 text-xs font-bold">{c}</span>
           ))}
         </div>
         <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">

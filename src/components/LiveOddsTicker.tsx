@@ -15,7 +15,7 @@ export function LiveOddsTicker() {
   });
   const loop = [...items, ...items];
   return (
-    <div className="relative overflow-hidden border-y border-ink/10 bg-ink text-cream/80">
+    <div className="relative overflow-hidden border-y border-white/10 bg-ink text-cream/80">
       <div className="flex items-center gap-2 py-2">
         <span className="ml-3 shrink-0 inline-flex items-center gap-1.5 text-[10px] font-mono uppercase tracking-[0.2em] text-clover">
           <span className="h-1.5 w-1.5 rounded-full bg-clover animate-pulse" /> Live

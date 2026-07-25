@@ -14,7 +14,7 @@ const links = [
 export function SiteNav() {
   const [open, setOpen] = useState(false);
   return (
-    <header className="sticky top-0 z-40 border-b-2 border-ink/10 bg-cream/95 backdrop-blur">
+    <header className="sticky top-0 z-40 border-b-2 border-white/10 bg-background/95 backdrop-blur">
       <div className="mx-auto max-w-7xl px-4 h-16 flex items-center justify-between gap-4">
         <Logo />
 
@@ -23,7 +23,7 @@ export function SiteNav() {
             <Link
               key={l.to}
               to={l.to}
-              className="px-3 py-2 text-sm font-semibold text-ink/80 hover:text-clover rounded-lg hover:bg-clover/5"
+              className="px-3 py-2 text-sm font-semibold text-foreground/80 hover:text-clover rounded-lg hover:bg-clover/5"
               activeProps={{ className: "text-clover bg-clover/10" }}
             >
               {l.label}
@@ -54,7 +54,7 @@ export function SiteNav() {
         </div>
       </div>
       {open && (
-        <nav className="md:hidden border-t border-ink/10 bg-cream px-4 py-3 flex flex-col gap-1">
+        <nav className="md:hidden border-t border-white/10 bg-background px-4 py-3 flex flex-col gap-1">
           {links.map((l) => (
             <Link
               key={l.to}

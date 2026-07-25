@@ -20,7 +20,7 @@ export const Route = createFileRoute("/winners")({
         <p className="text-muted-foreground mt-1">Every prize, every winner. Handed over and photographed.</p>
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {[...WINNERS, ...WINNERS].map((w, i) => (
-            <div key={i} className="rounded-2xl bg-white p-5 border-2 border-ink/5 shadow-[var(--shadow-card)]">
+            <div key={i} className="rounded-2xl bg-card p-5 border-2 border-white/5 shadow-[var(--shadow-card)]">
               <div className="flex items-center gap-3">
                 <div className="h-14 w-14 rounded-full bg-clover text-cream flex items-center justify-center font-display text-2xl font-bold">{w.name[0]}</div>
                 <div>
@@ -29,7 +29,7 @@ export const Route = createFileRoute("/winners")({
                 </div>
               </div>
               <div className="mt-3 rounded-lg bg-gold/15 px-3 py-2 text-sm font-bold text-clover">🏆 {w.prize}</div>
-              <p className="mt-3 text-sm italic text-ink/70">"{w.quote}"</p>
+              <p className="mt-3 text-sm italic text-foreground/70">"{w.quote}"</p>
             </div>
           ))}
         </div>
