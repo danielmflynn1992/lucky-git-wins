@@ -1,5 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
+import { useNavigate } from "@tanstack/react-router";
+import { zodValidator, fallback } from "@tanstack/zod-adapter";
+import { z } from "zod";
+import { useMemo } from "react";
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
 import { supabase } from "@/integrations/supabase/client";
@@ -31,7 +35,30 @@ const drawsQuery = queryOptions({
   },
 });
 
+const PRIZE_TYPES = ["Car", "Cash", "Watch", "Tech", "Holiday", "Other"] as const;
+type PrizeType = (typeof PRIZE_TYPES)[number];
+
+function classifyPrize(prize: string): PrizeType {
+  const p = prize.toLowerCase();
+  if (/(car|range rover|bmw|audi|porsche|mercedes|tesla|ford|golf|supra|m3|m4|rs\d)/.test(p)) return "Car";
+  if (/(cash|£|gbp|money|payout)/.test(p)) return "Cash";
+  if (/(rolex|omega|watch|tag heuer|patek|audemars)/.test(p)) return "Watch";
+  if (/(iphone|macbook|ipad|playstation|ps5|xbox|tv|laptop|airpods|tech|console)/.test(p)) return "Tech";
+  if (/(holiday|trip|villa|cruise|getaway|ibiza|dubai|maldives)/.test(p)) return "Holiday";
+  return "Other";
+}
+
+const searchSchema = z.object({
+  q: fallback(z.string(), "").default(""),
+  comp: fallback(z.string(), "").default(""),
+  from: fallback(z.string(), "").default(""),
+  to: fallback(z.string(), "").default(""),
+  type: fallback(z.string(), "").default(""),
+  num: fallback(z.string(), "").default(""),
+});
+
 export const Route = createFileRoute("/past-draws")({
+  validateSearch: zodValidator(searchSchema),
   loader: ({ context }) => context.queryClient.ensureQueryData(drawsQuery),
   head: () => ({
     meta: [
@@ -77,6 +104,42 @@ function formatDate(iso: string) {
 
 function PastDrawsPage() {
   const { data: draws } = useSuspenseQuery(drawsQuery);
+  const { q, comp, from, to, type, num } = Route.useSearch();
+  const navigate = useNavigate({ from: "/past-draws" });
+
+  const setParam = (key: "q" | "comp" | "from" | "to" | "type" | "num", value: string) => {
+    navigate({ search: (prev) => ({ ...prev, [key]: value }) });
+  };
+
+  const competitions = useMemo(() => {
+    const set = new Set<string>();
+    draws.forEach((d) => set.add(d.competition_title));
+    return Array.from(set).sort();
+  }, [draws]);
+
+  const filtered = useMemo(() => {
+    const qLower = q.trim().toLowerCase();
+    const fromMs = from ? new Date(from).getTime() : null;
+    const toMs = to ? new Date(to).getTime() + 24 * 60 * 60 * 1000 - 1 : null;
+    const numTrim = num.trim();
+    return draws.filter((d) => {
+      if (comp && d.competition_title !== comp) return false;
+      if (type && classifyPrize(d.prize) !== type) return false;
+      if (numTrim && String(d.winning_number) !== numTrim) return false;
+      const t = new Date(d.drawn_at).getTime();
+      if (fromMs !== null && t < fromMs) return false;
+      if (toMs !== null && t > toMs) return false;
+      if (qLower) {
+        const hay = `${d.competition_title} ${d.prize} ${d.winner_display_name} ${d.winner_town}`.toLowerCase();
+        if (!hay.includes(qLower)) return false;
+      }
+      return true;
+    });
+  }, [draws, q, comp, from, to, type, num]);
+
+  const activeFilters = Boolean(q || comp || from || to || type || num);
+  const reset = () =>
+    navigate({ search: { q: "", comp: "", from: "", to: "", type: "", num: "" } });
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -96,6 +159,105 @@ function PastDrawsPage() {
           </p>
         </div>
 
+        <div className="mt-6 rounded-2xl border border-border bg-surface p-4">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
+            <div className="md:col-span-4">
+              <label className="block text-[11px] font-mono uppercase tracking-widest text-foreground/50 mb-1">
+                Search
+              </label>
+              <input
+                type="text"
+                value={q}
+                onChange={(e) => setParam("q", e.target.value)}
+                placeholder="Competition, prize, winner…"
+                className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-clover"
+              />
+            </div>
+            <div className="md:col-span-3">
+              <label className="block text-[11px] font-mono uppercase tracking-widest text-foreground/50 mb-1">
+                Competition
+              </label>
+              <select
+                value={comp}
+                onChange={(e) => setParam("comp", e.target.value)}
+                className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-clover"
+              >
+                <option value="">All competitions</option>
+                {competitions.map((c) => (
+                  <option key={c} value={c}>
+                    {c}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="md:col-span-2">
+              <label className="block text-[11px] font-mono uppercase tracking-widest text-foreground/50 mb-1">
+                Prize type
+              </label>
+              <select
+                value={type}
+                onChange={(e) => setParam("type", e.target.value)}
+                className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-clover"
+              >
+                <option value="">Any type</option>
+                {PRIZE_TYPES.map((t) => (
+                  <option key={t} value={t}>
+                    {t}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="md:col-span-3">
+              <label className="block text-[11px] font-mono uppercase tracking-widest text-foreground/50 mb-1">
+                Winning #
+              </label>
+              <input
+                type="number"
+                inputMode="numeric"
+                value={num}
+                onChange={(e) => setParam("num", e.target.value)}
+                placeholder="e.g. 142"
+                className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm font-mono outline-none focus:border-clover"
+              />
+            </div>
+            <div className="md:col-span-3">
+              <label className="block text-[11px] font-mono uppercase tracking-widest text-foreground/50 mb-1">
+                Drawn from
+              </label>
+              <input
+                type="date"
+                value={from}
+                onChange={(e) => setParam("from", e.target.value)}
+                className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm font-mono outline-none focus:border-clover"
+              />
+            </div>
+            <div className="md:col-span-3">
+              <label className="block text-[11px] font-mono uppercase tracking-widest text-foreground/50 mb-1">
+                Drawn to
+              </label>
+              <input
+                type="date"
+                value={to}
+                onChange={(e) => setParam("to", e.target.value)}
+                className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm font-mono outline-none focus:border-clover"
+              />
+            </div>
+            <div className="md:col-span-6 flex items-end justify-between gap-3">
+              <div className="text-xs font-mono text-foreground/60">
+                {filtered.length} of {draws.length} draws
+              </div>
+              {activeFilters && (
+                <button
+                  onClick={reset}
+                  className="text-xs font-mono uppercase tracking-widest text-clover hover:underline"
+                >
+                  Clear filters
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+
         <div className="mt-8 rounded-2xl border border-border bg-surface overflow-hidden">
           <div className="grid grid-cols-12 gap-3 px-5 py-3 text-[11px] font-mono uppercase tracking-widest text-foreground/50 border-b border-border">
             <div className="col-span-3">Drawn</div>
@@ -104,14 +266,16 @@ function PastDrawsPage() {
             <div className="col-span-3">Winner</div>
           </div>
 
-          {draws.length === 0 && (
+          {filtered.length === 0 && (
             <div className="px-5 py-10 text-center text-foreground/60">
-              No draws recorded yet. Check back after the next competition ends.
+              {draws.length === 0
+                ? "No draws recorded yet. Check back after the next competition ends."
+                : "No draws match your filters."}
             </div>
           )}
 
           <ul className="divide-y divide-border">
-            {draws.map((d) => (
+            {filtered.map((d) => (
               <li key={d.id} className="px-5 py-5">
                 <div className="grid grid-cols-12 gap-3 items-start">
                   <div className="col-span-12 md:col-span-3 font-mono text-sm text-foreground/80">
