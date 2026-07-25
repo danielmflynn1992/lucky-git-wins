@@ -138,8 +138,13 @@ export function SiteNav() {
                 key={l.to + l.label}
                 to={l.to}
                 onClick={() => setOpen(false)}
-                className="px-3 py-3 text-[13px] font-bold uppercase tracking-[0.14em] text-foreground/85 hover:bg-muted hover:text-clover rounded-md"
-                activeProps={{ className: "text-clover bg-muted/60" }}
+                className="relative pl-4 pr-3 py-3 text-[13px] font-bold uppercase tracking-[0.14em] text-foreground/85 hover:bg-muted hover:text-clover rounded-md border-l-2 border-transparent"
+                activeProps={{
+                  className:
+                    "text-clover bg-clover/10 border-clover",
+                  "aria-current": "page",
+                }}
+                activeOptions={{ exact: l.to === "/" }}
               >
                 {l.label}
               </Link>
