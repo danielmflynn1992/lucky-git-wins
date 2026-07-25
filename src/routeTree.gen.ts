@@ -9,6 +9,9 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WinnersRouteImport } from './routes/winners'
+import { Route as LiveDrawsRouteImport } from './routes/live-draws'
+import { Route as FreePostalEntryRouteImport } from './routes/free-postal-entry'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CompetitionsIndexRouteImport } from './routes/competitions.index'
@@ -16,6 +19,21 @@ import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as CompetitionsSlugRouteImport } from './routes/competitions.$slug'
 import { Route as AdminCompetitionsNewRouteImport } from './routes/admin.competitions.new'
 
+const WinnersRoute = WinnersRouteImport.update({
+  id: '/winners',
+  path: '/winners',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LiveDrawsRoute = LiveDrawsRouteImport.update({
+  id: '/live-draws',
+  path: '/live-draws',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FreePostalEntryRoute = FreePostalEntryRouteImport.update({
+  id: '/free-postal-entry',
+  path: '/free-postal-entry',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CheckoutRoute = CheckoutRouteImport.update({
   id: '/checkout',
   path: '/checkout',
@@ -50,6 +68,9 @@ const AdminCompetitionsNewRoute = AdminCompetitionsNewRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/checkout': typeof CheckoutRoute
+  '/free-postal-entry': typeof FreePostalEntryRoute
+  '/live-draws': typeof LiveDrawsRoute
+  '/winners': typeof WinnersRoute
   '/competitions/$slug': typeof CompetitionsSlugRoute
   '/admin/': typeof AdminIndexRoute
   '/competitions/': typeof CompetitionsIndexRoute
@@ -58,6 +79,9 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/checkout': typeof CheckoutRoute
+  '/free-postal-entry': typeof FreePostalEntryRoute
+  '/live-draws': typeof LiveDrawsRoute
+  '/winners': typeof WinnersRoute
   '/competitions/$slug': typeof CompetitionsSlugRoute
   '/admin': typeof AdminIndexRoute
   '/competitions': typeof CompetitionsIndexRoute
@@ -67,6 +91,9 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/checkout': typeof CheckoutRoute
+  '/free-postal-entry': typeof FreePostalEntryRoute
+  '/live-draws': typeof LiveDrawsRoute
+  '/winners': typeof WinnersRoute
   '/competitions/$slug': typeof CompetitionsSlugRoute
   '/admin/': typeof AdminIndexRoute
   '/competitions/': typeof CompetitionsIndexRoute
@@ -77,6 +104,9 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/checkout'
+    | '/free-postal-entry'
+    | '/live-draws'
+    | '/winners'
     | '/competitions/$slug'
     | '/admin/'
     | '/competitions/'
@@ -85,6 +115,9 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/checkout'
+    | '/free-postal-entry'
+    | '/live-draws'
+    | '/winners'
     | '/competitions/$slug'
     | '/admin'
     | '/competitions'
@@ -93,6 +126,9 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/checkout'
+    | '/free-postal-entry'
+    | '/live-draws'
+    | '/winners'
     | '/competitions/$slug'
     | '/admin/'
     | '/competitions/'
@@ -102,6 +138,9 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CheckoutRoute: typeof CheckoutRoute
+  FreePostalEntryRoute: typeof FreePostalEntryRoute
+  LiveDrawsRoute: typeof LiveDrawsRoute
+  WinnersRoute: typeof WinnersRoute
   CompetitionsSlugRoute: typeof CompetitionsSlugRoute
   AdminIndexRoute: typeof AdminIndexRoute
   CompetitionsIndexRoute: typeof CompetitionsIndexRoute
@@ -110,6 +149,27 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/winners': {
+      id: '/winners'
+      path: '/winners'
+      fullPath: '/winners'
+      preLoaderRoute: typeof WinnersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/live-draws': {
+      id: '/live-draws'
+      path: '/live-draws'
+      fullPath: '/live-draws'
+      preLoaderRoute: typeof LiveDrawsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/free-postal-entry': {
+      id: '/free-postal-entry'
+      path: '/free-postal-entry'
+      fullPath: '/free-postal-entry'
+      preLoaderRoute: typeof FreePostalEntryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/checkout': {
       id: '/checkout'
       path: '/checkout'
@@ -158,6 +218,9 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CheckoutRoute: CheckoutRoute,
+  FreePostalEntryRoute: FreePostalEntryRoute,
+  LiveDrawsRoute: LiveDrawsRoute,
+  WinnersRoute: WinnersRoute,
   CompetitionsSlugRoute: CompetitionsSlugRoute,
   AdminIndexRoute: AdminIndexRoute,
   CompetitionsIndexRoute: CompetitionsIndexRoute,
