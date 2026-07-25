@@ -11,6 +11,8 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CompetitionsIndexRouteImport } from './routes/competitions.index'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as CompetitionsSlugRouteImport } from './routes/competitions.$slug'
 import { Route as AdminCompetitionsNewRouteImport } from './routes/admin.competitions.new'
 
@@ -22,6 +24,16 @@ const CheckoutRoute = CheckoutRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompetitionsIndexRoute = CompetitionsIndexRouteImport.update({
+  id: '/competitions/',
+  path: '/competitions/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CompetitionsSlugRoute = CompetitionsSlugRouteImport.update({
@@ -39,12 +51,16 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/checkout': typeof CheckoutRoute
   '/competitions/$slug': typeof CompetitionsSlugRoute
+  '/admin/': typeof AdminIndexRoute
+  '/competitions/': typeof CompetitionsIndexRoute
   '/admin/competitions/new': typeof AdminCompetitionsNewRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/checkout': typeof CheckoutRoute
   '/competitions/$slug': typeof CompetitionsSlugRoute
+  '/admin': typeof AdminIndexRoute
+  '/competitions': typeof CompetitionsIndexRoute
   '/admin/competitions/new': typeof AdminCompetitionsNewRoute
 }
 export interface FileRoutesById {
@@ -52,6 +68,8 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/checkout': typeof CheckoutRoute
   '/competitions/$slug': typeof CompetitionsSlugRoute
+  '/admin/': typeof AdminIndexRoute
+  '/competitions/': typeof CompetitionsIndexRoute
   '/admin/competitions/new': typeof AdminCompetitionsNewRoute
 }
 export interface FileRouteTypes {
@@ -60,14 +78,24 @@ export interface FileRouteTypes {
     | '/'
     | '/checkout'
     | '/competitions/$slug'
+    | '/admin/'
+    | '/competitions/'
     | '/admin/competitions/new'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/checkout' | '/competitions/$slug' | '/admin/competitions/new'
+  to:
+    | '/'
+    | '/checkout'
+    | '/competitions/$slug'
+    | '/admin'
+    | '/competitions'
+    | '/admin/competitions/new'
   id:
     | '__root__'
     | '/'
     | '/checkout'
     | '/competitions/$slug'
+    | '/admin/'
+    | '/competitions/'
     | '/admin/competitions/new'
   fileRoutesById: FileRoutesById
 }
@@ -75,6 +103,8 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CheckoutRoute: typeof CheckoutRoute
   CompetitionsSlugRoute: typeof CompetitionsSlugRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+  CompetitionsIndexRoute: typeof CompetitionsIndexRoute
   AdminCompetitionsNewRoute: typeof AdminCompetitionsNewRoute
 }
 
@@ -92,6 +122,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/competitions/': {
+      id: '/competitions/'
+      path: '/competitions'
+      fullPath: '/competitions/'
+      preLoaderRoute: typeof CompetitionsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/admin'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/competitions/$slug': {
@@ -115,6 +159,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CheckoutRoute: CheckoutRoute,
   CompetitionsSlugRoute: CompetitionsSlugRoute,
+  AdminIndexRoute: AdminIndexRoute,
+  CompetitionsIndexRoute: CompetitionsIndexRoute,
   AdminCompetitionsNewRoute: AdminCompetitionsNewRoute,
 }
 export const routeTree = rootRouteImport
