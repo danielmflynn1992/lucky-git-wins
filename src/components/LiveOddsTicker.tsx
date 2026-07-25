@@ -1,38 +1,45 @@
-import { COMPETITIONS } from "@/lib/mock-comps";
+import { COMPETITIONS, WINNERS } from "@/lib/mock-comps";
+import { Trophy, Timer } from "lucide-react";
 
 /**
- * Ambient horizontal ticker showing live comp data.
- * Signals "transparent data platform" instead of "raffle stall".
+ * Bright "Latest Winners / Draws Tonight" ticker.
+ * White strip under nav, bold black text, emerald dividers.
  */
 export function LiveOddsTicker() {
-  const items = COMPETITIONS.map((c) => {
-    const odds = Math.round(c.totalTickets / Math.max(1, c.ticketsSold || 1));
-    return {
-      title: c.title.toUpperCase(),
-      sold: `${c.ticketsSold.toLocaleString()}/${c.totalTickets.toLocaleString()} SOLD`,
-      odds: `ODDS 1:${odds.toLocaleString()}`,
-    };
-  });
+  const drawsTonight = [...COMPETITIONS]
+    .sort((a, b) => +new Date(a.endsAt) - +new Date(b.endsAt))
+    .slice(0, 3)
+    .map((c) => ({ type: "draw" as const, text: `${c.title.toUpperCase()} — DRAWING SOON` }));
+
+  const winners = WINNERS.slice(0, 5).map((w) => ({
+    type: "win" as const,
+    text: `${w.name.toUpperCase()} FROM ${w.town.toUpperCase()} WON ${w.prize.toUpperCase()}`,
+  }));
+
+  const items = [...winners, ...drawsTonight];
   const loop = [...items, ...items];
+
   return (
-    <div className="relative overflow-hidden border-y border-clover/20 bg-black text-clover">
-      <div className="flex items-stretch py-0">
-        <span className="shrink-0 inline-flex items-center gap-2 bg-clover/10 border-r border-clover/25 px-3 py-2 text-[10px] font-mono uppercase tracking-[0.3em] text-clover">
+    <div className="relative overflow-hidden bg-white border-b border-border">
+      <div className="flex items-stretch">
+        <span className="shrink-0 inline-flex items-center gap-2 bg-clover px-3 py-2 text-[10px] font-black uppercase tracking-[0.25em] text-primary-foreground">
           <span className="relative flex h-2 w-2">
-            <span className="absolute inline-flex h-full w-full rounded-full bg-clover opacity-60 animate-ping" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-clover" />
+            <span className="absolute inline-flex h-full w-full rounded-full bg-white opacity-70 animate-ping" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-white" />
           </span>
           LIVE
         </span>
-        <div className="relative flex-1 overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_5%,#000_95%,transparent)] py-2">
-          <div className="ticker-scroll flex gap-10 whitespace-nowrap font-mono text-[11px] tracking-[0.15em] tabular-nums">
+        <div className="relative flex-1 overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_4%,#000_96%,transparent)] py-2">
+          <div className="ticker-scroll flex gap-8 whitespace-nowrap text-xs font-bold tracking-wide text-ink">
             {loop.map((it, i) => (
               <span key={i} className="inline-flex items-center gap-3 shrink-0">
-                <span className="text-clover font-semibold">{it.title}</span>
-                <span className="text-clover/30">▲</span>
-                <span className="text-cream/80">{it.sold}</span>
-                <span className="text-clover/30">▲</span>
-                <span className="text-clover">{it.odds}</span>
+                {it.type === "win" ? (
+                  <Trophy className="h-3.5 w-3.5 text-gold" />
+                ) : (
+                  <Timer className="h-3.5 w-3.5 text-hot" />
+                )}
+                <span>{it.text}</span>
+                <span className="text-clover font-black">●</span>
               </span>
             ))}
           </div>
