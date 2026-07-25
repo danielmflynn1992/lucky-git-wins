@@ -107,8 +107,9 @@ function PastDrawsPage() {
   const { q, comp, from, to, type, num } = Route.useSearch();
   const navigate = useNavigate({ from: "/past-draws" });
 
-  const setParam = (key: "q" | "comp" | "from" | "to" | "type" | "num", value: string) => {
-    navigate({ search: (prev) => ({ ...prev, [key]: value }) });
+  type SearchState = { q: string; comp: string; from: string; to: string; type: string; num: string };
+  const setParam = (key: keyof SearchState, value: string) => {
+    navigate({ search: (prev: SearchState) => ({ ...prev, [key]: value }) });
   };
 
   const competitions = useMemo(() => {
