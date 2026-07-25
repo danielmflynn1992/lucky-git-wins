@@ -18,7 +18,7 @@ export function SiteNav() {
   const { session, loading } = useAuth();
   const signedIn = !!session;
   return (
-    <header className="sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur-md">
+    <header className="sticky top-0 z-40 border-b border-border bg-card/95 backdrop-blur-md shadow-sm">
       <div className="mx-auto max-w-7xl px-4 h-16 flex items-center justify-between gap-4">
         <Logo />
 
@@ -69,7 +69,7 @@ export function SiteNav() {
           </Link>
           <button
             onClick={() => setOpen((o) => !o)}
-            className="md:hidden p-2 rounded-md hover:bg-white/5 text-foreground/80"
+            className="md:hidden p-2 rounded-md hover:bg-muted text-foreground/80"
             aria-label="Menu"
           >
             <Menu className="h-5 w-5" />
@@ -77,33 +77,33 @@ export function SiteNav() {
         </div>
       </div>
       {open && (
-        <nav className="md:hidden border-t border-border bg-surface px-4 py-3 flex flex-col gap-1">
+        <nav className="md:hidden border-t border-border bg-card px-4 py-3 flex flex-col gap-1">
           {links.map((l) => (
             <Link
               key={l.to}
               to={l.to}
               onClick={() => setOpen(false)}
-              className="px-3 py-3 text-sm font-medium rounded-md hover:bg-white/5 text-foreground/80"
+              className="px-3 py-3 text-sm font-medium rounded-md hover:bg-muted text-foreground/80"
             >
               {l.label}
             </Link>
           ))}
           {signedIn ? (
             <>
-              <Link to="/account" onClick={() => setOpen(false)} className="px-3 py-3 text-sm font-medium rounded-md hover:bg-white/5 text-foreground/80">Account</Link>
+              <Link to="/account" onClick={() => setOpen(false)} className="px-3 py-3 text-sm font-medium rounded-md hover:bg-muted text-foreground/80">Account</Link>
               <button
                 onClick={async () => {
                   await supabase.auth.signOut();
                   setOpen(false);
                 }}
-                className="text-left px-3 py-3 text-sm font-medium rounded-md hover:bg-white/5 text-foreground/80"
+                className="text-left px-3 py-3 text-sm font-medium rounded-md hover:bg-muted text-foreground/80"
               >
                 Sign out
               </button>
             </>
           ) : (
             !loading && (
-              <Link to="/auth" onClick={() => setOpen(false)} className="px-3 py-3 text-sm font-medium rounded-md hover:bg-white/5 text-foreground/80">Sign in</Link>
+              <Link to="/auth" onClick={() => setOpen(false)} className="px-3 py-3 text-sm font-medium rounded-md hover:bg-muted text-foreground/80">Sign in</Link>
             )
           )}
         </nav>
