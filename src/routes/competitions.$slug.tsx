@@ -1,12 +1,13 @@
 import { createFileRoute, notFound, Link, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { Ticket, Shuffle, Shield, PoundSterling, CheckCircle2, Info, Loader2, AlertTriangle } from "lucide-react";
+import { Ticket, Shuffle, Shield, PoundSterling, Info, Loader2, AlertTriangle } from "lucide-react";
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
 import { Countdown } from "@/components/Countdown";
 import { CompCard } from "@/components/CompCard";
 import { Button } from "@/components/ui/button";
+import { SkillQuestionModal } from "@/components/SkillQuestionModal";
 import { COMPETITIONS } from "@/lib/mock-comps";
 import { gbp, shortNumber } from "@/lib/format";
 import {
