@@ -163,7 +163,7 @@ function PastDrawsPage() {
         <div className="mt-6 rounded-2xl border border-border bg-surface p-4">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
             <div className="md:col-span-4">
-              <label className="block text-[11px] font-mono uppercase tracking-widest text-foreground/50 mb-1">
+              <label className="block text-[11px] font-mono uppercase tracking-widest text-muted-foreground mb-1">
                 Search
               </label>
               <input
@@ -175,7 +175,7 @@ function PastDrawsPage() {
               />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-[11px] font-mono uppercase tracking-widest text-foreground/50 mb-1">
+              <label className="block text-[11px] font-mono uppercase tracking-widest text-muted-foreground mb-1">
                 Competition
               </label>
               <select
@@ -192,7 +192,7 @@ function PastDrawsPage() {
               </select>
             </div>
             <div className="md:col-span-2">
-              <label className="block text-[11px] font-mono uppercase tracking-widest text-foreground/50 mb-1">
+              <label className="block text-[11px] font-mono uppercase tracking-widest text-muted-foreground mb-1">
                 Prize type
               </label>
               <select
@@ -209,7 +209,7 @@ function PastDrawsPage() {
               </select>
             </div>
             <div className="md:col-span-3">
-              <label className="block text-[11px] font-mono uppercase tracking-widest text-foreground/50 mb-1">
+              <label className="block text-[11px] font-mono uppercase tracking-widest text-muted-foreground mb-1">
                 Winning #
               </label>
               <input
@@ -222,7 +222,7 @@ function PastDrawsPage() {
               />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-[11px] font-mono uppercase tracking-widest text-foreground/50 mb-1">
+              <label className="block text-[11px] font-mono uppercase tracking-widest text-muted-foreground mb-1">
                 Drawn from
               </label>
               <input
@@ -233,7 +233,7 @@ function PastDrawsPage() {
               />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-[11px] font-mono uppercase tracking-widest text-foreground/50 mb-1">
+              <label className="block text-[11px] font-mono uppercase tracking-widest text-muted-foreground mb-1">
                 Drawn to
               </label>
               <input
@@ -244,7 +244,7 @@ function PastDrawsPage() {
               />
             </div>
             <div className="md:col-span-6 flex items-end justify-between gap-3">
-              <div className="text-xs font-mono text-foreground/60">
+              <div className="text-xs font-mono text-muted-foreground">
                 {filtered.length} of {draws.length} draws
               </div>
               {activeFilters && (
@@ -260,7 +260,7 @@ function PastDrawsPage() {
         </div>
 
         <div className="mt-8 rounded-2xl border border-border bg-surface overflow-hidden">
-          <div className="grid grid-cols-12 gap-3 px-5 py-3 text-[11px] font-mono uppercase tracking-widest text-foreground/50 border-b border-border">
+          <div className="grid grid-cols-12 gap-3 px-5 py-3 text-[11px] font-mono uppercase tracking-widest text-muted-foreground border-b border-border">
             <div className="col-span-3">Drawn</div>
             <div className="col-span-4">Competition &amp; prize</div>
             <div className="col-span-2">Winning #</div>
@@ -268,7 +268,7 @@ function PastDrawsPage() {
           </div>
 
           {filtered.length === 0 && (
-            <div className="px-5 py-10 text-center text-foreground/60">
+            <div className="px-5 py-10 text-center text-muted-foreground">
               {draws.length === 0
                 ? "No draws recorded yet. Check back after the next competition ends."
                 : "No draws match your filters."}
@@ -281,7 +281,7 @@ function PastDrawsPage() {
                 <div className="grid grid-cols-12 gap-3 items-start">
                   <div className="col-span-12 md:col-span-3 font-mono text-sm text-foreground/80">
                     <div>{formatDate(d.drawn_at)}</div>
-                    <div className="text-[11px] uppercase tracking-widest text-foreground/40 mt-1">
+                    <div className="text-[11px] uppercase tracking-widest text-muted-foreground mt-1">
                       {d.draw_method}
                     </div>
                   </div>
@@ -300,7 +300,7 @@ function PastDrawsPage() {
                         {d.winning_number}
                       </span>
                     </div>
-                    <div className="text-[11px] font-mono text-foreground/40 mt-1">
+                    <div className="text-[11px] font-mono text-muted-foreground mt-1">
                       of {d.total_tickets.toLocaleString()}
                     </div>
                   </div>
@@ -308,22 +308,22 @@ function PastDrawsPage() {
                   <div className="col-span-6 md:col-span-3">
                     <div className="font-bold">{d.winner_display_name}</div>
                     {d.winner_town && (
-                      <div className="text-sm text-foreground/60">{d.winner_town}</div>
+                      <div className="text-sm text-muted-foreground">{d.winner_town}</div>
                     )}
                   </div>
                 </div>
 
                 {(d.verification_hash || d.notes) && (
-                  <div className="mt-3 rounded-md bg-background/60 border border-border px-3 py-2 font-mono text-[11px] text-foreground/60 break-all">
+                  <div className="mt-3 rounded-md bg-background/60 border border-border px-3 py-2 font-mono text-[11px] text-muted-foreground break-all">
                     {d.verification_hash && (
                       <div>
-                        <span className="text-foreground/40">verify:</span>{" "}
+                        <span className="text-muted-foreground">verify:</span>{" "}
                         {d.verification_hash}
                       </div>
                     )}
                     {d.notes && (
                       <div className="mt-1">
-                        <span className="text-foreground/40">note:</span> {d.notes}
+                        <span className="text-muted-foreground">note:</span> {d.notes}
                       </div>
                     )}
                   </div>
@@ -333,7 +333,7 @@ function PastDrawsPage() {
           </ul>
         </div>
 
-        <p className="mt-6 text-xs text-foreground/50 max-w-2xl">
+        <p className="mt-6 text-xs text-muted-foreground max-w-2xl">
           Draws are executed automatically once the competition timer ends. The
           winning number, timestamp and hash are written to this log immediately
           and cannot be altered from the site.

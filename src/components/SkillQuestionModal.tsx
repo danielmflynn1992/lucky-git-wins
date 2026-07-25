@@ -35,7 +35,7 @@ export function SkillQuestionModal({
 
   const panel = (
     <div
-      className="bg-background rounded-3xl border-2 border-white/10 w-full max-w-md p-6 shadow-2xl"
+      className="bg-background rounded-3xl border-2 border-border w-full max-w-md p-6 shadow-2xl"
       onClick={(e) => e.stopPropagation()}
     >
       <div className="text-xs font-bold uppercase tracking-widest text-clover">
@@ -60,7 +60,7 @@ export function SkillQuestionModal({
                   ? "border-clover bg-clover/10"
                   : wrong
                     ? "border-hot bg-hot/10"
-                    : "border-white/10 bg-card hover:border-clover/40"
+                    : "border-border bg-card hover:border-clover/40"
               }`}
             >
               <span>

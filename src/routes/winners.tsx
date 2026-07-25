@@ -31,7 +31,7 @@ export const Route = createFileRoute("/winners")({
                   <div className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground mt-0.5">{w.when}</div>
                 </div>
               </div>
-              <div className="mt-4 pt-3 border-t border-white/10">
+              <div className="mt-4 pt-3 border-t border-border">
                 <div className="text-[10px] font-mono uppercase tracking-[0.15em] text-muted-foreground">Prize</div>
                 <div className="font-medium text-foreground">{w.prize}</div>
               </div>

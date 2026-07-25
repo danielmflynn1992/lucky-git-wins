@@ -196,9 +196,9 @@ function NewComp() {
               <Field label="Question" required placeholder="e.g. Which of these is a German car manufacturer?" value={skillQ} onChange={(e) => setSkillQ(e.target.value)} />
               <div className="mt-3 grid gap-2 sm:grid-cols-2">
                 {answers.map((a, i) => (
-                  <label key={i} className={`flex items-center gap-2 rounded-xl border-2 px-3 py-2 ${correct === i ? "border-clover bg-clover/5" : "border-white/10 bg-card"}`}>
+                  <label key={i} className={`flex items-center gap-2 rounded-xl border-2 px-3 py-2 ${correct === i ? "border-clover bg-clover/5" : "border-border bg-card"}`}>
                     <input type="radio" name="correct" checked={correct === i} onChange={() => setCorrect(i)} className="h-4 w-4 accent-clover" />
-                    <span className="text-xs font-black text-foreground/60 w-4">{String.fromCharCode(65 + i)}</span>
+                    <span className="text-xs font-black text-muted-foreground w-4">{String.fromCharCode(65 + i)}</span>
                     <input
                       value={a}
                       onChange={(e) => { const n = [...answers]; n[i] = e.target.value; setAnswers(n); }}
@@ -234,7 +234,7 @@ function NewComp() {
           {/* Sidebar */}
           <div className="space-y-5">
             <Card title="Preview">
-              <div className="rounded-xl bg-background border-2 border-white/10 p-4">
+              <div className="rounded-xl bg-background border-2 border-border p-4">
                 <div className="text-[10px] font-mono uppercase tracking-widest text-clover/80">{category}</div>
                 <div className="font-display font-black text-lg leading-tight mt-1 truncate">{title || "Prize title"}</div>
                 <div className="text-xs text-muted-foreground truncate">{subtitle || "Short subtitle"}</div>
@@ -272,7 +272,7 @@ function NewComp() {
 
 function Card({ title, children }: { title: ReactNode; children: ReactNode }) {
   return (
-    <section className="rounded-2xl bg-card border-2 border-white/5 p-5 shadow-[var(--shadow-card)]">
+    <section className="rounded-2xl bg-card border-2 border-border p-5 shadow-[var(--shadow-card)]">
       <h2 className="font-display text-lg font-bold mb-4">{title}</h2>
       {children}
     </section>
@@ -281,24 +281,24 @@ function Card({ title, children }: { title: ReactNode; children: ReactNode }) {
 function Field({ label, className = "", ...props }: React.InputHTMLAttributes<HTMLInputElement> & { label: string }) {
   return (
     <label className={`block ${className}`}>
-      <span className="text-xs font-bold uppercase tracking-widest text-foreground/60">{label}</span>
-      <input {...props} className="mt-1 w-full h-11 rounded-xl border-2 border-white/10 bg-background px-3 font-semibold focus:outline-none focus:border-clover" />
+      <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">{label}</span>
+      <input {...props} className="mt-1 w-full h-11 rounded-xl border-2 border-border bg-background px-3 font-semibold focus:outline-none focus:border-clover" />
     </label>
   );
 }
 function TextArea({ label, className = "", ...props }: React.TextareaHTMLAttributes<HTMLTextAreaElement> & { label: string }) {
   return (
     <label className={`block ${className}`}>
-      <span className="text-xs font-bold uppercase tracking-widest text-foreground/60">{label}</span>
-      <textarea {...props} className="mt-1 w-full rounded-xl border-2 border-white/10 bg-background px-3 py-2 font-semibold focus:outline-none focus:border-clover" />
+      <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">{label}</span>
+      <textarea {...props} className="mt-1 w-full rounded-xl border-2 border-border bg-background px-3 py-2 font-semibold focus:outline-none focus:border-clover" />
     </label>
   );
 }
 function SelectField({ label, children, className = "", ...props }: React.SelectHTMLAttributes<HTMLSelectElement> & { label: string; children: ReactNode }) {
   return (
     <label className={`block ${className}`}>
-      <span className="text-xs font-bold uppercase tracking-widest text-foreground/60">{label}</span>
-      <select {...props} className="mt-1 w-full h-11 rounded-xl border-2 border-white/10 bg-background px-3 font-semibold focus:outline-none focus:border-clover">{children}</select>
+      <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">{label}</span>
+      <select {...props} className="mt-1 w-full h-11 rounded-xl border-2 border-border bg-background px-3 font-semibold focus:outline-none focus:border-clover">{children}</select>
     </label>
   );
 }

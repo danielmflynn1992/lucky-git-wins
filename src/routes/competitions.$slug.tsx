@@ -139,7 +139,7 @@ function CompDetail() {
 
         <div className="grid gap-8 lg:grid-cols-5">
           <div className="lg:col-span-3">
-            <div className="relative rounded-3xl overflow-hidden bg-card border-2 border-white/5">
+            <div className="relative rounded-3xl overflow-hidden bg-card border-2 border-border">
               <img src={c.image} alt={c.title} width={1280} height={960} className="w-full aspect-[4/3] object-cover" />
               <div className="absolute top-4 left-4 flex gap-1.5">
                 {c.hot && <span className="rounded-sm bg-hot text-hot-foreground px-2 py-1 text-[10px] font-semibold uppercase tracking-wider">Hot</span>}
@@ -154,7 +154,7 @@ function CompDetail() {
             <p className="mt-2 text-muted-foreground">{c.subtitle}</p>
 
             <div className="mt-4 flex items-center gap-3">
-              <div className="rounded-xl bg-background border-2 border-white/10 px-4 py-2">
+              <div className="rounded-xl bg-background border-2 border-border px-4 py-2">
                 <div className="text-[10px] font-bold uppercase tracking-widest opacity-70">Ticket</div>
                 <div className="font-display font-black text-2xl leading-none">{gbp(c.pricePerTicket)}</div>
               </div>
@@ -172,17 +172,17 @@ function CompDetail() {
               <div className="mt-1 text-xs text-muted-foreground font-mono tabular-nums">Odds 1 : {odds.toLocaleString()}</div>
             </div>
 
-            <div className="mt-6 rounded-2xl bg-card border-2 border-white/5 p-4">
+            <div className="mt-6 rounded-2xl bg-card border-2 border-border p-4">
               <div className="flex gap-2 mb-4">
                 <button
                   onClick={() => { setPicker("lucky"); setReserveError(null); }}
-                  className={`flex-1 rounded-xl px-3 py-2.5 text-sm font-bold border-2 flex items-center justify-center gap-1.5 ${picker === "lucky" ? "bg-clover text-cream border-clover" : "bg-background border-white/10"}`}
+                  className={`flex-1 rounded-xl px-3 py-2.5 text-sm font-bold border-2 flex items-center justify-center gap-1.5 ${picker === "lucky" ? "bg-clover text-cream border-clover" : "bg-background border-border"}`}
                 >
                   <Shuffle className="h-4 w-4" /> Lucky Dip
                 </button>
                 <button
                   onClick={() => { setPicker("manual"); setReserveError(null); }}
-                  className={`flex-1 rounded-xl px-3 py-2.5 text-sm font-bold border-2 flex items-center justify-center gap-1.5 ${picker === "manual" ? "bg-clover text-cream border-clover" : "bg-background border-white/10"}`}
+                  className={`flex-1 rounded-xl px-3 py-2.5 text-sm font-bold border-2 flex items-center justify-center gap-1.5 ${picker === "manual" ? "bg-clover text-cream border-clover" : "bg-background border-border"}`}
                 >
                   <Ticket className="h-4 w-4" /> Pick numbers
                 </button>
@@ -190,22 +190,22 @@ function CompDetail() {
 
               {picker === "lucky" ? (
                 <div>
-                  <label className="text-xs font-bold uppercase tracking-widest text-foreground/60">How many tickets?</label>
+                  <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">How many tickets?</label>
                   <div className="mt-2 flex items-center gap-3">
-                    <button onClick={() => setQty(Math.max(1, qty - 1))} className="h-11 w-11 rounded-xl border-2 border-white/10 bg-background font-bold text-lg">−</button>
+                    <button onClick={() => setQty(Math.max(1, qty - 1))} className="h-11 w-11 rounded-xl border-2 border-border bg-background font-bold text-lg">−</button>
                     <input
                       type="number"
                       value={qty}
                       min={1}
                       max={Math.min(c.maxPerPerson, c.ticketsAvailable)}
                       onChange={(e) => setQty(Math.max(1, Math.min(c.maxPerPerson, c.ticketsAvailable, +e.target.value || 1)))}
-                      className="flex-1 h-11 rounded-xl border-2 border-white/10 bg-background text-center font-display font-black text-xl tabular-nums"
+                      className="flex-1 h-11 rounded-xl border-2 border-border bg-background text-center font-display font-black text-xl tabular-nums"
                     />
-                    <button onClick={() => setQty(Math.min(c.maxPerPerson, c.ticketsAvailable, qty + 1))} className="h-11 w-11 rounded-xl border-2 border-white/10 bg-background font-bold text-lg">+</button>
+                    <button onClick={() => setQty(Math.min(c.maxPerPerson, c.ticketsAvailable, qty + 1))} className="h-11 w-11 rounded-xl border-2 border-border bg-background font-bold text-lg">+</button>
                   </div>
                   <div className="mt-2 flex gap-1.5 flex-wrap">
                     {[1, 5, 10, 25, 50].filter((n) => n <= c.ticketsAvailable).map((n) => (
-                      <button key={n} onClick={() => setQty(n)} className="rounded-lg px-2.5 py-1 text-xs font-bold bg-background border border-white/10 hover:border-clover">
+                      <button key={n} onClick={() => setQty(n)} className="rounded-lg px-2.5 py-1 text-xs font-bold bg-background border border-border hover:border-clover">
                         {n}
                       </button>
                     ))}
@@ -217,14 +217,14 @@ function CompDetail() {
               ) : (
                 <div>
                   <div className="flex items-center justify-between mb-2">
-                    <div className="text-xs font-bold uppercase tracking-widest text-foreground/60">Tap to pick</div>
+                    <div className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Tap to pick</div>
                     <div className="flex items-center gap-1 text-xs font-mono tabular-nums">
-                      <button disabled={numberPage === 0} onClick={() => setNumberPage((p) => Math.max(0, p - 1))} className="px-2 py-1 rounded border border-white/10 disabled:opacity-30">←</button>
+                      <button disabled={numberPage === 0} onClick={() => setNumberPage((p) => Math.max(0, p - 1))} className="px-2 py-1 rounded border border-border disabled:opacity-30">←</button>
                       <span className="px-2">{startNum}–{endNum}</span>
-                      <button disabled={numberPage >= pageCount - 1} onClick={() => setNumberPage((p) => Math.min(pageCount - 1, p + 1))} className="px-2 py-1 rounded border border-white/10 disabled:opacity-30">→</button>
+                      <button disabled={numberPage >= pageCount - 1} onClick={() => setNumberPage((p) => Math.min(pageCount - 1, p + 1))} className="px-2 py-1 rounded border border-border disabled:opacity-30">→</button>
                     </div>
                   </div>
-                  <div className="rounded-xl border-2 border-white/10 p-2 bg-background grid grid-cols-10 gap-1">
+                  <div className="rounded-xl border-2 border-border p-2 bg-background grid grid-cols-10 gap-1">
                     {Array.from({ length: endNum - startNum + 1 }, (_, i) => startNum + i).map((n) => {
                       const taken = takenSet.has(n);
                       const isPicked = picked.has(n);
@@ -260,9 +260,9 @@ function CompDetail() {
                 </div>
               )}
 
-              <div className="mt-4 pt-4 border-t border-white/10 flex items-center justify-between">
+              <div className="mt-4 pt-4 border-t border-border flex items-center justify-between">
                 <div>
-                  <div className="text-[10px] uppercase tracking-widest font-bold text-foreground/60">Total</div>
+                  <div className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground">Total</div>
                   <div className="font-display font-black text-3xl leading-none tabular-nums">{gbp(c.pricePerTicket * displayNumbers)}</div>
                   <div className="text-xs text-muted-foreground font-mono tabular-nums">{displayNumbers} ticket{displayNumbers === 1 ? "" : "s"}</div>
                 </div>
