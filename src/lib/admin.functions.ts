@@ -38,6 +38,36 @@ const slugify = (s: string) =>
     .replace(/^-+|-+$/g, "")
     .slice(0, 60);
 
+const skillQuestionSchema = z
+  .object({
+    q: z.string().trim().min(3, "Question must be at least 3 characters").max(300),
+    options: z
+      .array(z.string().trim().min(1, "Answer choices cannot be empty").max(120))
+      .length(4, "Exactly four answer choices are required"),
+    correct: z
+      .number({ invalid_type_error: "Select exactly one correct answer" })
+      .int()
+      .min(0, "Select exactly one correct answer")
+      .max(3, "Correct answer index must be between 0 and 3"),
+  })
+  .superRefine((val, ctx) => {
+    const cleaned = val.options.map((o) => o.trim());
+    if (cleaned.some((o) => o.length === 0)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["options"],
+        message: "All four answer choices must be non-empty",
+      });
+    }
+    if (!Number.isInteger(val.correct) || val.correct < 0 || val.correct > 3) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["correct"],
+        message: "Exactly one correct option must be selected",
+      });
+    }
+  });
+
 const createInput = z.object({
   title: z.string().trim().min(2).max(120),
   slug: z.string().trim().max(80).optional().default(""),
@@ -52,11 +82,7 @@ const createInput = z.object({
   endsAt: z.string().min(10),
   status: z.enum(["live", "draft", "paused"]),
   hot: z.boolean().default(false),
-  skillQuestion: z.object({
-    q: z.string().trim().min(3).max(300),
-    options: z.array(z.string().trim().min(1).max(120)).length(4),
-    correct: z.number().int().min(0).max(3),
-  }),
+  skillQuestion: skillQuestionSchema,
   instantWin: z.boolean().default(false),
   instantWinCount: z.number().int().min(0).max(10000).default(0),
   instantWinPrize: z.number().min(0).max(1000000).default(0),
@@ -110,11 +136,7 @@ export const createCompetition = createServerFn({ method: "POST" })
 
 const skillInput = z.object({
   slug: z.string().trim().min(1).max(80),
-  skillQuestion: z.object({
-    q: z.string().trim().min(3).max(300),
-    options: z.array(z.string().trim().min(1).max(120)).length(4),
-    correct: z.number().int().min(0).max(3),
-  }),
+  skillQuestion: skillQuestionSchema,
 });
 
 export const updateSkillQuestion = createServerFn({ method: "POST" })
