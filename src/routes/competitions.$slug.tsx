@@ -238,7 +238,7 @@ function CompDetail() {
             <h3 className="mt-1 font-display text-2xl font-black">{c.skillQuestion.q}</h3>
             <p className="text-xs text-muted-foreground mt-1">(UK law requires this. Sorry not sorry.)</p>
             <div className="mt-4 space-y-2">
-              {c.skillQuestion.options.map((opt, i) => (
+              {c.skillQuestion.options.map((opt: string, i: number) => (
                 <button
                   key={opt}
                   onClick={() => setAnswered(i)}
