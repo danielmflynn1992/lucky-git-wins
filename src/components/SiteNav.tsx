@@ -6,6 +6,7 @@ import { Logo } from "./Logo";
 import { useAuth } from "@/hooks/use-auth";
 import { useBasket } from "@/hooks/use-basket";
 import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 const leftLinks = [
   { to: "/competitions", label: "Get Tickets" },
@@ -26,6 +27,26 @@ export function SiteNav() {
   const { count: basketCount, slug: basketSlug } = useBasket();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   useEffect(() => { setOpen(false); }, [pathname]);
+
+  // Toast on basket count change (skip initial hydration).
+  const prevCountRef = useRef<number | null>(null);
+  useEffect(() => {
+    const prev = prevCountRef.current;
+    prevCountRef.current = basketCount;
+    if (prev === null || prev === basketCount) return;
+    const delta = basketCount - prev;
+    const plural = (n: number) => `${n} ticket${n === 1 ? "" : "s"}`;
+    const suffix =
+      basketCount === 0
+        ? "Basket empty."
+        : `Basket: ${plural(basketCount)}.`;
+    if (delta > 0) {
+      toast.success(`Added ${plural(delta)}`, { description: suffix });
+    } else {
+      toast(`Removed ${plural(-delta)}`, { description: suffix });
+    }
+  }, [basketCount]);
+
   const toggleRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
 
