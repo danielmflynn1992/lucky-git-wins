@@ -13,23 +13,29 @@ export const Route = createFileRoute("/winners")({
     ],
   }),
   component: () => (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-ambient">
       <SiteNav />
       <main className="mx-auto max-w-6xl px-4 py-10 w-full flex-1">
-        <h1 className="font-display text-4xl md:text-5xl font-black">Winners Wall</h1>
-        <p className="text-muted-foreground mt-1">Every prize, every winner. Handed over and photographed.</p>
+        <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-clover">Verified · Handed over · Photographed</div>
+        <h1 className="mt-2 font-display text-5xl md:text-7xl font-semibold tracking-[-0.03em]">
+          <span className="text-gradient-mint">Smug Gits.</span>
+        </h1>
+        <p className="text-muted-foreground mt-3 max-w-xl">Real people. Real prizes. Real handshakes. If you'd like to join this wall of insufferable smugness, the tickets are that way.</p>
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {[...WINNERS, ...WINNERS].map((w, i) => (
-            <div key={i} className="rounded-2xl bg-card p-5 border-2 border-white/5 shadow-[var(--shadow-card)]">
+            <div key={i} className="rounded-xl glass p-6 hover:border-clover/40 hover:shadow-[0_0_40px_-16px_rgba(0,223,129,0.35)] transition-all duration-300">
               <div className="flex items-center gap-3">
-                <div className="h-14 w-14 rounded-full bg-clover text-cream flex items-center justify-center font-display text-2xl font-bold">{w.name[0]}</div>
+                <div className="h-12 w-12 rounded-sm bg-ink border border-clover/30 text-clover flex items-center justify-center font-display text-xl font-semibold">{w.name[0]}</div>
                 <div>
-                  <div className="font-bold text-lg">{w.name} from {w.town}</div>
-                  <div className="text-xs text-muted-foreground">{w.when}</div>
+                  <div className="font-semibold">{w.name} <span className="text-muted-foreground font-normal">from {w.town}</span></div>
+                  <div className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground mt-0.5">{w.when}</div>
                 </div>
               </div>
-              <div className="mt-3 rounded-lg bg-gold/15 px-3 py-2 text-sm font-bold text-clover">🏆 {w.prize}</div>
-              <p className="mt-3 text-sm italic text-foreground/70">"{w.quote}"</p>
+              <div className="mt-4 pt-3 border-t border-white/10">
+                <div className="text-[10px] font-mono uppercase tracking-[0.15em] text-muted-foreground">Prize</div>
+                <div className="font-medium text-foreground">{w.prize}</div>
+              </div>
+              <p className="mt-5 font-serif italic text-lg leading-snug text-foreground/85">"{w.quote}"</p>
             </div>
           ))}
         </div>
