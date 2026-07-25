@@ -17,19 +17,19 @@ const buttonVariants = cva(
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
         gold:
-          "bg-gold text-gold-foreground font-bold shadow-[0_4px_0_rgba(0,0,0,0.15)] hover:bg-gold/90 hover:-translate-y-0.5 active:translate-y-0 active:shadow-[0_1px_0_rgba(0,0,0,0.15)]",
+          "bg-gold text-gold-foreground font-semibold hover:bg-gold/90",
         git:
-          "bg-clover text-cream font-semibold shadow-[0_4px_0_rgba(0,0,0,0.2)] hover:bg-clover-deep hover:-translate-y-0.5",
+          "bg-clover text-primary-foreground font-semibold hover:bg-clover-deep",
         hot:
-          "bg-hot text-hot-foreground font-bold shadow-[0_4px_0_rgba(0,0,0,0.15)] hover:brightness-110",
+          "bg-hot text-hot-foreground font-semibold hover:brightness-110",
         cream:
-          "bg-cream text-ink font-semibold border-2 border-ink/10 hover:bg-white",
+          "bg-white text-ink font-semibold border border-ink/10 hover:border-ink/20",
       },
       size: {
         default: "h-9 px-4 py-2",
         sm: "h-8 rounded-md px-3 text-xs",
-        lg: "h-12 rounded-xl px-8 text-base",
-        xl: "h-14 rounded-2xl px-10 text-lg",
+        lg: "h-11 rounded-md px-6 text-sm",
+        xl: "h-12 rounded-md px-8 text-base",
         icon: "h-9 w-9",
       },
     },

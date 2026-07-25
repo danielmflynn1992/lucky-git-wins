@@ -11,33 +11,20 @@ export function CompCard({ c }: { c: Competition }) {
     <Link
       to="/competitions/$slug"
       params={{ slug: c.slug }}
-      className="group relative flex flex-col rounded-3xl bg-card overflow-hidden shadow-[var(--shadow-card)] hover:-translate-y-1 hover:shadow-[0_20px_40px_-15px_rgba(15,81,50,0.35)] transition-all duration-200 border-2 border-ink/5"
+      className="group relative flex flex-col rounded-md bg-card overflow-hidden border border-ink/10 hover:border-clover/60 transition-colors duration-150"
     >
-      {/* Stickers */}
-      <div className="absolute top-3 left-3 z-10 flex flex-col gap-1.5">
-        {c.hot && (
-          <span className="sticker-tilt-l inline-flex items-center rounded-lg bg-hot text-hot-foreground px-2.5 py-1 text-xs font-black uppercase tracking-wide shadow-[var(--shadow-sticker)]">
-            🔥 Hot
-          </span>
-        )}
+      {/* Tag row — flat, single-accent */}
+      <div className="absolute top-3 left-3 z-10 flex gap-1.5">
         {c.instantWin && (
-          <span className="sticker-tilt-r inline-flex items-center rounded-lg bg-gold text-gold-foreground px-2.5 py-1 text-xs font-black uppercase tracking-wide shadow-[var(--shadow-sticker)]">
-            ⚡ Instant Win
+          <span className="rounded-sm bg-gold/95 text-gold-foreground px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider">
+            Instant win
           </span>
         )}
         {almostGone && (
-          <span className="sticker-tilt-l inline-flex items-center rounded-lg bg-ink text-cream px-2.5 py-1 text-xs font-black uppercase tracking-wide shadow-[var(--shadow-sticker)]">
-            Almost Gone!
+          <span className="rounded-sm bg-hot text-hot-foreground px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider">
+            Last {c.totalTickets - c.ticketsSold}
           </span>
         )}
-      </div>
-
-      {/* Price sticker */}
-      <div className="absolute top-3 right-3 z-10">
-        <div className="sticker-tilt-r bg-cream border-2 border-ink rounded-xl px-3 py-1.5 shadow-[var(--shadow-sticker)]">
-          <div className="text-[9px] uppercase tracking-widest font-bold opacity-70 leading-none">from</div>
-          <div className="font-display font-black text-lg leading-tight">{gbp(c.pricePerTicket)}</div>
-        </div>
       </div>
 
       <div className="aspect-[4/3] overflow-hidden bg-secondary">
@@ -47,31 +34,37 @@ export function CompCard({ c }: { c: Competition }) {
           loading="lazy"
           width={1280}
           height={960}
-          className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
+          className="h-full w-full object-cover"
         />
       </div>
 
       <div className="p-4 flex flex-col gap-3">
-        <div>
-          <div className="text-[10px] uppercase tracking-widest font-bold text-clover/70 mb-1">{c.category}</div>
-          <h3 className="font-display text-lg leading-tight">{c.title}</h3>
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            <div className="text-[10px] uppercase tracking-[0.15em] font-medium text-muted-foreground mb-1">{c.category}</div>
+            <h3 className="font-display text-base leading-snug truncate">{c.title}</h3>
+          </div>
+          <div className="text-right shrink-0">
+            <div className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground">from</div>
+            <div className="font-mono font-medium text-base leading-none tabular-nums">{gbp(c.pricePerTicket)}</div>
+          </div>
         </div>
 
-        {/* Progress */}
+        {/* Progress — slim line + tabular readout */}
         <div>
-          <div className="flex justify-between text-xs font-semibold mb-1.5">
-            <span>{shortNumber(c.ticketsSold)} of {shortNumber(c.totalTickets)} sold</span>
+          <div className="flex justify-between text-[11px] font-mono tabular-nums text-ink/70 mb-1">
+            <span>{c.ticketsSold.toLocaleString()} / {c.totalTickets.toLocaleString()}</span>
             <span className="text-clover">{pct}%</span>
           </div>
-          <div className="h-2.5 rounded-full bg-secondary overflow-hidden">
-            <div className="h-full shimmer rounded-full" style={{ width: `${pct}%` }} />
+          <div className="h-1 rounded-full bg-ink/5 overflow-hidden">
+            <div className="h-full shimmer" style={{ width: `${pct}%` }} />
           </div>
         </div>
 
-        <div className="flex items-center justify-between gap-2 pt-1">
-          <div className="text-xs">
-            <div className="opacity-60 uppercase tracking-wider text-[9px] font-bold">Odds now</div>
-            <div className="font-bold text-sm">1 in {odds.toLocaleString()}</div>
+        <div className="flex items-center justify-between gap-2 pt-1 border-t border-ink/5">
+          <div>
+            <div className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground">Odds</div>
+            <div className="font-mono tabular-nums text-sm">1 : {odds.toLocaleString()}</div>
           </div>
           <Countdown target={c.endsAt} compact />
         </div>

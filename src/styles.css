@@ -5,9 +5,9 @@
 @custom-variant dark (&:is(.dark *));
 
 /* ============================================================
- * LUCKY GIT COMPS — Design System
- * Clover Green / Lucky Gold / Cream / Hot Pink
- * Fraunces (display slab) + Inter (body grotesk)
+ * LUCKY GIT COMPS — Design System v2
+ * Fintech-calm. Emerald / muted gold on cool paper.
+ * Space Grotesk (geometric display) + Inter (body) + JetBrains Mono (numerals)
  * ============================================================ */
 
 @theme inline {
@@ -18,8 +18,9 @@
   --radius-2xl: calc(var(--radius) + 8px);
   --radius-3xl: calc(var(--radius) + 12px);
 
-  --font-display: "Fraunces", ui-serif, Georgia, serif;
+  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -50,21 +51,21 @@
   --color-hot: var(--hot);
   --color-hot-foreground: var(--hot-foreground);
 
-  --shadow-sticker: 0 6px 0 rgba(26, 26, 26, 0.12), 0 12px 24px rgba(15, 81, 50, 0.18);
-  --shadow-card: 0 2px 0 rgba(15, 81, 50, 0.06), 0 18px 40px -20px rgba(15, 81, 50, 0.25);
+  --shadow-sticker: 0 1px 0 rgba(11, 31, 23, 0.04);
+  --shadow-card: 0 1px 0 rgba(11, 31, 23, 0.03);
 }
 
 :root {
-  --radius: 0.9rem;
+  --radius: 0.375rem;
 
-  /* Brand */
-  --clover: oklch(0.42 0.11 155);         /* #0F5132 deep base */
-  --clover-deep: oklch(0.28 0.09 155);
-  --gold: oklch(0.83 0.17 82);            /* #F5B700 */
-  --gold-foreground: oklch(0.2 0.03 155);
-  --cream: oklch(0.985 0.02 88);          /* #FFF8ED */
-  --ink: oklch(0.19 0.005 250);           /* #1A1A1A */
-  --hot: oklch(0.68 0.24 5);              /* #FF3D81 */
+  /* Brand — fintech-calm */
+  --ink: oklch(0.22 0.03 168);            /* #0B1F17 near-black-green */
+  --clover: oklch(0.72 0.16 165);         /* #10B77F emerald (primary) */
+  --clover-deep: oklch(0.55 0.13 165);
+  --gold: oklch(0.8 0.13 82);             /* #E8B54D muted gold — used sparingly */
+  --gold-foreground: oklch(0.22 0.03 168);
+  --cream: oklch(0.97 0.007 90);          /* #F7F5F0 paper (cool) */
+  --hot: oklch(0.68 0.22 22);             /* #FF5C5C signal (urgent only) */
   --hot-foreground: oklch(1 0 0);
 
   /* Semantic mapping */
@@ -75,17 +76,17 @@
   --popover: oklch(1 0 0);
   --popover-foreground: var(--ink);
   --primary: var(--clover);
-  --primary-foreground: oklch(0.985 0.02 88);
-  --secondary: oklch(0.94 0.03 88);
+  --primary-foreground: oklch(0.22 0.03 168);
+  --secondary: oklch(0.95 0.005 90);
   --secondary-foreground: var(--ink);
-  --muted: oklch(0.94 0.02 88);
-  --muted-foreground: oklch(0.45 0.02 250);
+  --muted: oklch(0.94 0.005 90);
+  --muted-foreground: oklch(0.5 0.02 168);
   --accent: var(--gold);
   --accent-foreground: var(--gold-foreground);
   --destructive: oklch(0.58 0.24 27);
   --destructive-foreground: oklch(1 0 0);
-  --border: oklch(0.88 0.02 88);
-  --input: oklch(0.9 0.02 88);
+  --border: oklch(0.9 0.005 168);
+  --input: oklch(0.92 0.005 168);
   --ring: var(--clover);
 }
 
@@ -95,83 +96,74 @@
   }
   html {
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
-    background-image:
-      radial-gradient(circle at 20% 10%, rgba(15, 81, 50, 0.04) 0, transparent 40%),
-      radial-gradient(circle at 80% 60%, rgba(245, 183, 0, 0.05) 0, transparent 40%);
+    font-feature-settings: "ss01", "cv11";
   }
   h1, h2, h3, h4, .font-display {
     font-family: var(--font-display);
-    font-weight: 700;
-    letter-spacing: -0.01em;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+  .font-mono, .tabular-nums {
+    font-variant-numeric: tabular-nums;
   }
 }
 
-/* Clover pattern background for hero sections */
+/* Dark surface for hero/footer sections */
 @utility bg-clover-pattern {
-  background-color: var(--clover);
+  background-color: var(--ink);
   background-image:
-    radial-gradient(circle at 25% 25%, rgba(245, 183, 0, 0.08) 0, transparent 12%),
-    radial-gradient(circle at 75% 75%, rgba(255, 255, 255, 0.06) 0, transparent 12%),
-    radial-gradient(circle at 50% 50%, rgba(245, 183, 0, 0.05) 0, transparent 8%);
-  background-size: 80px 80px, 80px 80px, 40px 40px;
+    linear-gradient(180deg, rgba(16, 183, 127, 0.06) 0%, transparent 100%),
+    radial-gradient(circle at 80% 20%, rgba(232, 181, 77, 0.05) 0%, transparent 50%);
 }
 
-/* Sticker rotation utilities */
-@utility sticker-tilt-l { transform: rotate(-6deg); }
-@utility sticker-tilt-r { transform: rotate(4deg); }
+/* Flattened — no rotation. Kept as no-ops for compat. */
+@utility sticker-tilt-l { transform: none; }
+@utility sticker-tilt-r { transform: none; }
 
-/* Shimmer for progress bars */
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-}
+/* Slim gradient progress fill — no shimmer animation */
 @utility shimmer {
-  background-image: linear-gradient(
-    90deg,
-    var(--clover) 0%,
-    var(--clover) 40%,
-    color-mix(in oklab, var(--gold) 60%, var(--clover)) 50%,
-    var(--clover) 60%,
-    var(--clover) 100%
-  );
-  background-size: 200% 100%;
-  animation: shimmer 2.8s linear infinite;
+  background: linear-gradient(90deg, var(--clover) 0%, color-mix(in oklab, var(--clover) 70%, var(--gold)) 100%);
 }
 
-/* Wobble on hover for playful buttons */
-@keyframes wobble {
-  0%, 100% { transform: rotate(0deg); }
-  25% { transform: rotate(-2deg); }
-  75% { transform: rotate(2deg); }
-}
-@utility hover-wobble {
-  transition: transform 0.15s ease;
-}
-.hover-wobble:hover { animation: wobble 0.5s ease; }
+/* Restrained hover — opacity/colour only */
+@utility hover-wobble { transition: opacity 0.15s ease, background-color 0.15s ease; }
 
-/* Countdown urgency pulse */
-@keyframes urgentPulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 61, 129, 0.5); }
-  50% { box-shadow: 0 0 0 8px rgba(255, 61, 129, 0); }
-}
+/* Countdown urgency — subtle border tint, no pulsing box-shadow */
 @utility urgent-pulse {
-  animation: urgentPulse 1.4s ease-in-out infinite;
+  border-color: var(--hot);
+  color: var(--hot);
 }
 
-/* Confetti burst — simple keyframe used inline */
+/* Live odds ticker — continuous horizontal scroll */
+@keyframes tickerScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+@utility ticker-scroll {
+  animation: tickerScroll 60s linear infinite;
+}
+
+/* Monospace digit flip on countdown tick */
+@keyframes digitFlip {
+  0% { transform: translateY(-4px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+@utility digit-flip { animation: digitFlip 0.15s ease-out; }
+
+/* Confetti — kept for single success moment */
 @keyframes confettiFall {
   0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
   100% { transform: translateY(400px) rotate(720deg); opacity: 0; }
 }
 
-/* Soft rise-in for cards */
 @keyframes riseIn {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
 }
-@utility rise-in { animation: riseIn 0.5s ease both; }
+@utility rise-in { animation: riseIn 0.4s ease both; }

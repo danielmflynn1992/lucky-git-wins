@@ -10,30 +10,20 @@ export function Countdown({ target, compact = false }: { target: string; compact
   }, [target]);
 
   const pad = (n: number) => String(n).padStart(2, "0");
-  const cell = (n: number | null, l: string) => (
-    <div className={`flex flex-col items-center ${compact ? "min-w-[38px]" : "min-w-[54px]"}`}>
-      <div className={`font-display tabular-nums font-bold ${compact ? "text-xl" : "text-3xl"} leading-none`}>{n === null ? "--" : pad(n)}</div>
-      <div className={`uppercase tracking-widest text-[9px] mt-1 opacity-70`}>{l}</div>
-    </div>
-  );
-
+  const urgent = t?.urgent;
+  const digits = t
+    ? compact
+      ? `${pad(t.d)}d ${pad(t.h)}:${pad(t.m)}`
+      : `${pad(t.d)}d ${pad(t.h)}:${pad(t.m)}:${pad(t.s)}`
+    : compact ? "--d --:--" : "--d --:--:--";
   return (
     <div
-      className={`inline-flex items-center gap-1 rounded-xl px-3 py-2 ${
-        t?.urgent ? "bg-hot text-hot-foreground urgent-pulse" : "bg-ink text-cream"
-      }`}
+      className={`inline-flex items-center gap-2 rounded border px-2.5 py-1 font-mono tabular-nums ${
+        compact ? "text-xs" : "text-sm"
+      } ${urgent ? "border-hot text-hot bg-hot/5" : "border-ink/10 text-ink bg-white"}`}
     >
-      {cell(t?.d ?? null, "days")}
-      <span className="opacity-40">:</span>
-      {cell(t?.h ?? null, "hrs")}
-      <span className="opacity-40">:</span>
-      {cell(t?.m ?? null, "min")}
-      {!compact && (
-        <>
-          <span className="opacity-40">:</span>
-          {cell(t?.s ?? null, "sec")}
-        </>
-      )}
+      <span className={`h-1.5 w-1.5 rounded-full ${urgent ? "bg-hot" : "bg-clover"}`} />
+      <span className="font-medium">{digits}</span>
     </div>
   );
 }
