@@ -3,6 +3,7 @@ import { Instagram, Facebook, Mail, Menu, ShoppingBag, User, X } from "lucide-re
 import { useState } from "react";
 import { Logo } from "./Logo";
 import { useAuth } from "@/hooks/use-auth";
+import { useBasket } from "@/hooks/use-basket";
 import { supabase } from "@/integrations/supabase/client";
 
 const leftLinks = [
@@ -21,6 +22,7 @@ export function SiteNav() {
   const [open, setOpen] = useState(false);
   const { session, loading } = useAuth();
   const signedIn = !!session;
+  const { count: basketCount, slug: basketSlug } = useBasket();
   return (
     <header className="sticky top-0 z-40 shadow-sm">
       {/* Tier 1 — promo strip */}
@@ -103,11 +105,24 @@ export function SiteNav() {
             </nav>
             <Link
               to="/checkout"
-              aria-label="Basket"
-              className="relative inline-flex shrink-0 items-center justify-center h-10 w-10 rounded-full border border-border hover:border-clover hover:text-clover transition-colors"
+              search={basketSlug ? { slug: basketSlug } : undefined}
+              aria-label={basketCount > 0 ? `Basket, ${basketCount} ticket${basketCount === 1 ? "" : "s"}` : "Basket, empty"}
+              className={
+                "relative inline-flex shrink-0 items-center justify-center h-10 w-10 rounded-full border transition-colors " +
+                (basketCount > 0
+                  ? "border-clover text-clover hover:bg-clover hover:text-primary-foreground"
+                  : "border-border text-foreground/70 hover:border-clover hover:text-clover")
+              }
             >
               <ShoppingBag className="h-5 w-5" />
-              <span className="absolute -top-1 -right-1 h-4 min-w-4 px-1 rounded-full bg-clover text-primary-foreground text-[10px] font-bold flex items-center justify-center">0</span>
+              {basketCount > 0 && (
+                <span
+                  aria-hidden
+                  className="absolute -top-1.5 -right-1.5 min-w-[20px] h-5 px-1.5 rounded-full bg-hot text-hot-foreground text-[11px] font-mono font-bold flex items-center justify-center ring-2 ring-card tabular-nums"
+                >
+                  {basketCount > 99 ? "99+" : basketCount}
+                </span>
+              )}
             </Link>
           </div>
         </div>

@@ -116,6 +116,7 @@ function CompDetail() {
           expires: Date.now() + 15 * 60_000,
         }),
       );
+      window.dispatchEvent(new Event("lgc:basket-change"));
 
       navigate({ to: "/checkout", search: { slug: c.slug, qty: numbers.length } });
     } catch (err) {
