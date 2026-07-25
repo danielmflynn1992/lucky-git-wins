@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useRouterState } from "@tanstack/react-router";
 import { Instagram, Facebook, Mail, Menu, ShoppingBag, User, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Logo } from "./Logo";
 import { useAuth } from "@/hooks/use-auth";
 import { useBasket } from "@/hooks/use-basket";
@@ -26,6 +26,53 @@ export function SiteNav() {
   const { count: basketCount, slug: basketSlug } = useBasket();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   useEffect(() => { setOpen(false); }, [pathname]);
+  const toggleRef = useRef<HTMLButtonElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  // Focus management + Escape + focus trap while the panel is open.
+  useEffect(() => {
+    if (!open) return;
+    const panel = panelRef.current;
+    const trigger = toggleRef.current;
+    const focusables = () =>
+      panel
+        ? Array.from(
+            panel.querySelectorAll<HTMLElement>(
+              'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+            )
+          ).filter((el) => !el.hasAttribute("aria-hidden"))
+        : [];
+    focusables()[0]?.focus();
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        setOpen(false);
+        trigger?.focus();
+        return;
+      }
+      if (e.key !== "Tab") return;
+      const items = focusables();
+      if (items.length === 0) return;
+      const first = items[0];
+      const last = items[items.length - 1];
+      const active = document.activeElement as HTMLElement | null;
+      if (e.shiftKey && (active === first || !panel?.contains(active))) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && active === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+    document.addEventListener("keydown", onKey);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [open]);
+
   return (
     <header className="sticky top-0 z-40 shadow-sm">
       {/* Tier 1 — promo strip */}
@@ -80,9 +127,13 @@ export function SiteNav() {
 
           {/* Mobile menu toggle (left) */}
           <button
+            ref={toggleRef}
             onClick={() => setOpen((o) => !o)}
             className="lg:hidden justify-self-start p-2 rounded-md hover:bg-muted text-foreground/80"
-            aria-label="Menu"
+            aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open}
+            aria-controls="mobile-menu"
+            aria-haspopup="menu"
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
@@ -133,7 +184,14 @@ export function SiteNav() {
 
       {/* Mobile menu */}
       {open && (
-        <div className="lg:hidden border-t border-border bg-card">
+        <div
+          id="mobile-menu"
+          ref={panelRef}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Site navigation"
+          className="lg:hidden border-t border-border bg-card"
+        >
           {/* Primary nav — same order as desktop (left links then right links) */}
           <nav className="px-2 py-2 flex flex-col">
             {allLinks.map((l) => (
