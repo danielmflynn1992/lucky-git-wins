@@ -281,7 +281,7 @@ function Home() {
                 <div className="text-[10px] font-mono uppercase tracking-[0.15em] text-muted-foreground">Prize</div>
                 <div className="font-bold text-foreground">{w.prize}</div>
               </div>
-              <p className="mt-4 font-serif italic text-lg text-foreground/80 leading-snug">"{w.quote}"</p>
+              <p className="mt-4 italic font-sans text-lg text-foreground/80 leading-snug">"{w.quote}"</p>
             </div>
           ))}
         </div>
