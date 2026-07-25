@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Instagram, Facebook, Mail, Menu, ShoppingBag, User } from "lucide-react";
+import { Instagram, Facebook, Mail, Menu, ShoppingBag, User, X } from "lucide-react";
 import { useState } from "react";
 import { Logo } from "./Logo";
 import { useAuth } from "@/hooks/use-auth";
@@ -79,7 +79,7 @@ export function SiteNav() {
             className="lg:hidden justify-self-start p-2 rounded-md hover:bg-muted text-foreground/80"
             aria-label="Menu"
           >
-            <Menu className="h-5 w-5" />
+            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
 
           {/* Centered logo */}
@@ -115,23 +115,53 @@ export function SiteNav() {
 
       {/* Mobile menu */}
       {open && (
-        <nav className="lg:hidden border-t border-border bg-card px-4 py-3 flex flex-col gap-1">
-          {allLinks.map((l) => (
-            <Link
-              key={l.to + l.label}
-              to={l.to}
-              onClick={() => setOpen(false)}
-              className="px-3 py-3 text-sm font-semibold uppercase tracking-wider rounded-md hover:bg-muted text-foreground/80"
-            >
-              {l.label}
-            </Link>
-          ))}
-          {!signedIn && !loading && (
-            <Link to="/auth" onClick={() => setOpen(false)} className="px-3 py-3 text-sm font-semibold uppercase tracking-wider rounded-md hover:bg-muted text-foreground/80 inline-flex items-center gap-2">
-              <User className="h-4 w-4" /> Sign in
-            </Link>
-          )}
-        </nav>
+        <div className="lg:hidden border-t border-border bg-card">
+          {/* Primary nav — same order as desktop (left links then right links) */}
+          <nav className="px-2 py-2 flex flex-col">
+            {allLinks.map((l) => (
+              <Link
+                key={l.to + l.label}
+                to={l.to}
+                onClick={() => setOpen(false)}
+                className="px-3 py-3 text-[13px] font-bold uppercase tracking-[0.14em] text-foreground/85 hover:bg-muted hover:text-clover rounded-md"
+                activeProps={{ className: "text-clover bg-muted/60" }}
+              >
+                {l.label}
+              </Link>
+            ))}
+          </nav>
+
+          {/* Utility: auth (mirrors desktop tier 2 right side) */}
+          <div className="border-t border-border px-4 py-3 flex items-center gap-4 text-[12px] font-bold uppercase tracking-[0.16em]">
+            {signedIn ? (
+              <>
+                <Link to="/account" onClick={() => setOpen(false)} className="inline-flex items-center gap-2 text-foreground/85 hover:text-clover">
+                  <User className="h-4 w-4" /> Account
+                </Link>
+                <button
+                  onClick={() => { setOpen(false); supabase.auth.signOut(); }}
+                  className="ml-auto text-foreground/85 hover:text-clover"
+                >
+                  Sign out
+                </button>
+              </>
+            ) : (
+              !loading && (
+                <>
+                  <Link to="/auth" onClick={() => setOpen(false)} className="text-foreground/85 hover:text-clover">Login</Link>
+                  <Link to="/auth" onClick={() => setOpen(false)} className="text-foreground/85 hover:text-clover">Register</Link>
+                </>
+              )
+            )}
+          </div>
+
+          {/* Socials (mirrors desktop tier 2 left side) */}
+          <div className="border-t border-border px-4 py-3 flex items-center gap-5 text-foreground/70">
+            <a href="https://instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram" className="hover:text-clover"><Instagram className="h-[18px] w-[18px]" /></a>
+            <a href="https://facebook.com" target="_blank" rel="noreferrer" aria-label="Facebook" className="hover:text-clover"><Facebook className="h-[18px] w-[18px]" /></a>
+            <a href="mailto:hello@luckygitcomps.co.uk" aria-label="Email" className="hover:text-clover"><Mail className="h-[18px] w-[18px]" /></a>
+          </div>
+        </div>
       )}
     </header>
   );
