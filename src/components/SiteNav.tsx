@@ -30,6 +30,7 @@ export function SiteNav() {
 
   // Toast on basket count change (skip initial hydration).
   const prevCountRef = useRef<number | null>(null);
+  const [liveMsg, setLiveMsg] = useState("");
   useEffect(() => {
     const prev = prevCountRef.current;
     prevCountRef.current = basketCount;
@@ -42,8 +43,10 @@ export function SiteNav() {
         : `Basket: ${plural(basketCount)}.`;
     if (delta > 0) {
       toast.success(`Added ${plural(delta)}`, { description: suffix });
+      setLiveMsg(`Added ${plural(delta)}. ${suffix}`);
     } else {
       toast(`Removed ${plural(-delta)}`, { description: suffix });
+      setLiveMsg(`Removed ${plural(-delta)}. ${suffix}`);
     }
   }, [basketCount]);
 
@@ -201,6 +204,16 @@ export function SiteNav() {
             </Link>
           </div>
         </div>
+      </div>
+
+      {/* Screen-reader live region — announces basket changes globally */}
+      <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      >
+        {liveMsg}
       </div>
 
       {/* Mobile menu */}
