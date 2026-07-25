@@ -8,7 +8,7 @@ import { CompCard } from "@/components/CompCard";
 import { CompRow } from "@/components/CompRow";
 import { ViewToggle } from "@/routes/competitions.index";
 import { Countdown } from "@/components/Countdown";
-import { LuckyMark } from "@/components/GaryMascot";
+import { SmugSmile } from "@/components/Logo";
 import { LiveOddsTicker } from "@/components/LiveOddsTicker";
 import { COMPETITIONS, CATEGORIES, WINNERS, type Category } from "@/lib/mock-comps";
 import { gbp } from "@/lib/format";
@@ -122,7 +122,7 @@ function Home() {
             <div className="rounded-lg bg-card border border-border p-6 shadow-md">
               <div className="flex items-center justify-between">
                 <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-muted-foreground">Platform stats · Live</div>
-                <LuckyMark className="h-8 w-8" />
+                <SmugSmile className="h-8 w-8" />
               </div>
               <dl className="mt-6 grid grid-cols-2 gap-6">
                 <div>
@@ -291,7 +291,7 @@ function Home() {
       <section className="mx-auto max-w-7xl px-4 mt-24 w-full">
         <div className="rounded-lg bg-ink text-cream p-8 md:p-12 relative overflow-hidden">
           <div className="absolute top-6 right-6 opacity-40">
-            <LuckyMark className="h-20 w-20" />
+            <SmugSmile className="h-20 w-20" />
           </div>
           <div className="relative max-w-xl">
             <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-clover font-bold">New comps · Weekly</div>
