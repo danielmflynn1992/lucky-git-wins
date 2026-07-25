@@ -153,7 +153,7 @@ function Home() {
             { i: Radio, t: "Every draw streamed live" },
             { i: Shield, t: "Verified winners, real people" },
             { i: MessageSquareHeart, t: "UK company, UK support" },
-            { i: Ticket, t: "Free postal entry always" },
+            { i: Ticket, t: "Automatic random draws" },
           ].map(({ i: Icon, t }) => (
             <div key={t} className="flex items-center gap-3">
               <span className="h-8 w-8 rounded-sm bg-clover/10 text-clover flex items-center justify-center shrink-0">
