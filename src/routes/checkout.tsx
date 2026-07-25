@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { z } from "zod";
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -7,7 +7,17 @@ import { Button } from "@/components/ui/button";
 import { LuckyMark } from "@/components/GaryMascot";
 import { getComp, COMPETITIONS } from "@/lib/mock-comps";
 import { gbp } from "@/lib/format";
-import { CreditCard, Lock, ShieldCheck, Share2, CheckCircle2 } from "lucide-react";
+import { CreditCard, Lock, ShieldCheck, Share2, CheckCircle2, AlertTriangle } from "lucide-react";
+
+interface Reservation {
+  token: string;
+  slug: string;
+  numbers: number[];
+  skillAnswer: number;
+  skillQuestion: string;
+  skillAnswerText: string;
+  expires: number;
+}
 
 const searchSchema = z.object({
   slug: z.string().optional(),
@@ -30,11 +40,50 @@ function Checkout() {
   const { slug, qty = 5 } = Route.useSearch();
   const comp = slug ? getComp(slug) : COMPETITIONS[0];
   const [done, setDone] = useState(false);
+  const [reservation, setReservation] = useState<Reservation | null>(null);
+
+  useEffect(() => {
+    try {
+      const raw = sessionStorage.getItem("lgc:reservation");
+      if (!raw) return;
+      const r = JSON.parse(raw) as Reservation;
+      if (r.expires < Date.now()) {
+        sessionStorage.removeItem("lgc:reservation");
+        return;
+      }
+      if (slug && r.slug !== slug) return;
+      setReservation(r);
+    } catch {
+      // ignore malformed reservation
+    }
+  }, [slug]);
 
   if (!comp) return null;
-  const subtotal = comp.pricePerTicket * qty;
+  const effectiveQty = reservation?.numbers.length ?? qty;
+  const subtotal = comp.pricePerTicket * effectiveQty;
 
-  if (done) return <SuccessScreen compTitle={comp.title} qty={qty} />;
+  if (done) return <SuccessScreen compTitle={comp.title} numbers={reservation?.numbers ?? []} />;
+
+  if (!reservation) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <SiteNav />
+        <main className="mx-auto max-w-xl px-4 py-16 w-full flex-1 text-center">
+          <div className="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-full bg-hot/15 text-hot">
+            <AlertTriangle className="h-7 w-7" />
+          </div>
+          <h1 className="mt-6 font-display text-3xl font-black">Skill question required.</h1>
+          <p className="mt-2 text-muted-foreground">
+            No reserved tickets on this device. Head back, pick your tickets, and answer the skill question — checkout unlocks after that.
+          </p>
+          <Button asChild variant="gold" size="lg" className="mt-6">
+            <Link to="/competitions/$slug" params={{ slug: slug ?? comp.slug }}>Back to the comp</Link>
+          </Button>
+        </main>
+        <SiteFooter />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -45,12 +94,25 @@ function Checkout() {
           onSubmit={(e) => {
             e.preventDefault();
             setDone(true);
+            sessionStorage.removeItem("lgc:reservation");
           }}
         >
           <div>
             <h1 className="font-display text-3xl font-black">Right then, checkout.</h1>
             <p className="text-muted-foreground mt-1">You're seconds away from being in the draw.</p>
           </div>
+
+          <fieldset className="rounded-2xl bg-clover/5 border-2 border-clover/30 p-4">
+            <legend className="px-2 font-display text-sm font-bold flex items-center gap-1.5 text-clover">
+              <ShieldCheck className="h-4 w-4" /> Skill question passed
+            </legend>
+            <div className="text-xs uppercase tracking-widest text-foreground/60 font-bold">Question</div>
+            <p className="mt-0.5 text-sm">{reservation.skillQuestion}</p>
+            <div className="mt-3 text-xs uppercase tracking-widest text-foreground/60 font-bold">Your answer (recorded with order)</div>
+            <p className="mt-0.5 text-sm font-mono">
+              {String.fromCharCode(65 + reservation.skillAnswer)}. {reservation.skillAnswerText}
+            </p>
+          </fieldset>
 
           <fieldset className="rounded-2xl bg-card border-2 border-white/5 p-5 space-y-4">
             <legend className="px-2 font-display text-lg font-bold">Your details</legend>
@@ -97,7 +159,20 @@ function Checkout() {
               <div className="flex-1 min-w-0">
                 <div className="text-[10px] font-bold uppercase tracking-widest text-clover/70">{comp.category}</div>
                 <div className="font-display text-sm truncate">{comp.title}</div>
-                <div className="text-xs text-muted-foreground">{qty} × {gbp(comp.pricePerTicket)}</div>
+                <div className="text-xs text-muted-foreground">{effectiveQty} × {gbp(comp.pricePerTicket)}</div>
+              </div>
+            </div>
+            <div className="mt-4">
+              <div className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground mb-2">Reserved ticket numbers</div>
+              <div className="flex flex-wrap gap-1">
+                {reservation.numbers.slice(0, 40).map((n) => (
+                  <span key={n} className="rounded bg-ink text-cream px-1.5 py-0.5 font-mono text-[10px] tabular-nums">
+                    {n.toString().padStart(4, "0")}
+                  </span>
+                ))}
+                {reservation.numbers.length > 40 && (
+                  <span className="text-[10px] text-muted-foreground font-mono">+{reservation.numbers.length - 40} more</span>
+                )}
               </div>
             </div>
             <dl className="mt-5 space-y-2 text-sm">
@@ -128,8 +203,7 @@ function Input({ label, className = "", ...props }: React.InputHTMLAttributes<HT
   );
 }
 
-function SuccessScreen({ compTitle, qty }: { compTitle: string; qty: number }) {
-  const numbers = Array.from({ length: qty }, () => Math.floor(Math.random() * 15000) + 1);
+function SuccessScreen({ compTitle, numbers }: { compTitle: string; numbers: number[] }) {
   return (
     <div className="min-h-screen flex flex-col">
       <SiteNav />
@@ -147,9 +221,9 @@ function SuccessScreen({ compTitle, qty }: { compTitle: string; qty: number }) {
           <div className="mt-4">
             <div className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground mb-2">Your ticket numbers</div>
             <div className="flex flex-wrap gap-1.5">
-              {numbers.map((n, i) => (
-                <span key={i} className="rounded-sm bg-ink text-cream px-2 py-1 font-mono text-xs tabular-nums">
-                  {n.toString().padStart(5, "0")}
+              {numbers.map((n) => (
+                <span key={n} className="rounded-sm bg-ink text-cream px-2 py-1 font-mono text-xs tabular-nums">
+                  {n.toString().padStart(4, "0")}
                 </span>
               ))}
             </div>
