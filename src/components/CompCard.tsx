@@ -1,15 +1,19 @@
 import { Link } from "@tanstack/react-router";
+import { useState } from "react";
 import type { Competition } from "@/lib/mock-comps";
 import { gbp } from "@/lib/format";
 import { Countdown } from "./Countdown";
-import { ShieldCheck, Repeat2, Zap } from "lucide-react";
+import { QuickAddDialog } from "./QuickAddDialog";
+import { ShieldCheck, Repeat2, Zap, Plus } from "lucide-react";
 
 export function CompCard({ c }: { c: Competition }) {
   const pct = Math.round((c.ticketsSold / c.totalTickets) * 100);
   const almostGone = pct >= 80;
   const remaining = c.totalTickets - c.ticketsSold;
   const odds = Math.round(c.totalTickets / Math.max(1, c.ticketsSold || 1));
+  const [quickOpen, setQuickOpen] = useState(false);
   return (
+    <>
     <Link
       to="/competitions/$slug"
       params={{ slug: c.slug }}
@@ -75,9 +79,19 @@ export function CompCard({ c }: { c: Competition }) {
           </div>
         </div>
 
-        {/* CTA — screams to be clicked */}
-        <div className="rounded-md bg-clover text-primary-foreground text-center py-3 font-display font-extrabold text-base uppercase tracking-[-0.01em] group-hover:bg-clover-deep transition-colors">
-          Enter Now →
+        {/* CTA row — View + Quick add */}
+        <div className="flex gap-2">
+          <div className="flex-1 rounded-md bg-clover text-primary-foreground text-center py-3 font-display font-extrabold text-base uppercase tracking-[-0.01em] group-hover:bg-clover-deep transition-colors">
+            Enter Now →
+          </div>
+          <button
+            type="button"
+            aria-label={`Quick add tickets for ${c.title}`}
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); setQuickOpen(true); }}
+            className="shrink-0 rounded-md bg-gold text-gold-foreground px-4 py-3 font-display font-extrabold uppercase tracking-[-0.01em] inline-flex items-center gap-1.5 hover:bg-gold/90 transition-colors"
+          >
+            <Plus className="h-4 w-4" /> Add
+          </button>
         </div>
 
         {/* Trust badges */}
@@ -87,5 +101,7 @@ export function CompCard({ c }: { c: Competition }) {
         </div>
       </div>
     </Link>
+    <QuickAddDialog comp={c} open={quickOpen} onClose={() => setQuickOpen(false)} />
+    </>
   );
 }

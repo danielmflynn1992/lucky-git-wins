@@ -30,7 +30,7 @@ export function Logo({ variant = "horizontal", className = "" }: { variant?: "ho
       <img
         src={logoLockup}
         alt="LuckyGitComps"
-        className={`${sizing} object-contain max-w-none`}
+        className={`${sizing} object-contain max-w-none translate-x-[9%]`}
         width={1536}
         height={1024}
         loading="eager"
