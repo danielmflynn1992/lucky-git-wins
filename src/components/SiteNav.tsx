@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
+import { useRouterState } from "@tanstack/react-router";
 import { Instagram, Facebook, Mail, Menu, ShoppingBag, User, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Logo } from "./Logo";
 import { useAuth } from "@/hooks/use-auth";
 import { useBasket } from "@/hooks/use-basket";
@@ -23,6 +24,8 @@ export function SiteNav() {
   const { session, loading } = useAuth();
   const signedIn = !!session;
   const { count: basketCount, slug: basketSlug } = useBasket();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  useEffect(() => { setOpen(false); }, [pathname]);
   return (
     <header className="sticky top-0 z-40 shadow-sm">
       {/* Tier 1 — promo strip */}
