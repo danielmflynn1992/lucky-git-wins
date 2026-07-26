@@ -80,9 +80,9 @@ export function CompCard({ c }: { c: Competition }) {
       </div>
 
       {/* Ribbon title — the engraved banner across the plate. */}
-      <div className="relative z-10 -mt-4 mb-1 flex justify-center px-3 pointer-events-none">
+      <div className="relative z-10 -mt-4 mb-1 flex justify-center px-1 sm:px-3 pointer-events-none">
         <Ribbon as="h3" className="max-w-full">
-          <span className="block leading-[1.15] break-words hyphens-auto text-[clamp(0.78rem,3.4cqi,1.05rem)]">
+          <span className="block leading-[1.15] break-words hyphens-auto">
             {c.title}
           </span>
         </Ribbon>

@@ -15,9 +15,9 @@ export function Ribbon({
   eyebrow?: string;
 }) {
   return (
-    <div className={`inline-flex flex-col items-center text-center ${className}`}>
+    <div className={`flex w-full flex-col items-center text-center ${className}`}>
       {eyebrow && <div className="label-micro mb-2">{eyebrow}</div>}
-      <div className="relative inline-flex items-center justify-center px-8 py-3">
+      <div className="relative flex w-full items-center justify-center px-3 sm:px-6 py-2 sm:py-3">
         <svg
           aria-hidden="true"
           viewBox="0 0 400 60"
@@ -32,7 +32,7 @@ export function Ribbon({
           <path d="M392 30 L400 22 L400 38 Z" strokeWidth="1" fill="var(--color-paper-deep)" />
         </svg>
         <Tag
-          className="relative font-display font-semibold uppercase px-2 sm:px-4 text-[clamp(0.78rem,3.4cqi,1.15rem)] leading-[1.15] tracking-[0.06em] sm:tracking-[0.1em] md:tracking-[0.14em] break-words hyphens-auto"
+          className="relative font-display font-semibold uppercase px-1 sm:px-3 text-[clamp(0.68rem,2.9cqi,1.1rem)] leading-[1.15] tracking-[0.04em] sm:tracking-[0.08em] md:tracking-[0.12em] break-words hyphens-auto line-clamp-2"
           style={{ color: "var(--color-ink-green-deep)", fontVariant: "small-caps" }}
         >
           {children}
