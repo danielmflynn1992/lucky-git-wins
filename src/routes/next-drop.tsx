@@ -37,7 +37,7 @@ function NextDropPage() {
         <div className="mt-8 border-2 border-ink bg-card p-6 text-center">
           <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-muted-foreground">Doors open in</div>
           <div className="mt-2 text-4xl md:text-6xl font-display font-black tabular-nums">
-            {next ? <Countdown endsAt={next.toISOString()} /> : "—"}
+            {next ? <Countdown target={next.toISOString()} /> : "—"}
           </div>
         </div>
 
