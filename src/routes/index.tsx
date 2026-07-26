@@ -37,6 +37,7 @@ function Home() {
   const [cat, setCat] = useState<Category | "All">("All");
   const [sort, setSort] = useState<"ending" | "popular" | "price">("ending");
   const [view, setView] = useState<"grid" | "list">("grid");
+  const [openWinnerId, setOpenWinnerId] = useState<string | null>(null);
   const { data: winners = [] } = useQuery(winnersQuery);
 
   const filtered = useMemo(() => {
@@ -275,7 +276,12 @@ function Home() {
         {winners.length > 0 ? (
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {winners.slice(0, 3).map((w) => (
-              <WinnerCard key={w.id} w={w} />
+              <WinnerCard
+                key={w.id}
+                w={w}
+                expanded={openWinnerId === w.id}
+                onToggle={(id) => setOpenWinnerId((cur) => (cur === id ? null : id))}
+              />
             ))}
           </div>
         ) : (
