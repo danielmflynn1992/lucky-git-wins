@@ -54,8 +54,9 @@ export function WinnerCard({
   };
 
   const showWinnerPhoto = w.photo_consent && !!w.winner_photo_url;
-  const polaroidSrc = showWinnerPhoto ? w.winner_photo_url! : w.image;
   const slang = slangForPrize(w.prize);
+  const hasVerification =
+    !!w.verification_hash && !!w.seed_revealed && w.qualifying_pool_size != null;
 
   return (
     <article className="flex flex-col border-[1.5px] border-[var(--color-ink-black)] bg-[var(--color-paper-raised)] overflow-hidden">
@@ -66,14 +67,24 @@ export function WinnerCard({
         aria-controls={panelId}
         className="text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ink-blue)]"
       >
-        <header className="bg-[var(--color-ink-red)] text-[var(--color-paper)] px-3 py-1.5 flex items-baseline justify-between gap-2">
+        <header className="bg-[var(--color-ink-red)] text-[var(--color-paper)] px-3 py-1.5 flex items-center justify-between gap-2">
           <span className="font-body font-bold uppercase tracking-[0.16em] text-[10px]">Winner</span>
-          <span className="font-mono tabular-nums text-[10px] opacity-95">
-            {formatWinnerDate(w.drawn_at)}
+          <span className="flex items-center gap-2">
+            <span className="font-mono tabular-nums text-[10px] opacity-95">
+              {formatWinnerDate(w.drawn_at)}
+            </span>
+            <span className="font-body uppercase tracking-[0.16em] text-[9px] opacity-90">
+              {expanded ? "Tap to close" : "Tap to open"}
+            </span>
+            <ChevronDown
+              className="h-3.5 w-3.5 motion-safe:transition-transform motion-safe:duration-[220ms]"
+              style={{ transform: expanded ? "rotate(180deg)" : "rotate(0deg)" }}
+              aria-hidden
+            />
           </span>
         </header>
 
-        <dl className="px-3 pt-2 pb-1 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1">
+        <dl className="px-3 py-2 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1">
           <dt className="label text-[9px] whitespace-nowrap self-center">NAME</dt>
           <dd className="font-mono text-[12px] text-[var(--color-ink-black)] text-right self-center truncate">
             <b>{w.winner_display_name}</b>
@@ -93,25 +104,6 @@ export function WinnerCard({
             )}
           </dd>
         </dl>
-
-        <div className="mx-3 mt-1 rule-dotted" aria-hidden />
-        <div className="px-3 py-2 flex items-center justify-between gap-2">
-          <p className="font-mono text-[11px] text-[var(--color-ink-grey)] truncate">
-            {w.competition_title}
-          </p>
-          <span className="flex items-center gap-1.5 shrink-0">
-            <span
-              className="font-body uppercase tracking-[0.18em] text-[9px] text-[var(--color-ink-grey)] microtext"
-            >
-              {expanded ? "Tap to close" : "Tap to open"}
-            </span>
-            <ChevronDown
-              className="h-3.5 w-3.5 text-[var(--color-ink-blue)] motion-safe:transition-transform motion-safe:duration-[220ms]"
-              style={{ transform: expanded ? "rotate(180deg)" : "rotate(0deg)" }}
-              aria-hidden
-            />
-          </span>
-        </div>
       </button>
 
       <div
@@ -134,7 +126,7 @@ export function WinnerCard({
             </div>
           ) : null}
 
-          {polaroidSrc ? (
+          {showWinnerPhoto ? (
             <div className="px-3 pt-4 flex justify-center">
               <figure
                 className="bg-[var(--color-card-white)] p-2 pb-6 shadow-[0_4px_10px_rgba(0,0,0,0.18)] border border-[var(--color-paper-edge)] max-w-[180px]"
@@ -142,14 +134,15 @@ export function WinnerCard({
               >
                 <div className="aspect-square overflow-hidden bg-[var(--color-paper-deep)]">
                   <img
-                    src={polaroidSrc}
-                    alt={showWinnerPhoto ? `${w.winner_display_name} with prize` : w.prize}
+                    src={w.winner_photo_url!}
+                    alt={`${w.winner_display_name} with prize`}
                     loading="lazy"
                     className="w-full h-full object-cover"
                   />
                 </div>
                 <figcaption className="mt-1 font-mono text-[10px] text-center text-[var(--color-ink-black)]">
-                  {showWinnerPhoto ? w.winner_display_name : "prize photo"}
+                  {w.winner_display_name}
+                  {w.winner_town ? ` · ${w.winner_town}` : ""}
                 </figcaption>
               </figure>
             </div>
@@ -161,29 +154,35 @@ export function WinnerCard({
             </blockquote>
           ) : null}
 
-          <div className="mx-3 mt-3 rule-dotted" aria-hidden />
-          <div className="px-3 pt-2 pb-4">
-            <div className="label text-[9px] text-[var(--color-ink-blue)] mb-1">Verification</div>
-            <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-0.5 font-mono text-[10px] text-[var(--color-ink-black)]">
-              <dt className="text-[var(--color-ink-grey)]">Commit</dt>
-              <dd className="truncate" title={w.verification_hash}>{w.verification_hash.slice(0, 24)}…</dd>
-              <dt className="text-[var(--color-ink-grey)]">Seed</dt>
-              <dd className="truncate" title={w.seed_revealed}>{w.seed_revealed.slice(0, 24)}…</dd>
-              <dt className="text-[var(--color-ink-grey)]">Pool</dt>
-              <dd>{w.qualifying_pool_size ?? "—"} qualifying</dd>
-            </dl>
-            <Link
-              to="/draws/$id/reveal"
-              params={{ id: w.id }}
-              className="mt-2 inline-block font-body uppercase tracking-[0.16em] text-[10px] font-bold text-[var(--color-ink-blue)] underline underline-offset-2"
-            >
-              Verify this draw →
-            </Link>
-          </div>
+          {hasVerification ? (
+            <>
+              <div className="mx-3 mt-3 rule-dotted" aria-hidden />
+              <div className="px-3 pt-2 pb-4">
+                <div className="label text-[9px] text-[var(--color-ink-blue)] mb-1">Verification</div>
+                <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-0.5 font-mono text-[10px] text-[var(--color-ink-black)]">
+                  <dt className="text-[var(--color-ink-grey)]">Commit</dt>
+                  <dd className="truncate" title={w.verification_hash}>{w.verification_hash.slice(0, 24)}…</dd>
+                  <dt className="text-[var(--color-ink-grey)]">Seed</dt>
+                  <dd className="truncate" title={w.seed_revealed}>{w.seed_revealed.slice(0, 24)}…</dd>
+                  <dt className="text-[var(--color-ink-grey)]">Pool</dt>
+                  <dd>{w.qualifying_pool_size} qualifying</dd>
+                </dl>
+                <Link
+                  to="/draws/$id/reveal"
+                  params={{ id: w.id }}
+                  className="mt-2 inline-block font-body uppercase tracking-[0.16em] text-[10px] font-bold text-[var(--color-ink-blue)] underline underline-offset-2"
+                >
+                  Verify this draw →
+                </Link>
+              </div>
+            </>
+          ) : (
+            <div className="pb-4" />
+          )}
 
           <span
             aria-hidden
-            className="pointer-events-none absolute bottom-2 right-2 font-display uppercase tracking-[0.18em] text-[18px] text-[#6b21a8]/80 border-[2.5px] border-[#6b21a8]/80 px-2 py-0.5 rotate-[-8deg] select-none"
+            className="pointer-events-none absolute bottom-2 right-2 font-display uppercase tracking-[0.18em] text-[18px] text-[var(--color-coupon-red)]/85 border-[2.5px] border-[var(--color-coupon-red)]/85 px-2 py-0.5 rotate-[-8deg] select-none mix-blend-multiply"
             style={{ fontFamily: "var(--font-display, inherit)" }}
           >
             Paid Out
