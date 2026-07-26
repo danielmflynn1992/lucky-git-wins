@@ -47,7 +47,7 @@
   --color-ink-blue-soft:  #3B5BC0;
   --color-ink-blue-deep:  #122748;
   --color-biro:           #2B4CA8;   /* ballpoint — brighter, slightly purple */
-  --color-ink-purple:     #5B3A8C;   /* rubber stamp only */
+  /* --color-ink-purple removed: stamps are red or ink blue only */
   --color-ink-yellow:     #FFD447;   /* highlighter only */
   --color-ink-black:      #16161A;
   --color-ink-grey:       #4E4A40;
@@ -867,8 +867,8 @@
   font-family: var(--font-display);
   text-transform: uppercase;
   letter-spacing: .06em;
-  color: var(--color-stamp-purple);
-  border: 3px solid var(--color-stamp-purple);
+  color: var(--color-coupon-red);
+  border: 3px solid var(--color-coupon-red);
   padding: .25rem .8rem;
   display: inline-block;
   transform: rotate(-9deg);
