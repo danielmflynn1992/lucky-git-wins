@@ -136,8 +136,8 @@ export function SiteNav() {
       </div>
 
       {/* Tier 3 — main bar: nav | centered logo | cart */}
-      <div className="bg-card/95 backdrop-blur-md border-b border-border">
-        <div className="mx-auto max-w-7xl px-4 md:px-6 h-16 md:h-24 grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-4">
+      <div className="bg-card/95 backdrop-blur-md border-b border-border relative overflow-visible">
+        <div className="mx-auto max-w-7xl px-4 md:px-6 h-16 md:h-24 grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-4 relative">
           {/* Left nav */}
           <nav className="hidden lg:flex items-center justify-end gap-7 min-w-0">
             {leftLinks.map((l) => (
@@ -165,8 +165,8 @@ export function SiteNav() {
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
 
-          {/* Centered logo */}
-          <div className="justify-self-center shrink-0">
+          {/* Centered logo — overhangs below the bar, blends into the page */}
+          <div className="justify-self-center shrink-0 relative z-10 translate-y-4 md:translate-y-8">
             <Logo />
           </div>
 
