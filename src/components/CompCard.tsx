@@ -78,7 +78,18 @@ export function CompCard({ c }: { c: Competition }) {
       {/* Ribbon title — the engraved banner across the plate. */}
       <div className="relative z-10 -mt-4 mb-1 flex justify-center px-3 pointer-events-none">
         <Ribbon as="h3" className="max-w-full">
-          <span className="block truncate max-w-[16ch] sm:max-w-[22ch]">{c.title}</span>
+          <span
+            className="block text-[13px] sm:text-base leading-tight"
+            style={{
+              display: "-webkit-box",
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: "vertical",
+              overflow: "hidden",
+              maxWidth: "26ch",
+            }}
+          >
+            {c.title}
+          </span>
         </Ribbon>
       </div>
 
