@@ -266,7 +266,7 @@ function NewComp() {
                     <>
                       <ImagePlus className="h-7 w-7" />
                       Upload cover image
-                      <span className="text-xs font-normal text-muted-foreground">JPG, PNG or WEBP · up to 8 MB</span>
+                      <span className="text-xs font-normal text-muted-foreground">JPG, PNG or WEBP · auto-optimized to WEBP</span>
                     </>
                   )}
                 </button>
@@ -274,6 +274,23 @@ function NewComp() {
               {uploadError && (
                 <div className="mt-3 text-xs text-hot flex items-start gap-1.5">
                   <AlertTriangle className="h-3.5 w-3.5 mt-0.5 shrink-0" /> <span>{uploadError}</span>
+                </div>
+              )}
+              {optimizeInfo && !uploadError && (
+                <div className="mt-3 rounded-lg border border-clover/30 bg-clover/5 p-3 text-[11px] leading-relaxed text-foreground/80">
+                  <div className="font-bold text-clover uppercase tracking-wider text-[10px] mb-1">
+                    {optimizeInfo.converted ? "Optimized before upload" : "Uploaded as-is"}
+                  </div>
+                  {optimizeInfo.converted ? (
+                    <div className="font-mono tabular-nums">
+                      {formatBytes(optimizeInfo.originalBytes)} → <strong>{formatBytes(optimizeInfo.optimizedBytes)}</strong>
+                      {" "}({Math.max(0, Math.round((1 - optimizeInfo.optimizedBytes / optimizeInfo.originalBytes) * 100))}% smaller)
+                      {" · "}{optimizeInfo.width}×{optimizeInfo.height}
+                      {" · "}{optimizeInfo.contentType.replace("image/", "").toUpperCase()} q{Math.round(optimizeInfo.quality * 100)}
+                    </div>
+                  ) : (
+                    <div>Source already smaller than the WEBP output — kept the original.</div>
+                  )}
                 </div>
               )}
             </Card>
