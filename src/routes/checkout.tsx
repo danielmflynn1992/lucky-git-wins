@@ -8,6 +8,8 @@ import { SmugSmile, StampSeal } from "@/components/Logo";
 import { getComp, COMPETITIONS } from "@/lib/mock-comps";
 import { gbp } from "@/lib/format";
 import { CreditCard, Lock, ShieldCheck, Share2, CheckCircle2, AlertTriangle, Mail } from "lucide-react";
+import { SkillWarning } from "@/components/SkillWarning";
+import { SkillQuestionStep } from "@/components/SkillQuestionStep";
 
 interface Reservation {
   token: string;
@@ -38,6 +40,7 @@ function Checkout() {
   const comp = slug ? getComp(slug) : COMPETITIONS[0];
   const [done, setDone] = useState(false);
   const [reservation, setReservation] = useState<Reservation | null>(null);
+  const [answer, setAnswer] = useState<{ isCorrect: boolean; orderRef: string } | null>(null);
 
   useEffect(() => {
     try {
@@ -98,21 +101,18 @@ function Checkout() {
         >
           <div>
             <h1 className="font-display text-3xl md:text-4xl font-semibold tracking-tight">Right then, checkout.</h1>
-            <p className="text-muted-foreground mt-1">Card details, a quick tick-box, and you're in the draw. That's the lot.</p>
+            <p className="text-muted-foreground mt-1">
+              Answer the skill question, then card details. That's the lot.
+            </p>
           </div>
 
-          <div className="rounded-2xl border-2 border-clover/50 bg-clover/5 p-4 flex items-start gap-3">
-            <Mail className="h-5 w-5 text-clover shrink-0 mt-0.5" />
-            <div className="flex-1">
-              <div className="font-display font-bold text-clover">Prefer to enter this competition for free?</div>
-              <p className="text-sm text-foreground/80 mt-1">
-                Same ticket pool, same odds of winning, no purchase necessary. One free entry per person per competition.
-              </p>
-              <Button asChild variant="cream" size="lg" className="mt-3 border-2 border-clover text-clover hover:bg-clover hover:text-cream">
-                <Link to="/free-entry" search={{ slug: reservation.slug }}>Enter free instead →</Link>
-              </Button>
-            </div>
-          </div>
+          <SkillWarning />
+
+          <SkillQuestionStep
+            slug={reservation.slug}
+            reservationToken={reservation.token}
+            onResult={setAnswer}
+          />
 
           <fieldset className="rounded-2xl bg-card border-2 border-border p-5 space-y-4">
             <legend className="px-2 font-display text-lg font-bold">Your details</legend>
@@ -140,12 +140,30 @@ function Checkout() {
 
           <label className="flex items-start gap-2 text-sm">
             <input type="checkbox" required className="mt-1 h-4 w-4 accent-clover" />
-            <span>I've read the <Link to="/terms" className="underline">T&Cs</Link>, I'm 18+, and I know I can enter free by post if I want.</span>
+            <span>
+              I've read the <Link to="/terms" className="underline">T&amp;Cs</Link>, I confirm I'm 18+ and
+              I understand that tickets from an incorrect answer are not entered in the draw.
+            </span>
           </label>
 
-          <Button type="submit" variant="gold" size="xl" className="w-full">
-            Cough Up {gbp(subtotal)} (Securely)
+          <Button
+            type="submit"
+            variant="gold"
+            size="xl"
+            className="w-full"
+            disabled={!answer}
+          >
+            {answer
+              ? `Cough Up ${gbp(subtotal)} (Securely)`
+              : "Answer the skill question to continue"}
           </Button>
+          {answer && !answer.isCorrect && (
+            <div className="rounded-md border-2 border-[color:var(--color-ink-red)] bg-[color:var(--color-ink-red)]/5 p-3 text-xs text-[color:var(--color-ink-red)]">
+              Heads up: your answer was incorrect. If you proceed, tickets will be issued as
+              non-qualifying and will not be entered in the draw. No refund. Close this page to
+              cancel — no charge yet.
+            </div>
+          )}
           <div className="text-xs text-muted-foreground text-center flex items-center justify-center gap-1.5">
             <ShieldCheck className="h-3.5 w-3.5" /> Secure checkout.
           </div>
