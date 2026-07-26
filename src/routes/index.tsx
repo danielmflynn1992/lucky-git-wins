@@ -83,7 +83,9 @@ function Home() {
             {/* Featured comp mini card */}
             <div className="mt-6 rounded-lg bg-card border border-border text-foreground p-4 max-w-md shadow-md">
               <div className="flex gap-3">
-                <img src={featured.image} alt="" className="h-20 w-20 rounded-md object-cover" width={80} height={80} />
+                <div className="prize-treatment shrink-0 h-20 w-20">
+                  <img src={featured.image} alt="" width={320} height={320} />
+                </div>
                 <div className="flex-1 min-w-0">
                   <div className="text-[10px] font-mono uppercase tracking-[0.15em] text-muted-foreground">{featured.category}</div>
                   <div className="font-display text-base font-bold leading-tight truncate">{featured.title}</div>

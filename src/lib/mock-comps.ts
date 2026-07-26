@@ -5,7 +5,7 @@ import holiday from "@/assets/prize-holiday.jpg";
 import ps5 from "@/assets/prize-ps5.jpg";
 import watch from "@/assets/prize-watch.jpg";
 
-export type Category = "Cars" | "Tech" | "Cash" | "Holidays";
+export type Category = "Cars" | "Tech" | "Cash" | "Holidays" | "Watches";
 
 export interface Competition {
   slug: string;
@@ -115,7 +115,7 @@ export const COMPETITIONS: Competition[] = [
     slug: "rolex-submariner",
     title: "Rolex Submariner",
     subtitle: "Or £11,000 cash if you're not a watch person.",
-    category: "Tech",
+    category: "Watches",
     image: watch,
     gallery: [watch],
     pricePerTicket: 9.99,
@@ -129,7 +129,7 @@ export const COMPETITIONS: Competition[] = [
   },
 ];
 
-export const CATEGORIES: Category[] = ["Cars", "Tech", "Cash", "Holidays"];
+export const CATEGORIES: Category[] = ["Cars", "Tech", "Watches", "Cash", "Holidays"];
 
 export const WINNERS = [
   { name: "Dave", town: "Cardiff", prize: "Land Rover Defender", quote: "I actually cried. Ask my wife.", when: "2 weeks ago" },

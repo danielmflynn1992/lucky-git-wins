@@ -173,14 +173,14 @@ export function SiteNav() {
           >
             <Link to="/competitions" className="hover:text-clover transition-colors whitespace-nowrap">Competitions</Link>
             <Link to="/winners" className="hover:text-clover transition-colors whitespace-nowrap">Winners</Link>
-            <Link to="/how-it-works" className="hover:text-clover transition-colors whitespace-nowrap">About</Link>
-            <Link to="/past-draws" className="hover:text-clover transition-colors whitespace-nowrap">Verify</Link>
+            <Link to="/about" className="hover:text-clover transition-colors whitespace-nowrap">About</Link>
+            <Link to="/verify" className="hover:text-clover transition-colors whitespace-nowrap">Verify</Link>
           </nav>
 
           <Link
             to="/checkout"
             search={basketSlug ? { slug: basketSlug } : undefined}
-            aria-label={basketCount > 0 ? `Basket, ${basketCount} ticket${basketCount === 1 ? "" : "s"}` : "Basket, empty"}
+            aria-label="Basket"
             className={
               "relative inline-flex items-center justify-center h-8 w-8 -mr-1 rounded-full border transition-colors shrink-0 " +
               (basketCount > 0
@@ -188,7 +188,8 @@ export function SiteNav() {
                 : "border-border text-foreground/70 hover:border-clover hover:text-clover")
             }
           >
-            <ShoppingBag className="h-4 w-4" />
+            <ShoppingBag className="h-4 w-4" aria-hidden="true" />
+            <span className="sr-only">Basket{basketCount > 0 ? `, ${basketCount} ticket${basketCount === 1 ? "" : "s"}` : ", empty"}</span>
             {basketCount > 0 && (
               <span
                 aria-hidden
