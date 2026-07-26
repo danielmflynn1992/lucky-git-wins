@@ -18,6 +18,14 @@ export const IMAGES: Record<string, string> = {
   "rolex-submariner": watch,
 };
 
+// DB rows can hold stale dev paths like "/src/assets/prize-audi.jpg" that don't
+// resolve after build. Treat any non-http(s) value as unusable and fall back
+// to the bundled slug asset.
+function resolveImage(raw: string | null | undefined, slug: string): string {
+  if (raw && /^https?:\/\//i.test(raw)) return raw;
+  return IMAGES[slug] ?? "";
+}
+
 export interface DbCompetition {
   id: string;
   slug: string;
