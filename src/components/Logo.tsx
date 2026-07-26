@@ -82,7 +82,10 @@ export function WaxSeal({
         width={668}
         height={668}
         loading="eager"
-        className="block h-full w-full object-contain select-none pointer-events-none"
+        // The raster asset has a solid backing outside the engraved ring.
+        // clip-path circle crops it to the engraved edge so no white/cream
+        // disc bleeds out from behind the emblem.
+        className="block h-full w-full object-contain select-none pointer-events-none [clip-path:circle(50%_at_50%_50%)]"
         draggable={false}
       />
     </Link>
