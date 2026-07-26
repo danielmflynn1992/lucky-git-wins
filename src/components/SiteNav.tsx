@@ -170,24 +170,24 @@ export function SiteNav() {
           <Link
             to="/"
             aria-label="Lucky Git Comps — home"
-            className="justify-self-center inline-flex items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-clover"
+            className={
+              "relative justify-self-center block overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-clover " +
+              (scrolled
+                ? "h-14 w-[min(64vw,178px)]"
+                : "h-[88px] w-[min(68vw,279px)]")
+            }
           >
-            {/* Transparent-background banner. Fits entirely within the
-                96px header row with ~8px clearance from the double-rule
-                bottom border. No wrapper background, padding, or border. */}
-            {/* Responsive logo: scales with viewport but is capped by the
-                header row height so it can never overflow. `maxHeight` uses
-                the row height minus 8px breathing room. */}
+            {/* The source PNG includes a large transparent canvas. Crop that
+                dead space in CSS so the printed banner itself fills the row,
+                while the fixed masthead height remains unchanged. */}
             <Lockup
+              className="pointer-events-none absolute max-w-none"
               style={{
-                height: scrolled
-                  ? "clamp(40px, 10vw, 56px)"
-                  : "clamp(56px, 16vw, 88px)",
-                maxHeight: scrolled ? 56 : 88,
-                width: "auto",
-                maxWidth: "82vw",
-                objectFit: "contain",
-                display: "block",
+                width: "105.36%",
+                height: "auto",
+                maxWidth: "none",
+                left: "-2.68%",
+                top: "-46.7%",
               }}
             />
           </Link>
