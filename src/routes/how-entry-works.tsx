@@ -1,0 +1,70 @@
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { StaticPage } from "@/components/StaticPage";
+
+export const Route = createFileRoute("/how-entry-works")({
+  head: () => ({
+    meta: [
+      { title: "How entry works — Lucky Git Comps" },
+      {
+        name: "description",
+        content:
+          "Lucky Git Comps runs prize competitions of skill under the UK Gambling Act 2005. Entry requires a correct answer to a skill question. Winners are drawn at random from correct entries only.",
+      },
+      { property: "og:title", content: "How entry works — Lucky Git Comps" },
+      { property: "og:description", content: "Prize competition of skill. Correct answer required. Random winner from correct entries." },
+    ],
+  }),
+  component: () => (
+    <StaticPage kicker="How entry works" title="A prize competition of skill">
+      <p>
+        Lucky Git Comps operates as a <b>prize competition</b> under Section 14 of the Gambling
+        Act 2005 (Great Britain). Section 14 competitions require the genuine exercise of skill,
+        knowledge or judgement to enter — and do not require a Gambling Commission licence,
+        provided they are structured correctly.
+      </p>
+      <h2>How you enter</h2>
+      <ul>
+        <li>Pick your tickets on the competition page.</li>
+        <li>Answer a genuine question of skill. The answer is not on the site.</li>
+        <li>Pay for your tickets.</li>
+      </ul>
+      <h2>What happens if you answer incorrectly</h2>
+      <p>
+        The answer is validated on the server. If it is <b>correct</b>, your tickets are entered
+        in the draw. If it is <b>incorrect</b>, your tickets are recorded as non-qualifying and
+        will not be entered — you have purchased entry but are not in the draw. This is stated
+        clearly on the ticket page and above the payment button before you pay, exactly because
+        it is the part people find surprising.
+      </p>
+      <h2>How the winner is chosen</h2>
+      <p>
+        At close, our system draws a winner deterministically from the pool of correct entries
+        only, using a hash-then-reveal method. The winning number, the total sold and the
+        qualifying pool size are all published on <Link to="/past-draws" className="underline">/past-draws</Link>{" "}
+        and the <Link to="/promise" className="underline">/promise</Link> page, so anyone can
+        independently verify the draw.
+      </p>
+      <h2>If nobody answers correctly</h2>
+      <p>
+        If a competition closes with zero correct answers, the question is treated as void and
+        the draw runs across all sold tickets as a fallback. This is stated in the T&amp;Cs and
+        the draw record is flagged distinctly on the results page.
+      </p>
+      <h2>No free entry route</h2>
+      <p>
+        Because entry requires a genuine skill test, no free entry route is offered. There is no
+        postal entry and no "no purchase necessary" option. The legal defensibility of the
+        competition rests on the skill test being genuinely difficult — we monitor question
+        performance across all draws and adjust question difficulty when necessary.
+      </p>
+      <h2>Complaints</h2>
+      <p>
+        Email <a href="mailto:legal@luckygitcomps.example" className="underline">legal@luckygitcomps.example</a>.
+      </p>
+      <p className="text-xs opacity-60 mt-8">
+        Plain-English explainer, not legal advice. The definitive terms are our{" "}
+        <Link to="/terms" className="underline">Terms &amp; Conditions</Link>.
+      </p>
+    </StaticPage>
+  ),
+});
