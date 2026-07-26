@@ -27,7 +27,10 @@ async def shot(page: Page, viewport: str, name: str) -> None:
 async def open_first_competition(page: Page, viewport: str) -> str:
     """Navigate home, click the first competition card, return its slug."""
     await page.goto(BASE + "/", wait_until="domcontentloaded")
-    card = page.locator('a[href^="/competitions/"]').first
+    # Scope to CompCard's stretched link inside a .paper wrapper — the
+    # bare `a[href^="/competitions/"]` selector also matches the animated
+    # LiveOddsTicker links, which never report as "stable" to Playwright.
+    card = page.locator('.paper a[href^="/competitions/"]').first
     await card.wait_for(state="visible", timeout=15_000)
     href = await card.get_attribute("href")
     assert href and href.startswith("/competitions/"), f"bad href: {href!r}"
