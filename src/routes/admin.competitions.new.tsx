@@ -6,7 +6,7 @@ import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
 import { Button } from "@/components/ui/button";
 import { CATEGORIES } from "@/lib/mock-comps";
-import { ImagePlus, Zap, Copy, Save, ArrowLeft, Loader2, AlertTriangle, CheckCircle2, X } from "lucide-react";
+import { ImagePlus, Copy, Save, ArrowLeft, Loader2, AlertTriangle, CheckCircle2, X, HelpCircle } from "lucide-react";
 import { createCompetition } from "@/lib/admin.functions";
 import { supabase } from "@/integrations/supabase/client";
 import { optimizeImage, formatBytes, type OptimizeResult } from "@/lib/image-optimize";
@@ -39,9 +39,12 @@ function NewComp() {
   const [cashAlternative, setCashAlternative] = useState(1000);
   const [endsAt, setEndsAt] = useState("");
   const [hot, setHot] = useState(false);
-  const [instantWin, setInstantWin] = useState(false);
-  const [instantWinCount, setInstantWinCount] = useState(20);
-  const [instantWinPrize, setInstantWinPrize] = useState(50);
+  const [question, setQuestion] = useState("");
+  const [optionA, setOptionA] = useState("");
+  const [optionB, setOptionB] = useState("");
+  const [optionC, setOptionC] = useState("");
+  const [optionD, setOptionD] = useState("");
+  const [correctOption, setCorrectOption] = useState<"a" | "b" | "c" | "d">("a");
   const [status, setStatus] = useState<"draft" | "live" | "paused">("draft");
   const [imageUrl, setImageUrl] = useState<string>("");
   const [letterboxStyle, setLetterboxStyle] = useState<LetterboxStyle>("blur");
@@ -63,9 +66,10 @@ function NewComp() {
     if (pricePerTicket <= 0) errs.push("Ticket price");
     if (totalTickets < 1) errs.push("Total tickets");
     if (totalTickets > 499) errs.push("Total tickets exceeds the 499 cap");
-    if (instantWin && instantWinCount > totalTickets) errs.push("Instant-win count exceeds total");
+    if (question.trim().length < 8) errs.push("Skill question");
+    if (!optionA.trim() || !optionB.trim() || !optionC.trim() || !optionD.trim()) errs.push("All four options");
     return errs;
-  }, [title, derivedSlug, endsAt, pricePerTicket, totalTickets, instantWin, instantWinCount]);
+  }, [title, derivedSlug, endsAt, pricePerTicket, totalTickets, question, optionA, optionB, optionC, optionD]);
 
   async function handleFile(file: File) {
     setUploadError(null);
@@ -123,9 +127,12 @@ function NewComp() {
           endsAt,
           status: publishAs,
           hot,
-          instantWin,
-          instantWinCount: Math.floor(Number(instantWinCount) || 0),
-          instantWinPrize: Number(instantWinPrize) || 0,
+          question: question.trim(),
+          optionA: optionA.trim(),
+          optionB: optionB.trim(),
+          optionC: optionC.trim(),
+          optionD: optionD.trim(),
+          correctOption,
           letterboxStyle,
         },
       }),
@@ -368,23 +375,60 @@ function NewComp() {
               </p>
             </Card>
 
-            <Card title={<span className="flex items-center gap-2"><Zap className="h-4 w-4 text-gold" /> Instant wins <span className="text-xs font-normal text-muted-foreground">(optional)</span></span>}>
-              <label className="flex items-center gap-2 text-sm font-semibold">
-                <input type="checkbox" checked={instantWin} onChange={(e) => setInstantWin(e.target.checked)} className="h-4 w-4 accent-clover" />
-                Enable instant win tickets on this comp
-              </label>
-              {instantWin && (
-                <>
-                  <div className="mt-3 grid gap-3 sm:grid-cols-3">
-                    <Field label="# of instant wins" type="number" value={instantWinCount} onChange={(e) => setInstantWinCount(Number(e.target.value))} />
-                    <Field label="Prize per win (£)" type="number" value={instantWinPrize} onChange={(e) => setInstantWinPrize(Number(e.target.value))} />
-                    <SelectField label="Distribution"><option>Random</option></SelectField>
-                  </div>
-                  <p className="mt-2 text-xs text-muted-foreground">
-                    {instantWinCount} random ticket numbers out of {totalTickets.toLocaleString()} will be flagged as instant winners at £{instantWinPrize} each.
-                  </p>
-                </>
-              )}
+            <Card
+              title={
+                <span className="flex items-center gap-2">
+                  <HelpCircle className="h-4 w-4 text-[color:var(--color-ink-red)]" />
+                  Skill question <span className="text-xs font-normal text-[color:var(--color-ink-red)]">(required)</span>
+                </span>
+              }
+            >
+              <div className="rounded-md border-2 border-[color:var(--color-ink-red)] bg-[color:var(--color-ink-red)]/5 p-3 text-[11px] leading-relaxed text-foreground/80 mb-4">
+                The answer must <strong>not</strong> be findable on this page or in the prize
+                description. Questions must be difficult enough that a significant proportion of
+                entrants answer incorrectly — this is the legal basis for the competition under
+                Section 14 of the Gambling Act 2005.
+              </div>
+              <TextArea
+                label="Question text"
+                rows={2}
+                required
+                value={question}
+                onChange={(e) => setQuestion(e.target.value)}
+                placeholder="e.g. In what year was the Ford GT40 first raced at Le Mans?"
+              />
+              <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                {(["a", "b", "c", "d"] as const).map((k, i) => {
+                  const val = [optionA, optionB, optionC, optionD][i];
+                  const setters = [setOptionA, setOptionB, setOptionC, setOptionD];
+                  return (
+                    <div key={k} className="flex items-start gap-2">
+                      <label className="flex items-center gap-1.5 mt-8 shrink-0 text-xs font-bold uppercase tracking-widest">
+                        <input
+                          type="radio"
+                          name="correct-option"
+                          checked={correctOption === k}
+                          onChange={() => setCorrectOption(k)}
+                          className="h-4 w-4 accent-clover"
+                          aria-label={`Mark option ${k.toUpperCase()} as correct`}
+                        />
+                        {k.toUpperCase()}
+                      </label>
+                      <Field
+                        label={`Option ${k.toUpperCase()}${correctOption === k ? " · correct" : ""}`}
+                        className="flex-1"
+                        required
+                        value={val}
+                        onChange={(e) => setters[i](e.target.value)}
+                        placeholder={correctOption === k ? "Correct answer (kept server-side)" : ""}
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+              <p className="mt-3 text-[11px] text-muted-foreground">
+                The correct answer is written to the database only and never sent to the browser.
+              </p>
             </Card>
           </div>
 
@@ -419,7 +463,7 @@ function NewComp() {
                 { label: "Cash alternative filled", ok: cashAlternative > 0 },
                 { label: "Closing date", ok: !!endsAt },
                 { label: "Prize title", ok: title.trim().length >= 2 },
-                { label: "Free-entry route (site-wide)", ok: true },
+                { label: "Skill question set", ok: question.trim().length >= 8 && optionA.trim() && optionB.trim() && optionC.trim() && optionD.trim() ? true : false },
               ].map((c) => (
                 <div key={c.label} className="flex items-center gap-2 text-sm py-1">
                   {c.ok ? <CheckCircle2 className="h-4 w-4 text-clover" /> : <AlertTriangle className="h-4 w-4 text-urgent" />}
