@@ -21,12 +21,13 @@ export function CompCard({ c }: { c: Competition }) {
       {/* Tag row */}
       <div className="absolute top-3 left-3 z-10 flex gap-1.5">
         {c.instantWin && (
-          <span className="inline-flex items-center gap-1 rounded-full bg-gold text-gold-foreground px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider shadow-sm">
-            <Zap className="h-3 w-3" /> Instant win
+          <span className="inline-flex items-center gap-1 rounded-full bg-gold text-gold-foreground px-1.5 sm:px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider shadow-sm">
+            <Zap className="h-3 w-3 shrink-0" />
+            <span className="hidden sm:inline">Instant win</span>
           </span>
         )}
         {almostGone && (
-          <span className="rounded-full bg-hot text-hot-foreground px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider shadow-sm">
+          <span className="hidden sm:inline-block rounded-full bg-hot text-hot-foreground px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider shadow-sm whitespace-nowrap">
             Only {remaining} left
           </span>
         )}
@@ -79,14 +80,14 @@ export function CompCard({ c }: { c: Competition }) {
 
         {/* CTA row — equal-width buttons, never push the card */}
         <div className="grid grid-cols-2 gap-1.5 min-w-0 items-stretch">
-          <div className="min-w-0 h-9 inline-flex items-center justify-center rounded-md bg-clover text-primary-foreground px-2 font-display font-extrabold text-xs uppercase tracking-[-0.01em] leading-none shadow-sm group-hover:bg-clover-deep group-hover:shadow-md group-focus-visible:bg-clover-deep group-focus-visible:ring-2 group-focus-visible:ring-clover/40 group-focus-visible:ring-offset-2 group-focus-visible:ring-offset-card transition-all truncate">
-            Enter Now →
+          <div className="min-w-0 h-9 inline-flex items-center justify-center whitespace-nowrap rounded-md bg-clover text-primary-foreground px-1 font-display font-extrabold text-[11px] sm:text-xs uppercase tracking-[-0.02em] leading-none shadow-sm group-hover:bg-clover-deep group-hover:shadow-md group-focus-visible:bg-clover-deep group-focus-visible:ring-2 group-focus-visible:ring-clover/40 group-focus-visible:ring-offset-2 group-focus-visible:ring-offset-card transition-all">
+            Enter&nbsp;Now&nbsp;→
           </div>
           <button
             type="button"
             aria-label={`Quick add tickets for ${c.title}`}
             onClick={(e) => { e.preventDefault(); e.stopPropagation(); setQuickOpen(true); }}
-            className="min-w-0 h-9 rounded-md bg-gold text-gold-foreground px-2 font-display font-extrabold text-xs uppercase tracking-[-0.01em] leading-none inline-flex items-center justify-center gap-1 shadow-sm hover:bg-gold/90 hover:shadow-md hover:-translate-y-px active:translate-y-0 active:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-card transition-all truncate"
+            className="min-w-0 h-9 rounded-md bg-gold text-gold-foreground px-1 font-display font-extrabold text-[11px] sm:text-xs uppercase tracking-[-0.02em] leading-none inline-flex items-center justify-center gap-1 whitespace-nowrap shadow-sm hover:bg-gold/90 hover:shadow-md hover:-translate-y-px active:translate-y-0 active:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-card transition-all"
           >
             <Plus className="h-3.5 w-3.5 shrink-0" /> Add
           </button>
