@@ -303,11 +303,18 @@ function NewComp() {
 
           {/* Sidebar */}
           <div className="space-y-5">
-            <Card title="Preview">
+            <Card title="Live card preview">
               <div className="rounded-xl bg-background border-2 border-border p-4">
-                {imageUrl && (
-                  <img src={imageUrl} alt="" className="w-full aspect-[5/4] object-cover rounded-lg mb-3" />
-                )}
+                <div className="relative w-full aspect-[5/4] overflow-hidden rounded-lg bg-muted mb-3">
+                  {imageUrl ? (
+                    <>
+                      <img src={imageUrl} alt="" aria-hidden="true" className="absolute inset-0 h-full w-full object-cover scale-110 blur-2xl opacity-60" />
+                      <img src={imageUrl} alt="" className="relative h-full w-full object-contain" />
+                    </>
+                  ) : (
+                    <div className="h-full w-full flex items-center justify-center text-[11px] font-mono uppercase tracking-widest text-muted-foreground">No image yet</div>
+                  )}
+                </div>
                 <div className="text-[10px] font-mono uppercase tracking-widest text-clover/80">{category}</div>
                 <div className="font-display font-black text-lg leading-tight mt-1 truncate">{title || "Prize title"}</div>
                 <div className="text-xs text-muted-foreground truncate">{subtitle || "Short subtitle"}</div>
