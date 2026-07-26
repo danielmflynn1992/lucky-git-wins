@@ -54,15 +54,9 @@ export function CompCard({ c }: { c: Competition }) {
       <div className="pointer-events-none absolute top-3 right-3 z-20">
         <Countdown target={c.endsAt} compact />
       </div>
-      {/* Verified shield sits bottom-left of the image so it can't collide
-          with the countdown pill in the top-right. */}
-      <div className="pointer-events-none absolute z-20" style={{ left: 14, top: 'auto', bottom: 'calc(100% - (100% * 4 / 5) + 14px)' }} aria-hidden="true">
-        <NoDeadCompsBadge />
-      </div>
-
       {/* Prize field: engraved guilloche background behind the letterboxed image,
           framed as an inset plate — the "vignette on a share certificate" pattern. */}
-      <div className="relative z-0 m-2 overflow-hidden border border-[var(--color-ink-green)]/70 outline outline-1 outline-offset-[2px] outline-[var(--color-ink-green)]/40 bg-[var(--color-paper-deep)]">
+      <div className="pointer-events-none relative z-0 m-2 overflow-hidden border border-[var(--color-ink-green)]/70 outline outline-1 outline-offset-[2px] outline-[var(--color-ink-green)]/40 bg-[var(--color-paper-deep)]">
         <Guilloche className="text-[var(--color-ink-green)]" strength="faint" variant="rosette" />
         <LetterboxImage
           src={c.image}
@@ -78,23 +72,14 @@ export function CompCard({ c }: { c: Competition }) {
       {/* Ribbon title — the engraved banner across the plate. */}
       <div className="relative z-10 -mt-4 mb-1 flex justify-center px-3 pointer-events-none">
         <Ribbon as="h3" className="max-w-full">
-          <span
-            className="block text-[13px] sm:text-base leading-tight"
-            style={{
-              display: "-webkit-box",
-              WebkitLineClamp: 2,
-              WebkitBoxOrient: "vertical",
-              overflow: "hidden",
-              maxWidth: "26ch",
-            }}
-          >
+          <span className="block text-[13px] sm:text-base leading-tight break-words">
             {c.title}
           </span>
         </Ribbon>
       </div>
 
       {/* Serial ticket range — banknote treatment. */}
-      <div className="relative z-10 px-3 sm:px-4 pt-1 space-y-0.5 text-[var(--color-ink-grey)]">
+      <div className="pointer-events-none relative z-10 px-3 sm:px-4 pt-1 space-y-0.5 text-[var(--color-ink-grey)]">
         <div
           className="font-display text-[10px] sm:text-[11px] uppercase tracking-[0.08em] whitespace-nowrap"
           style={{ fontVariant: "small-caps" }}
