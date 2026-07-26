@@ -8,7 +8,7 @@ import { CompCard } from "@/components/CompCard";
 import { CompRow } from "@/components/CompRow";
 import { ViewToggle } from "@/routes/competitions.index";
 import { Countdown } from "@/components/Countdown";
-import { SmugSmile, StampSeal } from "@/components/Logo";
+import { SmugSmile, StampSeal, Wordmark } from "@/components/Logo";
 import { Pinstripe } from "@/components/Pinstripe";
 import { COMPETITIONS, CATEGORIES, WINNERS, type Category } from "@/lib/mock-comps";
 import { gbp } from "@/lib/format";
@@ -64,6 +64,9 @@ function Home() {
           {/* Static stamp — sits in the page content, not the chrome. */}
           <div className="flex justify-center mb-4 md:mb-6">
             <StampSeal size={140} />
+          </div>
+          <div className="flex justify-center mb-6 md:mb-8">
+            <Wordmark variant="detailed" className="h-20 md:h-28 text-clover" style={{ minWidth: 240 }} />
           </div>
           <div className="grid gap-10 md:grid-cols-2 items-center">
           <div>

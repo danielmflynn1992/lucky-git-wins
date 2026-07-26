@@ -28,7 +28,7 @@ export function SiteFooter() {
         <div className="md:col-span-1">
           <div className="flex flex-col items-start gap-3">
             <StampSeal size={100} tone="cream" />
-            <Wordmark className="text-[18px] text-cream" />
+            <Wordmark variant="detailed" className="h-16 text-cream" style={{ minWidth: 240 }} />
           </div>
           <p className="mt-4 text-sm text-cream/85 max-w-xs leading-relaxed">
             The odds, out in the open. A UK prize competition platform built on automated, verifiable draws and a public results log.
