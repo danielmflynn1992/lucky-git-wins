@@ -71,8 +71,12 @@ function CompetitionsPage() {
           </div>
         </div>
         {view === "grid" ? (
-          <div className="mt-8 grid gap-3 sm:gap-5 grid-cols-2 lg:grid-cols-3">
-            {sorted.map((c) => <CompCard key={c.slug} c={c} />)}
+          <div className="mt-8 grid gap-3 sm:gap-5 grid-cols-2 md:grid-cols-3 items-stretch">
+            {sorted.map((c) => (
+              <div key={c.slug} className="h-full">
+                <CompCard c={c} />
+              </div>
+            ))}
           </div>
         ) : (
           <div className="mt-8 flex flex-col gap-2">
