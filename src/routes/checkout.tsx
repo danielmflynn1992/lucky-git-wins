@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { SmugSmile } from "@/components/Logo";
 import { getComp, COMPETITIONS } from "@/lib/mock-comps";
 import { gbp } from "@/lib/format";
-import { CreditCard, Lock, ShieldCheck, Share2, CheckCircle2, AlertTriangle } from "lucide-react";
+import { CreditCard, Lock, ShieldCheck, Share2, CheckCircle2, AlertTriangle, Mail } from "lucide-react";
 
 interface Reservation {
   token: string;
@@ -99,6 +99,19 @@ function Checkout() {
           <div>
             <h1 className="font-display text-3xl md:text-4xl font-semibold tracking-tight">Right then, checkout.</h1>
             <p className="text-muted-foreground mt-1">Card details, a quick tick-box, and you're in the draw. That's the lot.</p>
+          </div>
+
+          <div className="rounded-2xl border-2 border-clover/50 bg-clover/5 p-4 flex items-start gap-3">
+            <Mail className="h-5 w-5 text-clover shrink-0 mt-0.5" />
+            <div className="flex-1">
+              <div className="font-display font-bold text-clover">Prefer to enter this competition for free?</div>
+              <p className="text-sm text-foreground/80 mt-1">
+                Same ticket pool, same odds of winning, no purchase necessary. One free entry per person per competition.
+              </p>
+              <Button asChild variant="cream" size="lg" className="mt-3 border-2 border-clover text-clover hover:bg-clover hover:text-cream">
+                <Link to="/free-entry" search={{ slug: reservation.slug }}>Enter free instead →</Link>
+              </Button>
+            </div>
           </div>
 
           <fieldset className="rounded-2xl bg-card border-2 border-border p-5 space-y-4">
