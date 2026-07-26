@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useRouterState } from "@tanstack/react-router";
 import { Instagram, Facebook, Mail, Menu, ShoppingBag, User, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { WaxSeal } from "./Logo";
+import { Wordmark } from "./Logo";
 import { useAuth } from "@/hooks/use-auth";
 import { useBasket } from "@/hooks/use-basket";
 import { supabase } from "@/integrations/supabase/client";
@@ -57,19 +57,6 @@ export function SiteNav() {
   const toggleRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
 
-  // Scroll-shrink: once the user has scrolled past ~80px, the seal shrinks
-  // and settles fully inside the header bar. prefers-reduced-motion listeners
-  // still receive the state change, but the .wax-seal-transition rule below
-  // drops the animation duration to 0 for those users.
-  const [scrolled, setScrolled] = useState(false);
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const onScroll = () => setScrolled(window.scrollY > 80);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
   // Focus management + Escape + focus trap while the panel is open.
   useEffect(() => {
     if (!open) return;
@@ -115,85 +102,67 @@ export function SiteNav() {
   }, [open]);
 
   return (
-    <header className="sticky top-0 z-40 shadow-[0_2px_10px_-4px_rgba(60,50,30,0.25)]">
+    <header className="sticky top-0 z-40 bg-card">
       {/* Tier 0 — live ticker, topmost element on the page, dark green strip. */}
       <LiveOddsTicker />
 
-      {/* Tier 1 (only tier below the ticker) — hamburger left, wax seal
-          centred (overhanging), then right-side nav + account links + basket.
-          overflow-visible so the seal can drop below the bar. No bottom
-          border — the buffer band below carries the same paper colour and a
-          soft shadow separates the header from page content. */}
-      <div className="bg-card/95 backdrop-blur-md relative overflow-visible">
-        <div className="mx-auto max-w-7xl px-4 md:px-6 h-14 md:h-16 grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-4 relative">
-          {/* Left nav (desktop) — sits alongside the hamburger; hamburger takes
-              over on smaller widths so the seal stays visually centred. */}
-          <nav className="hidden lg:flex items-center justify-end gap-6 min-w-0 pr-4">
-            {leftLinks.map((l) => (
-              <Link
-                key={l.to}
-                to={l.to}
-                className="text-[13px] font-bold uppercase tracking-[0.14em] text-foreground/85 hover:text-clover transition-colors whitespace-nowrap"
-                activeProps={{ className: "text-clover" }}
-              >
-                {l.label}
-              </Link>
-            ))}
-          </nav>
-
-          {/* Hamburger — always on the left, at every breakpoint, per spec. */}
-          <button
-            ref={toggleRef}
-            onClick={() => setOpen((o) => !o)}
-            className="lg:hidden justify-self-start p-2 rounded-md hover:bg-muted text-foreground/80"
-            aria-label={open ? "Close menu" : "Open menu"}
-            aria-expanded={open}
-            aria-controls="mobile-menu"
-            aria-haspopup="menu"
-          >
-            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </button>
-
-          {/* Centred wax seal — overhangs the header's bottom edge by half
-              its size, then shrinks and settles inside the bar on scroll.
-              The min-w reserves clear space in the grid centre column so
-              left/right nav links can't crash into the emblem. */}
-          <div className="justify-self-center shrink-0 relative z-50 pointer-events-auto min-w-[96px] md:min-w-[208px] flex justify-center">
-            <div className={`relative flex justify-center ${scrolled ? "items-center" : "items-end"}`}>
-              <WaxSeal
-                size={
-                  scrolled
-                    ? "h-14 w-14"
-                    : "h-[76px] w-[76px] md:h-[96px] md:w-[96px]"
-                }
-                className={
-                  scrolled
-                    ? "translate-y-0"
-                    : "translate-y-[38px] md:translate-y-[48px]"
-                }
-              />
-            </div>
-          </div>
-
-          {/* Right: primary nav (desktop) + auth (small caps, reduced size)
-              + basket. All at every breakpoint where visible. */}
-          <div className="flex items-center justify-end gap-5 md:gap-7 min-w-0">
-            <nav className="hidden lg:flex items-center gap-6 pl-4">
-              {rightLinks.map((l) => (
+      {/* Tier 1 — single 64px cream nav row.
+          Hamburger left · Wordmark centre · Basket right.
+          Desktop expands the left/right slots with the primary nav.
+          Single hairline bottom border. No seal, no overhang, no buffer. */}
+      <div className="bg-card border-b border-border">
+        <div className="mx-auto max-w-7xl px-4 md:px-6 h-16 grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-4">
+          {/* LEFT — hamburger + (desktop) primary nav */}
+          <div className="flex items-center gap-4 min-w-0">
+            <button
+              ref={toggleRef}
+              onClick={() => setOpen((o) => !o)}
+              className="lg:hidden p-2 -ml-2 rounded-md hover:bg-muted text-foreground/80"
+              aria-label={open ? "Close menu" : "Open menu"}
+              aria-expanded={open}
+              aria-controls="mobile-menu"
+              aria-haspopup="menu"
+            >
+              {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
+            <nav className="hidden lg:flex items-center gap-5 min-w-0">
+              {leftLinks.map((l) => (
                 <Link
-                  key={l.to + l.label}
+                  key={l.to}
                   to={l.to}
-                  className="text-[13px] font-bold uppercase tracking-[0.14em] text-foreground/85 hover:text-clover transition-colors whitespace-nowrap"
+                  className="text-[12px] font-bold uppercase tracking-[0.14em] text-foreground/85 hover:text-clover transition-colors whitespace-nowrap"
                   activeProps={{ className: "text-clover" }}
                 >
                   {l.label}
                 </Link>
               ))}
             </nav>
-            {/* Auth links merged in from the deleted utility row — small caps,
-                reduced size, sit right of the primary nav and before the
-                basket icon. Hidden on mobile (surfaced in the drawer instead). */}
-            <div className="hidden md:flex items-center gap-4 text-[11px] font-bold uppercase tracking-[0.18em] text-foreground/60">
+          </div>
+
+          {/* CENTRE — text wordmark, no emblem */}
+          <Link
+            to="/"
+            aria-label="Lucky Git Comps — home"
+            className="justify-self-center shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-clover rounded-sm px-2"
+          >
+            <Wordmark className="text-[15px] md:text-[20px]" />
+          </Link>
+
+          {/* RIGHT — (desktop) primary nav + auth + basket */}
+          <div className="flex items-center justify-end gap-4 md:gap-5 min-w-0">
+            <nav className="hidden lg:flex items-center gap-5 min-w-0">
+              {rightLinks.map((l) => (
+                <Link
+                  key={l.to + l.label}
+                  to={l.to}
+                  className="text-[12px] font-bold uppercase tracking-[0.14em] text-foreground/85 hover:text-clover transition-colors whitespace-nowrap"
+                  activeProps={{ className: "text-clover" }}
+                >
+                  {l.label}
+                </Link>
+              ))}
+            </nav>
+            <div className="hidden md:flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.16em] text-foreground/60">
               {signedIn ? (
                 <>
                   <Link to="/account" className="hover:text-clover transition-colors">Account</Link>
@@ -232,15 +201,6 @@ export function SiteNav() {
           </div>
         </div>
       </div>
-
-      {/* Buffer band — 32px cream strip directly beneath the nav row, same
-          colour as the header. The seal overhangs into this band so it sits
-          on an uninterrupted surface. No border, no content. */}
-      <div aria-hidden="true" className="h-8 bg-card pointer-events-none" />
-
-      {/* Content offset spacer — reserves buffer + half the seal height so
-          the first element of page content is never occluded by the seal. */}
-      <div aria-hidden="true" className="h-[38px] md:h-[48px] pointer-events-none" />
 
       {/* Screen-reader live region — announces basket changes globally */}
       <div
