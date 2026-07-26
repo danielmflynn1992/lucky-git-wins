@@ -26,27 +26,52 @@
 
 @theme {
   /* ---------- NEWSPRINT ---------- */
-  --color-paper:        #F1EBDC;
-  --color-paper-raised: #F7F1E1;
-  --color-paper-deep:   #E4DCC6;
+  --color-paper:        #F2EDE0;
+  --color-paper-raised: #F8F4E9;
+  --color-paper-deep:   #E5DECB;
   --color-paper-edge:   #C9BFA1;
+  --color-card-white:   #FCFAF4;
   --color-paper-line:   var(--color-paper-edge);
   --color-paper-hairline: var(--color-paper-edge);
 
+  /* New canonical names from Part 2 — aliased to the existing paper stack */
+  --color-newsprint:      var(--color-paper);
+  --color-newsprint-warm: var(--color-paper-raised);
+  --color-newsprint-dark: var(--color-paper-deep);
+
   /* ---------- INK PLATES (only 3 — red / blue / black) ---------- */
-  --color-ink-red:        #C8202B;   /* coupon red — mastheads, stamps, prizes */
+  --color-ink-red:        #CE2029;   /* coupon red — mastheads, stamps, prizes */
   --color-ink-red-soft:   #E24A54;
-  --color-ink-blue:       #1E3A8A;   /* pools blue — biro marks, verified rules */
+  --color-ink-red-deep:   #9E1720;
+  --color-ink-blue:       #1B3A6B;   /* pools blue — structure, links */
   --color-ink-blue-soft:  #3B5BC0;
-  --color-ink-purple:     #4A1E5C;   /* rubber stamp only */
-  --color-ink-yellow:     #F5D547;   /* highlighter only */
-  --color-ink-black:      #14110E;
+  --color-ink-blue-deep:  #122748;
+  --color-biro:           #2B4CA8;   /* ballpoint — brighter, slightly purple */
+  --color-ink-purple:     #5B3A8C;   /* rubber stamp only */
+  --color-ink-yellow:     #FFD447;   /* highlighter only */
+  --color-ink-black:      #16161A;
   --color-ink-grey:       #4E4A40;
+
+  /* New canonical Part-2 aliases */
+  --color-coupon-red:   var(--color-ink-red);
+  --color-coupon-red-d: var(--color-ink-red-deep);
+  --color-ink-blue-d:   var(--color-ink-blue-deep);
+  --color-print-black:  var(--color-ink-black);
+  --color-marker:       var(--color-ink-yellow);
+  --color-stamp-purple: var(--color-ink-purple);
+  --color-scratch:      #A8A8A2;
+  --color-scratch-lt:   #C9C9C2;
+
+  /* Dark arcade context (draw reveal only) */
+  --color-cabinet:      #14141A;
+  --color-cabinet-2:    #1E1E27;
+  --color-segment:      #FF4B3E;
+  --color-segment-dim:  #3A1512;
 
   /* Legacy "green" tokens now resolve to pools blue so untouched code
      that references --color-ink-green still gets a coherent plate colour. */
   --color-ink-green:      var(--color-ink-blue);
-  --color-ink-green-deep: #14235C;
+  --color-ink-green-deep: var(--color-ink-blue-deep);
   --color-ink-green-soft: var(--color-ink-blue-soft);
 
   /* ---------- NEGATIVE PLATE (draw reveal only) ---------- */
@@ -677,4 +702,173 @@
   .ticker-scroll { animation: none !important; transform: none !important; }
   .animate-ping, .animate-pulse, .animate-spin, .animate-bounce { animation: none !important; }
   .stall-tilt-l, .stall-tilt-r { transform: none !important; }
+}
+
+/* ============================================================
+ * PART 2 — Additional pools-coupon utilities
+ * (canonical names from the updated token spec)
+ * ============================================================ */
+
+/* Fairground slab — big numeric moments only, one per screen max. */
+.fairground {
+  font-family: var(--font-fair);
+  line-height: 0.88;
+  letter-spacing: -0.01em;
+}
+
+/* Printed form field label — Archivo caps, 0.16em tracking. */
+.label-field {
+  font-family: var(--font-body);
+  font-size: var(--text-micro);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-ink-grey);
+}
+
+/* ---------- COUPON CARD (canonical) ---------- */
+.coupon {
+  background: var(--color-card-white);
+  border: 2px solid var(--color-print-black);
+  border-radius: 0;
+  box-shadow: 1px 1px 0 rgba(22,22,26,.14), 0 6px 16px -10px rgba(22,22,26,.35);
+  position: relative;
+}
+.coupon__masthead {
+  background: var(--color-coupon-red);
+  color: var(--color-newsprint);
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  padding: .5rem .75rem;
+  border-bottom: 2px solid var(--color-print-black);
+}
+.coupon__rule-dotted { border-top: 1px dashed var(--color-n-400, #9C9788); }
+.coupon__row {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) auto;
+  align-items: baseline;
+  gap: .75rem;
+  padding: .4rem .75rem;
+  border-bottom: 1px solid var(--color-n-200, #E6E2D6);
+}
+
+/* ---------- PERFORATED SECTION RULE ---------- */
+.perf-rule {
+  height: 0;
+  border-top: 1px dashed color-mix(in oklab, var(--color-print-black) 45%, transparent);
+  margin-block: var(--space-block);
+  position: relative;
+}
+.perf-rule::before {
+  content: '✂';
+  position: absolute; left: 8px; top: 50%;
+  transform: translateY(-50%);
+  font-size: 11px;
+  color: color-mix(in oklab, var(--color-print-black) 45%, transparent);
+  background: var(--color-background);
+  padding-right: 6px;
+}
+
+/* ---------- RUBBER STAMP (canonical .stamp) ---------- */
+.stamp {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--color-stamp-purple);
+  border: 3px solid var(--color-stamp-purple);
+  padding: .25rem .8rem;
+  display: inline-block;
+  transform: rotate(-9deg);
+  opacity: .82;
+  mix-blend-mode: multiply;
+  background: transparent;
+}
+.stamp--red      { color: var(--color-coupon-red); border-color: var(--color-coupon-red); }
+.stamp--blue     { color: var(--color-ink-blue);   border-color: var(--color-ink-blue); }
+.stamp--rotate-r { transform: rotate(7deg); }
+
+/* ---------- SCRATCH PANEL ---------- */
+.scratch {
+  background: repeating-linear-gradient(
+    115deg,
+    var(--color-scratch) 0 3px,
+    var(--color-scratch-lt) 3px 6px
+  );
+  border: 1px solid var(--color-n-400, #9C9788);
+  color: transparent;
+  user-select: none;
+  position: relative;
+}
+.scratch::after {
+  content: 'SCRATCH';
+  position: absolute; inset: 0;
+  display: grid; place-items: center;
+  font-family: var(--font-body); font-size: var(--text-micro);
+  letter-spacing: 0.16em; color: rgba(22,22,26,.35);
+}
+.scratch--revealed { background: none; border-style: dashed; color: inherit; }
+.scratch--revealed::after { content: none; }
+
+/* ---------- COUPON GRID (canonical 499 pool) ---------- */
+.coupon-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(34px, 1fr));
+  gap: 0;
+  border-top: 1px solid var(--color-print-black);
+  border-left: 1px solid var(--color-print-black);
+}
+.coupon-cell {
+  aspect-ratio: 1;
+  border-right: 1px solid var(--color-print-black);
+  border-bottom: 1px solid var(--color-print-black);
+  display: grid; place-items: center;
+  font-family: var(--font-mono);
+  font-size: .625rem;
+  color: var(--color-ink-grey);
+  background: var(--color-card-white);
+  cursor: pointer;
+  position: relative;
+}
+.coupon-cell:hover { background: var(--color-newsprint-dark); }
+.coupon-cell--taken { color: color-mix(in oklab, var(--color-ink-grey) 40%, transparent); cursor: not-allowed; }
+.coupon-cell--taken::after,
+.coupon-cell--mine::after {
+  content: '';
+  position: absolute; inset: 12%;
+  background-image:
+    linear-gradient(45deg,  transparent 46%, currentColor 46%, currentColor 54%, transparent 54%),
+    linear-gradient(-45deg, transparent 46%, currentColor 46%, currentColor 54%, transparent 54%);
+  color: var(--color-biro);
+  opacity: .85;
+  transform: rotate(-3deg);
+}
+.coupon-cell--mine { background: #FFF9E0; }
+.coupon-cell--mine::after { color: var(--color-coupon-red); opacity: .95; }
+
+/* ---------- ARCADE CABINET (draw reveal) ---------- */
+.cabinet {
+  background: var(--color-cabinet);
+  color: #E7E4D9;
+  --color-foreground: #F7F5EF;
+  --color-muted-foreground: #8A8578;
+  --color-border: #2E2E38;
+  --color-surface: var(--color-cabinet-2);
+}
+.segment {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--color-segment);
+  text-shadow: 0 0 12px rgba(255,75,62,.55), 0 0 34px rgba(255,75,62,.28);
+  letter-spacing: .12em;
+}
+.cabinet .misreg { text-shadow: none; color: #F7F5EF; }
+
+/* Trust routes wearing .plain — additionally neutralise the new utilities. */
+.plain .stamp   { transform: none; opacity: 1; mix-blend-mode: normal; }
+.plain .marker  { background: none; padding: 0; }
+.plain .misreg  { text-shadow: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .stamp { transform: none; }
+  .coupon-cell--taken::after, .coupon-cell--mine::after { transform: none; }
 }
