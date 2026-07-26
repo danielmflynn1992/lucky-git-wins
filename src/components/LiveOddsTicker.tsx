@@ -38,10 +38,10 @@ export function LiveOddsTicker() {
   // Empty / loading state — still render the shell so layout doesn't jump.
   if (items.length === 0) {
     return (
-      <div data-dynamic="ticker" className="relative overflow-hidden bg-white border-b border-border">
+      <div data-dynamic="ticker" className="relative overflow-hidden bg-clover-deep text-cream">
         <div className="flex items-stretch">
           <LiveChip />
-          <div className="flex-1 px-4 py-2 text-xs font-bold text-muted-foreground tracking-wide">
+          <div className="flex-1 px-4 py-1.5 text-[11px] font-bold text-cream/75 tracking-wide">
             No live competitions right now. New ones drop weekly.
           </div>
         </div>
@@ -54,11 +54,13 @@ export function LiveOddsTicker() {
 
   return (
     <TooltipProvider delayDuration={150}>
-      <div data-dynamic="ticker" className="relative overflow-hidden bg-white border-b border-border">
+      <div data-dynamic="ticker" className="relative overflow-hidden bg-clover-deep text-cream">
         <div className="flex items-stretch">
           <LiveChip />
-          <div className="relative flex-1 overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_4%,#000_96%,transparent)] py-2">
-            <div className="ticker-scroll flex gap-8 whitespace-nowrap text-xs font-bold tracking-wide text-ink">
+          {/* Wider left mask fade so the first item scrolls in cleanly
+              instead of appearing mid-word at rest. */}
+          <div className="relative flex-1 overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_12%,#000_96%,transparent)] py-1.5">
+            <div className="ticker-scroll flex gap-8 whitespace-nowrap text-[11px] font-bold tracking-wide text-cream pl-[12%]">
               {loop.map((it, i) => (
                 <TickerItem key={`${it.id}-${i}`} c={it} />
               ))}
@@ -72,7 +74,7 @@ export function LiveOddsTicker() {
 
 function LiveChip() {
   return (
-    <span className="shrink-0 inline-flex items-center gap-2 bg-clover px-3 py-2 text-[10px] font-black uppercase tracking-[0.25em] text-primary-foreground">
+    <span className="shrink-0 inline-flex items-center gap-2 bg-clover px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.25em] text-primary-foreground">
       <span className="relative flex h-2 w-2">
         <span className="absolute inline-flex h-full w-full rounded-full bg-white opacity-70 animate-ping" />
         <span className="relative inline-flex h-2 w-2 rounded-full bg-white" />
@@ -91,13 +93,13 @@ function TickerItem({ c }: { c: LiveOdds }) {
         <Link
           to="/competitions/$slug"
           params={{ slug: c.slug }}
-          className="inline-flex items-center gap-3 shrink-0 hover:text-clover-deep focus:text-clover-deep focus:outline-none"
+          className="inline-flex items-center gap-3 shrink-0 hover:text-gold focus:text-gold focus:outline-none"
         >
           <span>{c.title.toUpperCase()}</span>
-          <span className="text-muted-foreground font-mono tabular-nums">
+          <span className="text-cream/60 font-mono tabular-nums">
             {c.ticketsSold.toLocaleString()}/{c.totalTickets.toLocaleString()} SOLD
           </span>
-          <span className="text-clover font-black">●</span>
+          <span className="text-gold font-black">●</span>
         </Link>
       </TooltipTrigger>
       <TooltipContent
