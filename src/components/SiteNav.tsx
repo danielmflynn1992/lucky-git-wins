@@ -146,7 +146,7 @@ export function SiteNav() {
           className={
             "relative mx-auto max-w-7xl px-3 md:px-6 grid items-center gap-2 md:gap-4 mast-transition " +
             "grid-cols-[1fr_auto_1fr] " +
-            (scrolled ? "h-14" : "h-[84px]")
+            (scrolled ? "h-14" : "h-[88px]")
           }
         >
           {/* LEFT edge — hamburger only, unchanged position. */}
@@ -168,7 +168,7 @@ export function SiteNav() {
             aria-label="Lucky Git Comps — home"
             className="justify-self-center inline-flex items-center bg-transparent p-0 border-0 shadow-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-clover rounded-sm"
           >
-            <Lockup style={{ height: 56, width: "auto", maxWidth: "66vw" }} />
+            <Lockup style={{ height: 58, width: "auto", maxWidth: "70vw", objectFit: "contain" }} />
           </Link>
 
           {/* RIGHT edge — auth (md+) + basket, unchanged position. */}
