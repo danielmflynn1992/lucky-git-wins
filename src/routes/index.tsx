@@ -8,7 +8,7 @@ import { CompCard } from "@/components/CompCard";
 import { CompRow } from "@/components/CompRow";
 import { ViewToggle } from "@/routes/competitions.index";
 import { Countdown } from "@/components/Countdown";
-import { Lockup, SmugSmile } from "@/components/Logo";
+import { Lockup } from "@/components/Logo";
 import { Pinstripe } from "@/components/Pinstripe";
 import { COMPETITIONS, CATEGORIES, WINNERS, type Category } from "@/lib/mock-comps";
 import { gbp } from "@/lib/format";
@@ -63,11 +63,7 @@ function Home() {
         <div className="mx-auto max-w-7xl px-4 pt-10 pb-16 md:pt-16 md:pb-24">
           {/* Single combined lockup — seal + wordmark in one SVG. */}
           <div className="flex justify-center mb-6 md:mb-8">
-            <Lockup
-              variant="stacked"
-              className="text-clover"
-              style={{ maxWidth: "min(320px, 70vw)", width: "100%", height: "auto" }}
-            />
+            <Lockup style={{ maxWidth: "min(340px, 78vw)", width: "100%", height: "auto" }} />
           </div>
           <div className="grid gap-10 md:grid-cols-2 items-center">
           <div>
@@ -126,7 +122,6 @@ function Home() {
             <div className="rounded-lg bg-card border border-border p-6 shadow-md">
               <div className="flex items-center justify-between">
                 <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-muted-foreground">Platform stats · Live</div>
-                <SmugSmile className="h-8 w-8" />
               </div>
               <dl className="mt-6 grid grid-cols-2 gap-6">
                 <div>
@@ -299,8 +294,8 @@ function Home() {
       {/* NEWSLETTER */}
       <section className="mx-auto max-w-7xl px-4 mt-24 w-full">
         <div className="rounded-lg bg-ink text-cream p-8 md:p-12 relative overflow-hidden">
-          <div className="absolute top-6 right-6 opacity-40">
-            <SmugSmile className="h-20 w-20" />
+          <div className="absolute top-6 right-6 opacity-40 pointer-events-none">
+            <Lockup tone="cream" style={{ width: 160, height: "auto" }} />
           </div>
           <div className="relative max-w-xl">
             <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-clover font-bold">New comps · Weekly</div>
