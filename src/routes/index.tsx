@@ -62,7 +62,7 @@ function Home() {
       <NextDropCountdown />
 
       {/* HERO */}
-      <section className="relative bg-clover-pattern overflow-hidden border-b border-border">
+      <section className="grain relative bg-clover-pattern overflow-hidden border-b border-border">
         <div className="mx-auto max-w-7xl px-4 pt-12 pb-16 md:pt-20 md:pb-24 grid gap-10 md:grid-cols-2 items-center">
           <div>
             <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-[10px] font-mono uppercase tracking-[0.25em] text-foreground/70 shadow-sm">

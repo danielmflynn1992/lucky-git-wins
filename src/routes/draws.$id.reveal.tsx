@@ -172,7 +172,7 @@ function RevealPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-ink text-cream">
+    <div className="grain relative min-h-screen flex flex-col bg-ink text-cream">
       <SiteNav />
       <main className="flex-1 w-full">
         <section className="mx-auto max-w-4xl px-4 pt-14 pb-6">
