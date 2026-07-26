@@ -2,16 +2,30 @@ import { Link } from "@tanstack/react-router";
 import { ShieldCheck } from "lucide-react";
 
 /** Small on-brand badge asserting: this comp draws on its stated close date/time,
- *  no matter what. Mechanically true because draws are fully automated. */
-export function NoDeadCompsBadge({ variant = "chip" }: { variant?: "chip" | "row" }) {
+ *  no matter what. Mechanically true because draws are fully automated.
+ *  `asLink={false}` renders a plain span so it can be nested inside another <a>
+ *  without breaking DOM validity (no nested anchors). */
+export function NoDeadCompsBadge({
+  variant = "chip",
+  asLink = true,
+}: {
+  variant?: "chip" | "row";
+  asLink?: boolean;
+}) {
   if (variant === "row") {
-    return (
-      <Link
-        to="/promise"
-        className="inline-flex items-center gap-1.5 text-[10px] font-mono uppercase tracking-[0.15em] font-bold text-clover hover:underline"
-      >
+    const cls =
+      "inline-flex items-center gap-1.5 text-[10px] font-mono uppercase tracking-[0.15em] font-bold text-clover hover:underline";
+    const inner = (
+      <>
         <ShieldCheck className="h-3 w-3" /> No dead comps guarantee
+      </>
+    );
+    return asLink ? (
+      <Link to="/promise" className={cls}>
+        {inner}
       </Link>
+    ) : (
+      <span className={cls}>{inner}</span>
     );
   }
   return (
