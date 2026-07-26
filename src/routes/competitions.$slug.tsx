@@ -170,7 +170,7 @@ function CompDetail() {
               <div className="h-[2px] rounded-full bg-white/10 overflow-hidden">
                 <div className="h-full bg-gradient-to-r from-clover to-gold" style={{ width: `${pct}%` }} />
               </div>
-              <div className="mt-1 text-xs text-muted-foreground font-mono tabular-nums">Odds 1 : {odds.toLocaleString()}</div>
+
             </div>
 
             <div className="mt-6 rounded-2xl bg-card border-2 border-border p-4">

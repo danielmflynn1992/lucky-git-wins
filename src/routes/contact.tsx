@@ -12,10 +12,9 @@ export const Route = createFileRoute("/contact")({
   }),
   component: () => (
     <StaticPage kicker="Get in touch" title="Contact & Support">
-      <p>Real humans, in the UK, weekdays 9–6. We'll usually reply within a few hours.</p>
-      <p><strong>Email:</strong> <a href="mailto:hello@luckygitcomps.co.uk">hello@luckygitcomps.co.uk</a></p>
-      <p><strong>Postal:</strong> Lucky Git Comps Ltd — [Registered address], United Kingdom</p>
-      <h2>What to include</h2>
+      <p>All support goes through email — that way we've got a record and nothing slips through the cracks. Real UK humans reply, usually within a few hours on weekdays.</p>
+      <p className="text-lg"><strong>Email:</strong> <a href="mailto:hello@luckygitcomps.co.uk">hello@luckygitcomps.co.uk</a></p>
+      <h2>When you email, please include</h2>
       <ul>
         <li>The competition name (if it's about a specific one)</li>
         <li>Your order reference (from your email confirmation)</li>

@@ -10,7 +10,6 @@ export function CompCard({ c }: { c: Competition }) {
   const pct = Math.round((c.ticketsSold / c.totalTickets) * 100);
   const almostGone = pct >= 80;
   const remaining = c.totalTickets - c.ticketsSold;
-  const odds = Math.round(c.totalTickets / Math.max(1, c.ticketsSold || 1));
   const [quickOpen, setQuickOpen] = useState(false);
   return (
     <>
@@ -74,7 +73,6 @@ export function CompCard({ c }: { c: Competition }) {
             <div className="text-right shrink-0 min-w-0">
               <div className="text-[9px] sm:text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">Remaining</div>
               <div className="font-mono tabular-nums text-xs sm:text-sm font-bold text-foreground">{remaining.toLocaleString()}</div>
-              <div className="text-[9px] sm:text-[10px] font-mono text-muted-foreground">1:{odds.toLocaleString()}</div>
             </div>
           </div>
         </div>
