@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import crest from "@/assets/lucky-git-seal.png.asset.json";
-import lockupImage from "@/assets/lockups/lockup-horizontal.png.asset.json";
+import lockupImage from "@/assets/lockups/lockup-horizontal-v2.png.asset.json";
 
 const CREST_URL = crest.url;
 const LOCKUP_URL = lockupImage.url;
@@ -83,52 +83,19 @@ export function Lockup({
   // dedicated cream-ink SVG wordmark using currentColor — no raster,
   // no filter, no hue shift. Wrap in a text-[--color-on-dark-fg]
   // (or similar) container to colour it.
-  if (tone === "cream") {
-    return (
-      <svg
-        viewBox="0 0 1200 240"
-        role="img"
-        aria-label="Lucky Git Comps"
-        className={`block select-none ${className}`}
-        style={{ maxWidth: "100%", height: "auto", ...style }}
-        preserveAspectRatio="xMidYMid meet"
-      >
-        <g fill="currentColor">
-          {/* Simple engraved wreath mark on the left, in currentColor */}
-          <circle cx="120" cy="120" r="96" fill="none" stroke="currentColor" strokeWidth="4" />
-          <circle cx="120" cy="120" r="80" fill="none" stroke="currentColor" strokeWidth="1.5" />
-          <text
-            x="120"
-            y="150"
-            textAnchor="middle"
-            fontFamily="'Cormorant Garamond','Cormorant',Garamond,Georgia,serif"
-            fontSize="72"
-            fontWeight="600"
-            fontStyle="italic"
-          >
-            LGC
-          </text>
-          <text
-            x="260"
-            y="152"
-            fontFamily="'Cormorant Garamond','Cormorant',Garamond,Georgia,serif"
-            fontSize="128"
-            fontWeight="600"
-            letterSpacing="10"
-            style={{ fontVariant: "small-caps" }}
-          >
-            Lucky Git Comps
-          </text>
-        </g>
-      </svg>
-    );
-  }
+  // The v2 lockup is a printed cream-and-red panel with a two-colour
+  // wheeler-dealer mascot on the left and the wordmark on the right.
+  // The cream backdrop is part of the artwork, so no blend mode is
+  // applied — it reads as a printed sticker on both light paper and
+  // dark ink-blue surfaces.
   return (
     <img
       src={LOCKUP_URL}
       alt="Lucky Git Comps"
       draggable={false}
-      className={`block object-contain select-none mix-blend-multiply ${className}`}
+      className={`block object-contain select-none ${
+        tone === "cream" ? "" : "mix-blend-multiply"
+      } ${className}`}
       style={{ maxWidth: "100%", height: "auto", ...style }}
     />
   );
