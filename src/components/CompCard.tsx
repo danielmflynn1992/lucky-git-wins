@@ -30,7 +30,7 @@ export function CompCard({ c }: { c: Competition }) {
   return (
     <PlateBorder
       variant="flush"
-      className="paper group relative flex h-full flex-col overflow-hidden min-w-0 max-w-full [overflow-wrap:anywhere] plate-border--lift cursor-pointer"
+      className="paper group relative flex h-full flex-col overflow-hidden min-w-0 max-w-full [overflow-wrap:anywhere] plate-border--lift cursor-pointer [container-type:inline-size]"
       onClick={(e) => {
         const t = e.target as HTMLElement;
         if (t.closest("a,button,input,select,textarea,label,[data-no-card-click]")) return;
@@ -82,7 +82,7 @@ export function CompCard({ c }: { c: Competition }) {
       {/* Ribbon title — the engraved banner across the plate. */}
       <div className="relative z-10 -mt-4 mb-1 flex justify-center px-3 pointer-events-none">
         <Ribbon as="h3" className="max-w-full">
-          <span className="block text-[13px] sm:text-base leading-tight break-words">
+          <span className="block leading-[1.15] break-words hyphens-auto text-[clamp(0.78rem,3.4cqi,1.05rem)]">
             {c.title}
           </span>
         </Ribbon>
@@ -120,7 +120,7 @@ export function CompCard({ c }: { c: Competition }) {
             <div className="min-w-0">
               <div className="text-[10px] uppercase tracking-[0.12em] text-n-600 font-semibold whitespace-nowrap">Tickets from</div>
               <div
-                className="font-display leading-none tabular-nums whitespace-nowrap text-[26px] sm:text-3xl md:text-4xl"
+                className="font-display leading-none tabular-nums whitespace-nowrap text-[clamp(1.35rem,7cqi,2.25rem)]"
                 style={{ color: "var(--color-ink-green-deep)" }}
               >
                 {gbp(c.pricePerTicket)}
