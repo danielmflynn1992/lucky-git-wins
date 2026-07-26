@@ -87,10 +87,10 @@ export function WaxSeal({
         <img
           src={CREST_URL}
           alt="Lucky Git Comps"
-          width={1400}
-          height={1400}
+          width={668}
+          height={668}
           loading="eager"
-          className="block h-full w-full object-cover mix-blend-multiply"
+          className="block h-full w-full object-cover"
         />
       </span>
     </Link>
