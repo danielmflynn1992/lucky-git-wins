@@ -56,7 +56,7 @@ export function CompCard({ c }: { c: Competition }) {
           loading="lazy"
           width={1280}
           height={1024}
-          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
+          className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-[1.05]"
         />
       </div>
 

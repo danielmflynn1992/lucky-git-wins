@@ -19,7 +19,7 @@ export function CompRow({ c }: { c: Competition }) {
     >
       {/* Thumb */}
       <div className="h-20 w-20 sm:h-24 sm:w-24 shrink-0 rounded-md overflow-hidden bg-muted">
-        <img src={c.image} alt={c.title} width={200} height={200} loading="lazy" className="h-full w-full object-cover" />
+        <img src={c.image} alt={c.title} width={200} height={200} loading="lazy" className="h-full w-full object-contain" />
       </div>
 
       {/* Middle */}
