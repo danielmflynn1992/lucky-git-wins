@@ -7,6 +7,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { Countdown } from "@/components/Countdown";
 import { CompCard } from "@/components/CompCard";
 import { Button } from "@/components/ui/button";
+import { LetterboxImage } from "@/components/LetterboxImage";
 import { COMPETITIONS } from "@/lib/mock-comps";
 import { gbp, shortNumber } from "@/lib/format";
 import {
@@ -141,10 +142,15 @@ function CompDetail() {
         <div className="grid gap-8 lg:grid-cols-5">
           <div className="lg:col-span-3">
             <div className="relative rounded-3xl overflow-hidden bg-card border-2 border-border">
-              <div className="relative w-full aspect-[4/3] overflow-hidden bg-muted rounded-lg">
-                <img src={c.image} alt="" aria-hidden="true" className="absolute inset-0 h-full w-full object-cover scale-110 blur-2xl opacity-60" />
-                <img src={c.image} alt={c.title} width={1280} height={960} className="relative h-full w-full object-contain" />
-              </div>
+              <LetterboxImage
+                src={c.image}
+                alt={c.title}
+                style={c.letterboxStyle}
+                className="w-full aspect-[4/3] rounded-lg"
+                width={1280}
+                height={960}
+                loading="eager"
+              />
               <div className="absolute top-4 left-4 flex gap-1.5">
                 {c.hot && <span className="rounded-sm bg-hot text-hot-foreground px-2 py-1 text-[10px] font-semibold uppercase tracking-wider">Hot</span>}
                 {c.instantWin && <span className="rounded-sm bg-gold text-gold-foreground px-2 py-1 text-[10px] font-semibold uppercase tracking-wider">Instant wins inside</span>}
