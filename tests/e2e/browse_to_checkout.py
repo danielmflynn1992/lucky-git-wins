@@ -105,11 +105,13 @@ async def flow_pick_numbers(page: Page, viewport: str) -> None:
 async def run_viewport(pw, viewport: str) -> list[str]:
     failures: list[str] = []
     browser = await pw.chromium.launch(headless=True)
-    ctx = await browser.new_context(viewport=VIEWPORTS[viewport])
-    page = await ctx.new_page()
-    page.on("pageerror", lambda e: print(f"  ! pageerror[{viewport}]: {e}"))
 
     for name, flow in [("lucky_dip", flow_lucky_dip), ("pick_numbers", flow_pick_numbers)]:
+        # Fresh context per flow so ticket reservations from the previous
+        # flow don't shrink availability under our feet.
+        ctx = await browser.new_context(viewport=VIEWPORTS[viewport])
+        page = await ctx.new_page()
+        page.on("pageerror", lambda e, v=viewport: print(f"  ! pageerror[{v}]: {e}"))
         try:
             print(f"[{viewport}] {name} …")
             await flow(page, viewport)
@@ -120,6 +122,8 @@ async def run_viewport(pw, viewport: str) -> list[str]:
             except Exception:
                 pass
             print(f"  FAIL {viewport}/{name}: {e}")
+        finally:
+            await ctx.close()
 
     await browser.close()
     return failures
