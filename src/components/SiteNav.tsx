@@ -126,7 +126,11 @@ export function SiteNav() {
           Height 68px mobile / 80px desktop, condensing to 56px on scroll.
           Bottom border is a double rule (2px clover + 1px paper-edge hairline
           3px beneath) — the certificate-header treatment. */}
-      <div className="relative bg-card overflow-hidden mast-transition data-[scrolled=true]:h-14" data-scrolled={scrolled ? "true" : "false"}>
+      {/* overflow-visible so the oversized centre lockup can extend
+          above/below the fixed row height without pushing the header
+          taller. The guilloché backdrop has its own overflow-hidden
+          wrapper below so it stays clipped. */}
+      <div className="relative bg-card overflow-visible mast-transition data-[scrolled=true]:h-14" data-scrolled={scrolled ? "true" : "false"}>
         {/* Faint guilloché backdrop — fades to the edges, disappears on scroll. */}
         <div
           aria-hidden="true"
