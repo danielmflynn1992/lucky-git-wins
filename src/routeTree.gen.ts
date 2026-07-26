@@ -31,6 +31,7 @@ import { Route as CompetitionsIndexRouteImport } from './routes/competitions.ind
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as DevCompcardRouteImport } from './routes/dev.compcard'
 import { Route as CompetitionsSlugRouteImport } from './routes/competitions.$slug'
+import { Route as AdminErrorsRouteImport } from './routes/admin.errors'
 import { Route as DrawsIdRevealRouteImport } from './routes/draws.$id.reveal'
 import { Route as AdminCompetitionsNewRouteImport } from './routes/admin.competitions.new'
 
@@ -144,6 +145,11 @@ const CompetitionsSlugRoute = CompetitionsSlugRouteImport.update({
   path: '/competitions/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminErrorsRoute = AdminErrorsRouteImport.update({
+  id: '/admin/errors',
+  path: '/admin/errors',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DrawsIdRevealRoute = DrawsIdRevealRouteImport.update({
   id: '/draws/$id/reveal',
   path: '/draws/$id/reveal',
@@ -174,6 +180,7 @@ export interface FileRoutesByFullPath {
   '/terms': typeof TermsRoute
   '/verify': typeof VerifyRoute
   '/winners': typeof WinnersRoute
+  '/admin/errors': typeof AdminErrorsRoute
   '/competitions/$slug': typeof CompetitionsSlugRoute
   '/dev/compcard': typeof DevCompcardRoute
   '/admin/': typeof AdminIndexRoute
@@ -200,6 +207,7 @@ export interface FileRoutesByTo {
   '/terms': typeof TermsRoute
   '/verify': typeof VerifyRoute
   '/winners': typeof WinnersRoute
+  '/admin/errors': typeof AdminErrorsRoute
   '/competitions/$slug': typeof CompetitionsSlugRoute
   '/dev/compcard': typeof DevCompcardRoute
   '/admin': typeof AdminIndexRoute
@@ -227,6 +235,7 @@ export interface FileRoutesById {
   '/terms': typeof TermsRoute
   '/verify': typeof VerifyRoute
   '/winners': typeof WinnersRoute
+  '/admin/errors': typeof AdminErrorsRoute
   '/competitions/$slug': typeof CompetitionsSlugRoute
   '/dev/compcard': typeof DevCompcardRoute
   '/admin/': typeof AdminIndexRoute
@@ -255,6 +264,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/verify'
     | '/winners'
+    | '/admin/errors'
     | '/competitions/$slug'
     | '/dev/compcard'
     | '/admin/'
@@ -281,6 +291,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/verify'
     | '/winners'
+    | '/admin/errors'
     | '/competitions/$slug'
     | '/dev/compcard'
     | '/admin'
@@ -307,6 +318,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/verify'
     | '/winners'
+    | '/admin/errors'
     | '/competitions/$slug'
     | '/dev/compcard'
     | '/admin/'
@@ -334,6 +346,7 @@ export interface RootRouteChildren {
   TermsRoute: typeof TermsRoute
   VerifyRoute: typeof VerifyRoute
   WinnersRoute: typeof WinnersRoute
+  AdminErrorsRoute: typeof AdminErrorsRoute
   CompetitionsSlugRoute: typeof CompetitionsSlugRoute
   DevCompcardRoute: typeof DevCompcardRoute
   AdminIndexRoute: typeof AdminIndexRoute
@@ -498,6 +511,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CompetitionsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/errors': {
+      id: '/admin/errors'
+      path: '/admin/errors'
+      fullPath: '/admin/errors'
+      preLoaderRoute: typeof AdminErrorsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/draws/$id/reveal': {
       id: '/draws/$id/reveal'
       path: '/draws/$id/reveal'
@@ -534,6 +554,7 @@ const rootRouteChildren: RootRouteChildren = {
   TermsRoute: TermsRoute,
   VerifyRoute: VerifyRoute,
   WinnersRoute: WinnersRoute,
+  AdminErrorsRoute: AdminErrorsRoute,
   CompetitionsSlugRoute: CompetitionsSlugRoute,
   DevCompcardRoute: DevCompcardRoute,
   AdminIndexRoute: AdminIndexRoute,

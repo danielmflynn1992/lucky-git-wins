@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { drawCompetition, autoDrawExpired } from "@/lib/admin.functions";
 import { gbp, shortNumber } from "@/lib/format";
-import { Copy, Plus, Play, Pause, Trophy, Loader2, Zap, AlertTriangle } from "lucide-react";
+import { Copy, Plus, Play, Pause, Trophy, Loader2, Zap, AlertTriangle, Bug } from "lucide-react";
 
 interface AdminRow {
   id: string;
@@ -92,6 +92,15 @@ function Admin() {
   const totalRevenue = rows.reduce((s, c) => s + c.sold * c.price_per_ticket, 0);
   const totalTickets = rows.reduce((s, c) => s + c.sold, 0);
   const liveCount = rows.filter((c) => c.status === "live").length;
+  const { data: errCount = 0 } = useQuery({
+    queryKey: ["admin", "errors-count"],
+    queryFn: async () => {
+      const { data, error } = await supabase.rpc("unresolved_client_errors_count");
+      if (error) throw error;
+      return Number(data ?? 0);
+    },
+    refetchInterval: 30_000,
+  });
   const now = Date.now();
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -113,6 +122,16 @@ function Admin() {
             <p className="text-muted-foreground text-sm">Run the shop.</p>
           </div>
           <div className="flex gap-2 flex-wrap">
+            <Button asChild variant="cream" size="lg">
+              <Link to="/admin/errors">
+                <Bug className="h-4 w-4" /> Errors
+                {errCount > 0 && (
+                  <span className="ml-1 inline-flex items-center justify-center min-w-[1.5rem] h-6 px-1.5 rounded-full bg-urgent text-white text-xs font-bold tabular-nums">
+                    {errCount}
+                  </span>
+                )}
+              </Link>
+            </Button>
             <Button variant="cream" size="lg" onClick={() => autoMut.mutate()} disabled={autoMut.isPending}>
               {autoMut.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Zap className="h-4 w-4" />}
               Auto-draw expired
