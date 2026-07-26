@@ -31,7 +31,10 @@ export function Ribbon({
           <path d="M8 30 L0 22 L0 38 Z" strokeWidth="1" fill="var(--color-paper-deep)" />
           <path d="M392 30 L400 22 L400 38 Z" strokeWidth="1" fill="var(--color-paper-deep)" />
         </svg>
-        <Tag className="relative font-display font-semibold tracking-[0.14em] uppercase text-lg md:text-xl leading-none px-4" style={{ color: "var(--color-ink-green-deep)", fontVariant: "small-caps" }}>
+        <Tag
+          className="relative font-display font-semibold uppercase px-2 sm:px-4 text-[clamp(0.78rem,3.4cqi,1.15rem)] leading-[1.15] tracking-[0.06em] sm:tracking-[0.1em] md:tracking-[0.14em] break-words hyphens-auto"
+          style={{ color: "var(--color-ink-green-deep)", fontVariant: "small-caps" }}
+        >
           {children}
         </Tag>
       </div>
