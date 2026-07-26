@@ -35,7 +35,7 @@ const drawsQuery = queryOptions({
       .select("id, competition_id, competition_title, prize, winning_number, winner_display_name, winner_town, total_tickets, total_sold, qualifying_pool_size, draw_pool, draw_method, notes, drawn_at")
       .order("drawn_at", { ascending: false });
     if (error) throw error;
-    return (data ?? []) as Draw[];
+    return ((data ?? []) as unknown) as Draw[];
   },
 });
 
