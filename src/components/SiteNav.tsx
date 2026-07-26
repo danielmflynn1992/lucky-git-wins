@@ -165,8 +165,8 @@ export function SiteNav() {
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
 
-          {/* Centered logo — overhangs below the bar, blends into the page */}
-          <div className="justify-self-center shrink-0 relative z-10 translate-y-4 md:translate-y-8">
+          {/* Centered logo — sits inside the bar, blends with the paper */}
+          <div className="justify-self-center shrink-0 relative z-10">
             <Logo />
           </div>
 
