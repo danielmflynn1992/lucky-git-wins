@@ -54,7 +54,7 @@ export function LiveOddsTicker() {
 
   return (
     <TooltipProvider delayDuration={150}>
-      <div className="relative overflow-hidden bg-white border-b border-border">
+      <div data-dynamic="ticker" className="relative overflow-hidden bg-white border-b border-border">
         <div className="flex items-stretch">
           <LiveChip />
           <div className="relative flex-1 overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_4%,#000_96%,transparent)] py-2">
