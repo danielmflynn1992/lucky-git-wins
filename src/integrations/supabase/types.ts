@@ -47,6 +47,7 @@ export type Database = {
           created_at: string
           description: string
           ends_at: string
+          free_entry_enabled: boolean
           hot: boolean
           id: string
           image: string
@@ -68,6 +69,7 @@ export type Database = {
           created_at?: string
           description?: string
           ends_at: string
+          free_entry_enabled?: boolean
           hot?: boolean
           id?: string
           image?: string
@@ -89,6 +91,7 @@ export type Database = {
           created_at?: string
           description?: string
           ends_at?: string
+          free_entry_enabled?: boolean
           hot?: boolean
           id?: string
           image?: string
@@ -189,6 +192,54 @@ export type Database = {
         }
         Relationships: []
       }
+      free_entries: {
+        Row: {
+          competition_id: string
+          created_at: string
+          email: string
+          id: string
+          ip_address: string | null
+          ticket_id: string
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          competition_id: string
+          created_at?: string
+          email: string
+          id?: string
+          ip_address?: string | null
+          ticket_id: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          competition_id?: string
+          created_at?: string
+          email?: string
+          id?: string
+          ip_address?: string | null
+          ticket_id?: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "free_entries_competition_id_fkey"
+            columns: ["competition_id"]
+            isOneToOne: false
+            referencedRelation: "competitions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "free_entries_ticket_id_fkey"
+            columns: ["ticket_id"]
+            isOneToOne: false
+            referencedRelation: "tickets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       site_settings: {
         Row: {
           key: string
@@ -211,6 +262,7 @@ export type Database = {
         Row: {
           competition_id: string
           created_at: string
+          entry_method: Database["public"]["Enums"]["entry_method"]
           id: string
           instant_win_prize: number | null
           is_instant_win: boolean
@@ -225,6 +277,7 @@ export type Database = {
         Insert: {
           competition_id: string
           created_at?: string
+          entry_method?: Database["public"]["Enums"]["entry_method"]
           id?: string
           instant_win_prize?: number | null
           is_instant_win?: boolean
@@ -239,6 +292,7 @@ export type Database = {
         Update: {
           competition_id?: string
           created_at?: string
+          entry_method?: Database["public"]["Enums"]["entry_method"]
           id?: string
           instant_win_prize?: number | null
           is_instant_win?: boolean
@@ -377,10 +431,20 @@ export type Database = {
         Args: { p_numbers: number[]; p_slug: string; p_token: string }
         Returns: number[]
       }
+      submit_free_entry: {
+        Args: {
+          p_email: string
+          p_ip?: string
+          p_slug: string
+          p_user_agent?: string
+        }
+        Returns: number
+      }
       sweep_expired_reservations: { Args: never; Returns: undefined }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
+      entry_method: "paid" | "free"
       letterbox_style: "solid" | "gradient" | "blur"
     }
     CompositeTypes: {
@@ -510,6 +574,7 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "moderator", "user"],
+      entry_method: ["paid", "free"],
       letterbox_style: ["solid", "gradient", "blur"],
     },
   },
