@@ -9,7 +9,6 @@ import { CompRow } from "@/components/CompRow";
 import { ViewToggle } from "@/routes/competitions.index";
 import { Countdown } from "@/components/Countdown";
 import { Lockup } from "@/components/Logo";
-import { Pinstripe } from "@/components/Pinstripe";
 import { Marker } from "@/components/Marker";
 import { Perforation } from "@/components/Perforation";
 import { COMPETITIONS, CATEGORIES, WINNERS, type Category } from "@/lib/mock-comps";
@@ -62,7 +61,7 @@ function Home() {
 
       {/* HERO — pools-coupon masthead */}
       <section className="halftone relative overflow-hidden rule-heavy border-b-[3px] border-[var(--color-ink-black)]">
-        <div className="mx-auto max-w-7xl px-4 pt-2 pb-16 md:pt-4 md:pb-24">
+        <div className="mx-auto max-w-7xl px-4 pt-2 pb-8 md:pt-4 md:pb-12">
           <div className="grid gap-10 md:grid-cols-2 items-center">
           <div>
             <h1
@@ -171,7 +170,7 @@ function Home() {
       </section>
 
       {/* LIVE COMPETITIONS GRID */}
-      <section className="mx-auto max-w-7xl px-4 pt-12 pb-6 w-full">
+      <section className="mx-auto max-w-7xl px-4 pt-6 pb-3 w-full">
         <div className="flex items-end justify-between gap-4 flex-wrap">
           <div>
             <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-clover mb-2 font-bold">Live · {COMPETITIONS.length.toString().padStart(2, "0")}</div>
@@ -183,7 +182,7 @@ function Home() {
             <select
               value={sort}
               onChange={(e) => setSort(e.target.value as typeof sort)}
-              className="rounded-md border border-border bg-card text-foreground px-3 py-2 text-sm font-semibold shadow-sm focus:outline-none focus:border-clover"
+              className="border-2 border-[var(--color-ink-black)] bg-[var(--color-paper-raised)] px-3 py-1 text-[11px] font-body font-bold uppercase tracking-[0.14em] text-[var(--color-ink-black)] focus:outline-none focus:ring-2 focus:ring-[var(--color-ink-blue)]"
             >
               <option value="ending">Ending soonest</option>
               <option value="popular">Most popular</option>
@@ -197,9 +196,12 @@ function Home() {
             <button
               key={c}
               onClick={() => setCat(c)}
-              className={`shrink-0 rounded-full px-4 py-1.5 text-sm font-semibold border transition-colors ${
-                cat === c ? "bg-ink text-cream border-ink" : "bg-card text-foreground/70 border-border hover:border-foreground/40"
-              }`}
+              className={
+                "shrink-0 whitespace-nowrap border-2 border-[var(--color-ink-black)] px-3 py-1 text-[11px] font-body font-bold uppercase tracking-[0.14em] transition-colors " +
+                (cat === c
+                  ? "bg-[var(--color-ink-blue)] text-[var(--color-paper)]"
+                  : "bg-[var(--color-paper-raised)] text-[var(--color-ink-black)] hover:bg-[var(--color-ink-yellow)]")
+              }
             >
               {c}
             </button>
@@ -225,10 +227,10 @@ function Home() {
         )}
       </section>
 
-      <div className="mx-auto max-w-7xl px-4"><Pinstripe /></div>
+      <div className="mx-auto max-w-7xl px-4"><div role="separator" aria-hidden className="perf-rule" /></div>
 
       {/* HOW IT WORKS */}
-      <section className="mx-auto max-w-7xl px-4 mt-24 w-full">
+      <section className="mx-auto max-w-7xl px-4 mt-10 w-full">
         <div>
           <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-clover font-bold">How it works</div>
           <h2 className="mt-2 font-display text-3xl md:text-5xl font-black tracking-[-0.02em] text-foreground">Three steps. One of them's a skill question.</h2>
@@ -241,9 +243,6 @@ function Home() {
             <p className="text-base text-muted-foreground mt-3 leading-relaxed max-w-md">
               Lucky Dip if you can't be bothered, or hand-pick your numbers like it matters. From a quid a go. Grid updates live so you can't nick a number someone else already has.
             </p>
-            <div className="mt-6 font-mono text-xs tabular-nums text-muted-foreground">
-              <span className="text-clover">$</span> ./enter --qty 10 --lucky-dip
-            </div>
           </div>
           <div className="md:col-span-3 rounded-lg bg-card border border-border p-6 shadow-sm hover:shadow-md transition-all duration-200">
             <div className="font-mono text-[11px] tracking-[0.25em] text-clover font-bold">STEP 02</div>
@@ -259,7 +258,7 @@ function Home() {
       </section>
 
       {/* WINNERS WALL */}
-      <section className="mx-auto max-w-7xl px-4 mt-24 w-full">
+      <section className="mx-auto max-w-7xl px-4 mt-10 w-full">
         <div className="flex items-end justify-between gap-4 flex-wrap">
           <div>
             <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-clover mb-2 font-bold">Winners · Verified</div>
@@ -270,27 +269,35 @@ function Home() {
         </div>
         <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {WINNERS.slice(0, 3).map((w) => (
-            <div key={w.name + w.prize} className="rounded-lg bg-card border border-border p-5 shadow-sm hover:shadow-md transition-all duration-200">
-              <div className="flex items-center gap-3">
-                <div className="h-11 w-11 rounded-md bg-ink text-cream flex items-center justify-center font-display text-lg font-black">
-                  {w.name[0]}
-                </div>
-                <div>
-                  <div className="font-bold text-foreground">{w.name} <span className="text-muted-foreground font-normal">from {w.town}</span></div>
-                  <div className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground mt-0.5">{w.when}</div>
-                </div>
-              </div>
-              <div className="mt-4 pt-3 border-t border-border">
-                <div className="text-[10px] font-mono uppercase tracking-[0.15em] text-muted-foreground">Prize</div>
-                <div className="font-bold text-foreground">{w.prize}</div>
-              </div>
-              <p className="mt-4 italic font-sans text-lg text-foreground/80 leading-snug">"{w.quote}"</p>
-            </div>
+            <article
+              key={w.name + w.prize}
+              className="flex flex-col border-[1.5px] border-[var(--color-ink-black)] bg-[var(--color-paper-raised)] overflow-hidden"
+            >
+              <header className="bg-[var(--color-ink-red)] text-[var(--color-paper)] px-3 py-1.5 flex items-baseline justify-between gap-2">
+                <span className="font-body font-bold uppercase tracking-[0.16em] text-[10px]">Winner</span>
+                <span className="font-mono tabular-nums text-[10px] opacity-95">{w.when}</span>
+              </header>
+              <div className="mx-3 mt-2 rule-dotted" aria-hidden />
+              <dl className="px-3 pt-2 pb-3 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1">
+                <dt className="label text-[9px] whitespace-nowrap self-center">NAME</dt>
+                <dd className="font-mono text-[12px] text-[var(--color-ink-black)] text-right self-center truncate">
+                  <b>{w.name}</b> <span className="opacity-70">· {w.town}</span>
+                </dd>
+                <dt className="label text-[9px] whitespace-nowrap self-center">PRIZE</dt>
+                <dd className="font-mono text-[12px] text-[var(--color-ink-black)] text-right self-center truncate">
+                  <b>{w.prize}</b>
+                </dd>
+              </dl>
+              <div className="mx-3 rule-dotted" aria-hidden />
+              <p className="px-3 py-3 italic font-serif text-[15px] text-[var(--color-ink-black)]/85 leading-snug">
+                "{w.quote}"
+              </p>
+            </article>
           ))}
         </div>
       </section>
 
-      <div className="mx-auto max-w-7xl px-4"><Pinstripe /></div>
+      <div className="mx-auto max-w-7xl px-4 mt-8"><div role="separator" aria-hidden className="perf-rule" /></div>
 
       <SiteFooter />
     </div>
