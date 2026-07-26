@@ -524,6 +524,14 @@
     filter 300ms ease;
 }
 
+/* Masthead condense transition — the banknote header shrinks height, seal
+   size, wordmark size and fades the flanking rules / guilloché on scroll.
+   Neutralised under prefers-reduced-motion by the block below. */
+@utility mast-transition {
+  transition: height 260ms ease, width 260ms ease, font-size 260ms ease,
+    opacity 260ms ease, transform 260ms ease;
+}
+
 /* Paper-edge bottom — double hairline rule under the header main bar, so the
    wax seal reads as sealing the join of a two-part document. */
 @utility paper-edge-bottom {
@@ -540,6 +548,7 @@
   }
   .seal, .wax-seal { transform: none; }
   .wax-seal-transition { transition: none !important; }
+  .mast-transition { transition: none !important; }
   .ticker-scroll { animation: none !important; transform: none !important; }
   .animate-ping, .animate-pulse, .animate-spin, .animate-bounce { animation: none !important; }
   .stall-tilt-l, .stall-tilt-r { transform: none !important; }

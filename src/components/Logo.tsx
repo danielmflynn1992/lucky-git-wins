@@ -58,9 +58,11 @@ export function StampSeal({
 export function Wordmark({
   className = "",
   as: Tag = "span",
+  style,
 }: {
   className?: string;
   as?: any;
+  style?: React.CSSProperties;
 }) {
   return (
     <Tag
@@ -72,6 +74,7 @@ export function Wordmark({
         fontWeight: 600,
         lineHeight: 1,
         whiteSpace: "nowrap",
+        ...style,
       }}
     >
       Lucky Git Comps

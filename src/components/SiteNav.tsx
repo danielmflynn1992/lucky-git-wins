@@ -2,7 +2,8 @@ import { Link } from "@tanstack/react-router";
 import { useRouterState } from "@tanstack/react-router";
 import { Instagram, Facebook, Mail, Menu, ShoppingBag, User, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { Wordmark } from "./Logo";
+import { StampSeal, Wordmark } from "./Logo";
+import { Guilloche } from "./Guilloche";
 import { useAuth } from "@/hooks/use-auth";
 import { useBasket } from "@/hooks/use-basket";
 import { supabase } from "@/integrations/supabase/client";
@@ -57,6 +58,19 @@ export function SiteNav() {
   const toggleRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
 
+  // Scroll-condense: over 80px scroll the masthead compresses from 68/80px to
+  // 56px, the seal shrinks 44→34, and the flanking rules + guilloché fade out.
+  // Motion is CSS-driven so `prefers-reduced-motion` disables it via the
+  // `.mast-transition` utility in src/styles.css.
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const onScroll = () => setScrolled(window.scrollY > 80);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   // Focus management + Escape + focus trap while the panel is open.
   useEffect(() => {
     if (!open) return;
@@ -102,66 +116,98 @@ export function SiteNav() {
   }, [open]);
 
   return (
-    <header className="sticky top-0 z-40 bg-card">
+    <header className="sticky top-0 z-40 bg-card" data-scrolled={scrolled ? "true" : "false"}>
       {/* Tier 0 — live ticker, topmost element on the page, dark green strip. */}
       <LiveOddsTicker />
 
-      {/* Tier 1 — single 64px cream nav row.
-          Hamburger left · Wordmark centre · Basket right.
-          Desktop expands the left/right slots with the primary nav.
-          Single hairline bottom border. No seal, no overhang, no buffer. */}
-      <div className="bg-card border-b border-border">
-        <div className="mx-auto max-w-7xl px-4 md:px-6 h-16 grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-4">
-          {/* LEFT — hamburger + (desktop) primary nav */}
-          <div className="flex items-center gap-4 min-w-0">
-            <button
-              ref={toggleRef}
-              onClick={() => setOpen((o) => !o)}
-              className="lg:hidden p-2 -ml-2 rounded-md hover:bg-muted text-foreground/80"
-              aria-label={open ? "Close menu" : "Open menu"}
-              aria-expanded={open}
-              aria-controls="mobile-menu"
-              aria-haspopup="menu"
-            >
-              {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-            </button>
-            <nav className="hidden lg:flex items-center gap-5 min-w-0">
-              {leftLinks.map((l) => (
-                <Link
-                  key={l.to}
-                  to={l.to}
-                  className="text-[12px] font-bold uppercase tracking-[0.14em] text-foreground/85 hover:text-clover transition-colors whitespace-nowrap"
-                  activeProps={{ className: "text-clover" }}
-                >
-                  {l.label}
-                </Link>
-              ))}
-            </nav>
+      {/* Tier 1 — engraved banknote masthead.
+          Structure: hamburger · flanking rule+diamond · seal+wordmark lockup
+          · flanking rule+diamond · basket. Faint guilloché backdrop at ~5%.
+          Height 68px mobile / 80px desktop, condensing to 56px on scroll.
+          Bottom border is a double rule (2px clover + 1px paper-edge hairline
+          3px beneath) — the certificate-header treatment. */}
+      <div className="relative bg-card overflow-hidden mast-transition data-[scrolled=true]:h-14" data-scrolled={scrolled ? "true" : "false"}>
+        {/* Faint guilloché backdrop — fades to the edges, disappears on scroll. */}
+        <div
+          aria-hidden="true"
+          className={
+            "absolute inset-0 pointer-events-none overflow-hidden mast-transition " +
+            (scrolled ? "opacity-0" : "opacity-[0.05]")
+          }
+          style={{
+            maskImage: "linear-gradient(90deg, transparent, #000 22%, #000 78%, transparent)",
+            WebkitMaskImage: "linear-gradient(90deg, transparent, #000 22%, #000 78%, transparent)",
+          }}
+        >
+          <Guilloche variant="rosette" strength="strong" className="text-clover w-full h-full" />
+        </div>
+
+        <div
+          className={
+            "relative mx-auto max-w-7xl px-3 md:px-6 grid items-center gap-2 md:gap-4 mast-transition " +
+            "grid-cols-[auto_1fr_auto_1fr_auto] " +
+            (scrolled ? "h-14" : "h-[68px] md:h-[80px]")
+          }
+        >
+          {/* LEFT edge — hamburger only, unchanged position. */}
+          <button
+            ref={toggleRef}
+            onClick={() => setOpen((o) => !o)}
+            className="p-2 -ml-2 rounded-md hover:bg-muted text-foreground/80 shrink-0"
+            aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open}
+            aria-controls="mobile-menu"
+            aria-haspopup="menu"
+          >
+            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+
+          {/* LEFT flanking rule + diamond ornament — fades on scroll. */}
+          <div
+            aria-hidden="true"
+            className={
+              "hidden sm:flex items-center gap-2 min-w-0 mast-transition " +
+              (scrolled ? "opacity-0" : "opacity-100")
+            }
+          >
+            <span className="flex-1 h-px bg-[var(--color-paper-edge)]" />
+            <span className="w-1.5 h-1.5 rotate-45 bg-clover shrink-0" />
           </div>
 
-          {/* CENTRE — text wordmark, no emblem */}
+          {/* CENTRE — horizontal seal + wordmark lockup, fully inside the bar. */}
           <Link
             to="/"
             aria-label="Lucky Git Comps — home"
-            className="justify-self-center shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-clover rounded-sm px-2"
+            className="flex items-center gap-2 md:gap-3 shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-clover rounded-sm px-1"
           >
-            <Wordmark className="text-[15px] md:text-[20px]" />
+            <StampSeal
+              size={scrolled ? 34 : 44}
+              className="mast-transition shrink-0"
+            />
+            <Wordmark
+              className={
+                "mast-transition " +
+                (scrolled ? "text-[14px] md:text-[18px]" : "text-[15px] md:text-[22px]")
+              }
+              /* Tighter tracking per spec — engraved lockup, not spaced-out chrome. */
+              style={{ letterSpacing: "0.16em" }}
+            />
           </Link>
 
-          {/* RIGHT — (desktop) primary nav + auth + basket */}
-          <div className="flex items-center justify-end gap-4 md:gap-5 min-w-0">
-            <nav className="hidden lg:flex items-center gap-5 min-w-0">
-              {rightLinks.map((l) => (
-                <Link
-                  key={l.to + l.label}
-                  to={l.to}
-                  className="text-[12px] font-bold uppercase tracking-[0.14em] text-foreground/85 hover:text-clover transition-colors whitespace-nowrap"
-                  activeProps={{ className: "text-clover" }}
-                >
-                  {l.label}
-                </Link>
-              ))}
-            </nav>
+          {/* RIGHT flanking rule + diamond ornament. */}
+          <div
+            aria-hidden="true"
+            className={
+              "hidden sm:flex items-center gap-2 min-w-0 mast-transition " +
+              (scrolled ? "opacity-0" : "opacity-100")
+            }
+          >
+            <span className="w-1.5 h-1.5 rotate-45 bg-clover shrink-0" />
+            <span className="flex-1 h-px bg-[var(--color-paper-edge)]" />
+          </div>
+
+          {/* RIGHT edge — auth (md+) + basket, unchanged position. */}
+          <div className="flex items-center justify-end gap-3 md:gap-4 shrink-0">
             <div className="hidden md:flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.16em] text-foreground/60">
               {signedIn ? (
                 <>
@@ -200,7 +246,18 @@ export function SiteNav() {
             </Link>
           </div>
         </div>
+
+        {/* Double-rule bottom border — 2px clover line, then a 1px paper-edge
+            hairline 3px beneath. Certificate-plate treatment; persists on
+            scroll so the masthead always reads as engraved. */}
+        <div aria-hidden="true" className="absolute left-0 right-0 -bottom-1 pointer-events-none">
+          <div className="h-[2px] bg-clover" />
+          <div className="h-px bg-[var(--color-paper-edge)] mt-[3px]" />
+        </div>
       </div>
+
+      {/* Spacer for the double rule so it doesn't sit under the next section. */}
+      <div aria-hidden="true" className="h-[6px] bg-card" />
 
       {/* Screen-reader live region — announces basket changes globally */}
       <div

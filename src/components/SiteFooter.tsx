@@ -1,7 +1,27 @@
 import { Link } from "@tanstack/react-router";
+import { useState } from "react";
+import { Bell } from "lucide-react";
 import { StampSeal, Wordmark } from "./Logo";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 export function SiteFooter() {
+  const [email, setEmail] = useState("");
+  const [subscribing, setSubscribing] = useState(false);
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email.trim()) return;
+    setSubscribing(true);
+    const { error } = await supabase.from("drop_subscribers").insert({ email: email.trim() });
+    setSubscribing(false);
+    if (error && !/duplicate/i.test(error.message)) {
+      toast.error("Couldn't sign you up — try again in a bit.");
+      return;
+    }
+    setEmail("");
+    toast.success("You're on the list. We'll ping you before each drop.");
+  };
+
   return (
     <footer className="grain relative mt-24 bg-ink text-cream border-t border-border">
       <div className="mx-auto max-w-7xl px-4 py-12 grid gap-10 md:grid-cols-4">
@@ -13,6 +33,32 @@ export function SiteFooter() {
           <p className="mt-4 text-sm text-cream/85 max-w-xs leading-relaxed">
             The odds, out in the open. A UK prize competition platform built on automated, verifiable draws and a public results log.
           </p>
+
+          {/* Compact drop-reminder capture — replaces the old homepage block. */}
+          <form onSubmit={handleSubscribe} className="mt-6 max-w-xs">
+            <label htmlFor="footer-drop-email" className="block text-[11px] font-mono uppercase tracking-[0.2em] text-cream/80 mb-2">
+              Get a nudge before each drop
+            </label>
+            <div className="flex gap-2">
+              <input
+                id="footer-drop-email"
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@somewhere.co.uk"
+                className="flex-1 min-w-0 rounded-md border border-cream/25 bg-transparent px-3 py-2 text-sm text-cream placeholder:text-cream/50 focus:outline-none focus:border-gold"
+              />
+              <button
+                type="submit"
+                disabled={subscribing}
+                aria-label="Subscribe to drop reminders"
+                className="inline-flex items-center gap-1.5 rounded-md bg-gold text-ink px-3 py-2 text-xs font-display font-extrabold uppercase tracking-wider hover:bg-gold-deep disabled:opacity-60 shrink-0"
+              >
+                <Bell className="h-3.5 w-3.5" />
+              </button>
+            </div>
+          </form>
         </div>
         <div>
           <h4 className="text-[10px] font-mono uppercase tracking-[0.2em] text-cream/80 mb-4">Play</h4>
