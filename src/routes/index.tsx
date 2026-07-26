@@ -170,7 +170,7 @@ function Home() {
       </section>
 
       {/* LIVE COMPETITIONS GRID */}
-      <section className="mx-auto max-w-7xl px-4 pt-6 pb-3 w-full">
+      <section className="mx-auto max-w-7xl px-4 pt-6 pb-2 w-full">
         <div className="flex items-end justify-between gap-4 flex-wrap">
           <div>
             <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-clover mb-2 font-bold">Live · {COMPETITIONS.length.toString().padStart(2, "0")}</div>
@@ -227,10 +227,10 @@ function Home() {
         )}
       </section>
 
-      <div className="mx-auto max-w-7xl px-4"><div role="separator" aria-hidden className="perf-rule" /></div>
+      <div className="mx-auto max-w-7xl px-4 mt-6 md:mt-10"><div role="separator" aria-hidden className="perf-rule" /></div>
 
       {/* HOW IT WORKS */}
-      <section className="mx-auto max-w-7xl px-4 mt-10 w-full">
+      <section className="mx-auto max-w-7xl px-4 mt-4 md:mt-6 w-full">
         <div>
           <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-clover font-bold">How it works</div>
           <h2 className="mt-2 font-display text-3xl md:text-5xl font-black tracking-[-0.02em] text-foreground">Three steps. One of them's a skill question.</h2>
@@ -258,7 +258,7 @@ function Home() {
       </section>
 
       {/* WINNERS WALL */}
-      <section className="mx-auto max-w-7xl px-4 mt-10 w-full">
+      <section className="mx-auto max-w-7xl px-4 mt-8 md:mt-14 w-full">
         <div className="flex items-end justify-between gap-4 flex-wrap">
           <div>
             <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-clover mb-2 font-bold">Winners · Verified</div>
@@ -289,7 +289,7 @@ function Home() {
                 </dd>
               </dl>
               <div className="mx-3 rule-dotted" aria-hidden />
-              <p className="px-3 py-3 italic font-serif text-[15px] text-[var(--color-ink-black)]/85 leading-snug">
+              <p className="px-3 py-3 italic font-body text-[14px] text-[var(--color-ink-grey)] leading-snug normal-case">
                 "{w.quote}"
               </p>
             </article>
@@ -297,7 +297,7 @@ function Home() {
         </div>
       </section>
 
-      <div className="mx-auto max-w-7xl px-4 mt-8"><div role="separator" aria-hidden className="perf-rule" /></div>
+      <div className="mx-auto max-w-7xl px-4 mt-6 md:mt-10"><div role="separator" aria-hidden className="perf-rule" /></div>
 
       <SiteFooter />
     </div>
