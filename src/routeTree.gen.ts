@@ -18,6 +18,7 @@ import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PastDrawsRouteImport } from './routes/past-draws'
 import { Route as OddsRouteImport } from './routes/odds'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
+import { Route as HowEntryWorksRouteImport } from './routes/how-entry-works'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CheckoutRouteImport } from './routes/checkout'
@@ -76,6 +77,11 @@ const OddsRoute = OddsRouteImport.update({
 const HowItWorksRoute = HowItWorksRouteImport.update({
   id: '/how-it-works',
   path: '/how-it-works',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HowEntryWorksRoute = HowEntryWorksRouteImport.update({
+  id: '/how-entry-works',
+  path: '/how-entry-works',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FaqRoute = FaqRouteImport.update({
@@ -157,6 +163,7 @@ export interface FileRoutesByFullPath {
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
+  '/how-entry-works': typeof HowEntryWorksRoute
   '/how-it-works': typeof HowItWorksRoute
   '/odds': typeof OddsRoute
   '/past-draws': typeof PastDrawsRoute
@@ -182,6 +189,7 @@ export interface FileRoutesByTo {
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
+  '/how-entry-works': typeof HowEntryWorksRoute
   '/how-it-works': typeof HowItWorksRoute
   '/odds': typeof OddsRoute
   '/past-draws': typeof PastDrawsRoute
@@ -208,6 +216,7 @@ export interface FileRoutesById {
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
+  '/how-entry-works': typeof HowEntryWorksRoute
   '/how-it-works': typeof HowItWorksRoute
   '/odds': typeof OddsRoute
   '/past-draws': typeof PastDrawsRoute
@@ -235,6 +244,7 @@ export interface FileRouteTypes {
     | '/checkout'
     | '/contact'
     | '/faq'
+    | '/how-entry-works'
     | '/how-it-works'
     | '/odds'
     | '/past-draws'
@@ -260,6 +270,7 @@ export interface FileRouteTypes {
     | '/checkout'
     | '/contact'
     | '/faq'
+    | '/how-entry-works'
     | '/how-it-works'
     | '/odds'
     | '/past-draws'
@@ -285,6 +296,7 @@ export interface FileRouteTypes {
     | '/checkout'
     | '/contact'
     | '/faq'
+    | '/how-entry-works'
     | '/how-it-works'
     | '/odds'
     | '/past-draws'
@@ -311,6 +323,7 @@ export interface RootRouteChildren {
   CheckoutRoute: typeof CheckoutRoute
   ContactRoute: typeof ContactRoute
   FaqRoute: typeof FaqRoute
+  HowEntryWorksRoute: typeof HowEntryWorksRoute
   HowItWorksRoute: typeof HowItWorksRoute
   OddsRoute: typeof OddsRoute
   PastDrawsRoute: typeof PastDrawsRoute
@@ -392,6 +405,13 @@ declare module '@tanstack/react-router' {
       path: '/how-it-works'
       fullPath: '/how-it-works'
       preLoaderRoute: typeof HowItWorksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/how-entry-works': {
+      id: '/how-entry-works'
+      path: '/how-entry-works'
+      fullPath: '/how-entry-works'
+      preLoaderRoute: typeof HowEntryWorksRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/faq': {
@@ -503,6 +523,7 @@ const rootRouteChildren: RootRouteChildren = {
   CheckoutRoute: CheckoutRoute,
   ContactRoute: ContactRoute,
   FaqRoute: FaqRoute,
+  HowEntryWorksRoute: HowEntryWorksRoute,
   HowItWorksRoute: HowItWorksRoute,
   OddsRoute: OddsRoute,
   PastDrawsRoute: PastDrawsRoute,
