@@ -1,0 +1,96 @@
+name: Visual regression
+
+# Blocks merges into main when screenshots for /competitions or a competition
+# detail page drift beyond tolerance vs the baselines checked into
+# tests/e2e/baselines/visual/.
+#
+# To intentionally refresh baselines after a design change:
+#   python3 tests/e2e/visual_regression.py --update
+# then commit the updated PNGs under tests/e2e/baselines/visual/.
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: visual-regression-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  visual-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    env:
+      # Match the base URL the runner in tests/e2e/visual_regression.py expects.
+      CI: "true"
+      PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS: "1"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Python deps for the visual runner
+        run: python -m pip install --no-cache-dir playwright pillow
+
+      - name: Install Playwright Chromium
+        run: python -m playwright install --with-deps chromium
+
+      - name: Build app
+        run: bun run build
+
+      - name: Start preview server
+        run: |
+          # visual_regression.py hits http://localhost:8080 — match that.
+          nohup bun run preview --port 8080 --host 127.0.0.1 > /tmp/preview.log 2>&1 &
+          echo $! > /tmp/preview.pid
+
+      - name: Wait for preview server
+        run: |
+          for i in $(seq 1 60); do
+            if curl -sf -o /dev/null http://localhost:8080/; then
+              echo "preview up"; exit 0
+            fi
+            sleep 1
+          done
+          echo "preview never became ready"; tail -n 100 /tmp/preview.log; exit 1
+
+      - name: Run visual regression checks
+        run: python3 tests/e2e/visual_regression.py
+
+      - name: Upload diff artifacts on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-regression-diffs
+          path: |
+            /tmp/browser/visual-regression/**
+            /tmp/preview.log
+          if-no-files-found: ignore
+          retention-days: 14
+
+      - name: Stop preview server
+        if: always()
+        run: |
+          if [ -f /tmp/preview.pid ]; then kill "$(cat /tmp/preview.pid)" 2>/dev/null || true; fi
