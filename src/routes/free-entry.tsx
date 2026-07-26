@@ -66,8 +66,8 @@ function FreeEntry() {
       const { data, error } = await supabase.rpc("submit_free_entry", {
         p_slug: slug,
         p_email: email,
-        p_ip: null,
-        p_user_agent: typeof navigator !== "undefined" ? navigator.userAgent.slice(0, 200) : null,
+        p_ip: undefined,
+        p_user_agent: typeof navigator !== "undefined" ? navigator.userAgent.slice(0, 200) : undefined,
       });
       if (error) throw error;
       setAssignedNumber(data as number);
