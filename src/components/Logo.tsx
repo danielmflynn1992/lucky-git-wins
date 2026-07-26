@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import crest from "@/assets/lucky-git-seal.png.asset.json";
-import lockupImage from "@/assets/lockups/lockup-horizontal.png.asset.json";
+import lockupImage from "@/assets/lockups/lockup-horizontal-v2.png.asset.json";
 
 const CREST_URL = crest.url;
 const LOCKUP_URL = lockupImage.url;
