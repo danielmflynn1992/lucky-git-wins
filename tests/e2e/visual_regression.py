@@ -34,7 +34,9 @@ OUT = Path("/tmp/browser/visual-regression")
 BASELINES.mkdir(parents=True, exist_ok=True)
 OUT.mkdir(parents=True, exist_ok=True)
 
-VIEWPORTS = [("mobile", 390, 1400), ("desktop", 1280, 1800)]
+# iPad-portrait sized tablet catches the mid-band where mobile 2-col grids
+# hand off to desktop 3-col and card content re-flows.
+VIEWPORTS = [("mobile", 390, 1400), ("tablet", 768, 1600), ("desktop", 1280, 1800)]
 
 # (route_path, label, wait_for_selector) — detail slug is filled in at runtime.
 ROUTES: list[tuple[str, str, str]] = [
