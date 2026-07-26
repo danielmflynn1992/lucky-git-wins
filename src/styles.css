@@ -5,23 +5,26 @@
 @custom-variant dark (&:is(.dark *));
 
 /* ============================================================
- * LUCKY GIT COMPS — Design System v2
- * Fintech-calm. Emerald / muted gold on cool paper.
- * Bricolage Grotesque (loud display) + DM Sans (body) + Space Mono (numerals)
+ * LUCKY GIT COMPS — Design System v3 ("Editorial Dark")
+ * Dark ink-green stage by default, bone content cards for reading.
+ * Instrument Serif (display) + Inter Tight (body) + JetBrains Mono (numerals).
  * ============================================================ */
 
 @theme inline {
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --radius-2xl: calc(var(--radius) + 8px);
-  --radius-3xl: calc(var(--radius) + 12px);
+  /* Sharp everywhere by default. Pill kept for chips/buttons/countdowns. */
+  --radius-sm: 2px;
+  --radius-md: 2px;
+  --radius-lg: 2px;
+  --radius-xl: 2px;
+  --radius-2xl: 2px;
+  --radius-3xl: 2px;
+  --radius-sharp: 2px;
+  --radius-pill: 9999px;
 
-  --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
-  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "Space Mono", "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
-  --font-serif: var(--font-sans);
+  --font-display: "Instrument Serif", "Times New Roman", ui-serif, Georgia, serif;
+  --font-sans: "Inter Tight", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-serif: var(--font-display);
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -49,49 +52,121 @@
   --color-gold-foreground: var(--gold-foreground);
   --color-cream: var(--cream);
   --color-ink: var(--ink);
+  --color-ink-deep: var(--ink-deep);
+  --color-bone: var(--bone);
+  --color-ember: var(--ember);
   --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
   --color-hot: var(--hot);
   --color-hot-foreground: var(--hot-foreground);
 
-  --shadow-sticker: 0 1px 0 rgba(11, 31, 23, 0.04);
-  --shadow-card: 0 1px 0 rgba(11, 31, 23, 0.03);
+  --color-n-100: var(--n-100);
+  --color-n-200: var(--n-200);
+  --color-n-300: var(--n-300);
+  --color-n-400: var(--n-400);
+  --color-n-500: var(--n-500);
+  --color-n-600: var(--n-600);
+  --color-n-700: var(--n-700);
+  --color-n-800: var(--n-800);
+  --color-n-900: var(--n-900);
+
+  --shadow-sticker: 0 1px 0 rgba(0, 0, 0, 0.25);
+  --shadow-card: 0 1px 0 rgba(0, 0, 0, 0.2);
+  --shadow-lift: 0 30px 60px -24px rgba(0, 0, 0, 0.55), 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
 :root {
-  --radius: 0.375rem;
+  --radius: 2px;
+  --space-section: clamp(4rem, 9vw, 8rem);
 
-  /* Brand — pulled directly from the mascot lockup:
-     deep sign-writer emerald, warm brass gold, cream sheepskin. */
-  --ink: #1B2A22;                       /* Warm near-black, tuned to emerald */
-  --surface: #FFFFFF;                   /* White cards */
-  --cream: #FBF3E2;                     /* Sheepskin cream */
-  --clover: #0F6B3F;                    /* Deep emerald — logo fill */
-  --clover-deep: #0A4F2E;               /* Darker emerald for hovers */
-  --gold: #E8B54D;                      /* Brass gold — logo outline */
-  --gold-foreground: #1B2A22;
-  --hot: #C0392B;                       /* Warm brick red — urgency that plays with emerald/gold */
-  --hot-foreground: #FFFFFF;
+  /* Brand — dark editorial stage */
+  --ink-deep: #07120D;                  /* Page bg — near-black green */
+  --ink: #0E1B15;                       /* Elevated dark surface */
+  --surface: #14251D;                   /* Slightly raised dark surface */
+  --surface-raised: #17281F;            /* Centre of prize-stage radial */
+  --bone: #F1E8D3;                      /* Light content surface for reading */
+  --cream: #F1E8D3;                     /* Alias — kept for existing markup */
 
-  /* Semantic mapping — light by default */
-  --background: #F6F1E4;                /* Warm cream page bg (paler sheepskin) */
-  --foreground: #1B2A22;
-  --card: #FFFFFF;
-  --card-foreground: #1B2A22;
-  --popover: #FFFFFF;
-  --popover-foreground: #1B2A22;
+  --clover: #14634A;                    /* Structural deep green */
+  --clover-deep: #0C4132;               /* Hover / darker green */
+  --gold: #C9A24A;                      /* Metallic brass base */
+  --gold-foreground: #0E1B15;
+  --ember: #B8552E;                     /* Desaturated rust — replaces red */
+  --hot: var(--ember);                  /* Backwards compat — no more brick red */
+  --hot-foreground: #F1E8D3;
+
+  --gradient-gold: linear-gradient(135deg, #EBD08A 0%, #C9A24A 40%, #7E5F22 100%);
+  --gradient-prize-stage:
+    radial-gradient(ellipse 70% 60% at 50% 45%, var(--surface-raised) 0%, #0B1712 62%, var(--ink-deep) 100%);
+  --rim-gold: radial-gradient(ellipse 90% 40% at 50% 12%, rgba(201, 162, 74, 0.14) 0%, transparent 60%);
+
+  /* Neutral ramp — cool near-black through bone.
+     Use these for the bulk of the interface; keep green + gold sparing. */
+  --n-900: #050C08;
+  --n-800: #0E1B15;
+  --n-700: #17251E;
+  --n-600: #2A3A32;
+  --n-500: #55655C;
+  --n-400: #8A9990;
+  --n-300: #B3BEB6;
+  --n-200: #D6DBD4;
+  --n-100: #ECEFE9;
+
+  /* Semantic mapping — DARK by default */
+  --background: var(--ink-deep);
+  --foreground: #E9E1CC;                /* Warm bone text on dark */
+  --card: var(--ink);
+  --card-foreground: #E9E1CC;
+  --popover: var(--ink);
+  --popover-foreground: #E9E1CC;
   --primary: var(--clover);
-  --primary-foreground: #FFFFFF;
-  --secondary: #EFE7D3;
-  --secondary-foreground: #1B2A22;
-  --muted: #EFE7D3;
-  --muted-foreground: #6B6152;
+  --primary-foreground: #F1E8D3;
+  --secondary: var(--n-700);
+  --secondary-foreground: #E9E1CC;
+  --muted: var(--n-800);
+  --muted-foreground: #9AA79E;          /* 4.5:1 on ink-deep */
   --accent: var(--gold);
   --accent-foreground: var(--gold-foreground);
-  --destructive: var(--hot);
-  --destructive-foreground: #FFFFFF;
-  --border: #E4DAC2;
-  --input: #E4DAC2;
-  --ring: var(--clover);
+  --destructive: var(--ember);
+  --destructive-foreground: #F1E8D3;
+  --border: rgba(241, 232, 211, 0.08);  /* Hairline — 8% foreground */
+  --input: rgba(241, 232, 211, 0.10);
+  --ring: var(--gold);
+}
+
+/* Light content island — put this on a wrapper around reading-heavy blocks.
+   All descendant semantic tokens invert so nested cards, buttons, and text
+   read correctly on the bone surface. */
+.on-light {
+  --background: var(--bone);
+  --foreground: var(--n-900);
+  --card: #FFFFFF;
+  --card-foreground: var(--n-900);
+  --popover: #FFFFFF;
+  --popover-foreground: var(--n-900);
+  --secondary: #E7DFC9;
+  --secondary-foreground: var(--n-900);
+  --muted: #E7DFC9;
+  --muted-foreground: #5C6660;
+  --border: rgba(14, 27, 21, 0.10);
+  --input: rgba(14, 27, 21, 0.12);
+  background-color: var(--bone);
+  color: var(--n-900);
+}
+
+.on-dark {
+  --background: var(--ink-deep);
+  --foreground: #E9E1CC;
+  --card: var(--ink);
+  --card-foreground: #E9E1CC;
+  --secondary: var(--n-700);
+  --secondary-foreground: #E9E1CC;
+  --muted: var(--n-800);
+  --muted-foreground: #9AA79E;
+  --border: rgba(241, 232, 211, 0.08);
+  --input: rgba(241, 232, 211, 0.10);
+  background-color: var(--ink-deep);
+  color: #E9E1CC;
 }
 
 @layer base {
@@ -101,20 +176,31 @@
   html {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    color-scheme: dark;
   }
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
     font-feature-settings: "ss01", "cv11";
+    line-height: 1.65;
+    font-variant-numeric: tabular-nums;
   }
-  h1, h2, h3, h4, .font-display {
+  h1, h2, h3, h4, .font-display, .font-serif {
     font-family: var(--font-display);
-    font-weight: 800;
-    letter-spacing: -0.035em;
+    font-weight: 400;                   /* Instrument Serif is beautifully weighted at regular */
+    letter-spacing: -0.03em;
+    line-height: 0.95;
   }
+  /* Fluid editorial type scale — display sizes are deliberately huge */
+  h1 { font-size: clamp(2.75rem, 7.5vw, 6rem); }
+  h2 { font-size: clamp(2rem, 4.5vw, 3.5rem); }
+  h3 { font-size: clamp(1.5rem, 2.5vw, 2rem); }
+  h4 { font-size: clamp(1.25rem, 1.6vw, 1.5rem); }
+
   .font-mono, .tabular-nums {
     font-variant-numeric: tabular-nums;
+    font-feature-settings: "zero", "ss01";
   }
   /* Form controls & SVG text inherit site typography */
   input, button, textarea, select, optgroup {
@@ -138,37 +224,72 @@
   /* Embedded frames — zero chrome, inherit color-scheme */
   iframe, embed, object, video {
     font-family: var(--font-sans);
-    color-scheme: light;
+    color-scheme: dark;
   }
+  ::selection { background: rgba(201, 162, 74, 0.35); color: #F1E8D3; }
 }
 
-/* Hero backdrop — soft emerald wash on light grey */
+/* Hero backdrop — soft emerald wash on dark ink */
 @utility bg-clover-pattern {
-  background-color: #F6F1E4;
+  background-color: var(--ink-deep);
   background-image:
-    radial-gradient(circle at 15% 10%, rgba(15, 107, 63, 0.12) 0%, transparent 45%),
-    radial-gradient(circle at 85% 90%, rgba(232, 181, 77, 0.14) 0%, transparent 45%);
+    radial-gradient(circle at 15% 10%, rgba(20, 99, 74, 0.35) 0%, transparent 55%),
+    radial-gradient(circle at 85% 90%, rgba(201, 162, 74, 0.18) 0%, transparent 55%);
 }
 
-/* Ambient site-wide background — very subtle on light grey */
+/* Ambient site-wide background — subtle warm glow on dark ink */
 @utility bg-ambient {
-  background-color: #F6F1E4;
+  background-color: var(--ink-deep);
   background-image:
-    radial-gradient(ellipse 80% 60% at 20% 0%, rgba(15, 107, 63, 0.07) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 40% at 90% 100%, rgba(232, 181, 77, 0.09) 0%, transparent 60%);
+    radial-gradient(ellipse 80% 60% at 20% 0%, rgba(20, 99, 74, 0.20) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 90% 100%, rgba(201, 162, 74, 0.10) 0%, transparent 60%);
   background-attachment: fixed;
 }
 
-/* "Glass" surface — repurposed as clean white card on light theme */
-@utility glass {
-  background-color: #FFFFFF;
-  border: 1px solid var(--border);
-  box-shadow: 0 1px 2px rgba(27, 42, 34, 0.05), 0 1px 3px rgba(27, 42, 34, 0.06);
+/* Prize / hero stage — dark radial cinematic backdrop with warm rim */
+@utility bg-prize-stage {
+  background-color: var(--ink-deep);
+  background-image: var(--rim-gold), var(--gradient-prize-stage);
 }
 
-/* Cinematic gradient text — ink to emerald */
+/* Very subtle grain overlay — apply via ::after on dark surfaces to stop them
+   reading as flat and digital. 2–3% opacity noise. */
+@utility bg-grain {
+  position: relative;
+}
+.bg-grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+/* Card surface (dark by default; light when inside .on-light) */
+@utility glass {
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-lift);
+}
+
+/* Metallic gold surface + gold text gradient */
+@utility bg-gradient-gold {
+  background-image: var(--gradient-gold);
+  color: var(--gold-foreground);
+}
+@utility text-gradient-gold {
+  background-image: var(--gradient-gold);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Cinematic gradient text — bone to gold (kept name for backwards compat) */
 @utility text-gradient-mint {
-  background-image: linear-gradient(100deg, #1B2A22 0%, #1B2A22 50%, #0F6B3F 100%);
+  background-image: linear-gradient(100deg, #E9E1CC 0%, #E9E1CC 55%, #C9A24A 100%);
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
@@ -183,16 +304,16 @@
 
 /* Slim gradient progress fill */
 @utility shimmer {
-  background: linear-gradient(90deg, var(--clover) 0%, color-mix(in oklab, var(--clover) 60%, var(--gold)) 100%);
+  background: linear-gradient(90deg, var(--clover) 0%, var(--gold) 100%);
 }
 
 /* Restrained hover — opacity/colour only */
 @utility hover-wobble { transition: opacity 0.15s ease, background-color 0.15s ease; }
 
-/* Countdown urgency — subtle border tint, no pulsing box-shadow */
+/* Countdown urgency — desaturated ember, no more brick red */
 @utility urgent-pulse {
-  border-color: var(--hot);
-  color: var(--hot);
+  border-color: var(--ember);
+  color: var(--ember);
 }
 
 /* Live odds ticker — continuous horizontal scroll */
