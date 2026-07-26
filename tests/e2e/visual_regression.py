@@ -59,21 +59,94 @@ async def discover_detail_slug(page) -> str | None:
     return href.split("/competitions/")[-1].split("?")[0].split("#")[0]
 
 
+# Fixed instant used for Date.now / new Date() inside the browser so any
+# time-derived UI (countdowns, "X ago" labels, next-drop timers) resolves to
+# the same value on every run. 2026-06-15 12:00:00 UTC.
+FROZEN_NOW_MS = 1_781_784_000_000
+
+# Injected before any app code runs. Freezes Date + seeds Math.random so the
+# React tree renders the same pixels across CI runs. Deterministic Math.random
+# uses mulberry32 with a fixed seed.
+DETERMINISM_SCRIPT = f"""
+(() => {{
+  const FIXED = {FROZEN_NOW_MS};
+  const RealDate = Date;
+  function FrozenDate(...args) {{
+    if (args.length === 0) return new RealDate(FIXED);
+    // @ts-ignore
+    return new RealDate(...args);
+  }}
+  FrozenDate.now = () => FIXED;
+  FrozenDate.parse = RealDate.parse;
+  FrozenDate.UTC = RealDate.UTC;
+  FrozenDate.prototype = RealDate.prototype;
+  // @ts-ignore
+  globalThis.Date = FrozenDate;
+
+  let seed = 0x9E3779B9;
+  Math.random = function () {{
+    seed |= 0; seed = (seed + 0x6D2B79F5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  }};
+
+  // performance.now — some libs use this for animation seeds.
+  if (globalThis.performance && typeof performance.now === 'function') {{
+    const start = FIXED;
+    performance.now = () => 0;
+    // keep timeOrigin stable
+    try {{ Object.defineProperty(performance, 'timeOrigin', {{ value: start, configurable: true }}); }} catch (_) {{}}
+  }}
+}})();
+"""
+
+# CSS applied post-nav to mask dynamic UI with a solid deterministic block
+# that preserves layout (visibility:hidden would still keep width/height,
+# but a colored fill makes drift instantly obvious in the diff PNG).
+MASK_CSS = """
+[data-dynamic],
+[data-live],
+[data-countdown],
+.live-ticker,
+.ticker-scroll {
+  background: repeating-linear-gradient(
+    45deg, #e5e7eb 0 6px, #f3f4f6 6px 12px
+  ) !important;
+  color: transparent !important;
+  text-shadow: none !important;
+  border-color: #e5e7eb !important;
+  box-shadow: none !important;
+}
+[data-dynamic] *, [data-live] *, [data-countdown] * {
+  color: transparent !important;
+  background: transparent !important;
+  border-color: transparent !important;
+  fill: transparent !important;
+  text-shadow: none !important;
+  box-shadow: none !important;
+  animation: none !important;
+  transition: none !important;
+}
+*, *::before, *::after {
+  animation: none !important;
+  transition: none !important;
+  caret-color: transparent !important;
+  scroll-behavior: auto !important;
+}
+"""
+
+
 async def capture(page, path: str, wait_sel: str, out_path: Path) -> None:
     await page.goto(f"{BASE_URL}{path}", wait_until="networkidle")
     try:
         await page.wait_for_selector(wait_sel, timeout=5000)
     except Exception:
         pass
-    # Freeze animations/countdowns so screenshots are deterministic.
-    await page.add_style_tag(content="""
-        *, *::before, *::after {
-            animation: none !important;
-            transition: none !important;
-            caret-color: transparent !important;
-        }
-        [data-countdown], .live-ticker, [data-live] { visibility: hidden !important; }
-    """)
+    # Deterministic stubbing: freeze animations + mask any element tagged as
+    # dynamic UI (countdowns, tickers, "next drop" clocks, random banners).
+    # Date/Math.random are already frozen via add_init_script at context setup.
+    await page.add_style_tag(content=MASK_CSS)
     await page.evaluate("window.scrollTo(0, 0)")
     await page.wait_for_timeout(300)
     await page.screenshot(path=str(out_path))
@@ -130,6 +203,9 @@ async def main() -> int:
             ctx = await browser.new_context(
                 viewport={"width": w, "height": h}, device_scale_factor=1
             )
+            # Freeze Date + seed Math.random for every page opened in this
+            # context. Safe here because we only ever navigate to localhost.
+            await ctx.add_init_script(DETERMINISM_SCRIPT)
             page = await ctx.new_page()
             for route_path, label, wait_sel in ROUTES:
                 path = f"/competitions/{slug}" if route_path == "__DETAIL__" else route_path

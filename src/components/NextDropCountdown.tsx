@@ -55,7 +55,7 @@ export function NextDropCountdown() {
           </span>
           <div>
             <div id="next-drop-heading" className="text-[10px] font-mono uppercase tracking-[0.25em] text-clover font-bold">Next drop</div>
-            <div className="font-display text-xl md:text-2xl font-black tracking-tight tabular-nums">{fmt(remaining)}</div>
+            <div data-dynamic="countdown" className="font-display text-xl md:text-2xl font-black tracking-tight tabular-nums">{fmt(remaining)}</div>
             <div className="text-xs text-muted-foreground mt-0.5">Drops on {scheduleSummary(schedule)}</div>
           </div>
         </div>
