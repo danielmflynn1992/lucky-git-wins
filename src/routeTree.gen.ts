@@ -10,10 +10,13 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WinnersRouteImport } from './routes/winners'
+import { Route as VerifyRouteImport } from './routes/verify'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as ResponsiblePlayRouteImport } from './routes/responsible-play'
+import { Route as PromiseRouteImport } from './routes/promise'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PastDrawsRouteImport } from './routes/past-draws'
+import { Route as OddsRouteImport } from './routes/odds'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -34,6 +37,11 @@ const WinnersRoute = WinnersRouteImport.update({
   path: '/winners',
   getParentRoute: () => rootRouteImport,
 } as any)
+const VerifyRoute = VerifyRouteImport.update({
+  id: '/verify',
+  path: '/verify',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
   path: '/terms',
@@ -44,6 +52,11 @@ const ResponsiblePlayRoute = ResponsiblePlayRouteImport.update({
   path: '/responsible-play',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PromiseRoute = PromiseRouteImport.update({
+  id: '/promise',
+  path: '/promise',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
@@ -52,6 +65,11 @@ const PrivacyRoute = PrivacyRouteImport.update({
 const PastDrawsRoute = PastDrawsRouteImport.update({
   id: '/past-draws',
   path: '/past-draws',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OddsRoute = OddsRouteImport.update({
+  id: '/odds',
+  path: '/odds',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HowItWorksRoute = HowItWorksRouteImport.update({
@@ -134,10 +152,13 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
   '/how-it-works': typeof HowItWorksRoute
+  '/odds': typeof OddsRoute
   '/past-draws': typeof PastDrawsRoute
   '/privacy': typeof PrivacyRoute
+  '/promise': typeof PromiseRoute
   '/responsible-play': typeof ResponsiblePlayRoute
   '/terms': typeof TermsRoute
+  '/verify': typeof VerifyRoute
   '/winners': typeof WinnersRoute
   '/competitions/$slug': typeof CompetitionsSlugRoute
   '/admin/': typeof AdminIndexRoute
@@ -154,10 +175,13 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
   '/how-it-works': typeof HowItWorksRoute
+  '/odds': typeof OddsRoute
   '/past-draws': typeof PastDrawsRoute
   '/privacy': typeof PrivacyRoute
+  '/promise': typeof PromiseRoute
   '/responsible-play': typeof ResponsiblePlayRoute
   '/terms': typeof TermsRoute
+  '/verify': typeof VerifyRoute
   '/winners': typeof WinnersRoute
   '/competitions/$slug': typeof CompetitionsSlugRoute
   '/admin': typeof AdminIndexRoute
@@ -176,10 +200,13 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
   '/how-it-works': typeof HowItWorksRoute
+  '/odds': typeof OddsRoute
   '/past-draws': typeof PastDrawsRoute
   '/privacy': typeof PrivacyRoute
+  '/promise': typeof PromiseRoute
   '/responsible-play': typeof ResponsiblePlayRoute
   '/terms': typeof TermsRoute
+  '/verify': typeof VerifyRoute
   '/winners': typeof WinnersRoute
   '/competitions/$slug': typeof CompetitionsSlugRoute
   '/admin/': typeof AdminIndexRoute
@@ -198,10 +225,13 @@ export interface FileRouteTypes {
     | '/contact'
     | '/faq'
     | '/how-it-works'
+    | '/odds'
     | '/past-draws'
     | '/privacy'
+    | '/promise'
     | '/responsible-play'
     | '/terms'
+    | '/verify'
     | '/winners'
     | '/competitions/$slug'
     | '/admin/'
@@ -218,10 +248,13 @@ export interface FileRouteTypes {
     | '/contact'
     | '/faq'
     | '/how-it-works'
+    | '/odds'
     | '/past-draws'
     | '/privacy'
+    | '/promise'
     | '/responsible-play'
     | '/terms'
+    | '/verify'
     | '/winners'
     | '/competitions/$slug'
     | '/admin'
@@ -239,10 +272,13 @@ export interface FileRouteTypes {
     | '/contact'
     | '/faq'
     | '/how-it-works'
+    | '/odds'
     | '/past-draws'
     | '/privacy'
+    | '/promise'
     | '/responsible-play'
     | '/terms'
+    | '/verify'
     | '/winners'
     | '/competitions/$slug'
     | '/admin/'
@@ -261,10 +297,13 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   FaqRoute: typeof FaqRoute
   HowItWorksRoute: typeof HowItWorksRoute
+  OddsRoute: typeof OddsRoute
   PastDrawsRoute: typeof PastDrawsRoute
   PrivacyRoute: typeof PrivacyRoute
+  PromiseRoute: typeof PromiseRoute
   ResponsiblePlayRoute: typeof ResponsiblePlayRoute
   TermsRoute: typeof TermsRoute
+  VerifyRoute: typeof VerifyRoute
   WinnersRoute: typeof WinnersRoute
   CompetitionsSlugRoute: typeof CompetitionsSlugRoute
   AdminIndexRoute: typeof AdminIndexRoute
@@ -281,6 +320,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WinnersRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/verify': {
+      id: '/verify'
+      path: '/verify'
+      fullPath: '/verify'
+      preLoaderRoute: typeof VerifyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/terms': {
       id: '/terms'
       path: '/terms'
@@ -295,6 +341,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResponsiblePlayRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/promise': {
+      id: '/promise'
+      path: '/promise'
+      fullPath: '/promise'
+      preLoaderRoute: typeof PromiseRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/privacy': {
       id: '/privacy'
       path: '/privacy'
@@ -307,6 +360,13 @@ declare module '@tanstack/react-router' {
       path: '/past-draws'
       fullPath: '/past-draws'
       preLoaderRoute: typeof PastDrawsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/odds': {
+      id: '/odds'
+      path: '/odds'
+      fullPath: '/odds'
+      preLoaderRoute: typeof OddsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/how-it-works': {
@@ -432,10 +492,13 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   FaqRoute: FaqRoute,
   HowItWorksRoute: HowItWorksRoute,
+  OddsRoute: OddsRoute,
   PastDrawsRoute: PastDrawsRoute,
   PrivacyRoute: PrivacyRoute,
+  PromiseRoute: PromiseRoute,
   ResponsiblePlayRoute: ResponsiblePlayRoute,
   TermsRoute: TermsRoute,
+  VerifyRoute: VerifyRoute,
   WinnersRoute: WinnersRoute,
   CompetitionsSlugRoute: CompetitionsSlugRoute,
   AdminIndexRoute: AdminIndexRoute,

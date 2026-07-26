@@ -6,6 +6,8 @@ import { z } from "zod";
 import { useMemo } from "react";
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
+import { Link } from "@tanstack/react-router";
+import { Shield } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 type Draw = {
@@ -309,6 +311,13 @@ function PastDrawsPage() {
                     {d.winner_town && (
                       <div className="text-sm text-muted-foreground">{d.winner_town}</div>
                     )}
+                    <Link
+                      to="/verify"
+                      search={{ draw: d.id }}
+                      className="mt-2 inline-flex items-center gap-1 text-[11px] font-mono uppercase tracking-widest text-clover font-bold hover:underline"
+                    >
+                      <Shield className="h-3 w-3" /> Verify this draw
+                    </Link>
                   </div>
                 </div>
 

@@ -10,6 +10,7 @@ import { ViewToggle } from "@/routes/competitions.index";
 import { Countdown } from "@/components/Countdown";
 import { SmugSmile } from "@/components/Logo";
 import { LiveOddsTicker } from "@/components/LiveOddsTicker";
+import { NextDropCountdown } from "@/components/NextDropCountdown";
 import { COMPETITIONS, CATEGORIES, WINNERS, type Category } from "@/lib/mock-comps";
 import { gbp } from "@/lib/format";
 import { Button } from "@/components/ui/button";
@@ -58,6 +59,7 @@ function Home() {
     <div className="min-h-screen flex flex-col bg-ambient">
       <SiteNav />
       <LiveOddsTicker />
+      <NextDropCountdown />
 
       {/* HERO */}
       <section className="relative bg-clover-pattern overflow-hidden border-b border-border">
