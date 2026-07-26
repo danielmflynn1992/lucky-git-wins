@@ -49,10 +49,10 @@ export function CompCard({ c }: { c: Competition }) {
 
       {/* RED MASTHEAD */}
       <header className="relative z-10 bg-[var(--color-ink-red)] text-[var(--color-paper)] px-3 py-1.5 flex items-baseline justify-between gap-2 min-w-0">
-        <span className="font-body font-bold uppercase tracking-[0.16em] text-[10px] shrink-0 opacity-95">
+        <span className="font-body font-bold uppercase tracking-[0.16em] text-[9px] min-w-0 truncate opacity-95">
           {c.category}
         </span>
-        <span className="font-mono tabular-nums text-[10px] whitespace-nowrap opacity-95">
+        <span className="font-mono tabular-nums text-[9px] whitespace-nowrap shrink-0 opacity-95">
           № {pad(1, serialWidth)}–{pad(c.totalTickets, serialWidth)}
         </span>
       </header>
@@ -69,27 +69,26 @@ export function CompCard({ c }: { c: Competition }) {
 
       <div className="mx-3 rule-dotted" aria-hidden="true" />
 
-      {/* Prize image in ruled black box */}
-      <div className="pointer-events-none relative z-0 mx-3 mt-2 overflow-hidden border border-[var(--color-ink-black)] bg-[var(--color-paper-deep)]">
-        <LetterboxImage
+      {/* Prize image on the printed stage — 4:3, cover, halftone + tint. */}
+      <div className="prize-treatment pointer-events-none relative z-0 mx-3 mt-2 aspect-[4/3]">
+        <img
           src={c.image}
           alt={c.title}
-          style={c.letterboxStyle ?? "blur"}
-          className="aspect-[5/4] relative z-[1]"
-          imgClassName="transition-transform duration-500 group-hover:scale-[1.03]"
+          loading="lazy"
           width={1280}
-          height={1024}
+          height={960}
+          className="transition-transform duration-500 group-hover:scale-[1.03]"
         />
         {soldOut ? (
-          <span className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
+          <span className="absolute inset-0 z-[5] flex items-center justify-center pointer-events-none">
             <StampMark variant="SOLD OUT" size="lg" angle={-10} />
           </span>
         ) : c.instantWin ? (
-          <span className="absolute top-2 right-2 z-10 pointer-events-none">
+          <span className="absolute top-2 right-2 z-[5] pointer-events-none">
             <StampMark variant="INSTANT WIN" size="sm" angle={-6} />
           </span>
         ) : almostGone ? (
-          <span className="absolute top-2 right-2 z-10 pointer-events-none">
+          <span className="absolute top-2 right-2 z-[5] pointer-events-none">
             <StampMark variant="LIVE" size="sm" angle={-4} />
           </span>
         ) : null}
