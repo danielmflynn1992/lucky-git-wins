@@ -294,8 +294,8 @@ function Home() {
       {/* NEWSLETTER */}
       <section className="mx-auto max-w-7xl px-4 mt-24 w-full">
         <div className="rounded-lg bg-ink text-cream p-8 md:p-12 relative overflow-hidden">
-          <div className="absolute top-6 right-6 opacity-40">
-            <SmugSmile className="h-20 w-20" />
+          <div className="absolute top-6 right-6 opacity-40 pointer-events-none">
+            <Lockup tone="cream" style={{ width: 160, height: "auto" }} />
           </div>
           <div className="relative max-w-xl">
             <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-clover font-bold">New comps · Weekly</div>
