@@ -323,7 +323,6 @@ export type Database = {
           p_instant_win_prize: number
           p_max_per_person: number
           p_price_per_ticket: number
-          p_skill_question: Json
           p_slug: string
           p_status: string
           p_subtitle: string
@@ -367,21 +366,11 @@ export type Database = {
       }
       release_reservation: { Args: { p_token: string }; Returns: undefined }
       reserve_lucky_dip: {
-        Args: {
-          p_qty: number
-          p_skill_answer: number
-          p_slug: string
-          p_token: string
-        }
+        Args: { p_qty: number; p_slug: string; p_token: string }
         Returns: number[]
       }
       reserve_specific_numbers: {
-        Args: {
-          p_numbers: number[]
-          p_skill_answer: number
-          p_slug: string
-          p_token: string
-        }
+        Args: { p_numbers: number[]; p_slug: string; p_token: string }
         Returns: number[]
       }
       sweep_expired_reservations: { Args: never; Returns: undefined }
