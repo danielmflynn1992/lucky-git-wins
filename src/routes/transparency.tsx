@@ -27,7 +27,7 @@ function TransparencyPage() {
   const drawsCount = winners.length;
   const avgOdds = COMPETITIONS.length
     ? Math.round(
-        COMPETITIONS.reduce((s, c) => s + c.totalTickets / Math.max(1, c.totalTickets - c.ticketsAvailable), 0) /
+        COMPETITIONS.reduce((s, c) => s + c.totalTickets / Math.max(1, c.ticketsSold), 0) /
           COMPETITIONS.length,
       )
     : 0;
