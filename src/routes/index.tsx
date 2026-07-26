@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { ChevronRight, Ticket, Shield, Radio, MessageSquareHeart, Sparkles } from "lucide-react";
+import { ChevronRight, Ticket, Shield, Radio, MessageSquareHeart } from "lucide-react";
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
 import { CompCard } from "@/components/CompCard";
