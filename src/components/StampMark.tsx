@@ -1,6 +1,6 @@
 /**
- * StampMark — rubber-stamp overprint.
- * Restraint: max one per card, two per screen. Replaces all badges.
+ * StampMark — rubber-stamp overprint. Replaces badges.
+ * Restraint: max one per card, two per screen.
  */
 import { cn } from "@/lib/utils";
 
@@ -37,8 +37,7 @@ export function StampMark({
     <span
       aria-label={variant}
       className={cn(
-        "inline-flex items-center font-display uppercase tracking-[0.14em] select-none",
-        "mix-blend-multiply",
+        "inline-flex items-center font-display uppercase tracking-[0.14em] select-none mix-blend-multiply",
         pad,
         className,
       )}
@@ -47,7 +46,6 @@ export function StampMark({
         borderColor: ink,
         transform: `rotate(${angle}deg)`,
         opacity: 0.82,
-        // ragged ink-bleed edge via inset text-shadow trick
         filter: "url(#stamp-noise)",
       }}
     >
@@ -56,7 +54,6 @@ export function StampMark({
   );
 }
 
-/** Once-per-app SVG filter for the stamp ink-bleed. Mount in root. */
 export function StampFilterDefs() {
   return (
     <svg width="0" height="0" style={{ position: "absolute" }} aria-hidden>
