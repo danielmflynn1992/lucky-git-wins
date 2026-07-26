@@ -12,84 +12,108 @@
 
 @theme {
   /* ---------- CORE SURFACES ---------- */
-  --color-ink-deep:      #0A100D;
-  --color-ink:           #0C1410;
-  --color-ink-raised:    #141E19;
-  --color-ink-hairline:  #1E2B24;
+  /* Painted signboard — warm brown-black, not cool near-black.
+     This warmth is what makes brass and cream sing against it. */
+  --color-pitch-deep:    #16110C;
+  --color-pitch:         #1B1610;
+  --color-pitch-raised:  #241C14;
+  --color-pitch-hairline:#2E251A;
+  /* Back-compat: existing components reference `ink*`. Point them at pitch. */
+  --color-ink-deep:      var(--color-pitch-deep);
+  --color-ink:           var(--color-pitch);
+  --color-ink-raised:    var(--color-pitch-raised);
+  --color-ink-hairline:  var(--color-pitch-hairline);
 
-  --color-bone:          #F4F1EA;
-  --color-bone-raised:   #FBFAF7;
-  --color-bone-hairline: #E2DED4;
+  /* Sheepskin cream — reading surface, aged paper. */
+  --color-sheepskin:         #F1E7CE;
+  --color-sheepskin-raised:  #F8F0DA;
+  --color-sheepskin-hairline:#DCCFA9;
+  --color-bone:          var(--color-sheepskin);
+  --color-bone-raised:   var(--color-sheepskin-raised);
+  --color-bone-hairline: var(--color-sheepskin-hairline);
 
   /* ---------- BRAND ---------- */
-  --color-clover:        #12503A;
-  --color-clover-hover:  #0D3D2C;
-  --color-clover-lift:   #1A6B4D;
-  /* Back-compat alias — existing components use `clover-deep` */
-  --color-clover-deep:   #0D3D2C;
+  /* Forest — structural surface: panels, primary buttons, stall headers. */
+  --color-forest:        #0F4A34;
+  --color-forest-hover:  #0A3826;
+  --color-forest-lift:   #16603F;
+  --color-clover:        var(--color-forest);
+  --color-clover-hover:  var(--color-forest-hover);
+  --color-clover-lift:   var(--color-forest-lift);
+  --color-clover-deep:   var(--color-forest-hover);
 
-  --color-gold:          #C9A227;
-  --color-gold-light:    #E5CE8F;
-  --color-gold-deep:     #A8821C;
-  --color-gold-foreground: #14130F;
+  /* Brass — never flat. Use the gradient + emboss shadows for real elements. */
+  --color-brass:            #C9A24A;
+  --color-brass-light:      #F0D783;
+  --color-brass-deep:       #8C6A1E;
+  --color-brass-foreground: #15110A;
+  --color-gold:             var(--color-brass);
+  --color-gold-light:       var(--color-brass-light);
+  --color-gold-deep:        var(--color-brass-deep);
+  --color-gold-foreground:  var(--color-brass-foreground);
 
-  --color-ember:         #B4593A;
-  /* Urgency accent — rust ember, never brick red */
-  --color-urgent:            #B4593A;
-  --color-urgent-foreground: #F7F6F3;
-  /* Back-compat aliases */
-  --color-hot:           #B4593A;
-  --color-hot-foreground: #F7F6F3;
+  /* Ember — rust urgency, never brick red. */
+  --color-ember:            #A84A26;
+  --color-urgent:           var(--color-ember);
+  --color-urgent-foreground:#F7F1E1;
+  --color-hot:              var(--color-ember);
+  --color-hot-foreground:   #F7F1E1;
 
   /* ---------- NEUTRAL RAMP ---------- */
-  --color-n-100: #F7F6F3;
-  --color-n-200: #E8E6E0;
-  --color-n-300: #CFCCC4;
-  --color-n-400: #A8A49A;
-  --color-n-500: #7D7970;
-  --color-n-600: #575349;
-  --color-n-700: #3A372F;
-  --color-n-800: #24221D;
-  --color-n-900: #14130F;
+  --color-n-100: #F7F1E1;
+  --color-n-200: #E8DEC3;
+  --color-n-300: #CDBF9A;
+  --color-n-400: #9E9273;
+  --color-n-500: #746A52;
+  --color-n-600: #4E4735;
+  --color-n-700: #362F22;
+  --color-n-800: #221C13;
+  --color-n-900: #15110A;
 
-  /* Back-compat alias — old markup uses `cream` */
-  --color-cream: #F4F1EA;
-  --color-surface: #0C1410;
-  --color-surface-raised: #141E19;
+  --color-cream:          var(--color-sheepskin);
+  --color-surface:        var(--color-pitch);
+  --color-surface-raised: var(--color-pitch-raised);
 
   /* ---------- SEMANTIC ---------- */
-  --color-background:        var(--color-ink-deep);
+  --color-background:        var(--color-pitch-deep);
   --color-foreground:        var(--color-n-100);
-  --color-card:              var(--color-ink);
+  --color-card:              var(--color-pitch);
   --color-card-foreground:   var(--color-n-100);
-  --color-popover:           var(--color-ink);
+  --color-popover:           var(--color-pitch);
   --color-popover-foreground: var(--color-n-100);
-  --color-primary:           var(--color-clover);
+  --color-primary:           var(--color-forest);
   --color-primary-foreground: var(--color-n-100);
-  --color-secondary:         var(--color-ink-raised);
+  --color-secondary:         var(--color-pitch-raised);
   --color-secondary-foreground: var(--color-n-100);
   --color-muted:             var(--color-n-800);
   --color-muted-foreground:  var(--color-n-400);
-  --color-accent:            var(--color-gold);
-  --color-accent-foreground: var(--color-gold-foreground);
+  --color-accent:            var(--color-brass);
+  --color-accent-foreground: var(--color-brass-foreground);
   --color-destructive:       var(--color-ember);
   --color-destructive-foreground: var(--color-n-100);
-  --color-border:            var(--color-ink-hairline);
-  --color-input:             var(--color-ink-hairline);
-  --color-ring:              var(--color-gold);
+  --color-border:            var(--color-pitch-hairline);
+  --color-input:             var(--color-pitch-hairline);
+  --color-ring:              var(--color-brass);
 
   /* ---------- GRADIENTS ---------- */
-  --gradient-gold: linear-gradient(135deg, #A8821C 0%, #E5CE8F 45%, #C9A227 60%, #8F6E15 100%);
-  --gradient-stage: radial-gradient(ellipse at 50% 45%, #182620 0%, #0C1410 55%, #0A100D 100%);
-  --gradient-fade-dark: linear-gradient(180deg, transparent 0%, #0A100D 100%);
-  --rim-gold: radial-gradient(ellipse 90% 40% at 50% 100%, rgba(201, 162, 39, 0.12) 0%, transparent 60%);
+  --gradient-brass: linear-gradient(160deg, #8C6A1E 0%, #E7CE7A 30%, #F5E1A0 48%, #C9A24A 62%, #7A5A18 100%);
+  --gradient-gold:  var(--gradient-brass);
+  --gradient-stage: radial-gradient(ellipse at 50% 45%, #2A2013 0%, #1B1610 55%, #16110C 100%);
+  --gradient-fade-dark: linear-gradient(180deg, transparent 0%, #16110C 100%);
+  --rim-gold: radial-gradient(ellipse 90% 40% at 50% 100%, rgba(201, 162, 74, 0.14) 0%, transparent 60%);
+
+  /* Brass emboss shadow (used inside inset shadows for stamped-metal feel). */
+  --shadow-brass-emboss: inset 0 1px 0 rgba(255,255,255,.38), inset 0 -1px 0 rgba(0,0,0,.32), 0 1px 0 rgba(0,0,0,.25);
 
   /* ---------- TYPOGRAPHY ---------- */
-  --font-display: "Instrument Serif", Georgia, serif;
-  --font-sans:    "Inter Tight", system-ui, sans-serif;
-  --font-body:    "Inter Tight", system-ui, sans-serif;
+  /* Archivo Black — signage-heavy display, sits alongside the script logo. */
+  --font-display: "Archivo Black", "Archivo", system-ui, sans-serif;
+  /* Abril Fatface — Victorian accent for oversized numerals and pull quotes. */
+  --font-fair:    "Abril Fatface", Georgia, serif;
+  --font-sans:    "Archivo", system-ui, sans-serif;
+  --font-body:    "Archivo", system-ui, sans-serif;
   --font-mono:    "JetBrains Mono", ui-monospace, monospace;
-  --font-serif:   "Instrument Serif", Georgia, serif;
+  --font-serif:   "Abril Fatface", Georgia, serif;
 
   --text-display-xl: clamp(3.5rem, 9vw, 6.5rem);
   --text-display-lg: clamp(2.75rem, 6.5vw, 4.5rem);
@@ -124,9 +148,11 @@
   --width-prose:      42rem;
 
   /* ---------- ELEVATION ---------- */
-  --shadow-lift: 0 1px 2px rgba(0,0,0,.4), 0 12px 40px -12px rgba(0,0,0,.6);
+  --shadow-lift: 0 1px 2px rgba(0,0,0,.45), 0 14px 44px -14px rgba(0,0,0,.65);
   --shadow-sticker: 0 1px 0 rgba(0, 0, 0, 0.25);
   --shadow-card: 0 1px 0 rgba(0, 0, 0, 0.2);
+  /* Brass frame — 2px gradient border simulated via layered box shadows. */
+  --shadow-brass-frame: 0 0 0 1px #7A5A18, 0 0 0 2px #C9A24A, 0 0 0 3px #4A3810, 0 12px 30px -14px rgba(0,0,0,.6);
 }
 
 :root {
