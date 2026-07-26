@@ -9,6 +9,7 @@ import { CATEGORIES } from "@/lib/mock-comps";
 import { ImagePlus, Zap, Copy, Save, ArrowLeft, Loader2, AlertTriangle, CheckCircle2, X } from "lucide-react";
 import { createCompetition } from "@/lib/admin.functions";
 import { supabase } from "@/integrations/supabase/client";
+import { optimizeImage, formatBytes, type OptimizeResult } from "@/lib/image-optimize";
 import type { ReactNode } from "react";
 
 export const Route = createFileRoute("/admin/competitions/new")({
@@ -44,6 +45,7 @@ function NewComp() {
   const [imageUrl, setImageUrl] = useState<string>("");
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const [optimizeInfo, setOptimizeInfo] = useState<OptimizeResult | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const derivedSlug = useMemo(() => {
@@ -64,21 +66,29 @@ function NewComp() {
 
   async function handleFile(file: File) {
     setUploadError(null);
+    setOptimizeInfo(null);
     if (!file.type.startsWith("image/")) {
       setUploadError("Pick an image file (jpg, png, webp).");
       return;
     }
-    if (file.size > 8 * 1024 * 1024) {
-      setUploadError("Image is too big. Keep it under 8 MB.");
+    if (file.size > 20 * 1024 * 1024) {
+      setUploadError("Image is too big. Keep it under 20 MB.");
       return;
     }
     setUploading(true);
     try {
-      const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
+      // Downscale + convert to WEBP client-side before upload so cards stay
+      // fast without asking the admin to pre-process anything.
+      const result = await optimizeImage(file, {
+        maxEdge: 1600,
+        targetBytes: 350 * 1024,
+      });
+      setOptimizeInfo(result);
+      const ext = result.contentType === "image/webp" ? "webp" : result.contentType === "image/jpeg" ? "jpg" : (file.name.split(".").pop()?.toLowerCase() || "bin");
       const path = `${crypto.randomUUID()}.${ext}`;
       const { error: upErr } = await supabase.storage
         .from("competition-images")
-        .upload(path, file, { cacheControl: "31536000", upsert: false, contentType: file.type });
+        .upload(path, result.blob, { cacheControl: "31536000", upsert: false, contentType: result.contentType });
       if (upErr) throw upErr;
       // Bucket is private (workspace policy); use a very-long-lived signed URL.
       const { data: signed, error: sErr } = await supabase.storage
