@@ -3,7 +3,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { Loader2, Minus, Plus, Shuffle, AlertTriangle, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { gbp } from "@/lib/format";
-import { newReservationToken, reserveLuckyDip } from "@/lib/competitions-api";
+import { explainReservationFailure, newReservationToken, reserveLuckyDip } from "@/lib/competitions-api";
 import type { Competition } from "@/lib/mock-comps";
 
 interface Props {
@@ -19,6 +19,8 @@ export function QuickAddDialog({ comp, open, onClose, maxQty = 25 }: Props) {
   const [qty, setQty] = useState(5);
   const [reserving, setReserving] = useState(false);
   const [err, setErr] = useState<string | null>(null);
+  const [availableLeft, setAvailableLeft] = useState<number | null>(null);
+  const [soldOut, setSoldOut] = useState(false);
 
   if (!open) return null;
 
@@ -26,12 +28,12 @@ export function QuickAddDialog({ comp, open, onClose, maxQty = 25 }: Props) {
 
   const close = () => {
     if (reserving) return;
-    setQty(5); setErr(null);
+    setQty(5); setErr(null); setAvailableLeft(null); setSoldOut(false);
     onClose();
   };
 
   const submit = async () => {
-    setErr(null); setReserving(true);
+    setErr(null); setAvailableLeft(null); setSoldOut(false); setReserving(true);
     try {
       const token = newReservationToken();
       const numbers = await reserveLuckyDip(comp.slug, qty, token);
@@ -44,7 +46,16 @@ export function QuickAddDialog({ comp, open, onClose, maxQty = 25 }: Props) {
       window.dispatchEvent(new Event("lgc:basket-change"));
       navigate({ to: "/checkout", search: { slug: comp.slug, qty: numbers.length } });
     } catch (e) {
-      setErr(e instanceof Error ? e.message : "Reservation failed.");
+      const raw = e instanceof Error ? e.message : "Reservation failed.";
+      const { message, availability } = await explainReservationFailure(comp.slug, qty, raw);
+      setErr(message);
+      if (availability) {
+        setAvailableLeft(availability.available);
+        setSoldOut(availability.available === 0 || availability.closed);
+        if (availability.available > 0 && availability.available < qty) {
+          setQty(availability.available);
+        }
+      }
       setReserving(false);
     }
   };
@@ -129,15 +140,22 @@ export function QuickAddDialog({ comp, open, onClose, maxQty = 25 }: Props) {
         </div>
 
         {err && (
-          <div className="mt-3 text-xs text-hot flex items-start gap-1.5">
-            <AlertTriangle className="h-3.5 w-3.5 mt-0.5 shrink-0" />
-            <span>{err}</span>
+          <div className="mt-3 rounded-xl border-2 border-hot/40 bg-hot/10 p-3 text-xs text-hot">
+            <div className="flex items-start gap-1.5 font-bold">
+              <AlertTriangle className="h-3.5 w-3.5 mt-0.5 shrink-0" />
+              <span>{err}</span>
+            </div>
+            {availableLeft !== null && !soldOut && (
+              <div className="mt-1 pl-5 font-mono text-[11px] tabular-nums text-hot/80">
+                {availableLeft} of {comp.totalTickets} left
+              </div>
+            )}
           </div>
         )}
 
         <div className="mt-5 flex gap-2">
           <Button variant="cream" onClick={close} className="flex-1" disabled={reserving}>Cancel</Button>
-          <Button variant="gold" size="lg" disabled={reserving} onClick={submit} className="flex-1">
+          <Button variant="gold" size="lg" disabled={reserving || soldOut} onClick={submit} className="flex-1">
             {reserving ? (<><Loader2 className="h-4 w-4 animate-spin" /> Locking…</>) : <>Add {qty} · {gbp(total)}</>}
           </Button>
         </div>
