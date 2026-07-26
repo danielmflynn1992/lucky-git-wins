@@ -20,6 +20,12 @@ export type OptimizeOptions = {
   startQuality?: number;
   /** Lowest quality we'll settle for before giving up. */
   minQuality?: number;
+  /** Force a 4:3 centre crop before encoding. Default true. */
+  cropToFourThree?: boolean;
+  /** Also produce a small square-ish thumbnail (max edge px). */
+  thumbEdge?: number;
+  /** Detect near-uniform background and flatten to warm paper. */
+  flattenBackground?: boolean;
 };
 
 export type OptimizeResult = {
@@ -32,6 +38,14 @@ export type OptimizeResult = {
   optimizedBytes: number;
   quality: number;
   converted: boolean;
+  /** Detected uniform-background confidence, 0-1. */
+  bgConfidence: number;
+  /** True if we flattened the background onto cream paper. */
+  flattened: boolean;
+  /** Optional thumbnail blob + filename. */
+  thumb?: { blob: Blob; filename: string; contentType: string; width: number; height: number };
+  /** Source pixel width — used to warn on tiny uploads. */
+  sourceWidth: number;
 };
 
 const DEFAULTS: Required<OptimizeOptions> = {
@@ -39,6 +53,9 @@ const DEFAULTS: Required<OptimizeOptions> = {
   targetBytes: 350 * 1024,
   startQuality: 0.82,
   minQuality: 0.55,
+  cropToFourThree: true,
+  thumbEdge: 400,
+  flattenBackground: true,
 };
 
 async function decode(file: File): Promise<{ bitmap: ImageBitmap | HTMLImageElement; width: number; height: number }>
