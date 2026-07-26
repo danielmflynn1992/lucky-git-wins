@@ -1,0 +1,1 @@
+DROP FUNCTION IF EXISTS public.create_competition_with_tickets(text,text,text,text,text,text,numeric,integer,integer,integer,timestamptz,text,boolean,boolean,integer,numeric);
