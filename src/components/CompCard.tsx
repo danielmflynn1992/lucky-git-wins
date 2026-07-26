@@ -114,21 +114,22 @@ export function CompCard({ c }: { c: Competition }) {
               <div className="h-full transition-all" style={{ width: `${pct}%`, background: "var(--color-ink-green)" }} />
             </div>
           </div>
-          {/* Price + remaining stack on mobile so the £ price never wraps
-              mid-number; they sit side-by-side from sm up where there's room. */}
-          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-1 sm:gap-2 pt-1 min-w-0">
-            <div className="min-w-0">
-              <div className="text-[10px] uppercase tracking-[0.12em] text-n-600 font-semibold whitespace-nowrap">Tickets from</div>
-              <div
-                className="font-display leading-none tabular-nums whitespace-nowrap text-[clamp(1.35rem,7cqi,2.25rem)]"
-                style={{ color: "var(--color-ink-green-deep)" }}
-              >
-                {gbp(c.pricePerTicket)}
-              </div>
+          {/* Price + remaining — a two-column grid keeps labels on one baseline
+              and values on another so the £ price and the remaining count never
+              collide, regardless of card width. minmax(0,1fr) lets each column
+              shrink; the price uses a fluid clamp capped low enough that a
+              4-digit remaining count (e.g. 1,234) still fits beside it. */}
+          <div className="grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-3 gap-y-0.5 pt-1 min-w-0">
+            <div className="text-[10px] uppercase tracking-[0.12em] text-n-600 font-semibold truncate">Tickets from</div>
+            <div className="text-[10px] uppercase tracking-[0.12em] text-n-600 font-semibold text-right truncate">Remaining</div>
+            <div
+              className="font-display leading-none tabular-nums whitespace-nowrap text-[clamp(1.25rem,6.5cqi,2rem)] min-w-0"
+              style={{ color: "var(--color-ink-green-deep)" }}
+            >
+              {gbp(c.pricePerTicket)}
             </div>
-            <div className="min-w-0 sm:text-right shrink-0">
-              <div className="text-[10px] uppercase tracking-[0.12em] text-n-600 font-semibold whitespace-nowrap">Remaining</div>
-              <div className="font-mono tabular-nums text-sm font-bold text-n-900 whitespace-nowrap">{remaining.toLocaleString()}</div>
+            <div className="font-mono tabular-nums text-sm font-bold text-n-900 whitespace-nowrap text-right self-end">
+              {remaining.toLocaleString()}
             </div>
           </div>
         </div>
