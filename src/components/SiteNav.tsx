@@ -150,7 +150,7 @@ export function SiteNav() {
           className={
             "relative mx-auto max-w-7xl px-3 md:px-6 grid items-center gap-2 md:gap-4 mast-transition overflow-hidden " +
             "grid-cols-[1fr_auto_1fr] " +
-            (scrolled ? "h-16" : "h-24")
+            (scrolled ? "h-20" : "h-32")
           }
         >
           {/* LEFT edge — hamburger only, unchanged position. */}
@@ -177,7 +177,7 @@ export function SiteNav() {
                 bottom border. No wrapper background, padding, or border. */}
             <Lockup
               style={{
-                height: scrolled ? 56 : 88,
+                height: scrolled ? 72 : 120,
                 width: "auto",
                 maxWidth: "82vw",
                 objectFit: "contain",
