@@ -17,9 +17,8 @@ import { Route as PromiseRouteImport } from './routes/promise'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PastDrawsRouteImport } from './routes/past-draws'
 import { Route as OddsRouteImport } from './routes/odds'
-import { Route as LegalStructureRouteImport } from './routes/legal-structure'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
-import { Route as FreeEntryRouteImport } from './routes/free-entry'
+import { Route as HowEntryWorksRouteImport } from './routes/how-entry-works'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CheckoutRouteImport } from './routes/checkout'
@@ -31,6 +30,7 @@ import { Route as CompetitionsIndexRouteImport } from './routes/competitions.ind
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as DevCompcardRouteImport } from './routes/dev.compcard'
 import { Route as CompetitionsSlugRouteImport } from './routes/competitions.$slug'
+import { Route as AdminQuestionPerformanceRouteImport } from './routes/admin.question-performance'
 import { Route as AdminErrorsRouteImport } from './routes/admin.errors'
 import { Route as DrawsIdRevealRouteImport } from './routes/draws.$id.reveal'
 import { Route as AdminCompetitionsNewRouteImport } from './routes/admin.competitions.new'
@@ -75,19 +75,14 @@ const OddsRoute = OddsRouteImport.update({
   path: '/odds',
   getParentRoute: () => rootRouteImport,
 } as any)
-const LegalStructureRoute = LegalStructureRouteImport.update({
-  id: '/legal-structure',
-  path: '/legal-structure',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const HowItWorksRoute = HowItWorksRouteImport.update({
   id: '/how-it-works',
   path: '/how-it-works',
   getParentRoute: () => rootRouteImport,
 } as any)
-const FreeEntryRoute = FreeEntryRouteImport.update({
-  id: '/free-entry',
-  path: '/free-entry',
+const HowEntryWorksRoute = HowEntryWorksRouteImport.update({
+  id: '/how-entry-works',
+  path: '/how-entry-works',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FaqRoute = FaqRouteImport.update({
@@ -145,6 +140,12 @@ const CompetitionsSlugRoute = CompetitionsSlugRouteImport.update({
   path: '/competitions/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminQuestionPerformanceRoute =
+  AdminQuestionPerformanceRouteImport.update({
+    id: '/admin/question-performance',
+    path: '/admin/question-performance',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AdminErrorsRoute = AdminErrorsRouteImport.update({
   id: '/admin/errors',
   path: '/admin/errors',
@@ -169,9 +170,8 @@ export interface FileRoutesByFullPath {
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
-  '/free-entry': typeof FreeEntryRoute
+  '/how-entry-works': typeof HowEntryWorksRoute
   '/how-it-works': typeof HowItWorksRoute
-  '/legal-structure': typeof LegalStructureRoute
   '/odds': typeof OddsRoute
   '/past-draws': typeof PastDrawsRoute
   '/privacy': typeof PrivacyRoute
@@ -181,6 +181,7 @@ export interface FileRoutesByFullPath {
   '/verify': typeof VerifyRoute
   '/winners': typeof WinnersRoute
   '/admin/errors': typeof AdminErrorsRoute
+  '/admin/question-performance': typeof AdminQuestionPerformanceRoute
   '/competitions/$slug': typeof CompetitionsSlugRoute
   '/dev/compcard': typeof DevCompcardRoute
   '/admin/': typeof AdminIndexRoute
@@ -196,9 +197,8 @@ export interface FileRoutesByTo {
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
-  '/free-entry': typeof FreeEntryRoute
+  '/how-entry-works': typeof HowEntryWorksRoute
   '/how-it-works': typeof HowItWorksRoute
-  '/legal-structure': typeof LegalStructureRoute
   '/odds': typeof OddsRoute
   '/past-draws': typeof PastDrawsRoute
   '/privacy': typeof PrivacyRoute
@@ -208,6 +208,7 @@ export interface FileRoutesByTo {
   '/verify': typeof VerifyRoute
   '/winners': typeof WinnersRoute
   '/admin/errors': typeof AdminErrorsRoute
+  '/admin/question-performance': typeof AdminQuestionPerformanceRoute
   '/competitions/$slug': typeof CompetitionsSlugRoute
   '/dev/compcard': typeof DevCompcardRoute
   '/admin': typeof AdminIndexRoute
@@ -224,9 +225,8 @@ export interface FileRoutesById {
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
-  '/free-entry': typeof FreeEntryRoute
+  '/how-entry-works': typeof HowEntryWorksRoute
   '/how-it-works': typeof HowItWorksRoute
-  '/legal-structure': typeof LegalStructureRoute
   '/odds': typeof OddsRoute
   '/past-draws': typeof PastDrawsRoute
   '/privacy': typeof PrivacyRoute
@@ -236,6 +236,7 @@ export interface FileRoutesById {
   '/verify': typeof VerifyRoute
   '/winners': typeof WinnersRoute
   '/admin/errors': typeof AdminErrorsRoute
+  '/admin/question-performance': typeof AdminQuestionPerformanceRoute
   '/competitions/$slug': typeof CompetitionsSlugRoute
   '/dev/compcard': typeof DevCompcardRoute
   '/admin/': typeof AdminIndexRoute
@@ -253,9 +254,8 @@ export interface FileRouteTypes {
     | '/checkout'
     | '/contact'
     | '/faq'
-    | '/free-entry'
+    | '/how-entry-works'
     | '/how-it-works'
-    | '/legal-structure'
     | '/odds'
     | '/past-draws'
     | '/privacy'
@@ -265,6 +265,7 @@ export interface FileRouteTypes {
     | '/verify'
     | '/winners'
     | '/admin/errors'
+    | '/admin/question-performance'
     | '/competitions/$slug'
     | '/dev/compcard'
     | '/admin/'
@@ -280,9 +281,8 @@ export interface FileRouteTypes {
     | '/checkout'
     | '/contact'
     | '/faq'
-    | '/free-entry'
+    | '/how-entry-works'
     | '/how-it-works'
-    | '/legal-structure'
     | '/odds'
     | '/past-draws'
     | '/privacy'
@@ -292,6 +292,7 @@ export interface FileRouteTypes {
     | '/verify'
     | '/winners'
     | '/admin/errors'
+    | '/admin/question-performance'
     | '/competitions/$slug'
     | '/dev/compcard'
     | '/admin'
@@ -307,9 +308,8 @@ export interface FileRouteTypes {
     | '/checkout'
     | '/contact'
     | '/faq'
-    | '/free-entry'
+    | '/how-entry-works'
     | '/how-it-works'
-    | '/legal-structure'
     | '/odds'
     | '/past-draws'
     | '/privacy'
@@ -319,6 +319,7 @@ export interface FileRouteTypes {
     | '/verify'
     | '/winners'
     | '/admin/errors'
+    | '/admin/question-performance'
     | '/competitions/$slug'
     | '/dev/compcard'
     | '/admin/'
@@ -335,9 +336,8 @@ export interface RootRouteChildren {
   CheckoutRoute: typeof CheckoutRoute
   ContactRoute: typeof ContactRoute
   FaqRoute: typeof FaqRoute
-  FreeEntryRoute: typeof FreeEntryRoute
+  HowEntryWorksRoute: typeof HowEntryWorksRoute
   HowItWorksRoute: typeof HowItWorksRoute
-  LegalStructureRoute: typeof LegalStructureRoute
   OddsRoute: typeof OddsRoute
   PastDrawsRoute: typeof PastDrawsRoute
   PrivacyRoute: typeof PrivacyRoute
@@ -347,6 +347,7 @@ export interface RootRouteChildren {
   VerifyRoute: typeof VerifyRoute
   WinnersRoute: typeof WinnersRoute
   AdminErrorsRoute: typeof AdminErrorsRoute
+  AdminQuestionPerformanceRoute: typeof AdminQuestionPerformanceRoute
   CompetitionsSlugRoute: typeof CompetitionsSlugRoute
   DevCompcardRoute: typeof DevCompcardRoute
   AdminIndexRoute: typeof AdminIndexRoute
@@ -413,13 +414,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OddsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/legal-structure': {
-      id: '/legal-structure'
-      path: '/legal-structure'
-      fullPath: '/legal-structure'
-      preLoaderRoute: typeof LegalStructureRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/how-it-works': {
       id: '/how-it-works'
       path: '/how-it-works'
@@ -427,11 +421,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HowItWorksRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/free-entry': {
-      id: '/free-entry'
-      path: '/free-entry'
-      fullPath: '/free-entry'
-      preLoaderRoute: typeof FreeEntryRouteImport
+    '/how-entry-works': {
+      id: '/how-entry-works'
+      path: '/how-entry-works'
+      fullPath: '/how-entry-works'
+      preLoaderRoute: typeof HowEntryWorksRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/faq': {
@@ -511,6 +505,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CompetitionsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/question-performance': {
+      id: '/admin/question-performance'
+      path: '/admin/question-performance'
+      fullPath: '/admin/question-performance'
+      preLoaderRoute: typeof AdminQuestionPerformanceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/errors': {
       id: '/admin/errors'
       path: '/admin/errors'
@@ -543,9 +544,8 @@ const rootRouteChildren: RootRouteChildren = {
   CheckoutRoute: CheckoutRoute,
   ContactRoute: ContactRoute,
   FaqRoute: FaqRoute,
-  FreeEntryRoute: FreeEntryRoute,
+  HowEntryWorksRoute: HowEntryWorksRoute,
   HowItWorksRoute: HowItWorksRoute,
-  LegalStructureRoute: LegalStructureRoute,
   OddsRoute: OddsRoute,
   PastDrawsRoute: PastDrawsRoute,
   PrivacyRoute: PrivacyRoute,
@@ -555,6 +555,7 @@ const rootRouteChildren: RootRouteChildren = {
   VerifyRoute: VerifyRoute,
   WinnersRoute: WinnersRoute,
   AdminErrorsRoute: AdminErrorsRoute,
+  AdminQuestionPerformanceRoute: AdminQuestionPerformanceRoute,
   CompetitionsSlugRoute: CompetitionsSlugRoute,
   DevCompcardRoute: DevCompcardRoute,
   AdminIndexRoute: AdminIndexRoute,

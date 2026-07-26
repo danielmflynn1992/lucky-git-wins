@@ -130,7 +130,6 @@ export function SiteFooter() {
               { to: "/competitions", label: "Live Competitions" },
               { to: "/winners", label: "Winners Wall" },
               { to: "/how-it-works", label: "How it works" },
-              { to: "/free-entry", label: "Free entry (no purchase)", bold: true },
             ]}
           />
           <FooterCol
@@ -139,7 +138,7 @@ export function SiteFooter() {
               { to: "/terms", label: "Terms & Conditions" },
               { to: "/privacy", label: "Privacy Policy" },
               { to: "/responsible-play", label: "Responsible Play" },
-              { to: "/legal-structure", label: "Legal structure" },
+              { to: "/how-entry-works", label: "How entry works" },
               { to: "/faq", label: "FAQ" },
             ]}
           />
@@ -156,7 +155,18 @@ export function SiteFooter() {
               style={{ color: "var(--color-on-dark-fg)" }}
             >
               Lucky Git Comps Ltd. Registered in England & Wales.<br />
-              18+ only. Please play responsibly.
+              <span
+                className="inline-flex items-center gap-1 font-bold"
+                style={{ color: "var(--color-marker)" }}
+              >
+                <span
+                  aria-label="18 plus"
+                  className="inline-flex items-center justify-center w-6 h-6 border-2 border-current text-xs font-black"
+                >
+                  18+
+                </span>
+                UK only. Please play responsibly.
+              </span>
             </p>
           </div>
         </div>

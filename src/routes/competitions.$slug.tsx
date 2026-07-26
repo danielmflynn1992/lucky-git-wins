@@ -2,6 +2,7 @@ import { createFileRoute, notFound, Link, useNavigate } from "@tanstack/react-ro
 import { useMemo, useState } from "react";
 import { useSuspenseQuery, useQueryClient } from "@tanstack/react-query";
 import { Ticket, Shuffle, Shield, PoundSterling, CheckCircle2, Info, Loader2, AlertTriangle } from "lucide-react";
+import { SkillWarning } from "@/components/SkillWarning";
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
 import { Countdown } from "@/components/Countdown";
@@ -153,7 +154,6 @@ function CompDetail() {
               />
               <div className="absolute top-4 left-4 flex gap-1.5">
                 {c.hot && <span className="rounded-sm bg-urgent text-urgent-foreground px-2 py-1 text-[10px] font-semibold uppercase tracking-wider">Hot</span>}
-                {c.instantWin && <span className="rounded-sm bg-gold text-gold-foreground px-2 py-1 text-[10px] font-semibold uppercase tracking-wider">Instant wins inside</span>}
               </div>
             </div>
           </div>
@@ -183,6 +183,7 @@ function CompDetail() {
             </div>
 
             <div className="mt-6 rounded-2xl bg-card border-2 border-border p-4">
+              <div className="mb-4"><SkillWarning compact /></div>
               <div className="flex gap-2 mb-4">
                 <button
                   onClick={() => { setPicker("lucky"); setReserveError(null); }}
@@ -293,15 +294,9 @@ function CompDetail() {
                 </Button>
               </div>
 
-              <div className="mt-4 pt-4 border-t-2 border-dashed border-border">
-                <div className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground mb-2">Or, enter this competition for free</div>
-                <Button asChild variant="cream" size="xl" className="w-full border-2 border-clover text-clover hover:bg-clover hover:text-cream">
-                  <Link to="/free-entry" search={{ slug: c.slug }}>Free entry — no purchase necessary</Link>
-                </Button>
-                <p className="mt-2 text-[11px] text-muted-foreground text-center">
-                  Same pool. Same odds. One free entry per person.{" "}
-                  <Link to="/legal-structure" className="underline">How this works</Link>
-                </p>
+              <div className="mt-4 pt-4 border-t-2 border-dashed border-border text-[11px] text-muted-foreground">
+                <Link to="/how-entry-works" className="underline">How entry works</Link>{" "}
+                — this is a prize competition of skill under Section 14 of the Gambling Act 2005.
               </div>
             </div>
 

@@ -5,7 +5,7 @@ import holiday from "@/assets/prize-holiday.jpg";
 import ps5 from "@/assets/prize-ps5.jpg";
 import watch from "@/assets/prize-watch.jpg";
 
-export type Category = "Cars" | "Tech" | "Cash" | "Holidays" | "£1 Instant Wins";
+export type Category = "Cars" | "Tech" | "Cash" | "Holidays";
 
 export interface Competition {
   slug: string;
@@ -21,7 +21,6 @@ export interface Competition {
   cashAlternative: number;
   maxPerPerson: number;
   endsAt: string; // ISO
-  instantWin: boolean;
   hot?: boolean;
   description: string;
 }
@@ -42,7 +41,6 @@ export const COMPETITIONS: Competition[] = [
     cashAlternative: 45000,
     maxPerPerson: 200,
     endsAt: inHours(38),
-    instantWin: false,
     hot: true,
     description:
       "A brand new Audi RS3 in Tango Red with the Vorsprung pack. If a car isn't your thing, or you'd rather not explain a new Audi to your accountant, take £45,000 in cash instead. We won't judge. Much.",
@@ -60,10 +58,9 @@ export const COMPETITIONS: Competition[] = [
     cashAlternative: 4500,
     maxPerPerson: 150,
     endsAt: inHours(11),
-    instantWin: false,
     hot: true,
     description:
-      "The whole shiny lot: iPhone 17 Pro Max, 16\" MacBook Pro M-something, AirPods Pro. Plus 20 instant win tickets worth £50 each hidden inside. Yes, really.",
+      "The whole shiny lot: iPhone 17 Pro Max, 16\" MacBook Pro M-something, AirPods Pro. Answer the skill question correctly to be entered in the draw.",
   },
   {
     slug: "10k-cash",
@@ -78,7 +75,6 @@ export const COMPETITIONS: Competition[] = [
     cashAlternative: 10000,
     maxPerPerson: 100,
     endsAt: inHours(72),
-    instantWin: false,
     description:
       "Ten grand. In your bank. Within 48 hours of the draw. Do what you like with it — we'd suggest not the horses.",
   },
@@ -95,15 +91,14 @@ export const COMPETITIONS: Competition[] = [
     cashAlternative: 8500,
     maxPerPerson: 50,
     endsAt: inHours(120),
-    instantWin: false,
     description:
       "A week of pretending you're the sort of person who deserves this. Business class flights, overwater bungalow, all inclusive. Bring someone you actually like.",
   },
   {
-    slug: "ps5-pro-instant",
+    slug: "ps5-pro-bundle",
     title: "PS5 Pro + Games Bundle",
-    subtitle: "Console, extra pad, three top games. £1 a pop.",
-    category: "£1 Instant Wins",
+    subtitle: "Console, extra pad, three top games. Answer to enter.",
+    category: "Tech",
     image: ps5,
     gallery: [ps5],
     pricePerTicket: 4.99,
@@ -112,10 +107,9 @@ export const COMPETITIONS: Competition[] = [
     cashAlternative: 700,
     maxPerPerson: 250,
     endsAt: inHours(4),
-    instantWin: true,
     hot: true,
     description:
-      "A quid a ticket, 25 instant-win prizes hidden throughout (£10 credits, wireless pads, an OLED telly), and one absolute champion walks off with the console bundle.",
+      "Console, extra controller and three top games. Answer the skill question correctly to be entered in the draw.",
   },
   {
     slug: "rolex-submariner",
@@ -130,13 +124,12 @@ export const COMPETITIONS: Competition[] = [
     cashAlternative: 11000,
     maxPerPerson: 100,
     endsAt: inHours(60),
-    instantWin: false,
     description:
       "Genuine, boxed, papered. The watch that says 'I've done alright.' Or take the eleven grand and just tell people you did.",
   },
 ];
 
-export const CATEGORIES: Category[] = ["Cars", "Tech", "Cash", "Holidays", "£1 Instant Wins"];
+export const CATEGORIES: Category[] = ["Cars", "Tech", "Cash", "Holidays"];
 
 export const WINNERS = [
   { name: "Dave", town: "Cardiff", prize: "Land Rover Defender", quote: "I actually cried. Ask my wife.", when: "2 weeks ago" },

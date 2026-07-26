@@ -231,7 +231,7 @@ function Home() {
       <section className="mx-auto max-w-7xl px-4 mt-24 w-full">
         <div>
           <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-clover font-bold">How it works</div>
-          <h2 className="mt-2 font-display text-3xl md:text-5xl font-black tracking-[-0.02em] text-foreground">Three steps. One of them's paying us.</h2>
+          <h2 className="mt-2 font-display text-3xl md:text-5xl font-black tracking-[-0.02em] text-foreground">Three steps. One of them's a skill question.</h2>
         </div>
         {/* Bento box */}
         <div className="mt-8 grid gap-4 md:grid-cols-6 md:grid-rows-2 md:auto-rows-fr">
@@ -248,12 +248,12 @@ function Home() {
           <div className="md:col-span-3 rounded-lg bg-card border border-border p-6 shadow-sm hover:shadow-md transition-all duration-200">
             <div className="font-mono text-[11px] tracking-[0.25em] text-clover font-bold">STEP 02</div>
             <h3 className="mt-3 font-display text-xl font-black text-foreground">Checkout, sorted.</h3>
-            <p className="text-sm text-muted-foreground mt-2 leading-relaxed">No dead comps, no rollovers. Every draw is fully automatic and verifiable.</p>
+            <p className="text-sm text-muted-foreground mt-2 leading-relaxed">Answer a genuine skill question before paying. Get it right and you're in the draw. Get it wrong and your tickets don't qualify — stated unmissably before you pay.</p>
           </div>
           <div className="md:col-span-3 rounded-lg bg-card border border-border p-6 shadow-sm hover:shadow-md transition-all duration-200">
             <div className="font-mono text-[11px] tracking-[0.25em] text-clover font-bold">STEP 03</div>
             <h3 className="mt-3 font-display text-xl font-black text-foreground">Draw goes off automatically.</h3>
-            <p className="text-sm text-muted-foreground mt-2 leading-relaxed">Timer hits zero. Random number picked. Winner named on the wall within minutes. Paid within 48 hours.</p>
+            <p className="text-sm text-muted-foreground mt-2 leading-relaxed">Timer hits zero. Winner drawn from correct entries only. Pool size published for verification. Paid within 48 hours.</p>
           </div>
         </div>
       </section>

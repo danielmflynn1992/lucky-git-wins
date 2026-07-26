@@ -111,8 +111,12 @@ function Admin() {
           <div className="text-sm">
             <div className="font-display font-bold text-urgent">Do not enable live Stripe payments without a gambling-law review.</div>
             <p className="mt-1 text-foreground/80">
-              The site is structured as a free draw under Schedule 2 of the Gambling Act 2005: every competition ships with a free entry route at{" "}
-              <code className="font-mono">/free-entry</code>, linked at equal prominence from every competition page and checkout. Before accepting real money, have a UK gambling-law solicitor confirm the structure, T&amp;Cs, and free-entry mechanics.
+              The site is structured as a prize competition of skill under Section 14 of the Gambling Act 2005:
+              every competition ships with a required skill question, and the draw runs only across correct
+              entries. Before accepting real money, have a UK gambling-law solicitor confirm the T&amp;Cs and
+              the question-authoring workflow. See{" "}
+              <Link to="/admin/question-performance" className="underline font-bold">/admin/question-performance</Link>{" "}
+              for the evidence panel required to defend question difficulty.
             </p>
           </div>
         </div>

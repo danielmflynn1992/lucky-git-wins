@@ -83,10 +83,6 @@ export function CompCard({ c }: { c: Competition }) {
           <span className="absolute inset-0 z-[5] flex items-center justify-center pointer-events-none">
             <StampMark variant="SOLD OUT" size="lg" angle={-10} />
           </span>
-        ) : c.instantWin ? (
-          <span className="absolute top-2 right-2 z-[5] pointer-events-none">
-            <StampMark variant="INSTANT WIN" size="sm" angle={-6} />
-          </span>
         ) : almostGone ? (
           <span className="absolute top-2 right-2 z-[5] pointer-events-none">
             <StampMark variant="LIVE" size="sm" angle={-4} />

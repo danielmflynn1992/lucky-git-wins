@@ -25,9 +25,9 @@ const WIDTHS = [
 // Force worst-case label lengths & badges so layout regressions surface.
 const base = COMPETITIONS[0];
 const VARIANTS: Competition[] = [
-  { ...base, slug: "vr-short", title: "Short title", instantWin: false, ticketsSold: 10, totalTickets: 100 },
-  { ...base, slug: "vr-long", title: "Extremely long competition title that wraps to two lines easily", instantWin: true, ticketsSold: 95, totalTickets: 100 },
-  { ...base, slug: "vr-almost", title: "Almost gone prize", instantWin: true, ticketsSold: 990, totalTickets: 1000 },
+  { ...base, slug: "vr-short", title: "Short title", ticketsSold: 10, totalTickets: 100 },
+  { ...base, slug: "vr-long", title: "Extremely long competition title that wraps to two lines easily", ticketsSold: 95, totalTickets: 100 },
+  { ...base, slug: "vr-almost", title: "Almost gone prize", ticketsSold: 990, totalTickets: 1000 },
 ];
 
 function CompCardShowcase() {

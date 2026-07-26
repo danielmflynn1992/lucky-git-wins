@@ -43,6 +43,15 @@ function Account() {
                     <span key={n} className="rounded bg-gold/20 border border-gold px-1.5 py-0.5 text-[10px] font-bold tabular-nums">#{n}</span>
                   ))}
                 </div>
+                <div className="mt-1.5 text-[11px] font-mono uppercase tracking-widest">
+                  Answer status:{" "}
+                  <span className="text-[color:var(--color-ink-blue)] font-bold">
+                    Correct · qualifying
+                  </span>
+                  <span className="ml-1 text-muted-foreground normal-case font-normal">
+                    (revealed after draw closes)
+                  </span>
+                </div>
               </div>
               <Button asChild variant="cream" size="sm"><Link to="/competitions/$slug" params={{ slug: c.slug }}>View</Link></Button>
             </div>
