@@ -24,8 +24,8 @@ export const Route = createFileRoute("/")({
     meta: [
       { title: "Lucky Git Comps — Win Cars, Cash & Tech in the UK" },
       { name: "description", content: "UK prize competitions with verified winners and automatic random draws. Cars, tech, cash and holidays from £1." },
-      { property: "og:title", content: "Lucky Git Comps — Someone's got to win it" },
-      { property: "og:description", content: "Cars, cash, tech and holidays. Live draws. Chancers welcome." },
+      { property: "og:title", content: "Lucky Git Comps — Win Cars, Cash & Tech in the UK" },
+      { property: "og:description", content: "UK prize competitions with verified winners and automatic random draws. Cars, tech, cash and holidays from £1." },
     ],
   }),
   component: Home,
