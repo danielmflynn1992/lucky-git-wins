@@ -241,6 +241,8 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color-scheme: light;
+    overflow-x: hidden;
+    max-width: 100%;
   }
   body {
     background-color: var(--color-background);
@@ -248,6 +250,8 @@
     font-family: var(--font-body);
     font-feature-settings: "kern";
     line-height: var(--leading-body);
+    overflow-x: hidden;
+    max-width: 100%;
   }
   h1, h2, h3, h4, .display, .font-display, .font-serif {
     font-family: var(--font-display);
