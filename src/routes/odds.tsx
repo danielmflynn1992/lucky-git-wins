@@ -62,7 +62,9 @@ function OddsLeaderboard() {
                   <div className="flex items-center gap-3 min-w-0">
                     <span className="font-mono text-xs tabular-nums text-muted-foreground w-6 text-right">#{i + 1}</span>
                     <div className="h-12 w-12 rounded-md overflow-hidden bg-muted shrink-0">
-                      <img src={IMAGES[r.slug] ?? ""} alt="" className="h-full w-full object-cover" loading="lazy" />
+                      {IMAGES[r.slug] ? (
+                        <img src={IMAGES[r.slug]} alt="" className="h-full w-full object-cover" loading="lazy" />
+                      ) : null}
                     </div>
                     <div className="min-w-0">
                       <div className="text-[10px] font-mono uppercase tracking-[0.15em] text-clover">{r.category}</div>
