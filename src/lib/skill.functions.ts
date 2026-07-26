@@ -1,35 +1,18 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
-import { createClient } from "@supabase/supabase-js";
-import type { Database } from "@/integrations/supabase/types";
-
-// Public server client for reads (no correct_option — reads through view)
-function publicClient() {
-  const url = process.env.SUPABASE_URL!;
-  const key = process.env.SUPABASE_PUBLISHABLE_KEY!;
-  return createClient<Database>(url, key, {
-    auth: { persistSession: false, autoRefreshToken: false, storage: undefined as unknown as Storage },
-    global: {
-      fetch: (input, init) => {
-        const h = new Headers(init?.headers);
-        if (key.startsWith("sb_") && h.get("Authorization") === `Bearer ${key}`) h.delete("Authorization");
-        h.set("apikey", key);
-        return fetch(input, { ...init, headers: h });
-      },
-    },
-  });
-}
+import { createPublicSkillClient } from "@/lib/skill.server";
 
 export const fetchSkillQuestion = createServerFn({ method: "GET" })
   .inputValidator((data: unknown) => z.object({ slug: z.string().min(1).max(120) }).parse(data))
   .handler(async ({ data }) => {
-    const client = publicClient();
-    const { data: comp } = await client
+    const client = createPublicSkillClient();
+    const { data: comp, error: competitionError } = await client
       .from("competitions")
       .select("id")
       .eq("slug", data.slug)
       .maybeSingle();
+    if (competitionError) throw new Error(competitionError.message);
     if (!comp) throw new Error("competition not found");
     const { data: q, error } = await client
       .from("skill_questions_public" as never)
