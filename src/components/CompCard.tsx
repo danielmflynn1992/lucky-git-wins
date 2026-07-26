@@ -112,6 +112,9 @@ export function CompCard({ c }: { c: Competition }) {
 
       {/* PERFORATED TEAR-OFF with CTAs */}
       <div className="relative z-10 mt-3">
+        <p className="px-3 pb-2 text-[8px] font-mono uppercase tracking-[0.14em] text-[var(--color-ink-grey)]/70 leading-tight">
+          No refunds, no rollovers, no funny business.
+        </p>
         <Perforation color="var(--color-ink-black)" />
         <div className="grid grid-cols-[1fr_auto] items-stretch">
           <div className="flex items-center justify-center gap-1.5 bg-[var(--color-ink-red)] text-[var(--color-paper)] px-3 py-2.5 font-display uppercase tracking-[0.14em] text-xs whitespace-nowrap">
