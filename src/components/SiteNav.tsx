@@ -158,7 +158,7 @@ export function SiteNav() {
               its size, then shrinks and settles inside the bar on scroll.
               The min-w reserves clear space in the grid centre column so
               left/right nav links can't crash into the emblem. */}
-          <div className="justify-self-center shrink-0 relative z-50 pointer-events-auto min-w-[96px] md:min-w-[176px] flex justify-center">
+          <div className="justify-self-center shrink-0 relative z-50 pointer-events-auto min-w-[96px] md:min-w-[208px] flex justify-center">
             <div className={`relative flex justify-center ${scrolled ? "items-center" : "items-end"}`}>
               <WaxSeal
                 size={
