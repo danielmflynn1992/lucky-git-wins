@@ -155,16 +155,16 @@ function Home() {
 
       {/* TRUST STRIP */}
       <section className="border-y-[1.5px] border-[var(--color-ink-black)] bg-[var(--color-paper-raised)]">
-        <div className="mx-auto max-w-7xl px-4 py-6 grid grid-cols-2 md:grid-cols-4 gap-6 text-sm">
+        <div className="mx-auto max-w-7xl px-4 py-6 grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3">
           {[
-            { i: Radio, t: "Automatic random draws" },
-            { i: Shield, t: "Verified winners, real handshakes" },
-            { i: MessageSquareHeart, t: "UK company, UK humans on support" },
-            { i: Ticket, t: "Every ticket number published" },
-          ].map(({ i: Icon, t }) => (
-            <div key={t} className="flex items-center gap-3">
-              <Icon className="h-4 w-4 shrink-0 text-[var(--color-ink-blue)]" strokeWidth={2.25} />
-              <span className="font-semibold text-foreground/85">{t}</span>
+            "Automatic random draws",
+            "Verified winners, real handshakes",
+            "UK company, UK humans on support",
+            "Every ticket number published",
+          ].map((t) => (
+            <div key={t} className="flex items-baseline gap-3 text-[var(--color-ink-blue)]">
+              <span aria-hidden className="inline-block h-2 w-2 shrink-0 translate-y-[-1px] bg-[var(--color-coupon-red)]" />
+              <span className="font-display uppercase tracking-[0.14em] text-[13px] md:text-[14px] font-bold">{t}</span>
             </div>
           ))}
         </div>
