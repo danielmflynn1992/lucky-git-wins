@@ -1,14 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { ChevronRight, Ticket, Shield, Radio, MessageSquareHeart, Sparkles } from "lucide-react";
+import { ChevronRight, Ticket, Shield, Radio, MessageSquareHeart } from "lucide-react";
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
 import { CompCard } from "@/components/CompCard";
 import { CompRow } from "@/components/CompRow";
 import { ViewToggle } from "@/routes/competitions.index";
 import { Countdown } from "@/components/Countdown";
-import { SmugSmile, StampSeal, Wordmark } from "@/components/Logo";
+import { Lockup, SmugSmile } from "@/components/Logo";
 import { Pinstripe } from "@/components/Pinstripe";
 import { COMPETITIONS, CATEGORIES, WINNERS, type Category } from "@/lib/mock-comps";
 import { gbp } from "@/lib/format";
@@ -61,19 +61,17 @@ function Home() {
       {/* HERO */}
       <section className="grain relative bg-clover-pattern overflow-hidden border-b border-border">
         <div className="mx-auto max-w-7xl px-4 pt-10 pb-16 md:pt-16 md:pb-24">
-          {/* Static stamp — sits in the page content, not the chrome. */}
-          <div className="flex justify-center mb-4 md:mb-6">
-            <StampSeal size={140} />
-          </div>
+          {/* Single combined lockup — seal + wordmark in one SVG. */}
           <div className="flex justify-center mb-6 md:mb-8">
-            <Wordmark variant="detailed" className="h-20 md:h-28 text-clover" style={{ minWidth: 240 }} />
+            <Lockup
+              variant="stacked"
+              className="text-clover"
+              style={{ maxWidth: "min(320px, 70vw)", width: "100%", height: "auto" }}
+            />
           </div>
           <div className="grid gap-10 md:grid-cols-2 items-center">
           <div>
-            <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-[10px] font-mono uppercase tracking-[0.25em] text-foreground/70 shadow-sm">
-              <Sparkles className="h-3 w-3 text-gold" /> The odds, out in the open
-            </div>
-            <h1 className="mt-5 font-display text-5xl md:text-7xl lg:text-[5.5rem] font-black leading-[0.95] tracking-[-0.035em] text-foreground">
+            <h1 className="font-display text-5xl md:text-7xl lg:text-[5.5rem] font-black leading-[0.95] tracking-[-0.035em] text-foreground">
               Real odds.<br />
               Automatic draws.
             </h1>

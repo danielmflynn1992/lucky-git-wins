@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useRouterState } from "@tanstack/react-router";
 import { Instagram, Facebook, Mail, Menu, ShoppingBag, User, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { StampSeal, Wordmark } from "./Logo";
+import { Lockup } from "./Logo";
 import { Guilloche } from "./Guilloche";
 import { useAuth } from "@/hooks/use-auth";
 import { useBasket } from "@/hooks/use-basket";
@@ -145,7 +145,7 @@ export function SiteNav() {
         <div
           className={
             "relative mx-auto max-w-7xl px-3 md:px-6 grid items-center gap-2 md:gap-4 mast-transition " +
-            "grid-cols-[auto_1fr_auto_1fr_auto] " +
+            "grid-cols-[auto_1fr_auto] " +
             (scrolled ? "h-14" : "h-[68px] md:h-[80px]")
           }
         >
@@ -162,47 +162,17 @@ export function SiteNav() {
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
 
-          {/* LEFT flanking rule + diamond ornament — fades on scroll. */}
-          <div
-            aria-hidden="true"
-            className={
-              "hidden sm:flex items-center gap-2 min-w-0 mast-transition " +
-              (scrolled ? "opacity-0" : "opacity-100")
-            }
-          >
-            <span className="flex-1 h-px bg-[var(--color-paper-edge)]" />
-            <span className="w-1.5 h-1.5 rotate-45 bg-clover shrink-0" />
-          </div>
-
-          {/* CENTRE — horizontal seal + wordmark lockup, fully inside the bar. */}
-          <Link
-            to="/"
-            aria-label="Lucky Git Comps — home"
-            className="flex items-center gap-2 md:gap-3 shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-clover rounded-sm px-1"
-          >
-            <StampSeal
-              size={scrolled ? 34 : 44}
-              className="mast-transition shrink-0"
-            />
-            <Wordmark
-              variant="simple"
-              className={
-                "mast-transition hidden min-[340px]:inline-block " +
-                (scrolled ? "h-[54px]" : "h-[70px]")
-              }
-            />
-          </Link>
-
-          {/* RIGHT flanking rule + diamond ornament. */}
-          <div
-            aria-hidden="true"
-            className={
-              "hidden sm:flex items-center gap-2 min-w-0 mast-transition " +
-              (scrolled ? "opacity-0" : "opacity-100")
-            }
-          >
-            <span className="w-1.5 h-1.5 rotate-45 bg-clover shrink-0" />
-            <span className="flex-1 h-px bg-[var(--color-paper-edge)]" />
+          {/* CENTRE — single combined lockup SVG. Height fixed at 40px,
+              width auto with a firm max-width so it never blows out the row. */}
+          <div className="flex justify-center min-w-0">
+            <Link
+              to="/"
+              aria-label="Lucky Git Comps — home"
+              className="inline-flex items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-clover rounded-sm text-clover"
+              style={{ height: 40, maxWidth: "60vw" }}
+            >
+              <Lockup variant="horizontal" style={{ height: 40, width: "auto", maxWidth: "60vw" }} />
+            </Link>
           </div>
 
           {/* RIGHT edge — auth (md+) + basket, unchanged position. */}
