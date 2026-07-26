@@ -197,3 +197,79 @@ export async function releaseReservation(token: string): Promise<void> {
 function cleanRpcError(msg: string) {
   return msg.replace(/^.*?:\s*/, "");
 }
+
+export interface Availability {
+  available: number;
+  total: number;
+  status: string;
+  endsAt: string;
+  closed: boolean;
+}
+
+export async function fetchAvailability(slug: string): Promise<Availability | null> {
+  const { data: comp, error } = await supabase
+    .from("competitions")
+    .select("id, status, ends_at, total_tickets")
+    .eq("slug", slug)
+    .maybeSingle();
+  if (error || !comp) return null;
+  const { count } = await supabase
+    .from("tickets")
+    .select("id", { count: "exact", head: true })
+    .eq("competition_id", comp.id)
+    .eq("status", "available");
+  const closed = comp.status !== "live" || new Date(comp.ends_at).getTime() <= Date.now();
+  return {
+    available: count ?? 0,
+    total: comp.total_tickets,
+    status: comp.status,
+    endsAt: comp.ends_at,
+    closed,
+  };
+}
+
+/**
+ * Turns an RPC reservation error into a user-facing message, adding live
+ * availability so the UI can nudge the user down to what's actually left.
+ */
+export async function explainReservationFailure(
+  slug: string,
+  requestedQty: number,
+  rawMessage: string,
+): Promise<{ message: string; availability: Availability | null }> {
+  const availability = await fetchAvailability(slug);
+  const msg = rawMessage.toLowerCase();
+
+  if (availability?.closed) {
+    return {
+      message: "This competition has closed — the auto-draw will run shortly.",
+      availability,
+    };
+  }
+
+  if (msg.includes("not enough tickets") || msg.includes("already taken")) {
+    if (!availability || availability.available === 0) {
+      return { message: "Sold out — every ticket has gone. Try another competition.", availability };
+    }
+    if (availability.available < requestedQty) {
+      return {
+        message: `Only ${availability.available} ticket${availability.available === 1 ? "" : "s"} left — drop your quantity to ${availability.available} or fewer to continue.`,
+        availability,
+      };
+    }
+    return {
+      message: "Some of those numbers were just snapped up. Pick different numbers or use Lucky Dip.",
+      availability,
+    };
+  }
+
+  if (msg.includes("exceeds max per person")) {
+    return { message: rawMessage, availability };
+  }
+
+  if (msg.includes("competition not open")) {
+    return { message: "This competition isn't open for entries right now.", availability };
+  }
+
+  return { message: rawMessage || "Reservation failed. Try again.", availability };
+}
