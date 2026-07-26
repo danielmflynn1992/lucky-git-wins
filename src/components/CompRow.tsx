@@ -15,7 +15,7 @@ export function CompRow({ c }: { c: Competition }) {
     <Link
       to="/competitions/$slug"
       params={{ slug: c.slug }}
-      className="group flex items-center gap-3 sm:gap-4 rounded-lg bg-card border border-border p-3 shadow-sm hover:shadow-md hover:border-clover/50 transition-all"
+      className="group flex items-center gap-3 sm:gap-4 rounded-lg bg-card border border-border p-3 shadow-sm hover:shadow-md hover:border-clover/50 transition-all overflow-hidden min-w-0 max-w-full [overflow-wrap:anywhere]"
     >
       {/* Thumb */}
       <div className="h-20 w-20 sm:h-24 sm:w-24 shrink-0 rounded-md overflow-hidden bg-muted">
@@ -24,7 +24,7 @@ export function CompRow({ c }: { c: Competition }) {
 
       {/* Middle */}
       <div className="min-w-0 flex-1">
-        <div className="text-[10px] uppercase tracking-[0.15em] font-semibold text-clover">{c.category}</div>
+        <div className="text-[10px] uppercase tracking-[0.15em] font-semibold text-clover truncate">{c.category}</div>
         <h3 className="font-display text-sm sm:text-base font-bold leading-tight text-foreground truncate">{c.title}</h3>
         <div className="mt-1.5 flex items-center gap-3 flex-wrap">
           <div className="font-display font-black text-lg tabular-nums text-foreground">
