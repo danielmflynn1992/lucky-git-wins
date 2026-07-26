@@ -1,7 +1,11 @@
 import { Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 import { Lockup } from "./Logo";
+import { winnersQuery } from "@/lib/winners-api";
 
 export function SiteFooter() {
+  const { data: winners = [] } = useQuery(winnersQuery);
+  const gitsCount = winners.length;
   return (
     <footer className="relative mt-8 md:mt-12">
       {/* -------- INK-BLUE LINK GRID -------- */}
@@ -80,7 +84,9 @@ export function SiteFooter() {
             color: "var(--color-on-dark-fg)",
           }}
         >
-          © {new Date().getFullYear()} LUCKYGITCOMPS · SOMEONE'S GOT TO WIN IT
+          © {new Date().getFullYear()} LUCKYGITCOMPS
+          <span className="mx-2 opacity-40">·</span>
+          GITS MADE LUCKY SO FAR: <b className="tabular-nums">{gitsCount.toString().padStart(3, "0")}</b>
         </div>
       </div>
     </footer>
