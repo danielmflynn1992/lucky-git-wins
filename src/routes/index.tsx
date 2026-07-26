@@ -281,7 +281,7 @@ function Home() {
               <dl className="px-3 pt-2 pb-3 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1">
                 <dt className="label text-[9px] whitespace-nowrap self-center">NAME</dt>
                 <dd className="font-mono text-[12px] text-[var(--color-ink-black)] text-right self-center truncate">
-                  <b>{w.name}</b> <span className="opacity-70">· {w.town}</span>
+                  <b>{w.name}</b> <span>· {w.town}</span>
                 </dd>
                 <dt className="label text-[9px] whitespace-nowrap self-center">PRIZE</dt>
                 <dd className="font-mono text-[12px] text-[var(--color-ink-black)] text-right self-center truncate">
