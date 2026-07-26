@@ -127,8 +127,8 @@ export function SiteNav() {
       <Link
         to="/"
         aria-label="Lucky Git Comps — home"
-        className="block w-full overflow-hidden bg-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-clover"
-        style={{ height: "clamp(44px, 13vw, 78px)", padding: "1px 0" }}
+        className="block w-full bg-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-clover"
+        style={{ padding: "6px 0" }}
       >
         <img
           src={LOCKUP_HORIZONTAL_URL}
@@ -136,12 +136,10 @@ export function SiteNav() {
           draggable={false}
           className="block select-none pointer-events-none mx-auto"
           style={{
-            height: "100%",
-            width: "auto",
-            maxWidth: "none",
-            // Scale to crop the baked-in transparent margins on the PNG.
-            transform: "scale(1.55)",
-            transformOrigin: "center",
+            width: "88%",
+            maxWidth: "88vw",
+            height: "auto",
+            objectFit: "contain",
           }}
         />
       </Link>
