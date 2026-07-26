@@ -13,7 +13,7 @@ export function CompCard({ c }: { c: Competition }) {
   const remaining = c.totalTickets - c.ticketsSold;
   const [quickOpen, setQuickOpen] = useState(false);
   return (
-    <>
+    <div className="relative flex h-full flex-col">
     <Link
       to="/competitions/$slug"
       params={{ slug: c.slug }}
@@ -80,31 +80,54 @@ export function CompCard({ c }: { c: Competition }) {
           </div>
         </div>
 
-        {/* CTA row — equal-width buttons, never push the card */}
+        {/* CTA row lives inside the card layout but the interactive Add button
+            is rendered as an overlay outside the <Link> to avoid nested-anchor
+            hydration errors and to make sure clicks never bubble into the card
+            link and navigate away from the modal. */}
         <div className="mt-auto grid grid-cols-2 gap-1.5 min-w-0 items-stretch">
           <div className="min-w-0 h-9 rounded-md bg-clover text-primary-foreground px-1 font-display font-extrabold text-[10px] sm:text-xs uppercase tracking-[-0.03em] leading-none inline-flex items-center justify-center gap-1 whitespace-nowrap shadow-sm group-hover:bg-clover-deep group-hover:shadow-md group-focus-visible:bg-clover-deep group-focus-visible:ring-2 group-focus-visible:ring-clover/40 group-focus-visible:ring-offset-2 group-focus-visible:ring-offset-card transition-all">
             <span>Enter Now</span>
             <ArrowRight className="h-3 w-3 sm:h-3.5 sm:w-3.5 shrink-0" aria-hidden="true" />
           </div>
-          <button
-            type="button"
-            aria-label={`Quick add tickets for ${c.title}`}
-            onClick={(e) => { e.preventDefault(); e.stopPropagation(); setQuickOpen(true); }}
-            className="min-w-0 h-9 rounded-md bg-gold text-gold-foreground px-1 font-display font-extrabold text-[10px] sm:text-xs uppercase tracking-[-0.03em] leading-none inline-flex items-center justify-center gap-1 whitespace-nowrap shadow-sm hover:bg-gold/90 hover:shadow-md hover:-translate-y-px active:translate-y-0 active:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-card transition-all"
-          >
-            <Plus className="h-3 w-3 sm:h-3.5 sm:w-3.5 shrink-0" aria-hidden="true" />
-            <span>Add</span>
-          </button>
+          {/* Placeholder cell — the real Add button is rendered as a sibling below
+              and absolutely positioned over this slot. Keeps the grid layout stable. */}
+          <div className="min-w-0 h-9" aria-hidden="true" />
         </div>
 
         {/* Trust badges */}
         <div className="hidden sm:flex items-center justify-between gap-2 pt-1 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
-          <NoDeadCompsBadge variant="row" />
+          <NoDeadCompsBadge variant="row" asLink={false} />
           <span className="inline-flex items-center gap-1"><Repeat2 className="h-3 w-3 text-clover" /> No Rollovers</span>
         </div>
       </div>
     </Link>
+
+    {/* Add button — sibling of the Link so clicks never nest inside an <a>.
+        Positioned to sit over the right half of the CTA row. */}
+    <button
+      type="button"
+      aria-label={`Quick add tickets for ${c.title}`}
+      onClick={(e) => { e.preventDefault(); e.stopPropagation(); setQuickOpen(true); }}
+      className="absolute right-2.5 sm:right-4 bottom-[calc(0.625rem+2.25rem+0.375rem)] sm:bottom-[calc(1rem+2.25rem+0.375rem)] hidden"
+      tabIndex={-1}
+    />
+    <div className="pointer-events-none absolute inset-x-2.5 sm:inset-x-4 bottom-2.5 sm:bottom-4">
+      {/* Only the Add half is interactive; the Enter Now half is handled by the underlying Link. */}
+      <div className="grid grid-cols-2 gap-1.5">
+        <div />
+        <button
+          type="button"
+          aria-label={`Quick add tickets for ${c.title}`}
+          onClick={(e) => { e.preventDefault(); e.stopPropagation(); setQuickOpen(true); }}
+          className="pointer-events-auto min-w-0 h-9 rounded-md bg-gold text-gold-foreground px-1 font-display font-extrabold text-[10px] sm:text-xs uppercase tracking-[-0.03em] leading-none inline-flex items-center justify-center gap-1 whitespace-nowrap shadow-sm hover:bg-gold/90 hover:shadow-md hover:-translate-y-px active:translate-y-0 active:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-card transition-all"
+        >
+          <Plus className="h-3 w-3 sm:h-3.5 sm:w-3.5 shrink-0" aria-hidden="true" />
+          <span>Add</span>
+        </button>
+      </div>
+    </div>
+
     <QuickAddDialog comp={c} open={quickOpen} onClose={() => setQuickOpen(false)} />
-    </>
+    </div>
   );
 }
