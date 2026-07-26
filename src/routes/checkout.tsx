@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { SmugSmile, StampSeal } from "@/components/Logo";
 import { getComp, COMPETITIONS } from "@/lib/mock-comps";
 import { gbp } from "@/lib/format";
-import { CreditCard, Lock, ShieldCheck, Share2, CheckCircle2, AlertTriangle, Mail } from "lucide-react";
+import { CreditCard, Lock, ShieldCheck, Share2, CheckCircle2, AlertTriangle } from "lucide-react";
 import { SkillWarning } from "@/components/SkillWarning";
 import { SkillQuestionStep } from "@/components/SkillQuestionStep";
 
