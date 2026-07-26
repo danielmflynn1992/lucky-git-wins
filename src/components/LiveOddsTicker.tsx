@@ -49,8 +49,7 @@ export function LiveOddsTicker() {
     );
   }
 
-  // Duplicate the list so the scroll can loop seamlessly.
-  const loop = [...items, ...items];
+  const loop = items;
 
   return (
     <TooltipProvider delayDuration={150}>
@@ -62,8 +61,8 @@ export function LiveOddsTicker() {
           {/* Wide left mask + matching left padding + trailing gap-8 spacer
               guarantee the first item is never mid-word at rest and the
               seamless loop hand-off never clips a partial word. */}
-          <div className="relative flex-1 overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_18%,#000_94%,transparent)] py-1.5">
-            <div className="ticker-scroll flex gap-8 whitespace-nowrap text-[11px] font-bold tracking-wide text-cream pl-[20%] pr-8">
+          <div className="relative flex-1 overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_4%,#000_96%,transparent)] py-1.5">
+            <div className="ticker-scroll flex gap-8 whitespace-nowrap text-[11px] font-bold tracking-wide text-cream pr-8">
               {loop.map((it, i) => (
                 <TickerItem key={`${it.id}-${i}`} c={it} />
               ))}
