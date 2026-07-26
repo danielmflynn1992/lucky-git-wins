@@ -68,6 +68,14 @@
   --color-segment:      #FF4B3E;
   --color-segment-dim:  #3A1512;
 
+  /* ---------- ON-DARK / ON-COLOUR SURFACE TOKENS ----------
+     Text colours tuned for use on --color-ink-blue, --color-ink-red,
+     --color-cabinet or any other coloured/dark surface. All hit 4.5:1
+     against those backgrounds. Do NOT use --color-muted-foreground on
+     dark — it was authored against cream paper and drops to ~2.5:1. */
+  --color-on-dark-fg:     #F7F5EF;
+  --color-on-dark-muted:  #C9C4B5;
+
   /* Legacy "green" tokens now resolve to pools blue so untouched code
      that references --color-ink-green still gets a coherent plate colour. */
   --color-ink-green:      var(--color-ink-blue);
