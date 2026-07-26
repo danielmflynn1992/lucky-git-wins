@@ -168,10 +168,9 @@ export function SiteNav() {
             <Link
               to="/"
               aria-label="Lucky Git Comps — home"
-              className="inline-flex items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-clover rounded-sm text-clover"
-              style={{ height: 40, maxWidth: "60vw" }}
+              className="inline-flex items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-clover rounded-sm"
             >
-              <Lockup variant="horizontal" style={{ height: 40, width: "auto", maxWidth: "60vw" }} />
+              <Lockup style={{ height: 38, width: "auto", maxWidth: "62vw" }} />
             </Link>
           </div>
 
