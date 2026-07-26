@@ -119,44 +119,29 @@ export function SiteNav() {
       {/* Tier 0 — live ticker, topmost element on the page, dark green strip. */}
       <LiveOddsTicker />
 
-      {/* Tier 1 — engraved banknote masthead.
-          Structure: hamburger · flanking rule+diamond · seal+wordmark lockup
-          · flanking rule+diamond · basket. Faint guilloché backdrop at ~5%.
-          Height 68px mobile / 80px desktop, condensing to 56px on scroll.
-          Bottom border is a double rule (2px clover + 1px paper-edge hairline
-          3px beneath) — the certificate-header treatment. */}
-      {/* Masthead container. Height is fixed but tall enough to fully
-          contain the 68px banner plus vertical breathing room and the
-          double-rule bottom border. No overflow tricks — the banner
-          fits inside the row so nothing is clipped top or bottom. */}
-      <div className="relative bg-card mast-transition" data-scrolled={scrolled ? "true" : "false"}>
-        {/* Faint guilloché backdrop — fades to the edges, disappears on scroll. */}
-        <div
-          aria-hidden="true"
-          className={
-            "absolute inset-0 pointer-events-none overflow-hidden mast-transition " +
-            (scrolled ? "opacity-0" : "opacity-[0.05]")
-          }
-          style={{
-            maskImage: "linear-gradient(90deg, transparent, #000 22%, #000 78%, transparent)",
-            WebkitMaskImage: "linear-gradient(90deg, transparent, #000 22%, #000 78%, transparent)",
-          }}
-        >
-          <Guilloche variant="rosette" strength="strong" className="text-clover w-full h-full" />
-        </div>
+      {/* Row 1 — masthead banner at full viewport bleed. No padding, no
+          margins, no other elements. object-cover on its own line. */}
+      <Link
+        to="/"
+        aria-label="Lucky Git Comps — home"
+        className="block w-screen relative left-1/2 right-1/2 -translate-x-1/2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-clover"
+      >
+        <Lockup
+          className="block w-full h-auto object-cover"
+          style={{ display: "block", width: "100%" }}
+        />
+      </Link>
 
-        <div
-          className={
-            "relative mx-auto max-w-7xl px-3 md:px-6 grid items-center gap-2 md:gap-4 mast-transition overflow-hidden " +
-            "grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] " +
-            "h-16"
-          }
-        >
-          {/* LEFT edge — hamburger only, unchanged position. */}
+      {/* 2px black rule separating row 1 from row 2. */}
+      <div aria-hidden="true" className="h-[2px] bg-[var(--color-ink-black,#000)]" />
+
+      {/* Row 2 — thin 44px cream strip: hamburger left, basket right. */}
+      <div className="relative bg-card h-11">
+        <div className="mx-auto max-w-7xl h-full px-3 md:px-6 flex items-center justify-between">
           <button
             ref={toggleRef}
             onClick={() => setOpen((o) => !o)}
-            className="p-2 -ml-2 rounded-md hover:bg-muted text-foreground/80 shrink-0 justify-self-start"
+            className="p-2 -ml-2 rounded-md hover:bg-muted text-foreground/80"
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
             aria-controls="mobile-menu"
@@ -165,76 +150,30 @@ export function SiteNav() {
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
 
-          {/* CENTRE — single combined lockup image, transparent wrapper. */}
           <Link
-            to="/"
-            aria-label="Lucky Git Comps — home"
+            to="/checkout"
+            search={basketSlug ? { slug: basketSlug } : undefined}
+            aria-label={basketCount > 0 ? `Basket, ${basketCount} ticket${basketCount === 1 ? "" : "s"}` : "Basket, empty"}
             className={
-              "relative justify-self-center block overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-clover " +
-              "h-12 w-[min(58vw,160px)]"
+              "relative inline-flex items-center justify-center h-9 w-9 rounded-full border transition-colors " +
+              (basketCount > 0
+                ? "border-clover text-clover hover:bg-clover hover:text-primary-foreground"
+                : "border-border text-foreground/70 hover:border-clover hover:text-clover")
             }
           >
-            {/* The source PNG includes a large transparent canvas. Crop that
-                dead space in CSS so the printed banner itself fills the row,
-                while the fixed masthead height remains unchanged. */}
-            <Lockup
-              className="pointer-events-none absolute max-w-none"
-              style={{
-                width: "105.36%",
-                height: "auto",
-                maxWidth: "none",
-                left: "-2.68%",
-                top: "-46.7%",
-              }}
-            />
+            <ShoppingBag className="h-4.5 w-4.5" />
+            {basketCount > 0 && (
+              <span
+                aria-hidden
+                className="absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] px-1 rounded-full bg-urgent text-urgent-foreground text-[10px] font-mono font-bold flex items-center justify-center ring-2 ring-card tabular-nums"
+              >
+                {basketCount > 99 ? "99+" : basketCount}
+              </span>
+            )}
           </Link>
-
-          {/* RIGHT edge — auth (md+) + basket, unchanged position. */}
-          <div className="flex items-center justify-end gap-3 md:gap-4 shrink-0 justify-self-end">
-            <div className="hidden md:flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.16em] text-foreground/60">
-              {signedIn ? (
-                <>
-                  <Link to="/account" className="hover:text-clover transition-colors">Account</Link>
-                  <button onClick={() => supabase.auth.signOut()} className="hover:text-clover transition-colors">Sign out</button>
-                </>
-              ) : (
-                !loading && (
-                  <>
-                    <Link to="/auth" search={{ redirect: undefined }} className="hover:text-clover transition-colors">Login</Link>
-                    <Link to="/auth" search={{ redirect: undefined }} className="hover:text-clover transition-colors">Register</Link>
-                  </>
-                )
-              )}
-            </div>
-            <Link
-              to="/checkout"
-              search={basketSlug ? { slug: basketSlug } : undefined}
-              aria-label={basketCount > 0 ? `Basket, ${basketCount} ticket${basketCount === 1 ? "" : "s"}` : "Basket, empty"}
-              className={
-                "relative inline-flex shrink-0 items-center justify-center h-10 w-10 rounded-full border transition-colors " +
-                (basketCount > 0
-                  ? "border-clover text-clover hover:bg-clover hover:text-primary-foreground"
-                  : "border-border text-foreground/70 hover:border-clover hover:text-clover")
-              }
-            >
-              <ShoppingBag className="h-5 w-5" />
-              {basketCount > 0 && (
-                <span
-                  aria-hidden
-                  className="absolute -top-1.5 -right-1.5 min-w-[20px] h-5 px-1.5 rounded-full bg-urgent text-urgent-foreground text-[11px] font-mono font-bold flex items-center justify-center ring-2 ring-card tabular-nums"
-                >
-                  {basketCount > 99 ? "99+" : basketCount}
-                </span>
-              )}
-            </Link>
-          </div>
         </div>
 
-        {/* Double-rule bottom border — 2px clover line, then a 1px paper-edge
-            hairline 3px beneath. Certificate-plate treatment; persists on
-            scroll so the masthead always reads as engraved. */}
-        {/* Double-rule sits BELOW the banner with clearance so it never
-            crosses the artwork. */}
+        {/* Double-rule bottom border — 2px clover + 1px paper-edge hairline 3px beneath. */}
         <div aria-hidden="true" className="absolute left-0 right-0 bottom-0 pointer-events-none">
           <div className="h-[2px] bg-clover" />
           <div className="h-px bg-[var(--color-paper-edge)] mt-[3px]" />
