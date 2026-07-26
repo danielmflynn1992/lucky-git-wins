@@ -14,6 +14,57 @@ export type Database = {
   }
   public: {
     Tables: {
+      client_errors: {
+        Row: {
+          count: number
+          created_at: string
+          extra: Json | null
+          fingerprint: string
+          id: string
+          kind: string
+          last_seen_at: string
+          message: string
+          resolved: boolean
+          route: string | null
+          severity: string
+          stack: string | null
+          user_agent: string | null
+          viewport: string | null
+        }
+        Insert: {
+          count?: number
+          created_at?: string
+          extra?: Json | null
+          fingerprint: string
+          id?: string
+          kind: string
+          last_seen_at?: string
+          message: string
+          resolved?: boolean
+          route?: string | null
+          severity: string
+          stack?: string | null
+          user_agent?: string | null
+          viewport?: string | null
+        }
+        Update: {
+          count?: number
+          created_at?: string
+          extra?: Json | null
+          fingerprint?: string
+          id?: string
+          kind?: string
+          last_seen_at?: string
+          message?: string
+          resolved?: boolean
+          route?: string | null
+          severity?: string
+          stack?: string | null
+          user_agent?: string | null
+          viewport?: string | null
+        }
+        Relationships: []
+      }
       competition_secrets: {
         Row: {
           competition_id: string
@@ -422,6 +473,20 @@ export type Database = {
         }
         Returns: boolean
       }
+      log_client_error: {
+        Args: {
+          _extra: Json
+          _fingerprint: string
+          _kind: string
+          _message: string
+          _route: string
+          _severity: string
+          _stack: string
+          _user_agent: string
+          _viewport: string
+        }
+        Returns: undefined
+      }
       release_reservation: { Args: { p_token: string }; Returns: undefined }
       reserve_lucky_dip: {
         Args: { p_qty: number; p_slug: string; p_token: string }
@@ -441,6 +506,7 @@ export type Database = {
         Returns: number
       }
       sweep_expired_reservations: { Args: never; Returns: undefined }
+      unresolved_client_errors_count: { Args: never; Returns: number }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
