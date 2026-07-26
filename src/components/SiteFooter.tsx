@@ -115,7 +115,7 @@ export function SiteFooter() {
               className="flex"
               style={{ color: "var(--color-on-dark-fg)" }}
             >
-              <Lockup tone="cream" style={{ maxWidth: 240, width: "100%", height: "auto" }} />
+              <Lockup tone="cream" style={{ maxWidth: 260, width: "100%", height: "auto" }} />
             </div>
             <p
               className="mt-4 text-sm max-w-xs leading-relaxed"
