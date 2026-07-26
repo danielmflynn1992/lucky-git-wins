@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useRouterState } from "@tanstack/react-router";
 import { Instagram, Facebook, Mail, Menu, ShoppingBag, User, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { Logo } from "./Logo";
+import { WaxSeal } from "./Logo";
 import { useAuth } from "@/hooks/use-auth";
 import { useBasket } from "@/hooks/use-basket";
 import { supabase } from "@/integrations/supabase/client";
@@ -56,6 +56,19 @@ export function SiteNav() {
   const toggleRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
 
+  // Scroll-shrink: once the user has scrolled past ~80px, the seal shrinks
+  // and settles fully inside the header bar. prefers-reduced-motion listeners
+  // still receive the state change, but the .wax-seal-transition rule below
+  // drops the animation duration to 0 for those users.
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const onScroll = () => setScrolled(window.scrollY > 80);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   // Focus management + Escape + focus trap while the panel is open.
   useEffect(() => {
     if (!open) return;
@@ -102,22 +115,17 @@ export function SiteNav() {
 
   return (
     <header className="sticky top-0 z-40 shadow-sm">
-      {/* Tier 1 — promo strip (hidden on mobile to reclaim viewport) */}
-      <div className="hidden md:block bg-urgent text-urgent-foreground text-center text-xs md:text-sm font-bold uppercase tracking-[0.14em] py-2.5 px-4">
-        <Link to="/how-it-works" className="hover:underline underline-offset-4">
-          REFER A MATE = FREE TICKETS
-        </Link>
-      </div>
-
-      {/* Tier 2 — utility (socials left, auth right) */}
+      {/* Tier 1 — merged utility bar: promo centre, auth right.
+          Socials moved into the mobile menu / footer to keep this row light. */}
       <div className="bg-ink text-cream">
-        <div className="mx-auto max-w-7xl px-4 h-10 flex items-center justify-between text-[11px] md:text-xs">
-          <div className="flex items-center gap-4 text-cream/80">
-            <a href="https://instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram" className="hover:text-gold transition-colors"><Instagram className="h-[15px] w-[15px]" /></a>
-            <a href="https://facebook.com" target="_blank" rel="noreferrer" aria-label="Facebook" className="hover:text-gold transition-colors"><Facebook className="h-[15px] w-[15px]" /></a>
-            <a href="mailto:hello@luckygitcomps.co.uk" aria-label="Email" className="hover:text-gold transition-colors"><Mail className="h-[15px] w-[15px]" /></a>
-          </div>
-          <div className="flex items-center gap-5 uppercase tracking-[0.16em] font-bold">
+        <div className="mx-auto max-w-7xl px-4 h-9 flex items-center justify-between gap-4 text-[11px] md:text-xs">
+          <Link
+            to="/how-it-works"
+            className="hidden sm:inline text-cream/85 hover:text-gold font-bold uppercase tracking-[0.16em] truncate"
+          >
+            Refer a mate = free tickets
+          </Link>
+          <div className="flex items-center gap-5 uppercase tracking-[0.16em] font-bold ml-auto">
             {signedIn ? (
               <>
                 <Link to="/account" className="hover:text-gold transition-colors">Account</Link>
@@ -135,11 +143,13 @@ export function SiteNav() {
         </div>
       </div>
 
-      {/* Tier 3 — main bar: nav | centered logo | cart */}
-      <div className="bg-card/95 backdrop-blur-md border-b border-border relative overflow-visible">
-        <div className="mx-auto max-w-7xl px-4 md:px-6 h-16 md:h-24 grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-4 relative">
-          {/* Left nav */}
-          <nav className="hidden lg:flex items-center justify-end gap-7 min-w-0">
+      {/* Main bar: hamburger left, wax seal centred (overhanging), basket right.
+          overflow-visible so the seal can drop below the bottom border. */}
+      <div className="paper-edge-bottom bg-card/95 backdrop-blur-md relative overflow-visible">
+        <div className="mx-auto max-w-7xl px-4 md:px-6 h-14 md:h-16 grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-4 relative">
+          {/* Left nav (desktop) — sits alongside the hamburger; hamburger takes
+              over on smaller widths so the seal stays visually centred. */}
+          <nav className="hidden lg:flex items-center justify-end gap-6 min-w-0 pr-4">
             {leftLinks.map((l) => (
               <Link
                 key={l.to}
@@ -152,7 +162,7 @@ export function SiteNav() {
             ))}
           </nav>
 
-          {/* Mobile menu toggle (left) */}
+          {/* Hamburger — always on the left, at every breakpoint, per spec. */}
           <button
             ref={toggleRef}
             onClick={() => setOpen((o) => !o)}
@@ -165,14 +175,28 @@ export function SiteNav() {
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
 
-          {/* Centered logo — sits inside the bar, blends with the paper */}
-          <div className="justify-self-center shrink-0 relative z-10">
-            <Logo />
+          {/* Centred wax seal — overhangs the header's bottom edge by ~40% of
+              its size, then shrinks and settles inside the bar on scroll. */}
+          <div className="justify-self-center shrink-0 relative z-50 pointer-events-auto">
+            <div className="relative flex items-end justify-center">
+              <WaxSeal
+                size={
+                  scrolled
+                    ? "h-[44px] w-[44px]"
+                    : "h-[64px] w-[64px] md:h-[88px] md:w-[88px]"
+                }
+                className={
+                  scrolled
+                    ? "translate-y-0"
+                    : "translate-y-[26px] md:translate-y-[35px]"
+                }
+              />
+            </div>
           </div>
 
-          {/* Right nav + cart */}
+          {/* Right: nav (desktop) + basket (all breakpoints). */}
           <div className="flex items-center justify-end gap-5 md:gap-7 min-w-0">
-            <nav className="hidden lg:flex items-center gap-7">
+            <nav className="hidden lg:flex items-center gap-6 pl-4">
               {rightLinks.map((l) => (
                 <Link
                   key={l.to + l.label}
@@ -208,6 +232,11 @@ export function SiteNav() {
           </div>
         </div>
       </div>
+
+      {/* Spacer reserving the seal's overhang so first-page content is never
+          occluded on initial render. Sits outside the sticky header, in normal
+          flow, so it pushes the page body down by the overhang height. */}
+      <div aria-hidden="true" className="h-[26px] md:h-[35px] pointer-events-none" />
 
       {/* Screen-reader live region — announces basket changes globally */}
       <div
