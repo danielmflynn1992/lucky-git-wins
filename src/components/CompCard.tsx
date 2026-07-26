@@ -4,7 +4,7 @@ import type { Competition } from "@/lib/mock-comps";
 import { gbp } from "@/lib/format";
 import { Countdown } from "./Countdown";
 import { QuickAddDialog } from "./QuickAddDialog";
-import { Repeat2, Zap, Plus } from "lucide-react";
+import { Repeat2, Zap, Plus, ArrowRight } from "lucide-react";
 import { NoDeadCompsBadge } from "./NoDeadCompsBadge";
 
 export function CompCard({ c }: { c: Competition }) {
@@ -82,8 +82,9 @@ export function CompCard({ c }: { c: Competition }) {
 
         {/* CTA row — equal-width buttons, never push the card */}
         <div className="mt-auto grid grid-cols-2 gap-1.5 min-w-0 items-stretch">
-          <div className="min-w-0 h-9 inline-flex items-center justify-center whitespace-nowrap rounded-md bg-clover text-primary-foreground px-1 font-display font-extrabold text-[11px] sm:text-xs uppercase tracking-[-0.02em] leading-none shadow-sm group-hover:bg-clover-deep group-hover:shadow-md group-focus-visible:bg-clover-deep group-focus-visible:ring-2 group-focus-visible:ring-clover/40 group-focus-visible:ring-offset-2 group-focus-visible:ring-offset-card transition-all">
-            Enter&nbsp;Now&nbsp;→
+          <div className="min-w-0 h-9 inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md bg-clover text-primary-foreground px-1 font-display font-extrabold text-[11px] sm:text-xs uppercase tracking-[-0.02em] leading-none shadow-sm group-hover:bg-clover-deep group-hover:shadow-md group-focus-visible:bg-clover-deep group-focus-visible:ring-2 group-focus-visible:ring-clover/40 group-focus-visible:ring-offset-2 group-focus-visible:ring-offset-card transition-all">
+            <span>Enter Now</span>
+            <ArrowRight className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
           </div>
           <button
             type="button"
