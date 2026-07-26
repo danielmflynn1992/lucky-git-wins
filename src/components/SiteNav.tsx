@@ -173,10 +173,7 @@ export function SiteNav() {
           >
             <Link to="/competitions" className="hover:text-clover transition-colors whitespace-nowrap">Competitions</Link>
             <Link to="/winners" className="hover:text-clover transition-colors whitespace-nowrap">Winners</Link>
-            <Link to="/how-it-works" className="hover:text-clover transition-colors whitespace-nowrap">
-              <span className="sm:hidden">How</span>
-              <span className="hidden sm:inline">How it works</span>
-            </Link>
+            <Link to="/how-it-works" className="hover:text-clover transition-colors whitespace-nowrap">About</Link>
             <Link to="/past-draws" className="hover:text-clover transition-colors whitespace-nowrap">Verify</Link>
           </nav>
 
