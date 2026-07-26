@@ -6,11 +6,12 @@ import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
 import { Button } from "@/components/ui/button";
 import { CATEGORIES } from "@/lib/mock-comps";
-import { ImagePlus, Copy, Save, ArrowLeft, Loader2, AlertTriangle, CheckCircle2, X, HelpCircle } from "lucide-react";
+import { ImagePlus, Copy, Save, ArrowLeft, Loader2, AlertTriangle, CheckCircle2, X, HelpCircle, Plus } from "lucide-react";
 import { createCompetition } from "@/lib/admin.functions";
 import { supabase } from "@/integrations/supabase/client";
 import { optimizeImage, formatBytes, type OptimizeResult } from "@/lib/image-optimize";
 import { LetterboxImage, type LetterboxStyle } from "@/components/LetterboxImage";
+import { PrizeImage } from "@/components/PrizeImage";
 import type { ReactNode } from "react";
 
 export const Route = createFileRoute("/admin/competitions/new")({
@@ -47,11 +48,15 @@ function NewComp() {
   const [correctOption, setCorrectOption] = useState<"a" | "b" | "c" | "d">("a");
   const [status, setStatus] = useState<"draft" | "live" | "paused">("draft");
   const [imageUrl, setImageUrl] = useState<string>("");
+  const [thumbUrl, setThumbUrl] = useState<string>("");
+  const [supportingImages, setSupportingImages] = useState<string[]>([]);
+  const [flattenBackground, setFlattenBackground] = useState<boolean>(true);
   const [letterboxStyle, setLetterboxStyle] = useState<LetterboxStyle>("blur");
-  const [uploading, setUploading] = useState(false);
+  const [uploading, setUploading] = useState<false | "hero" | number>(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [optimizeInfo, setOptimizeInfo] = useState<OptimizeResult | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const supportInputRef = useRef<HTMLInputElement>(null);
 
   const derivedSlug = useMemo(() => {
     const src = (slug || title).toLowerCase().trim();
@@ -71,9 +76,22 @@ function NewComp() {
     return errs;
   }, [title, derivedSlug, endsAt, pricePerTicket, totalTickets, question, optionA, optionB, optionC, optionD]);
 
-  async function handleFile(file: File) {
+  async function uploadBlob(blob: Blob, contentType: string, ext: string): Promise<string> {
+    const path = `${crypto.randomUUID()}.${ext}`;
+    const { error: upErr } = await supabase.storage
+      .from("competition-images")
+      .upload(path, blob, { cacheControl: "31536000", upsert: false, contentType });
+    if (upErr) throw upErr;
+    const { data: signed, error: sErr } = await supabase.storage
+      .from("competition-images")
+      .createSignedUrl(path, 60 * 60 * 24 * 365 * 10);
+    if (sErr) throw sErr;
+    return signed.signedUrl;
+  }
+
+  async function handleFile(file: File, slot: "hero" | number) {
     setUploadError(null);
-    setOptimizeInfo(null);
+    if (slot === "hero") setOptimizeInfo(null);
     if (!file.type.startsWith("image/")) {
       setUploadError("Pick an image file (jpg, png, webp).");
       return;
@@ -82,27 +100,36 @@ function NewComp() {
       setUploadError("Image is too big. Keep it under 20 MB.");
       return;
     }
-    setUploading(true);
+    setUploading(slot);
     try {
-      // Downscale + convert to WEBP client-side before upload so cards stay
-      // fast without asking the admin to pre-process anything.
       const result = await optimizeImage(file, {
         maxEdge: 1600,
-        targetBytes: 350 * 1024,
+        targetBytes: 300 * 1024,
+        cropToFourThree: true,
+        thumbEdge: 400,
+        flattenBackground,
       });
-      setOptimizeInfo(result);
-      const ext = result.contentType === "image/webp" ? "webp" : result.contentType === "image/jpeg" ? "jpg" : (file.name.split(".").pop()?.toLowerCase() || "bin");
-      const path = `${crypto.randomUUID()}.${ext}`;
-      const { error: upErr } = await supabase.storage
-        .from("competition-images")
-        .upload(path, result.blob, { cacheControl: "31536000", upsert: false, contentType: result.contentType });
-      if (upErr) throw upErr;
-      // Bucket is private (workspace policy); use a very-long-lived signed URL.
-      const { data: signed, error: sErr } = await supabase.storage
-        .from("competition-images")
-        .createSignedUrl(path, 60 * 60 * 24 * 365 * 10); // 10 years
-      if (sErr) throw sErr;
-      setImageUrl(signed.signedUrl);
+      if (slot === "hero") setOptimizeInfo(result);
+      const ext = result.contentType === "image/webp" ? "webp" : "jpg";
+      const url = await uploadBlob(result.blob, result.contentType, ext);
+
+      if (slot === "hero") {
+        setImageUrl(url);
+        if (result.thumb) {
+          const tExt = result.thumb.contentType === "image/webp" ? "webp" : "jpg";
+          const tUrl = await uploadBlob(result.thumb.blob, result.thumb.contentType, tExt);
+          setThumbUrl(tUrl);
+        } else {
+          setThumbUrl("");
+        }
+      } else {
+        setSupportingImages((prev) => {
+          const next = [...prev];
+          if (slot === prev.length) next.push(url);
+          else next[slot] = url;
+          return next.slice(0, 5);
+        });
+      }
     } catch (e) {
       setUploadError(e instanceof Error ? e.message : "Upload failed.");
     } finally {
@@ -127,6 +154,8 @@ function NewComp() {
           endsAt,
           status: publishAs,
           hot,
+            thumbUrl,
+            supportingImages,
           question: question.trim(),
           optionA: optionA.trim(),
           optionB: optionB.trim(),
