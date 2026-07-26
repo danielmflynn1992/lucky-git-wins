@@ -60,8 +60,8 @@ export function CompCard({ c }: { c: Competition }) {
       {/* Prize title in Anton */}
       <div className="relative z-10 px-3 pt-2 pb-1 min-w-0">
         <h3
-          className="font-display uppercase leading-[0.95] tracking-[0.01em] text-[var(--color-ink-black)] break-words hyphens-auto"
-          style={{ fontSize: "clamp(1.1rem, 5.4cqi, 1.7rem)" }}
+          className="font-display uppercase leading-[0.95] tracking-[0.01em] text-[var(--color-ink-black)] break-words hyphens-auto line-clamp-2"
+          style={{ fontSize: "clamp(1.1rem, 5.4cqi, 1.7rem)", minHeight: "calc(2em * 0.95)" }}
         >
           {c.title}
         </h3>
