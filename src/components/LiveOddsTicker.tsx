@@ -35,6 +35,16 @@ export function LiveOddsTicker() {
 
   const items = (data ?? []).filter((c) => c.totalTickets > 0);
 
+  /**
+   * Deadpan filler lines. Injected when fewer than three live comps exist
+   * so the marquee doesn't just loop the same title over and over.
+   */
+  const FILLER = [
+    "NEVER MORE THAN 499",
+    "SOMEONE'S GOT TO WIN IT",
+    "THE ODDS ARE THE ODDS",
+  ] as const;
+
   // Empty / loading state — still render the shell so layout doesn't jump.
   if (items.length === 0) {
     return (
@@ -50,6 +60,8 @@ export function LiveOddsTicker() {
   }
 
   const loop = items;
+  // Show filler chips only when fewer than three real items are live.
+  const showFiller = items.length > 0 && items.length < 3;
 
   return (
     <TooltipProvider delayDuration={150}>
@@ -70,6 +82,15 @@ export function LiveOddsTicker() {
               <span aria-hidden="true" className="shrink-0 basis-full min-w-full" />
               {loop.map((it, i) => (
                 <TickerItem key={`${it.id}-${i}`} c={it} />
+              ))}
+              {showFiller && FILLER.map((line) => (
+                <span
+                  key={line}
+                  className="inline-flex items-center gap-3 shrink-0 text-cream/75"
+                >
+                  {line}
+                  <span className="text-gold font-black">●</span>
+                </span>
               ))}
             </div>
           </div>

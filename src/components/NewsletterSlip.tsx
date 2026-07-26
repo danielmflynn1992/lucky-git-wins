@@ -21,7 +21,7 @@ export function NewsletterSlip() {
       return;
     }
     setEmail("");
-    toast.success("You're on the list. We'll ping you before each drop.");
+    toast.success("You're on the list.");
   };
 
   return (
@@ -86,7 +86,7 @@ export function NewsletterSlip() {
                 fontFamily: "'Anton','Archivo Black',system-ui,sans-serif",
               }}
             >
-              {subscribing ? "Signing up…" : "Sign me up"}
+              {subscribing ? "Signing up…" : "Go on then"}
             </button>
           </div>
         </form>

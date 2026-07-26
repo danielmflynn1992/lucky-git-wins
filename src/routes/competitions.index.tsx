@@ -6,6 +6,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { CompCard } from "@/components/CompCard";
 import { CompRow } from "@/components/CompRow";
 import { COMPETITIONS, CATEGORIES } from "@/lib/mock-comps";
+import { LuckyMark } from "@/components/GaryMascot";
 
 type SortKey = "ending-soon" | "highest-prize" | "best-odds" | "lowest-price" | "hot";
 
@@ -87,20 +88,40 @@ function CompetitionsPage() {
           </div>
         </div>
         {view === "grid" ? (
-          <div className="mt-8 grid gap-3 sm:gap-5 grid-cols-2 md:grid-cols-3 items-stretch">
-            {sorted.map((c) => (
-              <div key={c.slug} className="h-full">
-                <CompCard c={c} />
-              </div>
-            ))}
-          </div>
+          sorted.length === 0 ? (
+            <EmptyStall />
+          ) : (
+            <div className="mt-8 grid gap-3 sm:gap-5 grid-cols-2 md:grid-cols-3 items-stretch">
+              {sorted.map((c) => (
+                <div key={c.slug} className="h-full">
+                  <CompCard c={c} />
+                </div>
+              ))}
+            </div>
+          )
         ) : (
-          <div className="mt-8 flex flex-col gap-2">
-            {sorted.map((c) => <CompRow key={c.slug} c={c} />)}
-          </div>
+          sorted.length === 0 ? (
+            <EmptyStall />
+          ) : (
+            <div className="mt-8 flex flex-col gap-2">
+              {sorted.map((c) => <CompRow key={c.slug} c={c} />)}
+            </div>
+          )
         )}
       </main>
       <SiteFooter />
+    </div>
+  );
+}
+
+function EmptyStall() {
+  return (
+    <div className="mt-10 text-center py-12">
+      <LuckyMark className="mx-auto h-14 w-14" />
+      <p className="mt-4 font-display text-2xl font-bold text-foreground">
+        Stall's empty. Back Monday.
+      </p>
+      <p className="mt-1 text-sm text-muted-foreground">Nothing doing. Try something else.</p>
     </div>
   );
 }

@@ -10,7 +10,8 @@ import { CompCard } from "@/components/CompCard";
 import { Button } from "@/components/ui/button";
 import { LetterboxImage } from "@/components/LetterboxImage";
 import { COMPETITIONS } from "@/lib/mock-comps";
-import { gbp, shortNumber } from "@/lib/format";
+import { gbp, shortNumber, pickLoadingQuip, moneySlang } from "@/lib/format";
+import { LuckyMark } from "@/components/GaryMascot";
 import {
   competitionQueryOptions,
   explainReservationFailure,
@@ -36,8 +37,9 @@ export const Route = createFileRoute("/competitions/$slug")({
     <div className="min-h-screen flex flex-col">
       <SiteNav />
       <main className="mx-auto max-w-2xl px-4 py-24 text-center flex-1">
-        <h1 className="font-display text-4xl font-black">That comp's gone.</h1>
-        <p className="mt-2 text-muted-foreground">Try one that's live.</p>
+        <LuckyMark className="mx-auto h-16 w-16" />
+        <h1 className="mt-4 font-display text-4xl font-black">That comp's gone.</h1>
+        <p className="mt-2 text-muted-foreground">This page has done one. Try the comps.</p>
         <Button asChild variant="gold" size="lg" className="mt-6"><Link to="/">Back to live comps</Link></Button>
       </main>
       <SiteFooter />
@@ -69,6 +71,7 @@ function CompDetail() {
   const [reserveError, setReserveError] = useState<string | null>(null);
   const [availableLeft, setAvailableLeft] = useState<number | null>(null);
   const [soldOut, setSoldOut] = useState(false);
+  const [reservingQuip, setReservingQuip] = useState(pickLoadingQuip());
   const queryClient = useQueryClient();
 
   const takenSet = useMemo(() => new Set(c.takenNumbers), [c.takenNumbers]);
@@ -89,6 +92,7 @@ function CompDetail() {
     setReserveError(null);
     setAvailableLeft(null);
     setSoldOut(false);
+    setReservingQuip(pickLoadingQuip());
     setReserving(true);
     try {
       const token = newReservationToken();
@@ -277,7 +281,7 @@ function CompDetail() {
                   )}
                   {soldOut && (
                     <div className="mt-1 pl-6 font-mono text-[11px] tabular-nums text-urgent/80">
-                      Sold out — 0 tickets remaining
+                      Gone. You snooze, you lose.
                     </div>
                   )}
                 </div>
@@ -290,7 +294,7 @@ function CompDetail() {
                   <div className="text-xs text-muted-foreground font-mono tabular-nums">{displayNumbers} ticket{displayNumbers === 1 ? "" : "s"}</div>
                 </div>
                 <Button variant="gold" size="xl" onClick={handleReserve} disabled={displayNumbers === 0 || reserving || soldOut}>
-                  {reserving ? <><Loader2 className="h-4 w-4 animate-spin" /> Locking…</> : "Enter now"}
+                  {reserving ? <><Loader2 className="h-4 w-4 animate-spin" /> {reservingQuip}</> : "Go on then"}
                 </Button>
               </div>
 
@@ -302,7 +306,17 @@ function CompDetail() {
 
             <div className="mt-4 grid grid-cols-2 gap-3 text-xs">
               <div className="flex items-center gap-2"><Shield className="h-4 w-4 text-clover" /> Verifiable RNG draw</div>
-              <div className="flex items-center gap-2"><PoundSterling className="h-4 w-4 text-clover" /> Cash alt: {gbp(c.cashAlternative)}</div>
+              <div className="flex items-center gap-2">
+                <PoundSterling className="h-4 w-4 text-clover" />
+                <span>
+                  Cash alt: {gbp(c.cashAlternative)}
+                  {moneySlang(c.cashAlternative) && (
+                    <span className="ml-1.5 font-mono text-[10px] text-[var(--color-ink-blue)]">
+                      ({moneySlang(c.cashAlternative)})
+                    </span>
+                  )}
+                </span>
+              </div>
               <div className="flex items-center gap-2"><Ticket className="h-4 w-4 text-clover" /> Max {c.maxPerPerson} per person</div>
               <div className="flex items-center gap-2"><Info className="h-4 w-4 text-clover" /> Auto-drawn on close</div>
             </div>
@@ -317,7 +331,18 @@ function CompDetail() {
             <h3 className="mt-8 font-display text-xl font-black">The important bits</h3>
             <ul className="mt-3 space-y-2 text-sm text-foreground/80">
               <li className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-clover mt-0.5 shrink-0" /> Closing: <b>{new Date(c.endsAt).toLocaleString("en-GB")}</b> — or when sold out.</li>
-              <li className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-clover mt-0.5 shrink-0" /> Cash alternative: <b>{gbp(c.cashAlternative)}</b>.</li>
+              <li className="flex gap-2">
+                <CheckCircle2 className="h-4 w-4 text-clover mt-0.5 shrink-0" />
+                <span>
+                  Cash alternative: <b>{gbp(c.cashAlternative)}</b>
+                  {moneySlang(c.cashAlternative) && (
+                    <span className="ml-1.5 font-mono text-[11px] text-[var(--color-ink-blue)]">
+                      ({moneySlang(c.cashAlternative)})
+                    </span>
+                  )}
+                  .
+                </span>
+              </li>
               <li className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-clover mt-0.5 shrink-0" /> Winner automatically drawn and announced within 24h of close.</li>
               <li className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-clover mt-0.5 shrink-0" /> UK entrants only, 18+. <Link to="/terms" className="underline">T&Cs apply</Link>.</li>
             </ul>
