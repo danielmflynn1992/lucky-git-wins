@@ -18,7 +18,6 @@ type Draw = {
   winner_town: string;
   total_tickets: number;
   draw_method: string;
-  verification_hash: string;
   notes: string;
   drawn_at: string;
 };
@@ -28,7 +27,7 @@ const drawsQuery = queryOptions({
   queryFn: async (): Promise<Draw[]> => {
     const { data, error } = await supabase
       .from("draws")
-      .select("*")
+      .select("id, competition_id, competition_title, prize, winning_number, winner_display_name, winner_town, total_tickets, draw_method, notes, drawn_at")
       .order("drawn_at", { ascending: false });
     if (error) throw error;
     return (data ?? []) as Draw[];
@@ -154,9 +153,9 @@ function PastDrawsPage() {
             Past draws &amp; winners
           </h1>
           <p className="text-foreground/70 max-w-2xl">
-            Every completed draw, timestamped and hashed. Cross-check the winning
-            number against your own tickets — the record here is the source of
-            truth.
+            Every completed draw, timestamped and recorded. Cross-check the
+            winning number against your own tickets — the record here is the
+            source of truth.
           </p>
         </div>
 
@@ -313,19 +312,10 @@ function PastDrawsPage() {
                   </div>
                 </div>
 
-                {(d.verification_hash || d.notes) && (
-                  <div className="mt-3 rounded-md bg-background/60 border border-border px-3 py-2 font-mono text-[11px] text-muted-foreground break-all">
-                    {d.verification_hash && (
-                      <div>
-                        <span className="text-muted-foreground">verify:</span>{" "}
-                        {d.verification_hash}
-                      </div>
-                    )}
-                    {d.notes && (
-                      <div className="mt-1">
-                        <span className="text-muted-foreground">note:</span> {d.notes}
-                      </div>
-                    )}
+                {d.notes && (
+                  <div className="mt-3 rounded-md bg-background/60 border border-border px-3 py-2 text-[12px] text-muted-foreground">
+                    <span className="font-mono uppercase tracking-widest text-[10px] text-muted-foreground/80 mr-1">Note</span>
+                    {d.notes}
                   </div>
                 )}
               </li>
@@ -334,9 +324,9 @@ function PastDrawsPage() {
         </div>
 
         <p className="mt-6 text-xs text-muted-foreground max-w-2xl">
-          Draws are executed automatically once the competition timer ends. The
-          winning number, timestamp and hash are written to this log immediately
-          and cannot be altered from the site.
+          Draws run automatically the moment the competition timer ends. The
+          winning number and timestamp are written to this log immediately and
+          cannot be altered from the site.
         </p>
       </main>
       <SiteFooter />
