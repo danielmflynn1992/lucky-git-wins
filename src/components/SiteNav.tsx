@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useRouterState } from "@tanstack/react-router";
 import { Instagram, Facebook, Mail, Menu, ShoppingBag, User, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { Lockup } from "./Logo";
+import { Lockup, LOCKUP_HORIZONTAL_URL } from "./Logo";
 import { Guilloche } from "./Guilloche";
 import { useAuth } from "@/hooks/use-auth";
 import { useBasket } from "@/hooks/use-basket";
@@ -119,25 +119,40 @@ export function SiteNav() {
       {/* Tier 0 — live ticker, topmost element on the page, dark green strip. */}
       <LiveOddsTicker />
 
-      {/* Row 1 — masthead banner at full viewport bleed. No padding, no
-          margins, no other elements. object-cover on its own line. */}
+      {/* Row 1 — full-bleed masthead banner. Zero horizontal padding. The
+          source PNG carries baked-in transparent padding on all sides;
+          the wrapper crops it with overflow-hidden + a scaled/positioned
+          <img>, leaving ≤8px of vertical breathing room above/below the
+          printed artwork. */}
       <Link
         to="/"
         aria-label="Lucky Git Comps — home"
-        className="block w-screen relative left-1/2 right-1/2 -translate-x-1/2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-clover"
+        className="block w-full overflow-hidden bg-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-clover"
+        style={{ height: "clamp(52px, 16vw, 92px)", padding: "2px 0" }}
       >
-        <Lockup
-          className="block w-full h-auto object-cover"
-          style={{ display: "block", width: "100%" }}
+        <img
+          src={LOCKUP_HORIZONTAL_URL}
+          alt="Lucky Git Comps"
+          draggable={false}
+          className="block select-none pointer-events-none mx-auto"
+          style={{
+            height: "100%",
+            width: "auto",
+            maxWidth: "none",
+            // Scale to crop the baked-in transparent margins on the PNG.
+            transform: "scale(1.55)",
+            transformOrigin: "center",
+          }}
         />
       </Link>
 
       {/* 2px black rule separating row 1 from row 2. */}
       <div aria-hidden="true" className="h-[2px] bg-[var(--color-ink-black,#000)]" />
 
-      {/* Row 2 — thin 44px cream strip: hamburger left, basket right. */}
-      <div className="relative bg-card h-11">
-        <div className="mx-auto max-w-7xl h-full px-3 md:px-6 flex items-center justify-between">
+      {/* Row 2 — 40px cream strip: hamburger · centred nav · basket.
+          Nav links hide under 380px; hamburger + basket always visible. */}
+      <div className="relative bg-card" style={{ height: 40 }}>
+        <div className="mx-auto max-w-7xl h-full px-3 md:px-6 flex items-center justify-between gap-2">
           <button
             ref={toggleRef}
             onClick={() => setOpen((o) => !o)}
@@ -150,18 +165,30 @@ export function SiteNav() {
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
 
+          {/* Centred primary nav — hidden on very narrow viewports. */}
+          <nav
+            aria-label="Primary"
+            className="hidden min-[420px]:flex items-center justify-center gap-5 md:gap-7 flex-1 text-[11px] md:text-[12px] font-bold uppercase tracking-[0.14em]"
+            style={{ color: "var(--color-ink-blue, #123)" }}
+          >
+            <Link to="/competitions" className="hover:text-clover transition-colors whitespace-nowrap">Competitions</Link>
+            <Link to="/winners" className="hover:text-clover transition-colors whitespace-nowrap">Winners</Link>
+            <Link to="/how-it-works" className="hover:text-clover transition-colors whitespace-nowrap">How it works</Link>
+            <Link to="/past-draws" className="hover:text-clover transition-colors whitespace-nowrap">Verify</Link>
+          </nav>
+
           <Link
             to="/checkout"
             search={basketSlug ? { slug: basketSlug } : undefined}
             aria-label={basketCount > 0 ? `Basket, ${basketCount} ticket${basketCount === 1 ? "" : "s"}` : "Basket, empty"}
             className={
-              "relative inline-flex items-center justify-center h-9 w-9 rounded-full border transition-colors " +
+              "relative inline-flex items-center justify-center h-8 w-8 rounded-full border transition-colors shrink-0 " +
               (basketCount > 0
                 ? "border-clover text-clover hover:bg-clover hover:text-primary-foreground"
                 : "border-border text-foreground/70 hover:border-clover hover:text-clover")
             }
           >
-            <ShoppingBag className="h-4.5 w-4.5" />
+            <ShoppingBag className="h-4 w-4" />
             {basketCount > 0 && (
               <span
                 aria-hidden
