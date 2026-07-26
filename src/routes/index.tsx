@@ -9,7 +9,6 @@ import { CompRow } from "@/components/CompRow";
 import { ViewToggle } from "@/routes/competitions.index";
 import { Countdown } from "@/components/Countdown";
 import { SmugSmile } from "@/components/Logo";
-import { LiveOddsTicker } from "@/components/LiveOddsTicker";
 import { NextDropCountdown } from "@/components/NextDropCountdown";
 import { Pinstripe } from "@/components/Pinstripe";
 import { COMPETITIONS, CATEGORIES, WINNERS, type Category } from "@/lib/mock-comps";
@@ -59,7 +58,6 @@ function Home() {
   return (
     <div className="min-h-screen flex flex-col bg-ambient">
       <SiteNav />
-      <LiveOddsTicker />
       <NextDropCountdown />
 
       {/* HERO */}
@@ -71,11 +69,10 @@ function Home() {
             </div>
             <h1 className="mt-5 font-display text-5xl md:text-7xl lg:text-[5.5rem] font-black leading-[0.95] tracking-[-0.035em] text-foreground">
               Real odds.<br />
-              Automatic draws.<br />
-              <span className="text-clover">Might as well be you.</span>
+              Automatic draws.
             </h1>
             <p className="mt-5 text-muted-foreground max-w-md text-base leading-relaxed">
-              Cars, cash, tech and holidays. Every ticket counted, every draw published. No smoke, no mirrors, no bloke pulling names out of a hat in a back room.
+              <span className="text-foreground font-semibold">Might as well be you.</span> Cars, cash, tech and holidays. Every ticket counted, every draw published. No smoke, no mirrors, no bloke pulling names out of a hat in a back room.
             </p>
 
             {/* Featured comp mini card */}
