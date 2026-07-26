@@ -62,8 +62,8 @@ function Home() {
       <section className="grain relative bg-clover-pattern overflow-hidden border-b border-border">
         <div className="mx-auto max-w-7xl px-4 pt-10 pb-16 md:pt-16 md:pb-24">
           {/* Single combined lockup — seal + wordmark in one SVG. */}
-          <div className="flex justify-center mb-6 md:mb-8">
-            <Lockup style={{ maxWidth: "min(340px, 78vw)", width: "100%", height: "auto" }} />
+          <div className="flex justify-center mb-3 md:mb-4">
+            <Lockup style={{ maxWidth: "min(400px, 84vw)", width: "100%", height: "auto" }} />
           </div>
           <div className="grid gap-10 md:grid-cols-2 items-center">
           <div>
