@@ -516,6 +516,21 @@
 @keyframes riseIn { from { opacity: 0; transform: translateY(8px);} to { opacity: 1; transform: translateY(0);} }
 @utility rise-in { animation: riseIn 0.4s ease both; }
 
+/* Wax seal transition — sizes and translate are set as Tailwind utilities on
+   the WaxSeal <Link>; this rule adds smoothed timing for the shrink/settle
+   swap on scroll. Under prefers-reduced-motion the block below neutralises it. */
+@utility wax-seal-transition {
+  transition: width 300ms ease, height 300ms ease, transform 300ms ease,
+    filter 300ms ease;
+}
+
+/* Paper-edge bottom — double hairline rule under the header main bar, so the
+   wax seal reads as sealing the join of a two-part document. */
+@utility paper-edge-bottom {
+  border-bottom: 1px solid color-mix(in oklab, var(--color-ink-green) 22%, transparent);
+  box-shadow: 0 2px 0 -1px color-mix(in oklab, var(--color-ink-green) 14%, transparent);
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.001ms !important;
@@ -524,6 +539,7 @@
     scroll-behavior: auto !important;
   }
   .seal, .wax-seal { transform: none; }
+  .wax-seal-transition { transition: none !important; }
   .ticker-scroll { animation: none !important; transform: none !important; }
   .animate-ping, .animate-pulse, .animate-spin, .animate-bounce { animation: none !important; }
   .stall-tilt-l, .stall-tilt-r { transform: none !important; }
