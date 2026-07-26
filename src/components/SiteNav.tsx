@@ -46,10 +46,10 @@ export function SiteNav() {
         ? "Basket empty."
         : `Basket: ${plural(basketCount)}.`;
     if (delta > 0) {
-      toast.success(`Added ${plural(delta)}`, { description: suffix });
-      setLiveMsg(`Added ${plural(delta)}. ${suffix}`);
+      toast.success("In the bag.", { description: `${plural(delta)} · ${suffix}` });
+      setLiveMsg(`In the bag. ${plural(delta)}. ${suffix}`);
     } else {
-      toast(`Removed ${plural(-delta)}`, { description: suffix });
+      toast("Fair enough.", { description: `${plural(-delta)} · ${suffix}` });
       setLiveMsg(`Removed ${plural(-delta)}. ${suffix}`);
     }
   }, [basketCount]);

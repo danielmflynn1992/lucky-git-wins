@@ -13,3 +13,26 @@ export function timeLeft(target: Date | string) {
   const s = Math.floor((diff / 1000) % 60);
   return { d, h, m, s, total: diff, urgent: diff < 3_600_000 };
 }
+
+/**
+ * Cockney money slang for common round figures. Returns null when the amount
+ * isn't one of the recognised values so callers can render nothing rather
+ * than fake it.
+ */
+const MONEY_SLANG: Record<number, string> = {
+  25: "a pony",
+  50: "a bullseye",
+  100: "a ton",
+  500: "a monkey",
+  1000: "a bag of sand",
+  25000: "a lot of monkeys",
+};
+export function moneySlang(amount: number): string | null {
+  return MONEY_SLANG[amount] ?? null;
+}
+
+/** Rotating deadpan loading lines. */
+export const LOADING_QUIPS = ["Hang about…", "Two ticks…", "Won't be a sec…"] as const;
+export function pickLoadingQuip() {
+  return LOADING_QUIPS[Math.floor(Math.random() * LOADING_QUIPS.length)];
+}
