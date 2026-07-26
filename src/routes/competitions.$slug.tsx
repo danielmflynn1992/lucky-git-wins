@@ -71,7 +71,6 @@ function CompDetail() {
   const takenSet = useMemo(() => new Set(c.takenNumbers), [c.takenNumbers]);
   const soldTotal = c.totalTickets - c.ticketsAvailable;
   const pct = Math.round((soldTotal / c.totalTickets) * 100);
-  const odds = Math.max(1, Math.round(c.totalTickets / Math.max(1, soldTotal)));
 
   const canProceed = answered !== null && answered === c.skillQuestion.correct;
   const displayNumbers = picker === "manual" ? picked.size : qty;
