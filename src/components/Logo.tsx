@@ -18,11 +18,21 @@ export function SmugSmile({ className = "" }: { className?: string }) {
   );
 }
 
-export function Logo({ variant = "horizontal", className = "" }: { variant?: "horizontal" | "stacked"; className?: string }) {
+export function Logo({
+  variant = "horizontal",
+  onDark = false,
+  className = "",
+}: { variant?: "horizontal" | "stacked"; onDark?: boolean; className?: string }) {
   const sizing =
     variant === "stacked"
-      ? "h-16 w-auto"
-      : "h-12 sm:h-14 md:h-20 lg:h-24 w-auto";
+      ? "h-20 w-auto"
+      : "h-14 sm:h-16 md:h-20 lg:h-24 w-auto";
+  // On the aged paper background the crest's cream halo blends; on dark
+  // surfaces (footer) we need to lift the cream so it doesn't read as a
+  // dirty rectangle. mix-blend-screen keeps the ink readable on green.
+  const blend = onDark
+    ? "mix-blend-screen opacity-95"
+    : "mix-blend-multiply drop-shadow-[0_2px_0_rgba(0,0,0,0.08)]";
   return (
     <Link
       to="/"
@@ -32,7 +42,7 @@ export function Logo({ variant = "horizontal", className = "" }: { variant?: "ho
       <img
         src={CREST_URL}
         alt="Lucky Git Comps"
-        className={`${sizing} object-contain max-w-none drop-shadow-[0_2px_0_rgba(0,0,0,0.08)] mix-blend-multiply`}
+        className={`${sizing} object-contain max-w-none ${blend}`}
         width={1420}
         height={800}
         loading="eager"

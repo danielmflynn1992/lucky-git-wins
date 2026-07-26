@@ -102,8 +102,8 @@ export function SiteNav() {
 
   return (
     <header className="sticky top-0 z-40 shadow-sm">
-      {/* Tier 1 — promo strip */}
-      <div className="bg-urgent text-urgent-foreground text-center text-[11px] sm:text-xs md:text-sm font-bold uppercase tracking-[0.14em] py-2.5 px-4">
+      {/* Tier 1 — promo strip (hidden on mobile to reclaim viewport) */}
+      <div className="hidden md:block bg-urgent text-urgent-foreground text-center text-xs md:text-sm font-bold uppercase tracking-[0.14em] py-2.5 px-4">
         <Link to="/how-it-works" className="hover:underline underline-offset-4">
           REFER A MATE = FREE TICKETS
         </Link>
