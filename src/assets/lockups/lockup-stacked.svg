@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 620" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Lucky Git Comps">
+  <image href="/__l5e/assets-v1/00eaee08-a844-4533-a133-9f0ca5e42d30/lucky-git-seal.png" x="90" y="0" width="420" height="420" preserveAspectRatio="xMidYMid meet"/>
+  <g fill="currentColor">
+    <text x="300" y="530" text-anchor="middle"
+          font-family="'Cormorant Garamond','Cormorant',Garamond,Georgia,serif"
+          font-size="90" font-weight="700" letter-spacing="8"
+          font-variant="small-caps">Lucky Git Comps</text>
+    <rect x="80" y="565" width="180" height="1.5"/>
+    <rect x="340" y="565" width="180" height="1.5"/>
+    <path d="M300 558 l-10 8 l10 8 l10 -8 z"/>
+  </g>
+</svg>
