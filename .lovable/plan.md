@@ -1,62 +1,78 @@
-# Lucky Git Comps — Build Plan
+## Pools Coupon Restyle
 
-This is a big app. I'll ship it in **3 phases** so you get something usable at the end of each. You approve this plan, I start Phase 1 immediately.
+Full visual rebuild — no route or data changes. Everything moves from the "engraved banknote" system to a two-colour offset-on-newsprint pools-coupon aesthetic.
 
-## Phase 1 — Brand, design system & the 4 money screens (frontend, mock data)
+### Foundation (src/styles.css)
 
-Goal: a clickable, on-brand site you can share for feedback before we wire real payments.
+Retire mint/engraving tokens. New palette, kept small:
+- `--paper-news` #F1EBDC (newsprint cream)
+- `--ink-black` #14110E (body/rules)
+- `--ink-red` #C8202B (coupon red, plate 1)
+- `--ink-blue` #1E3A8A (biro/pools blue, plate 2)
+- `--ink-purple` #4A1E5C (rubber stamp)
+- `--ink-yellow` #F5D547 (highlighter)
 
-1. **Design system in `src/styles.css`**
-   - Palette tokens: Clover Green `#0F5132`, Lucky Gold `#F5B700`, Cream `#FFF8ED`, Ink `#1A1A1A`, Hot Pink `#FF3D81`.
-   - Fonts via `<link>` in `__root.tsx`: **Fraunces** (rounded slab display) for headings/prices, **Inter** for body/legal.
-   - Semantic tokens for card, sticker-badge, shimmer, wobble hover, confetti, clover-pattern background.
-   - Shadcn button variants: `gold` (primary CTA), `git` (dark green), `sticker` (rotated badge).
+Typography via Google Fonts `<link>` in `__root.tsx`:
+- Anton (display)
+- Alfa Slab One (fairground accent, one instance per screen)
+- Archivo (body + labels)
+- Courier Prime (all numerals, tickets, hashes, countdowns)
 
-2. **Gary the Git mascot** — inline SVG component (`src/components/GaryMascot.tsx`): four-leaf clover, flat cap, wink, golden ticket. Horizontal + stacked logo lockups. Favicon variant.
+Global utilities:
+- `.misreg` — 1–2px red offset ghost, display headings only
+- `.halftone` — background dot pattern at ~6% opacity
+- `.rule-heavy`, `.rule-dotted`, `.rule-double` — printed rules replacing borders/shadows
+- `.label` — Archivo caps, 0.16em tracking
+- Sharp corners as global default (radius 0)
+- `prefers-reduced-motion` disables stamp rotation and biro animations
 
-3. **Priority pages (mock data in `src/lib/mock-comps.ts`)**
-   - `/` Homepage — hero rotator, filterable comp grid, How It Works, Winners Wall carousel, trust strip, newsletter.
-   - `/competitions/$slug` Detail — gallery, ticket qty stepper + Lucky Dip + number-picker grid, progress, countdown, skill-question modal gate, instant-win reveal, T&Cs, free-entry link.
-   - `/checkout` — cart summary, Stripe placeholder, confetti confirmation screen.
-   - `/admin/competitions/new` — the single-page fast wizard (still mock-persisted this phase, real in Phase 2).
+### New primitives (src/components/)
 
-4. **Supporting pages** (lighter): `/live-draws`, `/winners`, `/free-postal-entry` (serious tone), `/faq`, `/terms`, `/privacy`, `/responsible-play`, `/about`, `/contact`. Each with its own `head()` metadata.
+- `CouponCard.tsx` — replaces CompCard structural chrome. Red masthead → prize name in Anton → dotted rule → image in ruled black box → form-style label/value rows (DRAW No. / STAKE / ODDS / CLOSES) in Courier → perforated bottom edge with CTAs.
+- `CouponGrid.tsx` — 499 numbered cells, sold = blue biro X, available = empty. `aria-pressed`, roving tabindex, direct number-input fallback. Used on competition detail as the hero graphic.
+- `StampMark.tsx` — rotated rubber stamp with ink-bleed edges. Variants: DRAWN, SOLD OUT, VERIFIED, PAID, WINNER, INSTANT WIN. Replaces `BrassTag`/`WaxSeal` badges.
+- `ScratchPanel.tsx` — canvas scratch-off for instant wins + ticket reveals, with keyboard "Reveal" button.
+- `BiroMark.tsx` — SVG X / tick / circle with hand-drawn wobble.
+- `Perforation.tsx` — dotted/scalloped tear-off edge for card bottoms, receipts, section dividers.
+- `Marker.tsx` — skewed highlighter swipe behind key phrases.
+- `ArcadeReveal.tsx` — dark arcade cabinet with glowing segment-display numerals for the draw reveal.
 
-5. **Global chrome**: sticky nav with Gary logo, cart badge, account link; footer with stacked logo, trust icons, legal links, free-entry callout.
+### Page treatments (restyle only, no data changes)
 
-## Phase 2 — Lovable Cloud backend, real auth, real tickets
+- `routes/index.tsx` — Anton masthead with `.misreg`; comps as a wall of CouponCards; sections separated by `<Perforation />`.
+- `routes/competitions.$slug.tsx` — full coupon at scale; `<CouponGrid />` replaces existing ticket selector chrome (keeps existing reservation hooks).
+- `routes/checkout.tsx` — betting-slip form styling; receipt sidebar gets top perforation.
+- Purchase confirmation — tear-off ticket stub, Courier numbers, `<StampMark variant="PAID" />` overprint.
+- `routes/promise.tsx` — 499 huge in Alfa Slab One, odds comparison as printed table.
+- `routes/verify.tsx`, `routes/past-draws.tsx` — plain ledger; ruled, typewritten; no jokes, no stamps beyond VERIFIED.
+- `routes/winners.tsx` — polaroid cards with biro captions, pinned at slight angles.
+- `routes/draws.$id.reveal.tsx` — swap contents for `<ArcadeReveal />`.
+- Header/footer — lockup stays as the current PNG for now (mascot re-illustration is a follow-up).
 
-1. **Enable Lovable Cloud.**
-2. **Schema migration**: `competitions`, `tickets` (one row per number, unique on `(competition_id, number)` — prevents double-sell), `orders`, `order_items`, `skill_questions`, `instant_wins`, `winners`, `referrals`, `draw_logs`, `profiles`, `user_roles` (separate table, `has_role` security-definer function — no role on profile).
-3. **RLS + GRANTs** on every public table. Public SELECT on live competitions/winners; owner-scoped on orders/tickets; admin-only via `has_role`.
-4. **Server functions** (`createServerFn`): `listLiveComps`, `getComp`, `reserveTickets` (transactional, locks rows), `submitSkillAnswer`, `createCheckoutIntent`, admin `createComp`, `duplicateComp`, `drawWinner`.
-5. **Auth**: email/password + Google via Lovable Cloud, `/auth` route, `_authenticated/` gate, `_authenticated/_admin` role gate.
-6. **Account dashboard**: `/account` — My Entries, My Wins, orders, referral code.
-7. **Admin panel** at `/admin`: comp list, new/edit wizard, duplicate, templates, bulk actions, animated draw tool, analytics dashboard.
-8. **Stripe** via `payments--enable_stripe_payments` (seamless, full compliance handling — eligible digital service). Webhook route at `/api/public/webhooks/stripe` confirms order + assigns ticket numbers.
+### Mascot
 
-## Phase 3 — Compliance, comms, polish
+Del Boy re-illustration (two-colour print, halftone, misregistration, circular badge) is called out as a follow-up asset task, not included in this pass. Existing lockup keeps its slot.
 
-1. **Resend integration** for order confirmation, draw reminder, winner emails (in-voice copy).
-2. **Live draw page** with YouTube/Facebook Live embed placeholder + realtime results feed via Supabase Realtime.
-3. **Instant-win scratch reveal** animation post-purchase.
-4. **Free postal entry** flow — admin can log postal entries as free tickets.
-5. **SEO**: `sitemap.xml` route, `robots.txt`, per-comp OG images.
-6. **Compliance audit pass**: skill question strictly enforced server-side, free-entry link on every comp card + detail, cash-alt value visible, dated draw log page.
-7. **Placeholders** for Twilio SMS (stub component + secret slot).
+### Restraint enforcement
 
-## Technical notes
+Documented as comments in `styles.css` and in a short `src/components/README-print.md`:
+- max 1 highlighter per screen
+- max 1 stamp per card, 2 per screen
+- 1 Alfa Slab One per screen
+- misreg on display headings only
+- ≤3 distinct textures per screen
 
-- Ticket integrity: `reserveTickets` uses `INSERT ... ON CONFLICT DO NOTHING` on `(competition_id, number)` inside a transaction; unsold reservations expire via `expires_at` + cron cleanup. Supabase Realtime channel per comp broadcasts taken numbers.
-- Skill question gate is enforced in the server fn that creates the checkout intent, not just the UI modal.
-- Admin role via `user_roles` table + `has_role(uuid, app_role)` SECURITY DEFINER — never on `profiles`.
-- All money displayed in GBP, formatted via `Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' })`.
-- Mobile-first: every screen designed at 390px viewport first, scales up.
+### Accessibility
 
-## What I need from you before Phase 2
+- Highlighter always behind text that already passes on cream.
+- ScratchPanel: canvas + keyboard reveal button, `aria-live` result.
+- CouponGrid: `role="grid"`, `aria-pressed`, roving tabindex, visible focus ring, number-input fallback.
+- Misregistration contrast verified at display sizes only.
+- All textures `aria-hidden` + `pointer-events: none`.
+- Motion utilities gated on `prefers-reduced-motion`.
 
-- Confirm **Stripe** (seamless, Lovable-managed) is fine — no BYOK Stripe account needed.
-- Confirm Google sign-in + email/password for auth (standard Lovable Cloud default).
-- A **Resend API key** when we reach Phase 3 (I'll prompt then, not now).
+### Out of scope for this pass
 
-Approve and I'll start Phase 1 now.
+- Route/data model changes
+- Del Boy re-illustration (noted as follow-up)
+- Real Stripe wiring, admin flows
