@@ -34,7 +34,7 @@ function NewComp() {
   const [category, setCategory] = useState<string>(CATEGORIES[0] ?? "Cars");
   const [description, setDescription] = useState("");
   const [pricePerTicket, setPricePerTicket] = useState(1.99);
-  const [totalTickets, setTotalTickets] = useState(5000);
+  const [totalTickets, setTotalTickets] = useState(499);
   const [maxPerPerson, setMaxPerPerson] = useState(150);
   const [cashAlternative, setCashAlternative] = useState(1000);
   const [endsAt, setEndsAt] = useState("");
@@ -62,6 +62,7 @@ function NewComp() {
     if (!endsAt) errs.push("Closing date");
     if (pricePerTicket <= 0) errs.push("Ticket price");
     if (totalTickets < 1) errs.push("Total tickets");
+    if (totalTickets > 499) errs.push("Total tickets exceeds the 499 cap");
     if (instantWin && instantWinCount > totalTickets) errs.push("Instant-win count exceeds total");
     return errs;
   }, [title, derivedSlug, endsAt, pricePerTicket, totalTickets, instantWin, instantWinCount]);
@@ -344,7 +345,20 @@ function NewComp() {
             <Card title="Tickets & pricing">
               <div className="grid gap-3 sm:grid-cols-3">
                 <Field label="Price per ticket (£)" type="number" step="0.01" required value={pricePerTicket} onChange={(e) => setPricePerTicket(Number(e.target.value))} />
-                <Field label="Total tickets" type="number" required value={totalTickets} onChange={(e) => setTotalTickets(Number(e.target.value))} />
+                <div>
+                  <Field
+                    label="Total tickets (max 499)"
+                    type="number"
+                    min={1}
+                    max={499}
+                    required
+                    value={totalTickets}
+                    onChange={(e) => setTotalTickets(Math.min(499, Math.max(1, Number(e.target.value) || 0)))}
+                  />
+                  <p className="mt-1 text-[11px] text-muted-foreground">
+                    Hard cap. We don't do five-figure ticket pools here.
+                  </p>
+                </div>
                 <Field label="Max per person" type="number" value={maxPerPerson} onChange={(e) => setMaxPerPerson(Number(e.target.value))} />
                 <Field label="Cash alternative (£)" type="number" required className="sm:col-span-1" value={cashAlternative} onChange={(e) => setCashAlternative(Number(e.target.value))} />
                 <Field label="Closes at" type="datetime-local" required className="sm:col-span-2" value={endsAt} onChange={(e) => setEndsAt(e.target.value)} />
