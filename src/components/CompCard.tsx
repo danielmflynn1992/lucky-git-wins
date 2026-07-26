@@ -12,15 +12,25 @@ export function CompCard({ c }: { c: Competition }) {
   const almostGone = pct >= 80;
   const remaining = c.totalTickets - c.ticketsSold;
   const [quickOpen, setQuickOpen] = useState(false);
+  // Stretched-link pattern: the card is a plain <div>, an absolute-positioned
+  // <Link> covers it for the primary click target, and real interactive
+  // controls (Add button, inner badges) sit above with pointer-events enabled.
+  // This avoids nested <a> elements (React hydration error) and stops clicks
+  // inside the QuickAdd modal from bubbling into the card link.
   return (
-    <div className="relative flex h-full flex-col">
-    <Link
-      to="/competitions/$slug"
-      params={{ slug: c.slug }}
-      className="group relative flex h-full flex-col rounded-lg bg-card border border-border overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 min-w-0 max-w-full [overflow-wrap:anywhere]"
-    >
+    <div className="group relative flex h-full flex-col rounded-lg bg-card border border-border overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 min-w-0 max-w-full [overflow-wrap:anywhere]">
+      <Link
+        to="/competitions/$slug"
+        params={{ slug: c.slug }}
+        aria-label={c.title}
+        className="absolute inset-0 z-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-clover/40 rounded-lg"
+        tabIndex={0}
+      >
+        <span className="sr-only">{c.title}</span>
+      </Link>
+
       {/* Tag row */}
-      <div className="absolute top-3 left-3 z-10 flex gap-1.5">
+      <div className="pointer-events-none absolute top-3 left-3 z-20 flex gap-1.5">
         {c.instantWin && (
           <span className="inline-flex items-center gap-1 rounded-full bg-gold text-gold-foreground px-1.5 sm:px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider shadow-sm">
             <Zap className="h-3 w-3 shrink-0" />
@@ -34,12 +44,12 @@ export function CompCard({ c }: { c: Competition }) {
           </span>
         )}
       </div>
-      <div className="absolute top-3 right-3 z-10">
+      <div className="pointer-events-none absolute top-3 right-3 z-20">
         <Countdown target={c.endsAt} compact />
       </div>
 
       {/* Massive edge-to-edge prize image */}
-      <div className="aspect-[5/4] overflow-hidden bg-muted">
+      <div className="relative z-0 aspect-[5/4] overflow-hidden bg-muted">
         <img
           src={c.image}
           alt={c.title}
@@ -51,7 +61,7 @@ export function CompCard({ c }: { c: Competition }) {
       </div>
 
       {/* Content */}
-      <div className="p-2.5 sm:p-4 flex flex-1 flex-col gap-2 sm:gap-3 min-w-0 overflow-hidden">
+      <div className="relative z-10 pointer-events-none p-2.5 sm:p-4 flex flex-1 flex-col gap-2 sm:gap-3 min-w-0 overflow-hidden">
         <div className="min-w-0 min-h-[2.75rem] sm:min-h-[3.25rem]">
           <div className="text-[9px] sm:text-[10px] uppercase tracking-[0.12em] sm:tracking-[0.15em] font-semibold text-clover mb-0.5 sm:mb-1 truncate">{c.category}</div>
           <h3 className="font-display text-sm sm:text-lg font-bold leading-snug text-foreground line-clamp-2 break-words">{c.title}</h3>
@@ -80,47 +90,32 @@ export function CompCard({ c }: { c: Competition }) {
           </div>
         </div>
 
-        {/* CTA row lives inside the card layout but the interactive Add button
-            is rendered as an overlay outside the <Link> to avoid nested-anchor
-            hydration errors and to make sure clicks never bubble into the card
-            link and navigate away from the modal. */}
+        {/* CTA row. Enter Now is visual — the card-wide Link handles the click.
+            Add is a real button rendered above the Link with pointer-events on. */}
         <div className="mt-auto grid grid-cols-2 gap-1.5 min-w-0 items-stretch">
-          <div className="min-w-0 h-9 rounded-md bg-clover text-primary-foreground px-1 font-display font-extrabold text-[10px] sm:text-xs uppercase tracking-[-0.03em] leading-none inline-flex items-center justify-center gap-1 whitespace-nowrap shadow-sm group-hover:bg-clover-deep group-hover:shadow-md group-focus-visible:bg-clover-deep group-focus-visible:ring-2 group-focus-visible:ring-clover/40 group-focus-visible:ring-offset-2 group-focus-visible:ring-offset-card transition-all">
+          <div className="min-w-0 h-9 rounded-md bg-clover text-primary-foreground px-1 font-display font-extrabold text-[10px] sm:text-xs uppercase tracking-[-0.03em] leading-none inline-flex items-center justify-center gap-1 whitespace-nowrap shadow-sm group-hover:bg-clover-deep group-hover:shadow-md transition-all">
             <span>Enter Now</span>
             <ArrowRight className="h-3 w-3 sm:h-3.5 sm:w-3.5 shrink-0" aria-hidden="true" />
           </div>
-          {/* Placeholder cell — the real Add button is rendered as a sibling below
-              and absolutely positioned over this slot. Keeps the grid layout stable. */}
-          <div className="min-w-0 h-9" aria-hidden="true" />
+          <button
+            type="button"
+            aria-label={`Quick add tickets for ${c.title}`}
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); setQuickOpen(true); }}
+            className="pointer-events-auto min-w-0 h-9 rounded-md bg-gold text-gold-foreground px-1 font-display font-extrabold text-[10px] sm:text-xs uppercase tracking-[-0.03em] leading-none inline-flex items-center justify-center gap-1 whitespace-nowrap shadow-sm hover:bg-gold/90 hover:shadow-md hover:-translate-y-px active:translate-y-0 active:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-card transition-all"
+          >
+            <Plus className="h-3 w-3 sm:h-3.5 sm:w-3.5 shrink-0" aria-hidden="true" />
+            <span>Add</span>
+          </button>
         </div>
 
         {/* Trust badges */}
         <div className="hidden sm:flex items-center justify-between gap-2 pt-1 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
-          <NoDeadCompsBadge variant="row" asLink={false} />
+          <NoDeadCompsBadge variant="row" />
           <span className="inline-flex items-center gap-1"><Repeat2 className="h-3 w-3 text-clover" /> No Rollovers</span>
         </div>
       </div>
-    </Link>
 
-    {/* Add button — sibling of the Link (not nested inside an <a>) so clicks
-        can't bubble into the card link and navigate away from the modal. */}
-    <div className="pointer-events-none absolute inset-x-2.5 sm:inset-x-4 bottom-[calc(0.625rem+1.25rem)] sm:bottom-4">
-      {/* Only the Add half is interactive; the Enter Now half is handled by the underlying Link. */}
-      <div className="grid grid-cols-2 gap-1.5">
-        <div />
-        <button
-          type="button"
-          aria-label={`Quick add tickets for ${c.title}`}
-          onClick={(e) => { e.preventDefault(); e.stopPropagation(); setQuickOpen(true); }}
-          className="pointer-events-auto min-w-0 h-9 rounded-md bg-gold text-gold-foreground px-1 font-display font-extrabold text-[10px] sm:text-xs uppercase tracking-[-0.03em] leading-none inline-flex items-center justify-center gap-1 whitespace-nowrap shadow-sm hover:bg-gold/90 hover:shadow-md hover:-translate-y-px active:translate-y-0 active:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-card transition-all"
-        >
-          <Plus className="h-3 w-3 sm:h-3.5 sm:w-3.5 shrink-0" aria-hidden="true" />
-          <span>Add</span>
-        </button>
-      </div>
-    </div>
-
-    <QuickAddDialog comp={c} open={quickOpen} onClose={() => setQuickOpen(false)} />
+      <QuickAddDialog comp={c} open={quickOpen} onClose={() => setQuickOpen(false)} />
     </div>
   );
 }
