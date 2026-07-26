@@ -103,7 +103,7 @@ export function SiteNav() {
   return (
     <header className="sticky top-0 z-40 shadow-sm">
       {/* Tier 1 — promo strip */}
-      <div className="bg-hot text-hot-foreground text-center text-[11px] sm:text-xs md:text-sm font-bold uppercase tracking-[0.14em] py-2.5 px-4">
+      <div className="bg-urgent text-urgent-foreground text-center text-[11px] sm:text-xs md:text-sm font-bold uppercase tracking-[0.14em] py-2.5 px-4">
         <Link to="/how-it-works" className="hover:underline underline-offset-4">
           REFER A MATE = FREE TICKETS
         </Link>
@@ -199,7 +199,7 @@ export function SiteNav() {
               {basketCount > 0 && (
                 <span
                   aria-hidden
-                  className="absolute -top-1.5 -right-1.5 min-w-[20px] h-5 px-1.5 rounded-full bg-hot text-hot-foreground text-[11px] font-mono font-bold flex items-center justify-center ring-2 ring-card tabular-nums"
+                  className="absolute -top-1.5 -right-1.5 min-w-[20px] h-5 px-1.5 rounded-full bg-urgent text-urgent-foreground text-[11px] font-mono font-bold flex items-center justify-center ring-2 ring-card tabular-nums"
                 >
                   {basketCount > 99 ? "99+" : basketCount}
                 </span>

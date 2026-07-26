@@ -140,13 +140,13 @@ export function QuickAddDialog({ comp, open, onClose, maxQty = 25 }: Props) {
         </div>
 
         {err && (
-          <div className="mt-3 rounded-xl border-2 border-hot/40 bg-hot/10 p-3 text-xs text-hot">
+          <div className="mt-3 rounded-xl border-2 border-urgent/40 bg-urgent/10 p-3 text-xs text-urgent">
             <div className="flex items-start gap-1.5 font-bold">
               <AlertTriangle className="h-3.5 w-3.5 mt-0.5 shrink-0" />
               <span>{err}</span>
             </div>
             {availableLeft !== null && !soldOut && (
-              <div className="mt-1 pl-5 font-mono text-[11px] tabular-nums text-hot/80">
+              <div className="mt-1 pl-5 font-mono text-[11px] tabular-nums text-urgent/80">
                 {availableLeft} of {comp.totalTickets} left
               </div>
             )}

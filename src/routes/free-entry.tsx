@@ -167,7 +167,7 @@ function FreeEntry() {
           </label>
 
           {error && (
-            <div className="rounded-lg border-2 border-hot/40 bg-hot/10 p-3 text-sm text-hot flex items-start gap-2">
+            <div className="rounded-lg border-2 border-urgent/40 bg-urgent/10 p-3 text-sm text-urgent flex items-start gap-2">
               <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" />
               <span>{error}</span>
             </div>

@@ -140,7 +140,7 @@ function VerifyChecker({ initialDrawId }: { initialDrawId: string }) {
           <Loader2 className="h-4 w-4 animate-spin" /> Loading draw…
         </div>
       )}
-      {error && <div className="text-sm text-hot">Couldn't load that draw.</div>}
+      {error && <div className="text-sm text-urgent">Couldn't load that draw.</div>}
 
       {draw && (
         <div className="rounded-md bg-muted/60 border border-border p-4 space-y-3">
@@ -156,7 +156,7 @@ function VerifyChecker({ initialDrawId }: { initialDrawId: string }) {
             <div
               className={
                 "rounded-md p-3 flex items-center gap-2 text-sm font-semibold " +
-                (matches ? "bg-clover/10 text-clover border border-clover/40" : "bg-hot/10 text-hot border border-hot/40")
+                (matches ? "bg-clover/10 text-clover border border-clover/40" : "bg-urgent/10 text-urgent border border-urgent/40")
               }
             >
               {matches ? <CheckCircle2 className="h-4 w-4" /> : <XCircle className="h-4 w-4" />}

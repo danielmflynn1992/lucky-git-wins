@@ -182,7 +182,7 @@ function NewComp() {
         </div>
 
         {errorMessage && (
-          <div className="mt-4 rounded-xl border-2 border-hot/40 bg-hot/10 text-hot p-3 text-sm flex items-start gap-2">
+          <div className="mt-4 rounded-xl border-2 border-urgent/40 bg-urgent/10 text-urgent p-3 text-sm flex items-start gap-2">
             <AlertTriangle className="h-4 w-4 mt-0.5 shrink-0" />
             <div>Couldn't save: {errorMessage}</div>
           </div>
@@ -318,7 +318,7 @@ function NewComp() {
                 </button>
               )}
               {uploadError && (
-                <div className="mt-3 text-xs text-hot flex items-start gap-1.5">
+                <div className="mt-3 text-xs text-urgent flex items-start gap-1.5">
                   <AlertTriangle className="h-3.5 w-3.5 mt-0.5 shrink-0" /> <span>{uploadError}</span>
                 </div>
               )}
@@ -408,12 +408,12 @@ function NewComp() {
                 { label: "Free-entry route (site-wide)", ok: true },
               ].map((c) => (
                 <div key={c.label} className="flex items-center gap-2 text-sm py-1">
-                  {c.ok ? <CheckCircle2 className="h-4 w-4 text-clover" /> : <AlertTriangle className="h-4 w-4 text-hot" />}
+                  {c.ok ? <CheckCircle2 className="h-4 w-4 text-clover" /> : <AlertTriangle className="h-4 w-4 text-urgent" />}
                   <span className={c.ok ? "" : "text-muted-foreground"}>{c.label}</span>
                 </div>
               ))}
               {validationErrors.length > 0 && (
-                <p className="mt-3 text-xs text-hot">Missing: {validationErrors.join(", ")}</p>
+                <p className="mt-3 text-xs text-urgent">Missing: {validationErrors.join(", ")}</p>
               )}
             </Card>
           </div>

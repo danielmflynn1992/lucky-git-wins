@@ -67,7 +67,7 @@ function Checkout() {
       <div className="min-h-screen flex flex-col">
         <SiteNav />
         <main className="mx-auto max-w-xl px-4 py-16 w-full flex-1 text-center">
-          <div className="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-full bg-hot/15 text-hot">
+          <div className="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-full bg-urgent/15 text-urgent">
             <AlertTriangle className="h-7 w-7" />
           </div>
           <h1 className="mt-6 font-display text-3xl font-semibold tracking-tight">Your basket is tragically empty.</h1>

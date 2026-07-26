@@ -356,7 +356,7 @@ function VerdictPill({ matches, children }: { matches: boolean; children: React.
         "mt-3 rounded-md p-3 flex items-start gap-2 text-sm font-semibold " +
         (matches
           ? "bg-clover/15 text-clover-foreground border border-clover/40 text-clover"
-          : "bg-hot/15 border border-hot/40 text-hot")
+          : "bg-urgent/15 border border-urgent/40 text-urgent")
       }
     >
       {matches ? <CheckCircle2 className="h-4 w-4 mt-0.5" /> : <XCircle className="h-4 w-4 mt-0.5" />}
