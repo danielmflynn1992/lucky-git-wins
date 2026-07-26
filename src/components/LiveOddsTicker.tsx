@@ -60,7 +60,7 @@ export function LiveOddsTicker() {
                   edge of the marquee. */}
               <span aria-hidden="true" className="shrink-0 basis-full min-w-full" />
               {items.map((it, i) => (
-                <TickerItem key={`${it.id}-${i}`} c={it} />
+                <TickerItem key={`${it.slug}-${i}`} c={it} />
               ))}
               {showFiller && FILLER.map((line) => (
                 <span
