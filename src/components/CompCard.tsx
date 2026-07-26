@@ -27,9 +27,8 @@ export function CompCard({ c }: { c: Competition }) {
           </span>
         )}
         {almostGone && (
-          <span className="rounded-full bg-hot text-hot-foreground px-1.5 sm:px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider shadow-sm whitespace-nowrap">
-            <span className="sm:hidden">{remaining} left</span>
-            <span className="hidden sm:inline">Only {remaining} left</span>
+          <span className="hidden sm:inline-block rounded-full bg-hot text-hot-foreground px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider shadow-sm whitespace-nowrap">
+            Only {remaining} left
           </span>
         )}
       </div>
