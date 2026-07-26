@@ -24,14 +24,12 @@ import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AccountRouteImport } from './routes/account'
 import { Route as AboutRouteImport } from './routes/about'
-import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CompetitionsIndexRouteImport } from './routes/competitions.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as DevCompcardRouteImport } from './routes/dev.compcard'
 import { Route as CompetitionsSlugRouteImport } from './routes/competitions.$slug'
 import { Route as AdminCompetitionsNewRouteImport } from './routes/admin.competitions.new'
-import { Route as AuthenticatedAdminCompetitionsSlugSkillRouteImport } from './routes/_authenticated/admin.competitions.$slug.skill'
 
 const WinnersRoute = WinnersRouteImport.update({
   id: '/winners',
@@ -108,10 +106,6 @@ const AboutRoute = AboutRouteImport.update({
   path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
-  id: '/_authenticated',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -142,12 +136,6 @@ const AdminCompetitionsNewRoute = AdminCompetitionsNewRouteImport.update({
   path: '/admin/competitions/new',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedAdminCompetitionsSlugSkillRoute =
-  AuthenticatedAdminCompetitionsSlugSkillRouteImport.update({
-    id: '/admin/competitions/$slug/skill',
-    path: '/admin/competitions/$slug/skill',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -171,7 +159,6 @@ export interface FileRoutesByFullPath {
   '/admin/': typeof AdminIndexRoute
   '/competitions/': typeof CompetitionsIndexRoute
   '/admin/competitions/new': typeof AdminCompetitionsNewRoute
-  '/admin/competitions/$slug/skill': typeof AuthenticatedAdminCompetitionsSlugSkillRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -195,12 +182,10 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminIndexRoute
   '/competitions': typeof CompetitionsIndexRoute
   '/admin/competitions/new': typeof AdminCompetitionsNewRoute
-  '/admin/competitions/$slug/skill': typeof AuthenticatedAdminCompetitionsSlugSkillRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/about': typeof AboutRoute
   '/account': typeof AccountRoute
   '/auth': typeof AuthRoute
@@ -221,7 +206,6 @@ export interface FileRoutesById {
   '/admin/': typeof AdminIndexRoute
   '/competitions/': typeof CompetitionsIndexRoute
   '/admin/competitions/new': typeof AdminCompetitionsNewRoute
-  '/_authenticated/admin/competitions/$slug/skill': typeof AuthenticatedAdminCompetitionsSlugSkillRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -247,7 +231,6 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/competitions/'
     | '/admin/competitions/new'
-    | '/admin/competitions/$slug/skill'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -271,11 +254,9 @@ export interface FileRouteTypes {
     | '/admin'
     | '/competitions'
     | '/admin/competitions/new'
-    | '/admin/competitions/$slug/skill'
   id:
     | '__root__'
     | '/'
-    | '/_authenticated'
     | '/about'
     | '/account'
     | '/auth'
@@ -296,12 +277,10 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/competitions/'
     | '/admin/competitions/new'
-    | '/_authenticated/admin/competitions/$slug/skill'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
   AccountRoute: typeof AccountRoute
   AuthRoute: typeof AuthRoute
@@ -431,13 +410,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated': {
-      id: '/_authenticated'
-      path: ''
-      fullPath: '/'
-      preLoaderRoute: typeof AuthenticatedRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
@@ -480,31 +452,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminCompetitionsNewRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/admin/competitions/$slug/skill': {
-      id: '/_authenticated/admin/competitions/$slug/skill'
-      path: '/admin/competitions/$slug/skill'
-      fullPath: '/admin/competitions/$slug/skill'
-      preLoaderRoute: typeof AuthenticatedAdminCompetitionsSlugSkillRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
   }
 }
 
-interface AuthenticatedRouteRouteChildren {
-  AuthenticatedAdminCompetitionsSlugSkillRoute: typeof AuthenticatedAdminCompetitionsSlugSkillRoute
-}
-
-const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
-  AuthenticatedAdminCompetitionsSlugSkillRoute:
-    AuthenticatedAdminCompetitionsSlugSkillRoute,
-}
-
-const AuthenticatedRouteRouteWithChildren =
-  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AboutRoute: AboutRoute,
   AccountRoute: AccountRoute,
   AuthRoute: AuthRoute,
