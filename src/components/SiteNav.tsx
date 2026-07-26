@@ -149,8 +149,8 @@ export function SiteNav() {
         <div
           className={
             "relative mx-auto max-w-7xl px-3 md:px-6 grid items-center gap-2 md:gap-4 mast-transition overflow-hidden " +
-            "grid-cols-[1fr_auto_1fr] " +
-            (scrolled ? "h-20" : "h-32")
+            "grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] " +
+            (scrolled ? "h-16" : "h-24")
           }
         >
           {/* LEFT edge — hamburger only, unchanged position. */}
@@ -175,9 +175,15 @@ export function SiteNav() {
             {/* Transparent-background banner. Fits entirely within the
                 96px header row with ~8px clearance from the double-rule
                 bottom border. No wrapper background, padding, or border. */}
+            {/* Responsive logo: scales with viewport but is capped by the
+                header row height so it can never overflow. `maxHeight` uses
+                the row height minus 8px breathing room. */}
             <Lockup
               style={{
-                height: scrolled ? 72 : 120,
+                height: scrolled
+                  ? "clamp(40px, 10vw, 56px)"
+                  : "clamp(56px, 16vw, 88px)",
+                maxHeight: scrolled ? 56 : 88,
                 width: "auto",
                 maxWidth: "82vw",
                 objectFit: "contain",
