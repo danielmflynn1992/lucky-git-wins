@@ -48,15 +48,23 @@ export function CompCard({ c }: { c: Competition }) {
         <Countdown target={c.endsAt} compact />
       </div>
 
-      {/* Massive edge-to-edge prize image */}
+      {/* Massive edge-to-edge prize image. Blurred backdrop fills the frame
+          width-to-width, while the foreground image stays fully visible
+          (object-contain) so nothing important gets cropped. */}
       <div className="relative z-0 aspect-[5/4] overflow-hidden bg-muted">
+        <img
+          src={c.image}
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 h-full w-full object-cover scale-110 blur-2xl opacity-60"
+        />
         <img
           src={c.image}
           alt={c.title}
           loading="lazy"
           width={1280}
           height={1024}
-          className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-[1.05]"
+          className="relative h-full w-full object-contain transition-transform duration-500 group-hover:scale-[1.05]"
         />
       </div>
 
