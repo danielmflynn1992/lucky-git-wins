@@ -41,7 +41,6 @@ export interface DbCompetition {
   cashAlternative: number;
   maxPerPerson: number;
   endsAt: string;
-  instantWin: boolean;
   hot: boolean;
   description: string;
   takenNumbers: number[];
@@ -82,7 +81,6 @@ export async function fetchCompetitionBySlug(slug: string): Promise<DbCompetitio
     cashAlternative: comp.cash_alternative,
     maxPerPerson: comp.max_per_person,
     endsAt: comp.ends_at,
-    instantWin: comp.instant_win,
     hot: comp.hot,
     description: comp.description,
     takenNumbers,
