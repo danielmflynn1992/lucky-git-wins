@@ -10,7 +10,7 @@ import { ImagePlus, Copy, Save, ArrowLeft, Loader2, AlertTriangle, CheckCircle2,
 import { createCompetition } from "@/lib/admin.functions";
 import { supabase } from "@/integrations/supabase/client";
 import { optimizeImage, formatBytes, type OptimizeResult } from "@/lib/image-optimize";
-import { LetterboxImage, type LetterboxStyle } from "@/components/LetterboxImage";
+import type { LetterboxStyle } from "@/components/LetterboxImage";
 import { PrizeImage } from "@/components/PrizeImage";
 import type { ReactNode } from "react";
 
