@@ -277,7 +277,7 @@ function CompDetail() {
             </div>
 
             <div className="mt-4 grid grid-cols-2 gap-3 text-xs">
-              <div className="flex items-center gap-2"><Shield className="h-4 w-4 text-clover" /> Live streamed draw</div>
+              <div className="flex items-center gap-2"><Shield className="h-4 w-4 text-clover" /> Verifiable RNG draw</div>
               <div className="flex items-center gap-2"><PoundSterling className="h-4 w-4 text-clover" /> Cash alt: {gbp(c.cashAlternative)}</div>
               <div className="flex items-center gap-2"><Ticket className="h-4 w-4 text-clover" /> Max {c.maxPerPerson} per person</div>
               <div className="flex items-center gap-2"><Info className="h-4 w-4 text-clover" /> Auto-drawn on close</div>

@@ -16,7 +16,7 @@ export const Route = createFileRoute("/responsible-play")({
       <h2>Spending limits</h2>
       <p>You can set a monthly spending limit or self-exclude at any time from your account settings.</p>
       <h2>Fair draws</h2>
-      <p>Every draw uses a certified RNG and is streamed live for public verification. Winning ticket numbers and winner names (with permission) are permanently published on our Winners Wall.</p>
+      <p>Every draw is automatic — the moment the timer hits zero we run a certified RNG and publish the winning number and verification hash to our Past Draws log. Winner names (with permission) are permanently listed on the Winners Wall.</p>
       <h2>Get help</h2>
       <p>If you're worried about your spending, help is free and confidential from <a href="https://www.gamcare.org.uk" rel="noreferrer" target="_blank">GamCare</a> (0808 8020 133).</p>
     </StaticPage>
