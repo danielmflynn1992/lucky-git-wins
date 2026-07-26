@@ -1,9 +1,6 @@
-import { useEffect } from "react";
 import { Link } from "@tanstack/react-router";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Ticket, Clock, Users } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
-import { liveOddsQueryOptions, type LiveOdds } from "@/lib/competitions-api";
+import { Ticket, Clock } from "lucide-react";
+import { COMPETITIONS, type Competition } from "@/lib/mock-comps";
 import { timeLeft } from "@/lib/format";
 import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 
@@ -13,27 +10,10 @@ import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from "@/comp
  * Each item shows a tooltip on hover/tap explaining what the numbers mean.
  */
 export function LiveOddsTicker() {
-  const qc = useQueryClient();
-  const { data } = useQuery(liveOddsQueryOptions);
-
-  // Realtime: invalidate the ticker when any ticket row changes.
-  useEffect(() => {
-    const channel = supabase
-      .channel("ticker-tickets")
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "tickets" },
-        () => {
-          qc.invalidateQueries({ queryKey: ["live-odds"] });
-        },
-      )
-      .subscribe();
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [qc]);
-
-  const items = (data ?? []).filter((c) => c.totalTickets > 0);
+  // Ticker mirrors the same source of truth the grid uses so the two never
+  // disagree. When we swap the grid over to live DB data, wire this to the
+  // same query.
+  const items = COMPETITIONS;
 
   /**
    * Deadpan filler lines. Injected when fewer than three live comps exist
@@ -59,7 +39,6 @@ export function LiveOddsTicker() {
     );
   }
 
-  const loop = items;
   // Show filler chips only when fewer than three real items are live.
   const showFiller = items.length > 0 && items.length < 3;
 
@@ -80,7 +59,7 @@ export function LiveOddsTicker() {
                   any animation reset, no partial word is visible at the left
                   edge of the marquee. */}
               <span aria-hidden="true" className="shrink-0 basis-full min-w-full" />
-              {loop.map((it, i) => (
+              {items.map((it, i) => (
                 <TickerItem key={`${it.id}-${i}`} c={it} />
               ))}
               {showFiller && FILLER.map((line) => (
@@ -112,9 +91,10 @@ function LiveChip() {
   );
 }
 
-function TickerItem({ c }: { c: LiveOdds }) {
+function TickerItem({ c }: { c: Competition }) {
   const t = timeLeft(c.endsAt);
   const closes = `${String(t.d).padStart(2, "0")}d ${String(t.h).padStart(2, "0")}h ${String(t.m).padStart(2, "0")}m`;
+  const pctSold = Math.round((c.ticketsSold / c.totalTickets) * 100);
   return (
     <Tooltip>
       <TooltipTrigger asChild>
@@ -143,17 +123,9 @@ function TickerItem({ c }: { c: LiveOdds }) {
           <TooltipRow
             icon={<Ticket className="h-3 w-3 text-clover" />}
             label="Tickets sold"
-            value={`${c.ticketsSold.toLocaleString()} / ${c.totalTickets.toLocaleString()} (${c.pctSold}%)`}
+            value={`${c.ticketsSold.toLocaleString()} / ${c.totalTickets.toLocaleString()} (${pctSold}%)`}
             hint="How many tickets have been paid for so far."
           />
-          {c.ticketsReserved > 0 && (
-            <TooltipRow
-              icon={<Users className="h-3 w-3 text-gold" />}
-              label="Reserved"
-              value={c.ticketsReserved.toLocaleString()}
-              hint="Held in other people's baskets for the next 15 minutes."
-            />
-          )}
           <TooltipRow
             icon={<Clock className="h-3 w-3 text-urgent" />}
             label="Closes in"
