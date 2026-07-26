@@ -114,7 +114,7 @@ export function WinnerCard({
         className="motion-safe:transition-[height] motion-safe:duration-[220ms] motion-safe:ease-out overflow-hidden"
         style={{ height: expanded ? panelHeight : 0 }}
       >
-        <div ref={panelRef} className="border-t-[1.5px] border-dashed border-[var(--color-ink-black)] relative">
+        <div ref={panelRef} className="border-t-[1.5px] border-dashed border-[var(--color-ink-black)] relative pb-14">
           {w.image ? (
             <div className="relative mx-3 mt-3">
               <div className="prize-treatment pointer-events-none relative z-0 aspect-[4/3]">
@@ -126,19 +126,6 @@ export function WinnerCard({
                   height={960}
                 />
               </div>
-              <span
-                aria-hidden
-                className="pointer-events-none absolute z-20 font-display uppercase tracking-[0.18em] text-[22px] text-[var(--color-ink-red)] border-[2.5px] border-[var(--color-ink-red)] px-2.5 py-0.5 select-none mix-blend-multiply"
-                style={{
-                  right: "24px",
-                  bottom: "24px",
-                  transform: "rotate(-8deg)",
-                  opacity: 0.85,
-                  fontFamily: "var(--font-display, inherit)",
-                }}
-              >
-                Paid Out
-              </span>
             </div>
           ) : null}
 
@@ -199,6 +186,22 @@ export function WinnerCard({
           ) : (
             <div className="pb-4" />
           )}
+
+          {/* PAID OUT stamp — on cream body, overlapping the dotted rule so it
+              reads as stamped across the document rather than boxed. */}
+          <span
+            aria-hidden
+            className="pointer-events-none absolute z-20 font-display uppercase tracking-[0.18em] whitespace-nowrap text-[20px] text-[var(--color-ink-red)] border-2 border-[var(--color-ink-red)] px-2.5 py-0.5 select-none mix-blend-multiply leading-none"
+            style={{
+              right: "20px",
+              bottom: "12px",
+              transform: "rotate(-8deg)",
+              opacity: 0.85,
+              filter: "url(#stamp-noise)",
+            }}
+          >
+            Paid Out
+          </span>
         </div>
       </div>
     </article>

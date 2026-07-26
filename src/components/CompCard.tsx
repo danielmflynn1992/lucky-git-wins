@@ -79,20 +79,20 @@ export function CompCard({ c }: { c: Competition }) {
           eyebrow={c.category}
           size="card"
         />
-        {soldOut ? (
-          <span className="absolute inset-0 z-[6] flex items-center justify-center pointer-events-none">
-            <StampMark variant="SOLD OUT" size="lg" angle={-10} />
-          </span>
-        ) : almostGone ? (
-          <span className="absolute top-2 right-2 z-[6] pointer-events-none">
-            <StampMark variant="LIVE" size="sm" angle={-4} />
-          </span>
-        ) : null}
       </div>
 
       {/* FORM-STYLE DATA BLOCK */}
       <div className="relative z-10 pointer-events-none px-3 pt-3 flex flex-1 flex-col gap-2 min-w-0 overflow-hidden">
-        <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 min-w-0">
+        <dl className="relative grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 min-w-0">
+          {soldOut ? (
+            <span className="pointer-events-none absolute inset-0 z-[6] flex items-center justify-center">
+              <StampMark variant="SOLD OUT" size="lg" angle={-8} />
+            </span>
+          ) : almostGone ? (
+            <span className="pointer-events-none absolute -top-1 right-0 z-[6]">
+              <StampMark variant="LIVE" size="sm" angle={-4} />
+            </span>
+          ) : null}
           <FormRow label="STAKE" value={<span className="font-bold text-[var(--color-ink-red)]">{gbp(c.pricePerTicket)}</span>} />
           <FormRow label="ODDS" value={<>1 in <b>{c.totalTickets}</b></>} />
           <FormRow label="LEFT" value={<b>{remaining.toLocaleString()}</b>} />
