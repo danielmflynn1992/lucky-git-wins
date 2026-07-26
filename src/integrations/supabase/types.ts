@@ -14,6 +14,32 @@ export type Database = {
   }
   public: {
     Tables: {
+      competition_secrets: {
+        Row: {
+          competition_id: string
+          created_at: string
+          seed: string
+        }
+        Insert: {
+          competition_id: string
+          created_at?: string
+          seed: string
+        }
+        Update: {
+          competition_id?: string
+          created_at?: string
+          seed?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "competition_secrets_competition_id_fkey"
+            columns: ["competition_id"]
+            isOneToOne: true
+            referencedRelation: "competitions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       competitions: {
         Row: {
           cash_alternative: number
@@ -27,6 +53,7 @@ export type Database = {
           instant_win: boolean
           max_per_person: number
           price_per_ticket: number
+          seed_hash: string
           skill_question: Json
           slug: string
           status: string
@@ -46,6 +73,7 @@ export type Database = {
           instant_win?: boolean
           max_per_person?: number
           price_per_ticket: number
+          seed_hash?: string
           skill_question?: Json
           slug: string
           status?: string
@@ -65,6 +93,7 @@ export type Database = {
           instant_win?: boolean
           max_per_person?: number
           price_per_ticket?: number
+          seed_hash?: string
           skill_question?: Json
           slug?: string
           status?: string
@@ -84,6 +113,8 @@ export type Database = {
           id: string
           notes: string
           prize: string
+          seed_hash: string
+          seed_revealed: string
           total_tickets: number
           verification_hash: string
           winner_display_name: string
@@ -99,6 +130,8 @@ export type Database = {
           id?: string
           notes?: string
           prize: string
+          seed_hash?: string
+          seed_revealed?: string
           total_tickets: number
           verification_hash?: string
           winner_display_name: string
@@ -114,6 +147,8 @@ export type Database = {
           id?: string
           notes?: string
           prize?: string
+          seed_hash?: string
+          seed_revealed?: string
           total_tickets?: number
           verification_hash?: string
           winner_display_name?: string
@@ -129,6 +164,45 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      drop_subscribers: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      site_settings: {
+        Row: {
+          key: string
+          updated_at: string
+          value: Json
+        }
+        Insert: {
+          key: string
+          updated_at?: string
+          value: Json
+        }
+        Update: {
+          key?: string
+          updated_at?: string
+          value?: Json
+        }
+        Relationships: []
       }
       tickets: {
         Row: {
@@ -220,6 +294,8 @@ export type Database = {
           id: string
           notes: string
           prize: string
+          seed_hash: string
+          seed_revealed: string
           total_tickets: number
           verification_hash: string
           winner_display_name: string
@@ -267,6 +343,8 @@ export type Database = {
           id: string
           notes: string
           prize: string
+          seed_hash: string
+          seed_revealed: string
           total_tickets: number
           verification_hash: string
           winner_display_name: string
