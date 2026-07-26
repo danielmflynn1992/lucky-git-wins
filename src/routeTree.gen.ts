@@ -28,6 +28,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CompetitionsIndexRouteImport } from './routes/competitions.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as DevCompcardRouteImport } from './routes/dev.compcard'
 import { Route as CompetitionsSlugRouteImport } from './routes/competitions.$slug'
 import { Route as AdminCompetitionsNewRouteImport } from './routes/admin.competitions.new'
 import { Route as AuthenticatedAdminCompetitionsSlugSkillRouteImport } from './routes/_authenticated/admin.competitions.$slug.skill'
@@ -126,6 +127,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/admin/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DevCompcardRoute = DevCompcardRouteImport.update({
+  id: '/dev/compcard',
+  path: '/dev/compcard',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CompetitionsSlugRoute = CompetitionsSlugRouteImport.update({
   id: '/competitions/$slug',
   path: '/competitions/$slug',
@@ -161,6 +167,7 @@ export interface FileRoutesByFullPath {
   '/verify': typeof VerifyRoute
   '/winners': typeof WinnersRoute
   '/competitions/$slug': typeof CompetitionsSlugRoute
+  '/dev/compcard': typeof DevCompcardRoute
   '/admin/': typeof AdminIndexRoute
   '/competitions/': typeof CompetitionsIndexRoute
   '/admin/competitions/new': typeof AdminCompetitionsNewRoute
@@ -184,6 +191,7 @@ export interface FileRoutesByTo {
   '/verify': typeof VerifyRoute
   '/winners': typeof WinnersRoute
   '/competitions/$slug': typeof CompetitionsSlugRoute
+  '/dev/compcard': typeof DevCompcardRoute
   '/admin': typeof AdminIndexRoute
   '/competitions': typeof CompetitionsIndexRoute
   '/admin/competitions/new': typeof AdminCompetitionsNewRoute
@@ -209,6 +217,7 @@ export interface FileRoutesById {
   '/verify': typeof VerifyRoute
   '/winners': typeof WinnersRoute
   '/competitions/$slug': typeof CompetitionsSlugRoute
+  '/dev/compcard': typeof DevCompcardRoute
   '/admin/': typeof AdminIndexRoute
   '/competitions/': typeof CompetitionsIndexRoute
   '/admin/competitions/new': typeof AdminCompetitionsNewRoute
@@ -234,6 +243,7 @@ export interface FileRouteTypes {
     | '/verify'
     | '/winners'
     | '/competitions/$slug'
+    | '/dev/compcard'
     | '/admin/'
     | '/competitions/'
     | '/admin/competitions/new'
@@ -257,6 +267,7 @@ export interface FileRouteTypes {
     | '/verify'
     | '/winners'
     | '/competitions/$slug'
+    | '/dev/compcard'
     | '/admin'
     | '/competitions'
     | '/admin/competitions/new'
@@ -281,6 +292,7 @@ export interface FileRouteTypes {
     | '/verify'
     | '/winners'
     | '/competitions/$slug'
+    | '/dev/compcard'
     | '/admin/'
     | '/competitions/'
     | '/admin/competitions/new'
@@ -306,6 +318,7 @@ export interface RootRouteChildren {
   VerifyRoute: typeof VerifyRoute
   WinnersRoute: typeof WinnersRoute
   CompetitionsSlugRoute: typeof CompetitionsSlugRoute
+  DevCompcardRoute: typeof DevCompcardRoute
   AdminIndexRoute: typeof AdminIndexRoute
   CompetitionsIndexRoute: typeof CompetitionsIndexRoute
   AdminCompetitionsNewRoute: typeof AdminCompetitionsNewRoute
@@ -446,6 +459,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dev/compcard': {
+      id: '/dev/compcard'
+      path: '/dev/compcard'
+      fullPath: '/dev/compcard'
+      preLoaderRoute: typeof DevCompcardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/competitions/$slug': {
       id: '/competitions/$slug'
       path: '/competitions/$slug'
@@ -501,6 +521,7 @@ const rootRouteChildren: RootRouteChildren = {
   VerifyRoute: VerifyRoute,
   WinnersRoute: WinnersRoute,
   CompetitionsSlugRoute: CompetitionsSlugRoute,
+  DevCompcardRoute: DevCompcardRoute,
   AdminIndexRoute: AdminIndexRoute,
   CompetitionsIndexRoute: CompetitionsIndexRoute,
   AdminCompetitionsNewRoute: AdminCompetitionsNewRoute,
