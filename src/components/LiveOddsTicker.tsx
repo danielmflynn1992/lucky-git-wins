@@ -38,7 +38,7 @@ export function LiveOddsTicker() {
   // Empty / loading state — still render the shell so layout doesn't jump.
   if (items.length === 0) {
     return (
-      <div className="relative overflow-hidden bg-white border-b border-border">
+      <div data-dynamic="ticker" className="relative overflow-hidden bg-white border-b border-border">
         <div className="flex items-stretch">
           <LiveChip />
           <div className="flex-1 px-4 py-2 text-xs font-bold text-muted-foreground tracking-wide">
