@@ -41,7 +41,7 @@ export function CompCard({ c }: { c: Competition }) {
           if (t.closest("a,button,input,select,textarea,[data-no-card-click]")) return;
           goToDetail();
         }}
-        className="absolute inset-0 z-[25]"
+        className="absolute inset-0 z-[1]"
         style={{ background: "transparent" }}
       />
       <Link
