@@ -4,6 +4,7 @@ import { Loader2, Minus, Plus, Shuffle, AlertTriangle, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { gbp } from "@/lib/format";
 import { explainReservationFailure, newReservationToken, reserveLuckyDip } from "@/lib/competitions-api";
+import { pickLoadingQuip } from "@/lib/format";
 import type { Competition } from "@/lib/mock-comps";
 
 interface Props {
@@ -21,6 +22,7 @@ export function QuickAddDialog({ comp, open, onClose, maxQty = 25 }: Props) {
   const [err, setErr] = useState<string | null>(null);
   const [availableLeft, setAvailableLeft] = useState<number | null>(null);
   const [soldOut, setSoldOut] = useState(false);
+  const [quip, setQuip] = useState(pickLoadingQuip());
 
   if (!open) return null;
 
@@ -33,7 +35,7 @@ export function QuickAddDialog({ comp, open, onClose, maxQty = 25 }: Props) {
   };
 
   const submit = async () => {
-    setErr(null); setAvailableLeft(null); setSoldOut(false); setReserving(true);
+    setErr(null); setAvailableLeft(null); setSoldOut(false); setQuip(pickLoadingQuip()); setReserving(true);
     try {
       const token = newReservationToken();
       const numbers = await reserveLuckyDip(comp.slug, qty, token);
@@ -156,7 +158,7 @@ export function QuickAddDialog({ comp, open, onClose, maxQty = 25 }: Props) {
         <div className="mt-5 flex gap-2">
           <Button variant="cream" onClick={close} className="flex-1" disabled={reserving}>Cancel</Button>
           <Button variant="gold" size="lg" disabled={reserving || soldOut} onClick={submit} className="flex-1">
-            {reserving ? (<><Loader2 className="h-4 w-4 animate-spin" /> Locking…</>) : <>Add {qty} · {gbp(total)}</>}
+            {reserving ? (<><Loader2 className="h-4 w-4 animate-spin" /> {quip}</>) : <>Add {qty} · {gbp(total)}</>}
           </Button>
         </div>
       </div>

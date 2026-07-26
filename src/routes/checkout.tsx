@@ -4,9 +4,10 @@ import { z } from "zod";
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
 import { Button } from "@/components/ui/button";
-import { SmugSmile, StampSeal } from "@/components/Logo";
+import { StampSeal } from "@/components/Logo";
+import { LuckyMark } from "@/components/GaryMascot";
 import { getComp, COMPETITIONS } from "@/lib/mock-comps";
-import { gbp } from "@/lib/format";
+import { gbp, moneySlang } from "@/lib/format";
 import { CreditCard, Lock, ShieldCheck, Share2, CheckCircle2, AlertTriangle } from "lucide-react";
 import { SkillWarning } from "@/components/SkillWarning";
 import { SkillQuestionStep } from "@/components/SkillQuestionStep";
@@ -70,13 +71,9 @@ function Checkout() {
       <div className="min-h-screen flex flex-col">
         <SiteNav />
         <main className="mx-auto max-w-xl px-4 py-16 w-full flex-1 text-center">
-          <div className="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-full bg-urgent/15 text-urgent">
-            <AlertTriangle className="h-7 w-7" />
-          </div>
-          <h1 className="mt-6 font-display text-3xl font-semibold tracking-tight">Your basket is tragically empty.</h1>
-          <p className="mt-2 text-muted-foreground">
-            You can't win if you don't play. Head back, pick your tickets — then checkout unlocks. Simple as.
-          </p>
+          <LuckyMark className="mx-auto h-16 w-16" />
+          <h1 className="mt-4 font-display text-3xl font-semibold tracking-tight">Your basket's empty.</h1>
+          <p className="mt-2 text-muted-foreground">Nothing in here. Bit tragic, that.</p>
           <Button asChild variant="gold" size="lg" className="mt-6">
             <Link to="/competitions/$slug" params={{ slug: slug ?? comp.slug }}>Right, take me back</Link>
           </Button>
@@ -154,7 +151,7 @@ function Checkout() {
             disabled={!answer}
           >
             {answer
-              ? `Cough Up ${gbp(subtotal)} (Securely)`
+              ? `Sort me out — ${gbp(subtotal)}`
               : "Answer the skill question to continue"}
           </Button>
           {answer && !answer.isCorrect && (
@@ -200,6 +197,11 @@ function Checkout() {
                 <dt className="font-display font-bold">Total</dt>
                 <dd className="font-display font-black text-2xl leading-none">{gbp(subtotal)}</dd>
               </div>
+              {moneySlang(subtotal) && (
+                <div className="flex justify-end -mt-1 font-mono text-[10px] text-[var(--color-ink-blue)]">
+                  {moneySlang(subtotal)}
+                </div>
+              )}
             </dl>
           </div>
         </aside>
@@ -255,6 +257,9 @@ function SuccessScreen({ compTitle, numbers }: { compTitle: string; numbers: num
           <Button variant="git" size="lg"><Share2 className="h-4 w-4" /> Tell the group chat</Button>
           <Button asChild variant="cream" size="lg"><Link to="/">Back to comps</Link></Button>
         </div>
+        <p className="mt-8 font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground/70">
+          Keep this somewhere safe. Or don't — we've got a copy.
+        </p>
       </main>
       <SiteFooter />
     </div>

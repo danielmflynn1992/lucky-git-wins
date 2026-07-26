@@ -19,16 +19,16 @@ function NotFoundComponent() {
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <div className="font-mono text-xs tracking-[0.3em] text-muted-foreground">ERROR · 404</div>
-        <h1 className="mt-3 font-display text-4xl font-semibold text-foreground">Nothing here, mate.</h1>
+        <h1 className="mt-3 font-display text-4xl font-semibold text-foreground">Nothing here.</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Whatever you were after has done a runner. Probably won something and cleared off to Marbella.
+          This page has done one. Try the comps.
         </p>
         <div className="mt-6">
           <Link
             to="/"
             className="inline-flex items-center justify-center rounded-md bg-clover text-primary-foreground px-5 py-2.5 text-sm font-semibold hover:bg-clover-deep"
           >
-            Right, take me home
+            Back to the comps
           </Link>
         </div>
       </div>
