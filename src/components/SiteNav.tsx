@@ -178,11 +178,11 @@ export function SiteNav() {
           {/* Centred wax seal — overhangs the header's bottom edge by ~40% of
               its size, then shrinks and settles inside the bar on scroll. */}
           <div className="justify-self-center shrink-0 relative z-50 pointer-events-auto">
-            <div className="relative flex items-end justify-center">
+            <div className={`relative flex justify-center ${scrolled ? "items-center" : "items-end"}`}>
               <WaxSeal
                 size={
                   scrolled
-                    ? "h-[48px] w-[48px]"
+                    ? "h-10 w-10 md:h-12 md:w-12"
                     : "h-[84px] w-[84px] md:h-[120px] md:w-[120px]"
                 }
                 className={
