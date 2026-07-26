@@ -166,9 +166,22 @@ export function SiteNav() {
           <Link
             to="/"
             aria-label="Lucky Git Comps — home"
-            className="justify-self-center inline-flex items-center bg-transparent p-0 border-0 shadow-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-clover rounded-sm"
+            className="justify-self-center inline-flex items-center bg-transparent p-0 border-0 shadow-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-clover rounded-sm overflow-visible"
           >
-            <Lockup style={{ height: 58, width: "auto", maxWidth: "70vw", objectFit: "contain" }} />
+            {/* Lockup PNG has ~15% whitespace padding baked in, so the
+                visible wordmark is smaller than the bounding box. Height
+                is set well above the header row (88px normal / 56px
+                scrolled) and the parents allow overflow so the artwork
+                extends slightly above/below the row without pushing the
+                header taller. */}
+            <Lockup
+              style={{
+                height: scrolled ? 72 : 116,
+                width: "auto",
+                maxWidth: "78vw",
+                objectFit: "contain",
+              }}
+            />
           </Link>
 
           {/* RIGHT edge — auth (md+) + basket, unchanged position. */}
