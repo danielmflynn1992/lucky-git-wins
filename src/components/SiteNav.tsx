@@ -168,7 +168,7 @@ export function SiteNav() {
           {/* Centred primary nav — hidden on very narrow viewports. */}
           <nav
             aria-label="Primary"
-            className="hidden min-[420px]:flex items-center justify-center gap-5 md:gap-7 flex-1 text-[11px] md:text-[12px] font-bold uppercase tracking-[0.14em]"
+            className="hidden md:flex items-center justify-center gap-7 flex-1 min-w-0 text-[12px] font-bold uppercase tracking-[0.14em]"
             style={{ color: "var(--color-ink-blue, #123)" }}
           >
             <Link to="/competitions" className="hover:text-clover transition-colors whitespace-nowrap">Competitions</Link>
