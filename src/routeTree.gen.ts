@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WinnersRouteImport } from './routes/winners'
+import { Route as VerifyRouteImport } from './routes/verify'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as ResponsiblePlayRouteImport } from './routes/responsible-play'
 import { Route as PromiseRouteImport } from './routes/promise'
@@ -33,6 +34,11 @@ import { Route as AuthenticatedAdminCompetitionsSlugSkillRouteImport } from './r
 const WinnersRoute = WinnersRouteImport.update({
   id: '/winners',
   path: '/winners',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VerifyRoute = VerifyRouteImport.update({
+  id: '/verify',
+  path: '/verify',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TermsRoute = TermsRouteImport.update({
@@ -145,6 +151,7 @@ export interface FileRoutesByFullPath {
   '/promise': typeof PromiseRoute
   '/responsible-play': typeof ResponsiblePlayRoute
   '/terms': typeof TermsRoute
+  '/verify': typeof VerifyRoute
   '/winners': typeof WinnersRoute
   '/competitions/$slug': typeof CompetitionsSlugRoute
   '/admin/': typeof AdminIndexRoute
@@ -166,6 +173,7 @@ export interface FileRoutesByTo {
   '/promise': typeof PromiseRoute
   '/responsible-play': typeof ResponsiblePlayRoute
   '/terms': typeof TermsRoute
+  '/verify': typeof VerifyRoute
   '/winners': typeof WinnersRoute
   '/competitions/$slug': typeof CompetitionsSlugRoute
   '/admin': typeof AdminIndexRoute
@@ -189,6 +197,7 @@ export interface FileRoutesById {
   '/promise': typeof PromiseRoute
   '/responsible-play': typeof ResponsiblePlayRoute
   '/terms': typeof TermsRoute
+  '/verify': typeof VerifyRoute
   '/winners': typeof WinnersRoute
   '/competitions/$slug': typeof CompetitionsSlugRoute
   '/admin/': typeof AdminIndexRoute
@@ -212,6 +221,7 @@ export interface FileRouteTypes {
     | '/promise'
     | '/responsible-play'
     | '/terms'
+    | '/verify'
     | '/winners'
     | '/competitions/$slug'
     | '/admin/'
@@ -233,6 +243,7 @@ export interface FileRouteTypes {
     | '/promise'
     | '/responsible-play'
     | '/terms'
+    | '/verify'
     | '/winners'
     | '/competitions/$slug'
     | '/admin'
@@ -255,6 +266,7 @@ export interface FileRouteTypes {
     | '/promise'
     | '/responsible-play'
     | '/terms'
+    | '/verify'
     | '/winners'
     | '/competitions/$slug'
     | '/admin/'
@@ -278,6 +290,7 @@ export interface RootRouteChildren {
   PromiseRoute: typeof PromiseRoute
   ResponsiblePlayRoute: typeof ResponsiblePlayRoute
   TermsRoute: typeof TermsRoute
+  VerifyRoute: typeof VerifyRoute
   WinnersRoute: typeof WinnersRoute
   CompetitionsSlugRoute: typeof CompetitionsSlugRoute
   AdminIndexRoute: typeof AdminIndexRoute
@@ -292,6 +305,13 @@ declare module '@tanstack/react-router' {
       path: '/winners'
       fullPath: '/winners'
       preLoaderRoute: typeof WinnersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/verify': {
+      id: '/verify'
+      path: '/verify'
+      fullPath: '/verify'
+      preLoaderRoute: typeof VerifyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/terms': {
@@ -457,6 +477,7 @@ const rootRouteChildren: RootRouteChildren = {
   PromiseRoute: PromiseRoute,
   ResponsiblePlayRoute: ResponsiblePlayRoute,
   TermsRoute: TermsRoute,
+  VerifyRoute: VerifyRoute,
   WinnersRoute: WinnersRoute,
   CompetitionsSlugRoute: CompetitionsSlugRoute,
   AdminIndexRoute: AdminIndexRoute,
