@@ -7,6 +7,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { useBasket } from "@/hooks/use-basket";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { LiveOddsTicker } from "./LiveOddsTicker";
 
 const leftLinks = [
   { to: "/competitions", label: "Get Tickets" },
@@ -114,38 +115,16 @@ export function SiteNav() {
   }, [open]);
 
   return (
-    <header className="sticky top-0 z-40 shadow-sm">
-      {/* Tier 1 — merged utility bar: promo centre, auth right.
-          Socials moved into the mobile menu / footer to keep this row light. */}
-      <div className="bg-ink text-cream">
-        <div className="mx-auto max-w-7xl px-4 h-9 flex items-center justify-between gap-4 text-[11px] md:text-xs">
-          <Link
-            to="/how-it-works"
-            className="hidden sm:inline text-cream/85 hover:text-gold font-bold uppercase tracking-[0.16em] truncate"
-          >
-            Refer a mate = free tickets
-          </Link>
-          <div className="flex items-center gap-5 uppercase tracking-[0.16em] font-bold ml-auto">
-            {signedIn ? (
-              <>
-                <Link to="/account" className="hover:text-gold transition-colors">Account</Link>
-                <button onClick={() => supabase.auth.signOut()} className="hover:text-gold transition-colors">Sign out</button>
-              </>
-            ) : (
-              !loading && (
-                <>
-                  <Link to="/auth" className="hover:text-gold transition-colors">Login</Link>
-                  <Link to="/auth" className="hover:text-gold transition-colors">Register</Link>
-                </>
-              )
-            )}
-          </div>
-        </div>
-      </div>
+    <header className="sticky top-0 z-40 shadow-[0_2px_10px_-4px_rgba(60,50,30,0.25)]">
+      {/* Tier 0 — live ticker, topmost element on the page, dark green strip. */}
+      <LiveOddsTicker />
 
-      {/* Main bar: hamburger left, wax seal centred (overhanging), basket right.
-          overflow-visible so the seal can drop below the bottom border. */}
-      <div className="paper-edge-bottom bg-card/95 backdrop-blur-md relative overflow-visible">
+      {/* Tier 1 (only tier below the ticker) — hamburger left, wax seal
+          centred (overhanging), then right-side nav + account links + basket.
+          overflow-visible so the seal can drop below the bar. No bottom
+          border — the buffer band below carries the same paper colour and a
+          soft shadow separates the header from page content. */}
+      <div className="bg-card/95 backdrop-blur-md relative overflow-visible">
         <div className="mx-auto max-w-7xl px-4 md:px-6 h-14 md:h-16 grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-4 relative">
           {/* Left nav (desktop) — sits alongside the hamburger; hamburger takes
               over on smaller widths so the seal stays visually centred. */}
@@ -182,19 +161,20 @@ export function SiteNav() {
               <WaxSeal
                 size={
                   scrolled
-                    ? "h-10 w-10 md:h-12 md:w-12"
-                    : "h-[84px] w-[84px] md:h-[120px] md:w-[120px]"
+                    ? "h-14 w-14"
+                    : "h-[76px] w-[76px] md:h-[96px] md:w-[96px]"
                 }
                 className={
                   scrolled
                     ? "translate-y-0"
-                    : "translate-y-[36px] md:translate-y-[52px]"
+                    : "translate-y-[38px] md:translate-y-[48px]"
                 }
               />
             </div>
           </div>
 
-          {/* Right: nav (desktop) + basket (all breakpoints). */}
+          {/* Right: primary nav (desktop) + auth (small caps, reduced size)
+              + basket. All at every breakpoint where visible. */}
           <div className="flex items-center justify-end gap-5 md:gap-7 min-w-0">
             <nav className="hidden lg:flex items-center gap-6 pl-4">
               {rightLinks.map((l) => (
@@ -208,6 +188,24 @@ export function SiteNav() {
                 </Link>
               ))}
             </nav>
+            {/* Auth links merged in from the deleted utility row — small caps,
+                reduced size, sit right of the primary nav and before the
+                basket icon. Hidden on mobile (surfaced in the drawer instead). */}
+            <div className="hidden md:flex items-center gap-4 text-[11px] font-bold uppercase tracking-[0.18em] text-foreground/60">
+              {signedIn ? (
+                <>
+                  <Link to="/account" className="hover:text-clover transition-colors">Account</Link>
+                  <button onClick={() => supabase.auth.signOut()} className="hover:text-clover transition-colors">Sign out</button>
+                </>
+              ) : (
+                !loading && (
+                  <>
+                    <Link to="/auth" className="hover:text-clover transition-colors">Login</Link>
+                    <Link to="/auth" className="hover:text-clover transition-colors">Register</Link>
+                  </>
+                )
+              )}
+            </div>
             <Link
               to="/checkout"
               search={basketSlug ? { slug: basketSlug } : undefined}
@@ -233,10 +231,14 @@ export function SiteNav() {
         </div>
       </div>
 
-      {/* Spacer reserving the seal's overhang so first-page content is never
-          occluded on initial render. Sits outside the sticky header, in normal
-          flow, so it pushes the page body down by the overhang height. */}
-      <div aria-hidden="true" className="h-[36px] md:h-[52px] pointer-events-none" />
+      {/* Buffer band — 32px cream strip directly beneath the nav row, same
+          colour as the header. The seal overhangs into this band so it sits
+          on an uninterrupted surface. No border, no content. */}
+      <div aria-hidden="true" className="h-8 bg-card pointer-events-none" />
+
+      {/* Content offset spacer — reserves buffer + half the seal height so
+          the first element of page content is never occluded by the seal. */}
+      <div aria-hidden="true" className="h-[38px] md:h-[48px] pointer-events-none" />
 
       {/* Screen-reader live region — announces basket changes globally */}
       <div
