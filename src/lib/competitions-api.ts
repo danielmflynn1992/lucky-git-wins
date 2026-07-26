@@ -65,7 +65,7 @@ export async function fetchCompetitionBySlug(slug: string): Promise<DbCompetitio
     title: comp.title,
     subtitle: comp.subtitle,
     category: comp.category,
-    image: comp.image || IMAGES[comp.slug] || "",
+    image: resolveImage(comp.image, comp.slug),
     letterboxStyle: ((comp as { letterbox_style?: string }).letterbox_style ?? "blur") as LetterboxStyle,
     pricePerTicket: Number(comp.price_per_ticket),
     totalTickets: comp.total_tickets,
