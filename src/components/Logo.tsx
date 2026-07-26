@@ -50,3 +50,50 @@ export function Logo({
     </Link>
   );
 }
+
+/**
+ * WaxSeal — circular "stamp" variant of the crest for the header.
+ *
+ * Crops the raster crest to a circle so only the portrait roundel shows
+ * (the ribbon banner is masked out), then adds a pressed-into-paper effect:
+ * inset highlight on the top-left inner edge and a low ambient drop shadow
+ * beneath. The whole circle is the tap target and it links home. Sizing is
+ * driven by the parent so a scroll-shrink parent can swap it.
+ */
+export function WaxSeal({
+  size = "h-[88px] w-[88px]",
+  className = "",
+}: {
+  size?: string;
+  className?: string;
+}) {
+  return (
+    <Link
+      to="/"
+      aria-label="Lucky Git Comps — home"
+      className={`group relative inline-flex items-center justify-center rounded-full ${size} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-paper)] focus-visible:ring-[var(--color-ink-green)] wax-seal-transition ${className}`}
+      style={{
+        filter: "drop-shadow(0 4px 12px rgba(60, 50, 30, 0.35))",
+      }}
+    >
+      <span
+        aria-hidden="true"
+        className="block h-full w-full rounded-full overflow-hidden bg-[var(--color-paper-raised)]"
+        style={{
+          boxShadow:
+            "inset 1px 1px 0 rgba(255,255,255,0.55), inset -1px -1px 0 rgba(60,50,30,0.15), 0 0 0 1px rgba(60,50,30,0.18)",
+        }}
+      >
+        <img
+          src={CREST_URL}
+          alt="Lucky Git Comps"
+          width={1420}
+          height={800}
+          loading="eager"
+          className="block h-[170%] w-[170%] max-w-none -translate-x-[20%] -translate-y-[18%] object-cover mix-blend-multiply"
+          style={{ objectPosition: "50% 30%" }}
+        />
+      </span>
+    </Link>
+  );
+}
