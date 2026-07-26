@@ -301,16 +301,9 @@
 .plate-border--lift  { box-shadow: var(--shadow-paper); }
 .plate-border--tight { padding: 0.75rem; outline-offset: 2px; }
 .plate-border--flush { padding: 0; }
-.plate-border::before,
-.plate-border::after {
-  content: '◆';
-  position: absolute;
-  font-size: 8px;
-  color: var(--color-ink-green);
-  line-height: 1;
-}
-.plate-border::before { top: 5px; left: 6px; }
-.plate-border::after  { bottom: 5px; right: 6px; }
+/* Corner ornaments are rendered by <PlateCorners /> in PlateBorder.tsx.
+   The old ::before/::after diamond glyphs were doubling up and clipping in
+   card corners, so we intentionally omit them here. */
 
 /* ---------- MICROTEXT RULE ---------- */
 .microtext,
