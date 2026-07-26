@@ -378,16 +378,17 @@ function NewComp() {
           <div className="space-y-5">
             <Card title="Live card preview">
               <div className="rounded-xl bg-background border-2 border-border p-4">
-                <div className="relative w-full aspect-[5/4] overflow-hidden rounded-lg bg-muted mb-3">
-                  {imageUrl ? (
-                    <>
-                      <img src={imageUrl} alt="" aria-hidden="true" className="absolute inset-0 h-full w-full object-cover scale-110 blur-2xl opacity-60" />
-                      <img src={imageUrl} alt="" className="relative h-full w-full object-contain" />
-                    </>
-                  ) : (
-                    <div className="h-full w-full flex items-center justify-center text-[11px] font-mono uppercase tracking-widest text-muted-foreground">No image yet</div>
-                  )}
-                </div>
+                {imageUrl ? (
+                  <LetterboxImage
+                    src={imageUrl}
+                    alt=""
+                    style={letterboxStyle}
+                    className="w-full aspect-[5/4] rounded-lg mb-3"
+                    loading="eager"
+                  />
+                ) : (
+                  <div className="w-full aspect-[5/4] rounded-lg bg-muted mb-3 flex items-center justify-center text-[11px] font-mono uppercase tracking-widest text-muted-foreground">No image yet</div>
+                )}
                 <div className="text-[10px] font-mono uppercase tracking-widest text-clover/80">{category}</div>
                 <div className="font-display font-black text-lg leading-tight mt-1 truncate">{title || "Prize title"}</div>
                 <div className="text-xs text-muted-foreground truncate">{subtitle || "Short subtitle"}</div>
