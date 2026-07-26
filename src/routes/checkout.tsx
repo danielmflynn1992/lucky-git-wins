@@ -13,9 +13,6 @@ interface Reservation {
   token: string;
   slug: string;
   numbers: number[];
-  skillAnswer: number;
-  skillQuestion: string;
-  skillAnswerText: string;
   expires: number;
 }
 
@@ -75,7 +72,7 @@ function Checkout() {
           </div>
           <h1 className="mt-6 font-display text-3xl font-semibold tracking-tight">Your basket is tragically empty.</h1>
           <p className="mt-2 text-muted-foreground">
-            You can't win if you don't play. Head back, pick your tickets, answer the skill question — then checkout unlocks. Simple as.
+            You can't win if you don't play. Head back, pick your tickets — then checkout unlocks. Simple as.
           </p>
           <Button asChild variant="gold" size="lg" className="mt-6">
             <Link to="/competitions/$slug" params={{ slug: slug ?? comp.slug }}>Right, take me back</Link>
@@ -103,18 +100,6 @@ function Checkout() {
             <h1 className="font-display text-3xl md:text-4xl font-semibold tracking-tight">Right then, checkout.</h1>
             <p className="text-muted-foreground mt-1">Card details, a quick tick-box, and you're in the draw. That's the lot.</p>
           </div>
-
-          <fieldset className="rounded-2xl bg-clover/5 border-2 border-clover/30 p-4">
-            <legend className="px-2 font-display text-sm font-bold flex items-center gap-1.5 text-clover">
-              <ShieldCheck className="h-4 w-4" /> Skill question passed
-            </legend>
-            <div className="text-xs uppercase tracking-widest text-muted-foreground font-bold">Question</div>
-            <p className="mt-0.5 text-sm">{reservation.skillQuestion}</p>
-            <div className="mt-3 text-xs uppercase tracking-widest text-muted-foreground font-bold">Your answer (recorded with order)</div>
-            <p className="mt-0.5 text-sm font-mono">
-              {String.fromCharCode(65 + reservation.skillAnswer)}. {reservation.skillAnswerText}
-            </p>
-          </fieldset>
 
           <fieldset className="rounded-2xl bg-card border-2 border-border p-5 space-y-4">
             <legend className="px-2 font-display text-lg font-bold">Your details</legend>
@@ -149,7 +134,7 @@ function Checkout() {
             Cough Up {gbp(subtotal)} (Securely)
           </Button>
           <div className="text-xs text-muted-foreground text-center flex items-center justify-center gap-1.5">
-            <ShieldCheck className="h-3.5 w-3.5" /> Secure checkout. Skill question passed.
+            <ShieldCheck className="h-3.5 w-3.5" /> Secure checkout.
           </div>
         </form>
 
@@ -216,7 +201,7 @@ function SuccessScreen({ compTitle, numbers }: { compTitle: string; numbers: num
         </div>
         <div className="mt-6 text-[10px] font-mono uppercase tracking-[0.25em] text-clover">Entry confirmed · #{Math.floor(Math.random()*90000+10000)}</div>
         <h1 className="mt-2 font-display text-4xl md:text-5xl font-semibold tracking-tight">You're in the draw,<br/><span className="text-clover">you lucky git.</span></h1>
-        <p className="mt-3 text-muted-foreground">Payment confirmed. Skill question passed. Numbers assigned.</p>
+        <p className="mt-3 text-muted-foreground">Payment confirmed. Numbers assigned.</p>
         <div className="mt-8 rounded-md bg-card border border-border p-6 text-left">
           <div className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground">Your entry</div>
           <div className="font-display text-xl font-semibold mt-1">{compTitle}</div>

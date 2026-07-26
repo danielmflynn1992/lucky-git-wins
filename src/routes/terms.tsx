@@ -16,7 +16,7 @@ export const Route = createFileRoute("/terms")({
       <h2>1. Eligibility</h2>
       <p>Entrants must be aged 18 or over and resident in the United Kingdom.</p>
       <h2>2. Entry</h2>
-      <p>Entry is by paid ticket purchase. All entrants must correctly answer the skill question on that competition's page for their entry to count. Winners are selected automatically by a verifiable random draw when the competition closes.</p>
+      <p>Entry is by paid ticket purchase. Winners are selected automatically by a verifiable random draw when the competition closes.</p>
       <h2>3. The draw</h2>
       <p>Draws take place automatically on the published closing date and are conducted using a certified random number generator. Every draw is recorded with a verification hash on our public Past Draws log for independent scrutiny.</p>
       <h2>4. Prizes</h2>

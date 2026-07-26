@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { Loader2, Minus, Plus, Shuffle, CheckCircle2, AlertTriangle, X } from "lucide-react";
+import { Loader2, Minus, Plus, Shuffle, AlertTriangle, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { gbp } from "@/lib/format";
 import { newReservationToken, reserveLuckyDip } from "@/lib/competitions-api";
@@ -17,34 +17,28 @@ interface Props {
 export function QuickAddDialog({ comp, open, onClose, maxQty = 25 }: Props) {
   const navigate = useNavigate();
   const [qty, setQty] = useState(5);
-  const [answered, setAnswered] = useState<number | null>(null);
   const [reserving, setReserving] = useState(false);
   const [err, setErr] = useState<string | null>(null);
 
   if (!open) return null;
 
-  const canProceed = answered !== null && answered === comp.skillQuestion.correct;
   const total = comp.pricePerTicket * qty;
 
   const close = () => {
     if (reserving) return;
-    setQty(5); setAnswered(null); setErr(null);
+    setQty(5); setErr(null);
     onClose();
   };
 
   const submit = async () => {
-    if (!canProceed) { setErr("Answer the skill question correctly to continue."); return; }
     setErr(null); setReserving(true);
     try {
       const token = newReservationToken();
-      const numbers = await reserveLuckyDip(comp.slug, qty, token, answered!);
+      const numbers = await reserveLuckyDip(comp.slug, qty, token);
       sessionStorage.setItem("lgc:reservation", JSON.stringify({
         token,
         slug: comp.slug,
         numbers,
-        skillAnswer: answered,
-        skillQuestion: comp.skillQuestion.q,
-        skillAnswerText: comp.skillQuestion.options[answered!],
         expires: Date.now() + 15 * 60_000,
       }));
       window.dispatchEvent(new Event("lgc:basket-change"));
@@ -134,39 +128,6 @@ export function QuickAddDialog({ comp, open, onClose, maxQty = 25 }: Props) {
           </div>
         </div>
 
-        {/* Skill question */}
-        <div className="mt-5">
-          <div className="text-[11px] font-bold uppercase tracking-widest text-clover">Skill question · required</div>
-          <p className="mt-1 font-display text-lg font-black leading-snug">{comp.skillQuestion.q}</p>
-          <div className="mt-3 space-y-2">
-            {comp.skillQuestion.options.map((opt, i) => {
-              const chosen = answered === i;
-              const right = chosen && i === comp.skillQuestion.correct;
-              const wrong = chosen && i !== comp.skillQuestion.correct;
-              return (
-                <button
-                  key={i}
-                  type="button"
-                  onClick={() => setAnswered(i)}
-                  disabled={reserving}
-                  className={`w-full text-left rounded-xl border-2 px-4 py-2.5 text-sm font-semibold transition-colors flex items-center justify-between ${
-                    right ? "border-clover bg-clover/10" : wrong ? "border-hot bg-hot/10" : "border-border bg-card hover:border-clover/40"
-                  }`}
-                >
-                  <span>{String.fromCharCode(65 + i)}. {opt}</span>
-                  {right && <CheckCircle2 className="h-4 w-4 text-clover" />}
-                  {wrong && <AlertTriangle className="h-4 w-4 text-hot" />}
-                </button>
-              );
-            })}
-          </div>
-          {answered !== null && (
-            <div className={`mt-2 text-xs font-bold ${canProceed ? "text-clover" : "text-hot"}`}>
-              {canProceed ? "Correct. You can continue." : "Not quite — pick another answer."}
-            </div>
-          )}
-        </div>
-
         {err && (
           <div className="mt-3 text-xs text-hot flex items-start gap-1.5">
             <AlertTriangle className="h-3.5 w-3.5 mt-0.5 shrink-0" />
@@ -176,7 +137,7 @@ export function QuickAddDialog({ comp, open, onClose, maxQty = 25 }: Props) {
 
         <div className="mt-5 flex gap-2">
           <Button variant="cream" onClick={close} className="flex-1" disabled={reserving}>Cancel</Button>
-          <Button variant="gold" size="lg" disabled={!canProceed || reserving} onClick={submit} className="flex-1">
+          <Button variant="gold" size="lg" disabled={reserving} onClick={submit} className="flex-1">
             {reserving ? (<><Loader2 className="h-4 w-4 animate-spin" /> Locking…</>) : <>Add {qty} · {gbp(total)}</>}
           </Button>
         </div>

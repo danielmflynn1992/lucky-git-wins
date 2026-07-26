@@ -34,7 +34,6 @@ export interface DbCompetition {
   instantWin: boolean;
   hot: boolean;
   description: string;
-  skillQuestion: { q: string; options: string[]; correct: number };
   takenNumbers: number[];
 }
 
@@ -64,7 +63,7 @@ export async function fetchCompetitionBySlug(slug: string): Promise<DbCompetitio
     title: comp.title,
     subtitle: comp.subtitle,
     category: comp.category,
-    image: IMAGES[comp.slug] ?? comp.image,
+    image: comp.image || IMAGES[comp.slug] || "",
     pricePerTicket: Number(comp.price_per_ticket),
     totalTickets: comp.total_tickets,
     ticketsSold: sold,
@@ -75,7 +74,6 @@ export async function fetchCompetitionBySlug(slug: string): Promise<DbCompetitio
     instantWin: comp.instant_win,
     hot: comp.hot,
     description: comp.description,
-    skillQuestion: comp.skill_question as DbCompetition["skillQuestion"],
     takenNumbers,
   };
 }
@@ -168,13 +166,11 @@ export async function reserveLuckyDip(
   slug: string,
   qty: number,
   token: string,
-  skillAnswer: number,
 ): Promise<number[]> {
   const { data, error } = await supabase.rpc("reserve_lucky_dip", {
     p_slug: slug,
     p_qty: qty,
     p_token: token,
-    p_skill_answer: skillAnswer,
   });
   if (error) throw new Error(cleanRpcError(error.message));
   return (data as number[]) ?? [];
@@ -184,13 +180,11 @@ export async function reserveNumbers(
   slug: string,
   numbers: number[],
   token: string,
-  skillAnswer: number,
 ): Promise<number[]> {
   const { data, error } = await supabase.rpc("reserve_specific_numbers", {
     p_slug: slug,
     p_numbers: numbers,
     p_token: token,
-    p_skill_answer: skillAnswer,
   });
   if (error) throw new Error(cleanRpcError(error.message));
   return (data as number[]) ?? [];

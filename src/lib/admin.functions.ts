@@ -38,42 +38,12 @@ const slugify = (s: string) =>
     .replace(/^-+|-+$/g, "")
     .slice(0, 60);
 
-const skillQuestionSchema = z
-  .object({
-    q: z.string().trim().min(3, "Question must be at least 3 characters").max(300),
-    options: z
-      .array(z.string().trim().min(1, "Answer choices cannot be empty").max(120))
-      .length(4, "Exactly four answer choices are required"),
-    correct: z
-      .number({ invalid_type_error: "Select exactly one correct answer" })
-      .int()
-      .min(0, "Select exactly one correct answer")
-      .max(3, "Correct answer index must be between 0 and 3"),
-  })
-  .superRefine((val, ctx) => {
-    const cleaned = val.options.map((o) => o.trim());
-    if (cleaned.some((o) => o.length === 0)) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ["options"],
-        message: "All four answer choices must be non-empty",
-      });
-    }
-    if (!Number.isInteger(val.correct) || val.correct < 0 || val.correct > 3) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ["correct"],
-        message: "Exactly one correct option must be selected",
-      });
-    }
-  });
-
 const createInput = z.object({
   title: z.string().trim().min(2).max(120),
   slug: z.string().trim().max(80).optional().default(""),
   subtitle: z.string().max(200).optional().default(""),
   category: z.string().min(1).max(40),
-  image: z.string().max(400).optional().default(""),
+  image: z.string().max(1024).optional().default(""),
   description: z.string().max(4000).optional().default(""),
   pricePerTicket: z.number().positive().max(10000),
   totalTickets: z.number().int().min(1).max(100000),
@@ -82,7 +52,6 @@ const createInput = z.object({
   endsAt: z.string().min(10),
   status: z.enum(["live", "draft", "paused"]),
   hot: z.boolean().default(false),
-  skillQuestion: skillQuestionSchema,
   instantWin: z.boolean().default(false),
   instantWinCount: z.number().int().min(0).max(10000).default(0),
   instantWinPrize: z.number().min(0).max(1000000).default(0),
@@ -123,7 +92,6 @@ export const createCompetition = createServerFn({ method: "POST" })
         p_ends_at: endsAtIso,
         p_status: data.status,
         p_hot: data.hot,
-        p_skill_question: data.skillQuestion,
         p_instant_win: data.instantWin,
         p_instant_win_count: data.instantWin ? data.instantWinCount : 0,
         p_instant_win_prize: data.instantWin ? data.instantWinPrize : 0,
@@ -132,25 +100,6 @@ export const createCompetition = createServerFn({ method: "POST" })
 
     if (error) throw new Error(error.message);
     return { id: newId as string, slug };
-  });
-
-const skillInput = z.object({
-  slug: z.string().trim().min(1).max(80),
-  skillQuestion: skillQuestionSchema,
-});
-
-export const updateSkillQuestion = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
-  .inputValidator((data: unknown) => skillInput.parse(data))
-  .handler(async ({ data, context }) => {
-    await assertAdmin(context);
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { error } = await supabaseAdmin
-      .from("competitions")
-      .update({ skill_question: data.skillQuestion })
-      .eq("slug", data.slug);
-    if (error) throw new Error(error.message);
-    return { ok: true };
   });
 
 const drawInput = z.object({
