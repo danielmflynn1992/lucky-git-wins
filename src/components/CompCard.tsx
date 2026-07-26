@@ -4,7 +4,8 @@ import type { Competition } from "@/lib/mock-comps";
 import { gbp } from "@/lib/format";
 import { Countdown } from "./Countdown";
 import { QuickAddDialog } from "./QuickAddDialog";
-import { ShieldCheck, Repeat2, Zap, Plus } from "lucide-react";
+import { Repeat2, Zap, Plus } from "lucide-react";
+import { NoDeadCompsBadge } from "./NoDeadCompsBadge";
 
 export function CompCard({ c }: { c: Competition }) {
   const pct = Math.round((c.ticketsSold / c.totalTickets) * 100);
@@ -26,6 +27,7 @@ export function CompCard({ c }: { c: Competition }) {
             <span className="hidden sm:inline">Instant win</span>
           </span>
         )}
+        <NoDeadCompsBadge />
         {almostGone && (
           <span className="hidden sm:inline-block rounded-full bg-hot text-hot-foreground px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider shadow-sm whitespace-nowrap">
             Only {remaining} left
@@ -95,7 +97,7 @@ export function CompCard({ c }: { c: Competition }) {
 
         {/* Trust badges */}
         <div className="hidden sm:flex items-center justify-between gap-2 pt-1 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
-          <span className="inline-flex items-center gap-1"><ShieldCheck className="h-3 w-3 text-clover" /> Guaranteed Draw</span>
+          <NoDeadCompsBadge variant="row" />
           <span className="inline-flex items-center gap-1"><Repeat2 className="h-3 w-3 text-clover" /> No Rollovers</span>
         </div>
       </div>
