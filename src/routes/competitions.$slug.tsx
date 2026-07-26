@@ -141,7 +141,10 @@ function CompDetail() {
         <div className="grid gap-8 lg:grid-cols-5">
           <div className="lg:col-span-3">
             <div className="relative rounded-3xl overflow-hidden bg-card border-2 border-border">
-              <img src={c.image} alt={c.title} width={1280} height={960} className="w-full aspect-[4/3] object-contain bg-muted" />
+              <div className="relative w-full aspect-[4/3] overflow-hidden bg-muted rounded-lg">
+                <img src={c.image} alt="" aria-hidden="true" className="absolute inset-0 h-full w-full object-cover scale-110 blur-2xl opacity-60" />
+                <img src={c.image} alt={c.title} width={1280} height={960} className="relative h-full w-full object-contain" />
+              </div>
               <div className="absolute top-4 left-4 flex gap-1.5">
                 {c.hot && <span className="rounded-sm bg-hot text-hot-foreground px-2 py-1 text-[10px] font-semibold uppercase tracking-wider">Hot</span>}
                 {c.instantWin && <span className="rounded-sm bg-gold text-gold-foreground px-2 py-1 text-[10px] font-semibold uppercase tracking-wider">Instant wins inside</span>}

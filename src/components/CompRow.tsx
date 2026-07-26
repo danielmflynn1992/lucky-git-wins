@@ -18,8 +18,9 @@ export function CompRow({ c }: { c: Competition }) {
       className="group flex items-center gap-3 sm:gap-4 rounded-lg bg-card border border-border p-3 shadow-sm hover:shadow-md hover:border-clover/50 transition-all overflow-hidden min-w-0 max-w-full [overflow-wrap:anywhere]"
     >
       {/* Thumb */}
-      <div className="h-20 w-20 sm:h-24 sm:w-24 shrink-0 rounded-md overflow-hidden bg-muted">
-        <img src={c.image} alt={c.title} width={200} height={200} loading="lazy" className="h-full w-full object-contain" />
+      <div className="relative h-20 w-20 sm:h-24 sm:w-24 shrink-0 rounded-md overflow-hidden bg-muted">
+        <img src={c.image} alt="" aria-hidden="true" className="absolute inset-0 h-full w-full object-cover scale-110 blur-xl opacity-60" />
+        <img src={c.image} alt={c.title} width={200} height={200} loading="lazy" className="relative h-full w-full object-contain" />
       </div>
 
       {/* Middle */}
