@@ -247,7 +247,7 @@ function Home() {
           <div className="md:col-span-3 rounded-lg bg-card border border-border p-6 shadow-sm hover:shadow-md transition-all duration-200">
             <div className="font-mono text-[11px] tracking-[0.25em] text-clover font-bold">STEP 02</div>
             <h3 className="mt-3 font-display text-xl font-black text-foreground">Answer the question.</h3>
-            <p className="text-sm text-muted-foreground mt-2 leading-relaxed">One multiple-choice skill question. Genuinely answerable — we're not trying to be clever.</p>
+            <p className="text-sm text-muted-foreground mt-2 leading-relaxed">No dead comps, no rollovers. Every draw is fully automatic and verifiable.</p>
           </div>
           <div className="md:col-span-3 rounded-lg bg-card border border-border p-6 shadow-sm hover:shadow-md transition-all duration-200">
             <div className="font-mono text-[11px] tracking-[0.25em] text-clover font-bold">STEP 03</div>
