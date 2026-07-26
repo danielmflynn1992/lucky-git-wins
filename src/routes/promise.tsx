@@ -52,7 +52,7 @@ function PromisePage() {
               i: Cpu,
               kicker: "Promise #2",
               title: "Fully automated draws",
-              body: "The moment the timer hits zero (or the last ticket sells), the system runs the draw. No presenter, no delay, no room for a stitch-up.",
+              body: "The moment the timer hits zero (or the last ticket sells), the system draws deterministically from the pool of correct answers only. No presenter, no delay, no room for a stitch-up.",
             },
             {
               i: ShieldCheck,
