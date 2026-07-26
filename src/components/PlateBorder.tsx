@@ -10,17 +10,25 @@ export function PlateBorder({
   variant = "default",
   as: Tag = "div",
   corners = true,
+  onClick,
+  onKeyDown,
+  role,
+  tabIndex,
 }: {
   children: ReactNode;
   className?: string;
   variant?: "default" | "tight" | "flush";
   as?: "div" | "article" | "section" | "aside";
   corners?: boolean;
+  onClick?: (e: React.MouseEvent<HTMLElement>) => void;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLElement>) => void;
+  role?: string;
+  tabIndex?: number;
 }) {
   const v =
     variant === "tight" ? "plate-border--tight" : variant === "flush" ? "plate-border--flush" : "";
   return (
-    <Tag className={`plate-border ${v} ${className}`}>
+    <Tag className={`plate-border ${v} ${className}`} onClick={onClick} onKeyDown={onKeyDown} role={role} tabIndex={tabIndex}>
       {corners && <PlateCorners />}
       {children}
     </Tag>
