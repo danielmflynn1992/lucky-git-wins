@@ -11,7 +11,11 @@ import { Countdown } from "@/components/Countdown";
 import { Lockup } from "@/components/Logo";
 import { Marker } from "@/components/Marker";
 import { Perforation } from "@/components/Perforation";
-import { COMPETITIONS, CATEGORIES, WINNERS, type Category } from "@/lib/mock-comps";
+import { COMPETITIONS, CATEGORIES, type Category } from "@/lib/mock-comps";
+import { NewsletterSlip } from "@/components/NewsletterSlip";
+import { WinnerCard } from "@/components/WinnerCard";
+import { winnersQuery } from "@/lib/winners-api";
+import { useQuery } from "@tanstack/react-query";
 import { gbp } from "@/lib/format";
 import { Button } from "@/components/ui/button";
 
@@ -33,6 +37,7 @@ function Home() {
   const [cat, setCat] = useState<Category | "All">("All");
   const [sort, setSort] = useState<"ending" | "popular" | "price">("ending");
   const [view, setView] = useState<"grid" | "list">("grid");
+  const { data: winners = [] } = useQuery(winnersQuery);
 
   const filtered = useMemo(() => {
     let list = cat === "All" ? COMPETITIONS : COMPETITIONS.filter((c) => c.category === cat);
@@ -267,38 +272,20 @@ function Home() {
           </div>
           <Link to="/winners" className="text-sm font-bold text-clover hover:underline">Smug Gits (Our Winners) →</Link>
         </div>
-        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {WINNERS.slice(0, 3).map((w) => (
-            <article
-              key={w.name + w.prize}
-              className="flex flex-col border-[1.5px] border-[var(--color-ink-black)] bg-[var(--color-paper-raised)] overflow-hidden"
-            >
-              <header className="bg-[var(--color-ink-red)] text-[var(--color-paper)] px-3 py-1.5 flex items-baseline justify-between gap-2">
-                <span className="font-body font-bold uppercase tracking-[0.16em] text-[10px]">Winner</span>
-                <span className="font-mono tabular-nums text-[10px] opacity-95">{w.when}</span>
-              </header>
-              <div className="mx-3 mt-2 rule-dotted" aria-hidden />
-              <dl className="px-3 pt-2 pb-3 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1">
-                <dt className="label text-[9px] whitespace-nowrap self-center">NAME</dt>
-                <dd className="font-mono text-[12px] text-[var(--color-ink-black)] text-right self-center truncate">
-                  <b>{w.name}</b> <span>· {w.town}</span>
-                </dd>
-                <dt className="label text-[9px] whitespace-nowrap self-center">PRIZE</dt>
-                <dd className="font-mono text-[12px] text-[var(--color-ink-black)] text-right self-center truncate">
-                  <b>{w.prize}</b>
-                </dd>
-              </dl>
-              <div className="mx-3 rule-dotted" aria-hidden />
-              <p className="px-3 py-3 italic font-body text-[14px] text-[var(--color-ink-grey)] leading-snug normal-case">
-                "{w.quote}"
-              </p>
-            </article>
-          ))}
-        </div>
+        {winners.length > 0 ? (
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {winners.slice(0, 3).map((w) => (
+              <WinnerCard key={w.id} w={w} />
+            ))}
+          </div>
+        ) : (
+          <p className="mt-6 font-mono text-sm text-muted-foreground">No draws yet — first winners land after the next close.</p>
+        )}
       </section>
 
       <div className="mx-auto max-w-7xl px-4 mt-6 md:mt-10"><div role="separator" aria-hidden className="perf-rule" /></div>
 
+      <NewsletterSlip />
       <SiteFooter />
     </div>
   );

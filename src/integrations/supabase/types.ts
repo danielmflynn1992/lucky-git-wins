@@ -164,6 +164,7 @@ export type Database = {
           competition_title: string
           created_at: string
           draw_method: string
+          draw_pool: string | null
           drawn_at: string
           drew_from: string
           id: string
@@ -184,6 +185,7 @@ export type Database = {
           competition_title: string
           created_at?: string
           draw_method?: string
+          draw_pool?: string | null
           drawn_at?: string
           drew_from?: string
           id?: string
@@ -204,6 +206,7 @@ export type Database = {
           competition_title?: string
           created_at?: string
           draw_method?: string
+          draw_pool?: string | null
           drawn_at?: string
           drew_from?: string
           id?: string
@@ -565,6 +568,7 @@ export type Database = {
           competition_title: string
           created_at: string
           draw_method: string
+          draw_pool: string | null
           drawn_at: string
           drew_from: string
           id: string
@@ -620,6 +624,7 @@ export type Database = {
           competition_title: string
           created_at: string
           draw_method: string
+          draw_pool: string | null
           drawn_at: string
           drew_from: string
           id: string
