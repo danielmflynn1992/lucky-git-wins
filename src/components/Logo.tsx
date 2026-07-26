@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import crest from "@/assets/lucky-git-seal.png.asset.json";
-import wordmarkSimpleSrc from "@/assets/wordmarks/wordmark-simple.svg?raw";
-import wordmarkDetailedSrc from "@/assets/wordmarks/wordmark-detailed.svg?raw";
+import lockupHorizontalSrc from "@/assets/lockups/lockup-horizontal-simple.svg?raw";
+import lockupStackedSrc from "@/assets/lockups/lockup-stacked.svg?raw";
 
 const CREST_URL = crest.url;
 
@@ -53,27 +53,31 @@ export function StampSeal({
 }
 
 /**
- * Wordmark — the "LUCKY GIT COMPS" text lockup used in the header centre.
- * Cormorant Garamond, small caps, wide tracking, deep green. Text-only so
- * it never pixelates and needs no background knocked out.
+ * Lockup — single combined seal + wordmark SVG. Two variants:
+ *   - "horizontal": header lockup, seal-left, wordmark-right.
+ *   - "stacked":    hero/footer lockup, seal above wordmark.
+ *
+ * Inlined via dangerouslySetInnerHTML so the SVG's <text> renders with
+ * the page's Cormorant Garamond. Fill is controlled via `currentColor`,
+ * so wrap in a text-<colour> utility (e.g. text-clover, text-cream).
+ *
+ * IMPORTANT: every caller MUST bound width. The svg fills its container.
  */
-export function Wordmark({
+export function Lockup({
+  variant = "horizontal",
   className = "",
-  as: Tag = "span",
   style,
-  variant = "simple",
 }: {
+  variant?: "horizontal" | "stacked";
   className?: string;
-  as?: any;
   style?: React.CSSProperties;
-  variant?: "simple" | "detailed";
 }) {
-  const svg = variant === "detailed" ? wordmarkDetailedSrc : wordmarkSimpleSrc;
+  const svg = variant === "stacked" ? lockupStackedSrc : lockupHorizontalSrc;
   return (
-    <Tag
+    <span
       aria-label="Lucky Git Comps"
       role="img"
-      className={`inline-block text-clover [&_svg]:block [&_svg]:h-full [&_svg]:w-auto ${className}`}
+      className={`inline-block [&_svg]:block [&_svg]:h-full [&_svg]:w-full ${className}`}
       style={{ lineHeight: 0, ...style }}
       dangerouslySetInnerHTML={{ __html: svg }}
     />
