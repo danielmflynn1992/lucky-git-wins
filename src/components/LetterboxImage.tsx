@@ -40,7 +40,7 @@ export function LetterboxImage({
     style === "gradient"
       ? {
           backgroundImage:
-            "linear-gradient(135deg, hsl(var(--cream)) 0%, hsl(var(--gold) / 0.35) 55%, hsl(var(--clover) / 0.25) 100%)",
+            "linear-gradient(135deg, var(--cream) 0%, color-mix(in oklab, var(--gold) 55%, transparent) 55%, color-mix(in oklab, var(--clover) 40%, transparent) 100%)",
         }
       : {};
   return (
