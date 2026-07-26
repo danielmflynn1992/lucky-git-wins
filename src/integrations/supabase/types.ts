@@ -115,6 +115,8 @@ export type Database = {
           slug: string
           status: string
           subtitle: string
+          supporting_images: string[]
+          thumb_url: string | null
           title: string
           total_tickets: number
         }
@@ -134,6 +136,8 @@ export type Database = {
           slug: string
           status?: string
           subtitle?: string
+          supporting_images?: string[]
+          thumb_url?: string | null
           title: string
           total_tickets: number
         }
@@ -153,6 +157,8 @@ export type Database = {
           slug?: string
           status?: string
           subtitle?: string
+          supporting_images?: string[]
+          thumb_url?: string | null
           title?: string
           total_tickets?: number
         }
@@ -604,31 +610,59 @@ export type Database = {
         }
       }
       claim_admin_if_empty: { Args: never; Returns: boolean }
-      create_competition_with_tickets: {
-        Args: {
-          p_cash_alternative: number
-          p_category: string
-          p_correct_option: Database["public"]["Enums"]["skill_option"]
-          p_description: string
-          p_ends_at: string
-          p_hot: boolean
-          p_image: string
-          p_letterbox_style?: string
-          p_max_per_person: number
-          p_option_a: string
-          p_option_b: string
-          p_option_c: string
-          p_option_d: string
-          p_price_per_ticket: number
-          p_question: string
-          p_slug: string
-          p_status: string
-          p_subtitle: string
-          p_title: string
-          p_total_tickets: number
-        }
-        Returns: string
-      }
+      create_competition_with_tickets:
+        | {
+            Args: {
+              p_cash_alternative: number
+              p_category: string
+              p_correct_option: Database["public"]["Enums"]["skill_option"]
+              p_description: string
+              p_ends_at: string
+              p_hot: boolean
+              p_image: string
+              p_letterbox_style?: string
+              p_max_per_person: number
+              p_option_a: string
+              p_option_b: string
+              p_option_c: string
+              p_option_d: string
+              p_price_per_ticket: number
+              p_question: string
+              p_slug: string
+              p_status: string
+              p_subtitle: string
+              p_title: string
+              p_total_tickets: number
+            }
+            Returns: string
+          }
+        | {
+            Args: {
+              p_cash_alternative: number
+              p_category: string
+              p_correct_option: Database["public"]["Enums"]["skill_option"]
+              p_description: string
+              p_ends_at: string
+              p_hot: boolean
+              p_image: string
+              p_letterbox_style?: string
+              p_max_per_person: number
+              p_option_a: string
+              p_option_b: string
+              p_option_c: string
+              p_option_d: string
+              p_price_per_ticket: number
+              p_question: string
+              p_slug: string
+              p_status: string
+              p_subtitle: string
+              p_supporting_images?: string[]
+              p_thumb_url?: string
+              p_title: string
+              p_total_tickets: number
+            }
+            Returns: string
+          }
       draw_competition: {
         Args: { p_comp_id: string; p_notes?: string }
         Returns: {
