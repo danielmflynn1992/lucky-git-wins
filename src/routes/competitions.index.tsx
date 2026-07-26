@@ -34,8 +34,9 @@ export const Route = createFileRoute("/competitions/")({
 function CompetitionsPage() {
   const [view, setView] = useState<"grid" | "list">("grid");
   const [sort, setSort] = useState<SortKey>("ending-soon");
+  const [activeCat, setActiveCat] = useState<(typeof CATEGORIES)[number] | null>(null);
   const sorted = useMemo(() => {
-    const arr = [...COMPETITIONS];
+    const arr = COMPETITIONS.filter((c) => (activeCat ? c.category === activeCat : true));
     switch (sort) {
       case "ending-soon":
         return arr.sort((a, b) => +new Date(a.endsAt) - +new Date(b.endsAt));
@@ -52,7 +53,7 @@ function CompetitionsPage() {
       default:
         return arr;
     }
-  }, [sort]);
+  }, [sort, activeCat]);
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <SiteNav />
@@ -61,9 +62,24 @@ function CompetitionsPage() {
         <p className="text-muted-foreground mt-1">All the current lot. Sort them, filter them, buy the lot.</p>
         <div className="mt-6 flex items-center justify-between gap-3 flex-wrap">
           <div className="flex gap-2 flex-wrap">
-            {CATEGORIES.map((c) => (
-              <span key={c} className="rounded-full bg-card border border-border px-3 py-1 text-xs font-bold text-foreground/80">{c}</span>
-            ))}
+            {CATEGORIES.map((c) => {
+              const active = activeCat === c;
+              return (
+                <button
+                  key={c}
+                  type="button"
+                  onClick={() => setActiveCat(active ? null : c)}
+                  className={
+                    "whitespace-nowrap border-2 border-[var(--color-ink-black)] px-3 py-1 text-[11px] font-body font-bold uppercase tracking-[0.14em] transition-colors " +
+                    (active
+                      ? "bg-[var(--color-ink-blue)] text-[var(--color-paper)]"
+                      : "bg-[var(--color-paper-raised)] text-[var(--color-ink-black)] hover:bg-[var(--color-ink-yellow)]")
+                  }
+                >
+                  {c}
+                </button>
+              );
+            })}
           </div>
           <div className="flex items-center gap-2 flex-wrap">
             <SortSelect value={sort} onChange={setSort} />
@@ -91,12 +107,12 @@ function CompetitionsPage() {
 
 export function SortSelect({ value, onChange }: { value: SortKey; onChange: (v: SortKey) => void }) {
   return (
-    <label className="inline-flex items-center gap-2">
-      <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Sort</span>
+    <label className="inline-flex items-center gap-2 whitespace-nowrap">
+      <span className="text-[11px] font-body font-bold uppercase tracking-[0.16em] text-[var(--color-ink-black)]/70">Sort</span>
       <select
         value={value}
         onChange={(e) => onChange(e.target.value as SortKey)}
-        className="rounded-md border border-border bg-card px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-foreground shadow-sm focus:outline-none focus:ring-2 focus:ring-clover"
+        className="border-2 border-[var(--color-ink-black)] bg-[var(--color-paper-raised)] px-3 py-1 text-[11px] font-body font-bold uppercase tracking-[0.14em] text-[var(--color-ink-black)] focus:outline-none focus:ring-2 focus:ring-[var(--color-ink-blue)]"
       >
         {SORTS.map((s) => (
           <option key={s.key} value={s.key}>{s.label}</option>
@@ -108,19 +124,23 @@ export function SortSelect({ value, onChange }: { value: SortKey; onChange: (v: 
 
 export function ViewToggle({ view, onChange }: { view: "grid" | "list"; onChange: (v: "grid" | "list") => void }) {
   return (
-    <div className="inline-flex rounded-md border border-border bg-card p-0.5 shadow-sm">
+    <div className="inline-flex border-2 border-[var(--color-ink-black)] bg-[var(--color-paper-raised)]">
       <button
         onClick={() => onChange("grid")}
-        className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-bold uppercase tracking-wider transition-colors ${
-          view === "grid" ? "bg-ink text-cream" : "text-muted-foreground hover:text-foreground"
+        className={`inline-flex items-center gap-1.5 px-3 py-1 text-[11px] font-body font-bold uppercase tracking-[0.14em] transition-colors ${
+          view === "grid"
+            ? "bg-[var(--color-ink-blue)] text-[var(--color-paper)]"
+            : "text-[var(--color-ink-black)]/70 hover:text-[var(--color-ink-black)]"
         }`}
       >
         <LayoutGrid className="h-3.5 w-3.5" /> Grid
       </button>
       <button
         onClick={() => onChange("list")}
-        className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-bold uppercase tracking-wider transition-colors ${
-          view === "list" ? "bg-ink text-cream" : "text-muted-foreground hover:text-foreground"
+        className={`inline-flex items-center gap-1.5 px-3 py-1 text-[11px] font-body font-bold uppercase tracking-[0.14em] transition-colors ${
+          view === "list"
+            ? "bg-[var(--color-ink-blue)] text-[var(--color-paper)]"
+            : "text-[var(--color-ink-black)]/70 hover:text-[var(--color-ink-black)]"
         }`}
       >
         <List className="h-3.5 w-3.5" /> List
