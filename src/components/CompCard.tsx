@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import type { Competition } from "@/lib/mock-comps";
 import { gbp } from "@/lib/format";
@@ -20,13 +20,30 @@ export function CompCard({ c }: { c: Competition }) {
   const remaining = c.totalTickets - c.ticketsSold;
   const [quickOpen, setQuickOpen] = useState(false);
   const serialWidth = 4;
-  // Stretched-link pattern (see previous notes): card is a <div>, an absolute
-  // <Link> is the primary click target, interactive controls sit above.
+  const navigate = useNavigate();
+  const goToDetail = () => navigate({ to: "/competitions/$slug", params: { slug: c.slug } });
+  // Belt-and-braces: a stretched <Link> handles the standard case (keyboard,
+  // middle-click, "open in new tab"), and an onClick on the outer card catches
+  // any pointer that lands on decorative layers above the link's stacking
+  // context. Interactive children opt out via [data-no-card-click] or by
+  // being a native <button>/<a>.
   return (
     <PlateBorder
       variant="flush"
-      className="paper group relative flex h-full flex-col overflow-hidden min-w-0 max-w-full [overflow-wrap:anywhere] plate-border--lift"
+      className="paper group relative flex h-full flex-col overflow-hidden min-w-0 max-w-full [overflow-wrap:anywhere] plate-border--lift cursor-pointer"
     >
+      {/* Card-wide click handler. Anything interactive inside stops
+          propagation itself (buttons) or lives inside the sr-only Link. */}
+      <div
+        aria-hidden="true"
+        onClick={(e) => {
+          const t = e.target as HTMLElement;
+          if (t.closest("a,button,input,select,textarea,[data-no-card-click]")) return;
+          goToDetail();
+        }}
+        className="absolute inset-0 z-[25]"
+        style={{ background: "transparent" }}
+      />
       <Link
         to="/competitions/$slug"
         params={{ slug: c.slug }}
