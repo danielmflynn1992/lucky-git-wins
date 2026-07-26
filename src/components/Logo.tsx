@@ -1,5 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import crest from "@/assets/lucky-git-seal.png.asset.json";
+import wordmarkSimpleSrc from "@/assets/wordmarks/wordmark-simple.svg?raw";
+import wordmarkDetailedSrc from "@/assets/wordmarks/wordmark-detailed.svg?raw";
 
 const CREST_URL = crest.url;
 
@@ -59,26 +61,22 @@ export function Wordmark({
   className = "",
   as: Tag = "span",
   style,
+  variant = "simple",
 }: {
   className?: string;
   as?: any;
   style?: React.CSSProperties;
+  variant?: "simple" | "detailed";
 }) {
+  const svg = variant === "detailed" ? wordmarkDetailedSrc : wordmarkSimpleSrc;
   return (
     <Tag
-      className={`font-display text-clover ${className}`}
-      style={{
-        fontVariant: "small-caps",
-        fontFeatureSettings: '"smcp"',
-        letterSpacing: "0.22em",
-        fontWeight: 600,
-        lineHeight: 1,
-        whiteSpace: "nowrap",
-        ...style,
-      }}
-    >
-      Lucky Git Comps
-    </Tag>
+      aria-label="Lucky Git Comps"
+      role="img"
+      className={`inline-block text-clover [&_svg]:block [&_svg]:h-full [&_svg]:w-auto ${className}`}
+      style={{ lineHeight: 0, ...style }}
+      dangerouslySetInnerHTML={{ __html: svg }}
+    />
   );
 }
 
