@@ -180,9 +180,9 @@ export function SiteNav() {
                 header taller. */}
             <Lockup
               style={{
-                height: scrolled ? 72 : 116,
+                height: 56,
                 width: "auto",
-                maxWidth: "78vw",
+                maxWidth: "74vw",
                 objectFit: "contain",
               }}
             />
