@@ -13,6 +13,7 @@ export interface Competition {
   subtitle: string;
   category: Category;
   image: string;
+  letterboxStyle?: "solid" | "gradient" | "blur";
   gallery: string[];
   pricePerTicket: number;
   totalTickets: number;
