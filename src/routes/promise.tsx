@@ -63,10 +63,8 @@ function PromisePage() {
           ].map((p) => (
             <div key={p.title} className="rounded-lg bg-card border border-border p-6 shadow-sm">
               <div className="flex items-center gap-3">
-                <span className="h-10 w-10 rounded-md bg-clover/10 text-clover grid place-items-center">
-                  <p.i className="h-5 w-5" />
-                </span>
-                <div className="text-[10px] font-mono uppercase tracking-[0.2em] text-clover font-bold">{p.kicker}</div>
+                <p.i className="h-6 w-6 text-[var(--color-ink-blue)] shrink-0" />
+                <div className="text-[10px] font-mono uppercase tracking-[0.2em] text-[var(--color-ink-blue)] font-bold">{p.kicker}</div>
               </div>
               <h2 className="mt-4 font-display text-xl font-black tracking-tight">{p.title}</h2>
               <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{p.body}</p>
@@ -89,10 +87,10 @@ function PromisePage() {
                   key={n}
                   onClick={() => setTickets(n)}
                   className={
-                    "rounded-full px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider border transition-colors " +
+                    "border-2 border-[var(--color-ink-black)] px-3 py-1 text-[11px] font-body font-bold uppercase tracking-[0.14em] transition-colors whitespace-nowrap " +
                     (tickets === n
-                      ? "bg-ink text-cream border-ink"
-                      : "bg-background text-foreground/70 border-border hover:border-foreground/40")
+                      ? "bg-[var(--color-ink-blue)] text-[var(--color-paper)]"
+                      : "bg-[var(--color-paper-raised)] text-[var(--color-ink-black)] hover:bg-[var(--color-ink-yellow)]")
                   }
                 >
                   {n.toLocaleString()} tix
@@ -137,13 +135,16 @@ function PromisePage() {
 
         {/* NO DEAD COMPS DEEP DIVE */}
         <section className="mx-auto max-w-5xl px-4 mt-20">
-          <div className="rounded-lg bg-ink text-cream p-8 md:p-12 relative overflow-hidden">
-            <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-gold font-bold">The no-dead-comps bit</div>
+          <div
+            className="rounded-lg p-8 md:p-12 relative overflow-hidden"
+            style={{ background: "var(--color-ink-blue)", color: "var(--color-on-dark-fg)" }}
+          >
+            <div className="text-[10px] font-mono uppercase tracking-[0.25em] font-bold" style={{ color: "var(--color-marker)" }}>The no-dead-comps bit</div>
             <h2 className="mt-2 font-display text-3xl md:text-4xl font-black tracking-[-0.02em]">Nobody's postponing anything.</h2>
-            <p className="mt-4 text-cream/80 leading-relaxed max-w-2xl">
+            <p className="mt-4 leading-relaxed max-w-2xl opacity-90">
               Because our draws are fully automated (see Promise #2), the draw literally cannot be delayed. When the timer hits zero the server runs the RNG, writes the winning number to the public log, and moves on. There's no button labelled "Push the draw back a week because ticket sales are slow" — that button doesn't exist in our code.
             </p>
-            <p className="mt-3 text-cream/60 leading-relaxed max-w-2xl italic">
+            <p className="mt-3 leading-relaxed max-w-2xl italic opacity-70">
               This isn't a promise we hope to keep. The system doesn't know how to delay a draw.
             </p>
           </div>

@@ -18,7 +18,7 @@ export const Route = createFileRoute("/how-it-works")({
       <p>Every competition has a genuine question of skill. Answer correctly and your tickets are entered in the draw. Answer incorrectly and your tickets are recorded as non-qualifying — you have paid for entry but you are not in the draw. This is stated unmissably on the payment screen. It's the legal basis for the competition.</p>
       <h2>3. We auto-draw from correct entries</h2>
       <p>When the timer hits zero (or the last ticket sells), our system picks a winner deterministically from the pool of correct entries only, using a hash-then-reveal method. The winning number, sold-ticket count and qualifying-pool size are published on the <a href="/past-draws">Past Draws</a> log for anyone to check. Winners are paid or shipped within 48 hours.</p>
-      <p className="text-sm opacity-75">Read the full mechanic on <a href="/how-entry-works">/how-entry-works</a>.</p>
+      <p className="text-sm opacity-75">Read the full mechanic on our <a href="/how-entry-works">How entry works</a> page.</p>
     </StaticPage>
   ),
 });
