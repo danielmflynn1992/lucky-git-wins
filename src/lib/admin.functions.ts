@@ -152,3 +152,41 @@ export const updateSkillQuestion = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { ok: true };
   });
+
+const drawInput = z.object({
+  competitionId: z.string().uuid(),
+  notes: z.string().max(500).optional().default(""),
+});
+
+export const drawCompetition = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) => drawInput.parse(data))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: row, error } = await supabaseAdmin.rpc("draw_competition", {
+      p_comp_id: data.competitionId,
+      p_notes: data.notes ?? "",
+    });
+    if (error) throw new Error(error.message);
+    return row as {
+      id: string;
+      competition_id: string;
+      competition_title: string;
+      winning_number: number;
+      winner_display_name: string;
+      total_tickets: number;
+      verification_hash: string;
+      drawn_at: string;
+    };
+  });
+
+export const autoDrawExpired = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await assertAdmin(context);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data, error } = await supabaseAdmin.rpc("auto_draw_expired");
+    if (error) throw new Error(error.message);
+    return { drawn: (data as unknown[])?.length ?? 0 };
+  });

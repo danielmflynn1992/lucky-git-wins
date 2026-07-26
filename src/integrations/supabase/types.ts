@@ -209,6 +209,30 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      auto_draw_expired: {
+        Args: never
+        Returns: {
+          competition_id: string | null
+          competition_title: string
+          created_at: string
+          draw_method: string
+          drawn_at: string
+          id: string
+          notes: string
+          prize: string
+          total_tickets: number
+          verification_hash: string
+          winner_display_name: string
+          winner_town: string
+          winning_number: number
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "draws"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
       claim_admin_if_empty: { Args: never; Returns: boolean }
       create_competition_with_tickets: {
         Args: {
@@ -231,6 +255,30 @@ export type Database = {
           p_total_tickets: number
         }
         Returns: string
+      }
+      draw_competition: {
+        Args: { p_comp_id: string; p_notes?: string }
+        Returns: {
+          competition_id: string | null
+          competition_title: string
+          created_at: string
+          draw_method: string
+          drawn_at: string
+          id: string
+          notes: string
+          prize: string
+          total_tickets: number
+          verification_hash: string
+          winner_display_name: string
+          winner_town: string
+          winning_number: number
+        }
+        SetofOptions: {
+          from: "*"
+          to: "draws"
+          isOneToOne: true
+          isSetofReturn: false
+        }
       }
       has_role: {
         Args: {

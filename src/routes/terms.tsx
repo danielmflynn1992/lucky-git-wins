@@ -18,7 +18,7 @@ export const Route = createFileRoute("/terms")({
       <h2>2. Entry</h2>
       <p>Entry is by paid ticket purchase. All entrants must correctly answer the skill question on that competition's page for their entry to count. Winners are selected automatically by a verifiable random draw when the competition closes.</p>
       <h2>3. The draw</h2>
-      <p>Draws take place on or shortly after the published closing date and are conducted using a certified random number generator, streamed live for public verification.</p>
+      <p>Draws take place automatically on the published closing date and are conducted using a certified random number generator. Every draw is recorded with a verification hash on our public Past Draws log for independent scrutiny.</p>
       <h2>4. Prizes</h2>
       <p>Prizes are as described on each competition page. The cash alternative shown on the competition page may be taken in place of the physical prize at the winner's request.</p>
       <h2>5. Refunds & cancellations</h2>

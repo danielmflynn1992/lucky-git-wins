@@ -8,7 +8,7 @@ export function SiteFooter() {
         <div className="md:col-span-1">
           <Logo variant="stacked" />
           <p className="mt-4 text-sm text-cream/60 max-w-xs leading-relaxed">
-            The odds, out in the open. A UK prize competition platform built on transparent draws and live-streamed results.
+            The odds, out in the open. A UK prize competition platform built on automated, verifiable draws and a public results log.
           </p>
         </div>
         <div>
