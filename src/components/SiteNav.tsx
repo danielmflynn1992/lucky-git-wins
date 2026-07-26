@@ -185,12 +185,11 @@ export function SiteNav() {
               className="mast-transition shrink-0"
             />
             <Wordmark
+              variant="simple"
               className={
-                "mast-transition " +
-                (scrolled ? "text-[14px] md:text-[18px]" : "text-[15px] md:text-[22px]")
+                "mast-transition hidden min-[340px]:inline-block " +
+                (scrolled ? "h-[54px]" : "h-[70px]")
               }
-              /* Tighter tracking per spec — engraved lockup, not spaced-out chrome. */
-              style={{ letterSpacing: "0.16em" }}
             />
           </Link>
 
