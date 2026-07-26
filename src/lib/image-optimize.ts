@@ -1,30 +1,21 @@
 /**
- * Client-side image optimizer for competition cover uploads.
+ * Prize-image optimizer — runs entirely in the browser.
  *
- * - Decodes the source file with the browser image decoder.
- * - Downscales to fit within `maxEdge` px on the longest side (retina-safe).
- * - Encodes to WEBP via canvas.toBlob, iteratively reducing quality until
- *   the result is under `targetBytes` (or we've reached the quality floor).
- * - Falls back to the original file if WEBP encoding isn't supported or the
- *   optimized output would be *larger* than the source.
- *
- * Runs entirely in the browser — no server round-trip, no dependencies.
+ * Pipeline:
+ *  1. Decode the source file.
+ *  2. Sample the border to detect a near-uniform background. If confidence is
+ *     high, flatten to warm paper (the stage treatment supplies the halftone).
+ *  3. Centre-crop to 4:3, downscale to fit maxEdge, encode WEBP under target.
+ *  4. Also encode a 400px thumbnail for card use.
  */
 
 export type OptimizeOptions = {
-  /** Longest-edge cap in CSS pixels. Cards render at ~1200px max. */
   maxEdge?: number;
-  /** Target file size in bytes. Quality drops until we're under this. */
   targetBytes?: number;
-  /** Initial WEBP quality (0–1). */
   startQuality?: number;
-  /** Lowest quality we'll settle for before giving up. */
   minQuality?: number;
-  /** Force a 4:3 centre crop before encoding. Default true. */
   cropToFourThree?: boolean;
-  /** Also produce a small square-ish thumbnail (max edge px). */
   thumbEdge?: number;
-  /** Detect near-uniform background and flatten to warm paper. */
   flattenBackground?: boolean;
 };
 
@@ -38,19 +29,21 @@ export type OptimizeResult = {
   optimizedBytes: number;
   quality: number;
   converted: boolean;
-  /** Detected uniform-background confidence, 0-1. */
   bgConfidence: number;
-  /** True if we flattened the background onto cream paper. */
   flattened: boolean;
-  /** Optional thumbnail blob + filename. */
-  thumb?: { blob: Blob; filename: string; contentType: string; width: number; height: number };
-  /** Source pixel width — used to warn on tiny uploads. */
   sourceWidth: number;
+  thumb?: {
+    blob: Blob;
+    filename: string;
+    contentType: string;
+    width: number;
+    height: number;
+  };
 };
 
 const DEFAULTS: Required<OptimizeOptions> = {
   maxEdge: 1600,
-  targetBytes: 350 * 1024,
+  targetBytes: 300 * 1024,
   startQuality: 0.82,
   minQuality: 0.55,
   cropToFourThree: true,
@@ -58,13 +51,18 @@ const DEFAULTS: Required<OptimizeOptions> = {
   flattenBackground: true,
 };
 
-async function decode(file: File): Promise<{ bitmap: ImageBitmap | HTMLImageElement; width: number; height: number }>
-{
+// Warm cream fill matching the printed stage. Halftone dots come from CSS.
+const PAPER_FILL = "#F1E7CE";
+
+async function decode(file: File): Promise<{ bitmap: ImageBitmap | HTMLImageElement; width: number; height: number }> {
   if (typeof createImageBitmap === "function") {
-    const bitmap = await createImageBitmap(file);
-    return { bitmap, width: bitmap.width, height: bitmap.height };
+    try {
+      const bitmap = await createImageBitmap(file);
+      return { bitmap, width: bitmap.width, height: bitmap.height };
+    } catch {
+      /* fall through */
+    }
   }
-  // Safari fallback
   const url = URL.createObjectURL(file);
   try {
     const img = await new Promise<HTMLImageElement>((resolve, reject) => {
@@ -75,104 +73,199 @@ async function decode(file: File): Promise<{ bitmap: ImageBitmap | HTMLImageElem
     });
     return { bitmap: img, width: img.naturalWidth, height: img.naturalHeight };
   } finally {
-    // Revoke after the canvas has drawn — caller handles that timing
     setTimeout(() => URL.revokeObjectURL(url), 0);
   }
 }
 
-function drawScaled(
+function fourThreeCrop(srcW: number, srcH: number) {
+  const targetRatio = 4 / 3;
+  const srcRatio = srcW / srcH;
+  if (Math.abs(srcRatio - targetRatio) < 0.01) return { sx: 0, sy: 0, sw: srcW, sh: srcH };
+  if (srcRatio > targetRatio) {
+    // Too wide → crop sides.
+    const sw = Math.round(srcH * targetRatio);
+    const sx = Math.round((srcW - sw) / 2);
+    return { sx, sy: 0, sw, sh: srcH };
+  }
+  // Too tall → crop top/bottom.
+  const sh = Math.round(srcW / targetRatio);
+  const sy = Math.round((srcH - sh) / 2);
+  return { sx: 0, sy, sw: srcW, sh };
+}
+
+function drawTo(
   source: ImageBitmap | HTMLImageElement,
   srcW: number,
   srcH: number,
-  maxEdge: number,
+  destW: number,
+  destH: number,
+  cropToFourThree: boolean,
+  fill?: string,
 ): HTMLCanvasElement {
-  const scale = Math.min(1, maxEdge / Math.max(srcW, srcH));
-  const w = Math.round(srcW * scale);
-  const h = Math.round(srcH * scale);
   const canvas = document.createElement("canvas");
-  canvas.width = w;
-  canvas.height = h;
+  canvas.width = destW;
+  canvas.height = destH;
   const ctx = canvas.getContext("2d");
   if (!ctx) throw new Error("Canvas 2D unavailable");
   ctx.imageSmoothingEnabled = true;
   ctx.imageSmoothingQuality = "high";
-  ctx.drawImage(source as CanvasImageSource, 0, 0, w, h);
+  if (fill) {
+    ctx.fillStyle = fill;
+    ctx.fillRect(0, 0, destW, destH);
+  }
+  if (cropToFourThree) {
+    const { sx, sy, sw, sh } = fourThreeCrop(srcW, srcH);
+    ctx.drawImage(source as CanvasImageSource, sx, sy, sw, sh, 0, 0, destW, destH);
+  } else {
+    ctx.drawImage(source as CanvasImageSource, 0, 0, destW, destH);
+  }
   return canvas;
+}
+
+/**
+ * Sample the outer border and score how uniform it is.
+ * Returns { confidence 0-1, mean [r,g,b] }.
+ */
+function detectBackground(canvas: HTMLCanvasElement): { confidence: number; mean: [number, number, number] } {
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return { confidence: 0, mean: [255, 255, 255] };
+  const w = canvas.width;
+  const h = canvas.height;
+  const strip = Math.max(2, Math.round(Math.min(w, h) * 0.04));
+  const samples: number[][] = [];
+  const grab = (x: number, y: number, sw: number, sh: number) => {
+    const d = ctx.getImageData(x, y, sw, sh).data;
+    for (let i = 0; i < d.length; i += 16) samples.push([d[i], d[i + 1], d[i + 2]]);
+  };
+  grab(0, 0, w, strip);
+  grab(0, h - strip, w, strip);
+  grab(0, 0, strip, h);
+  grab(w - strip, 0, strip, h);
+  if (samples.length === 0) return { confidence: 0, mean: [255, 255, 255] };
+  let r = 0, g = 0, b = 0;
+  for (const s of samples) { r += s[0]; g += s[1]; b += s[2]; }
+  r /= samples.length; g /= samples.length; b /= samples.length;
+  // variance
+  let v = 0;
+  for (const s of samples) {
+    const dr = s[0] - r, dg = s[1] - g, db = s[2] - b;
+    v += dr * dr + dg * dg + db * db;
+  }
+  v /= samples.length;
+  // Std dev per channel. <8 = very uniform, >30 = busy.
+  const std = Math.sqrt(v / 3);
+  const uniform = Math.max(0, Math.min(1, 1 - (std - 6) / 22));
+  return { confidence: uniform, mean: [r, g, b] };
 }
 
 function canvasToBlob(canvas: HTMLCanvasElement, type: string, quality: number): Promise<Blob | null> {
   return new Promise((resolve) => canvas.toBlob((b) => resolve(b), type, quality));
 }
 
-export async function optimizeImage(file: File, opts: OptimizeOptions = {}): Promise<OptimizeResult> {
-  const cfg = { ...DEFAULTS, ...opts };
-  const originalBytes = file.size;
-
-  const { bitmap, width, height } = await decode(file);
-  const canvas = drawScaled(bitmap, width, height, cfg.maxEdge);
-  // Release GPU memory when we can.
-  if ("close" in bitmap && typeof (bitmap as ImageBitmap).close === "function") {
-    (bitmap as ImageBitmap).close();
-  }
-
-  let quality = cfg.startQuality;
-  let blob = await canvasToBlob(canvas, "image/webp", quality);
-  // Some browsers (older Safari) return null for image/webp → fall back to JPEG.
+async function encodeUnderBudget(
+  canvas: HTMLCanvasElement,
+  targetBytes: number,
+  startQuality: number,
+  minQuality: number,
+): Promise<{ blob: Blob; quality: number; contentType: "image/webp" | "image/jpeg" } | null> {
+  let quality = startQuality;
   let contentType: "image/webp" | "image/jpeg" = "image/webp";
+  let blob = await canvasToBlob(canvas, "image/webp", quality);
   if (!blob) {
     contentType = "image/jpeg";
     blob = await canvasToBlob(canvas, "image/jpeg", quality);
   }
-  if (!blob) {
-    return {
-      blob: file,
-      filename: file.name,
-      contentType: file.type || "application/octet-stream",
-      width,
-      height,
-      originalBytes,
-      optimizedBytes: originalBytes,
-      quality: 1,
-      converted: false,
-    };
-  }
-
-  // Iteratively reduce quality until we hit the size budget.
+  if (!blob) return null;
   const step = 0.08;
-  while (blob && blob.size > cfg.targetBytes && quality > cfg.minQuality) {
-    quality = Math.max(cfg.minQuality, quality - step);
+  while (blob && blob.size > targetBytes && quality > minQuality) {
+    quality = Math.max(minQuality, quality - step);
     const next = await canvasToBlob(canvas, contentType, quality);
     if (!next) break;
     blob = next;
   }
+  return { blob, quality, contentType };
+}
 
-  // If our "optimized" output somehow ended up larger, keep the original.
-  if (blob.size >= originalBytes && file.type.startsWith("image/")) {
+export async function optimizeImage(file: File, opts: OptimizeOptions = {}): Promise<OptimizeResult> {
+  const cfg = { ...DEFAULTS, ...opts };
+  const originalBytes = file.size;
+  const { bitmap, width: srcW, height: srcH } = await decode(file);
+
+  // Target dimensions: 4:3, clamped to maxEdge.
+  const cropDims = cfg.cropToFourThree ? fourThreeCrop(srcW, srcH) : { sw: srcW, sh: srcH };
+  const scale = Math.min(1, cfg.maxEdge / Math.max(cropDims.sw, cropDims.sh));
+  const destW = Math.round(cropDims.sw * scale);
+  const destH = Math.round(cropDims.sh * scale);
+
+  // First pass — draw without fill so we can measure the source background.
+  const probe = drawTo(bitmap, srcW, srcH, destW, destH, cfg.cropToFourThree);
+  const { confidence, mean } = detectBackground(probe);
+
+  // High confidence + light near-uniform → flatten onto warm paper so every
+  // hero blends into the printed stage. Skip dark or coloured backgrounds.
+  const light = (mean[0] + mean[1] + mean[2]) / 3 > 210;
+  const shouldFlatten = cfg.flattenBackground && confidence > 0.7 && light;
+
+  let mainCanvas = probe;
+  if (shouldFlatten) {
+    mainCanvas = drawTo(bitmap, srcW, srcH, destW, destH, cfg.cropToFourThree, PAPER_FILL);
+  }
+
+  // Thumbnail — always centre-cropped 4:3 to match card frame.
+  const tScale = Math.min(1, cfg.thumbEdge / Math.max(cropDims.sw, cropDims.sh));
+  const tW = Math.round(cropDims.sw * tScale);
+  const tH = Math.round(cropDims.sh * tScale);
+  const thumbCanvas = drawTo(bitmap, srcW, srcH, tW, tH, cfg.cropToFourThree, shouldFlatten ? PAPER_FILL : undefined);
+
+  if ("close" in bitmap && typeof (bitmap as ImageBitmap).close === "function") {
+    (bitmap as ImageBitmap).close();
+  }
+
+  const encoded = await encodeUnderBudget(mainCanvas, cfg.targetBytes, cfg.startQuality, cfg.minQuality);
+  if (!encoded) {
     return {
       blob: file,
       filename: file.name,
-      contentType: file.type,
-      width,
-      height,
+      contentType: file.type || "application/octet-stream",
+      width: srcW,
+      height: srcH,
       originalBytes,
       optimizedBytes: originalBytes,
       quality: 1,
       converted: false,
+      bgConfidence: confidence,
+      flattened: false,
+      sourceWidth: srcW,
     };
   }
 
+  const thumb = await encodeUnderBudget(thumbCanvas, 60 * 1024, 0.8, 0.55);
+
   const baseName = (file.name.replace(/\.[^.]+$/, "") || "cover").toLowerCase().replace(/[^a-z0-9-]+/g, "-");
-  const ext = contentType === "image/webp" ? "webp" : "jpg";
+  const ext = encoded.contentType === "image/webp" ? "webp" : "jpg";
+
   return {
-    blob,
+    blob: encoded.blob,
     filename: `${baseName}.${ext}`,
-    contentType,
-    width: canvas.width,
-    height: canvas.height,
+    contentType: encoded.contentType,
+    width: mainCanvas.width,
+    height: mainCanvas.height,
     originalBytes,
-    optimizedBytes: blob.size,
-    quality,
+    optimizedBytes: encoded.blob.size,
+    quality: encoded.quality,
     converted: true,
+    bgConfidence: confidence,
+    flattened: shouldFlatten,
+    sourceWidth: srcW,
+    thumb: thumb
+      ? {
+          blob: thumb.blob,
+          filename: `${baseName}-thumb.${thumb.contentType === "image/webp" ? "webp" : "jpg"}`,
+          contentType: thumb.contentType,
+          width: thumbCanvas.width,
+          height: thumbCanvas.height,
+        }
+      : undefined,
   };
 }
 
