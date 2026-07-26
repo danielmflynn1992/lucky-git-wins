@@ -49,53 +49,53 @@ export function CompCard({ c }: { c: Competition }) {
       </div>
 
       {/* Content */}
-      <div className="p-4 flex flex-col gap-3">
-        <div>
-          <div className="text-[10px] uppercase tracking-[0.15em] font-semibold text-clover mb-1">{c.category}</div>
-          <h3 className="font-display text-lg font-bold leading-tight text-foreground line-clamp-2">{c.title}</h3>
+      <div className="p-2.5 sm:p-4 flex flex-col gap-2 sm:gap-3 min-w-0">
+        <div className="min-w-0">
+          <div className="text-[9px] sm:text-[10px] uppercase tracking-[0.12em] sm:tracking-[0.15em] font-semibold text-clover mb-0.5 sm:mb-1 truncate">{c.category}</div>
+          <h3 className="font-display text-sm sm:text-lg font-bold leading-snug text-foreground line-clamp-2 break-words">{c.title}</h3>
         </div>
 
         {/* Grey data box */}
-        <div className="rounded-md bg-muted/60 border border-border/60 p-3 space-y-2">
+        <div className="rounded-md bg-muted/60 border border-border/60 p-2 sm:p-3 space-y-1.5 sm:space-y-2 min-w-0">
           <div>
-            <div className="flex justify-between text-[11px] font-mono tabular-nums text-muted-foreground mb-1">
-              <span className="font-semibold text-foreground/80">{c.ticketsSold.toLocaleString()} sold</span>
-              <span className="text-clover font-bold">{pct}%</span>
+            <div className="flex justify-between gap-2 text-[10px] sm:text-[11px] font-mono tabular-nums text-muted-foreground mb-1 min-w-0">
+              <span className="font-semibold text-foreground/80 truncate">{c.ticketsSold.toLocaleString()} sold</span>
+              <span className="text-clover font-bold shrink-0">{pct}%</span>
             </div>
             <div className="h-1.5 rounded-full bg-border overflow-hidden">
               <div className="h-full shimmer transition-all" style={{ width: `${pct}%` }} />
             </div>
           </div>
-          <div className="flex items-end justify-between pt-1">
-            <div>
-              <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">Tickets from</div>
-              <div className="font-display font-extrabold text-3xl leading-none tracking-[-0.04em] tabular-nums text-foreground">{gbp(c.pricePerTicket)}</div>
+          <div className="flex items-end justify-between gap-2 pt-0.5 sm:pt-1 min-w-0">
+            <div className="min-w-0">
+              <div className="text-[9px] sm:text-[10px] uppercase tracking-wider text-muted-foreground font-semibold truncate">Tickets from</div>
+              <div className="font-display font-extrabold text-xl sm:text-3xl leading-none tracking-[-0.04em] tabular-nums text-foreground">{gbp(c.pricePerTicket)}</div>
             </div>
-            <div className="text-right">
-              <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">Remaining</div>
-              <div className="font-mono tabular-nums text-sm font-bold text-foreground">{remaining.toLocaleString()}</div>
-              <div className="text-[10px] font-mono text-muted-foreground">1:{odds.toLocaleString()} odds</div>
+            <div className="text-right shrink-0 min-w-0">
+              <div className="text-[9px] sm:text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">Remaining</div>
+              <div className="font-mono tabular-nums text-xs sm:text-sm font-bold text-foreground">{remaining.toLocaleString()}</div>
+              <div className="text-[9px] sm:text-[10px] font-mono text-muted-foreground">1:{odds.toLocaleString()}</div>
             </div>
           </div>
         </div>
 
         {/* CTA row — View + Quick add */}
-        <div className="flex gap-1.5">
-          <div className="flex-1 min-w-0 rounded-md bg-clover text-primary-foreground text-center py-2 sm:py-2.5 px-2 font-display font-extrabold text-xs sm:text-sm uppercase tracking-[-0.01em] group-hover:bg-clover-deep transition-colors truncate">
+        <div className="flex gap-1 sm:gap-1.5 min-w-0">
+          <div className="flex-1 min-w-0 rounded-md bg-clover text-primary-foreground text-center py-1.5 sm:py-2.5 px-2 font-display font-extrabold text-[11px] sm:text-sm uppercase tracking-[-0.01em] leading-tight group-hover:bg-clover-deep transition-colors truncate">
             Enter Now →
           </div>
           <button
             type="button"
             aria-label={`Quick add tickets for ${c.title}`}
             onClick={(e) => { e.preventDefault(); e.stopPropagation(); setQuickOpen(true); }}
-            className="shrink-0 rounded-md bg-gold text-gold-foreground px-2.5 sm:px-3 py-2 sm:py-2.5 font-display font-extrabold text-xs sm:text-sm uppercase tracking-[-0.01em] inline-flex items-center gap-1 hover:bg-gold/90 transition-colors"
+            className="shrink-0 rounded-md bg-gold text-gold-foreground px-2 sm:px-3 py-1.5 sm:py-2.5 font-display font-extrabold text-[11px] sm:text-sm uppercase tracking-[-0.01em] leading-tight inline-flex items-center gap-1 hover:bg-gold/90 transition-colors"
           >
-            <Plus className="h-3.5 w-3.5" /> Add
+            <Plus className="h-3 w-3 sm:h-3.5 sm:w-3.5" /> Add
           </button>
         </div>
 
         {/* Trust badges */}
-        <div className="flex items-center justify-between gap-2 pt-1 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
+        <div className="hidden sm:flex items-center justify-between gap-2 pt-1 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
           <span className="inline-flex items-center gap-1"><ShieldCheck className="h-3 w-3 text-clover" /> Guaranteed Draw</span>
           <span className="inline-flex items-center gap-1"><Repeat2 className="h-3 w-3 text-clover" /> No Rollovers</span>
         </div>
