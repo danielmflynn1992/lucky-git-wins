@@ -3,6 +3,7 @@ import { ChevronDown } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import type { Winner } from "@/lib/winners-api";
 import { formatWinnerDate } from "@/lib/winners-api";
+import { cn } from "@/lib/utils";
 
 function slangForPrize(prize: string): string | null {
   // Pull the biggest £-figure out of the prize label ("Rolex + £2,000" → 2000)
