@@ -31,19 +31,12 @@ export function CompCard({ c }: { c: Competition }) {
     <PlateBorder
       variant="flush"
       className="paper group relative flex h-full flex-col overflow-hidden min-w-0 max-w-full [overflow-wrap:anywhere] plate-border--lift cursor-pointer"
+      onClick={(e) => {
+        const t = e.target as HTMLElement;
+        if (t.closest("a,button,input,select,textarea,label,[data-no-card-click]")) return;
+        goToDetail();
+      }}
     >
-      {/* Card-wide click handler. Anything interactive inside stops
-          propagation itself (buttons) or lives inside the sr-only Link. */}
-      <div
-        aria-hidden="true"
-        onClick={(e) => {
-          const t = e.target as HTMLElement;
-          if (t.closest("a,button,input,select,textarea,[data-no-card-click]")) return;
-          goToDetail();
-        }}
-        className="absolute inset-0 z-[1]"
-        style={{ background: "transparent" }}
-      />
       <Link
         to="/competitions/$slug"
         params={{ slug: c.slug }}
