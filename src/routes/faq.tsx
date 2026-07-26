@@ -6,7 +6,6 @@ const QAs = [
   ["What happens if the competition doesn't sell out?", "The draw still goes ahead on the closing date. Everyone who entered has the same shot regardless of how many tickets sold."],
   ["When do I get my prize?", "Cash prizes are paid by bank transfer within 48 hours of the winner being verified. Physical prizes are shipped or hand-delivered within 7 working days."],
   ["Can I take the cash instead of the prize?", "Yes, every competition shows a cash alternative on the prize page. Winners can take that instead — no questions asked."],
-  ["What if I answer the skill question wrong?", "You can retry. The correct answer must be given before your entry counts."],
   ["How is the winner picked?", "Automatically. As soon as the timer hits zero (or the last ticket sells), the system draws a random winning number from the sold tickets and publishes it on the Winners Wall."],
 ];
 

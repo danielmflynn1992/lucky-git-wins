@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { drawCompetition, autoDrawExpired } from "@/lib/admin.functions";
 import { gbp, shortNumber } from "@/lib/format";
-import { Copy, Plus, Play, Pause, Trophy, HelpCircle, Loader2, Zap } from "lucide-react";
+import { Copy, Plus, Play, Pause, Trophy, Loader2, Zap } from "lucide-react";
 
 interface AdminRow {
   id: string;
@@ -176,14 +176,6 @@ function Admin() {
                       <td className="p-3">
                         <div className="flex gap-1">
                           <button className="p-2 rounded-lg hover:bg-background" title="Duplicate"><Copy className="h-4 w-4" /></button>
-                          <Link
-                            to="/admin/competitions/$slug/skill"
-                            params={{ slug: c.slug }}
-                            className="p-2 rounded-lg hover:bg-background inline-flex"
-                            title="Edit skill question"
-                          >
-                            <HelpCircle className="h-4 w-4" />
-                          </Link>
                           <button
                             className="p-2 rounded-lg hover:bg-background disabled:opacity-40 disabled:cursor-not-allowed"
                             title={c.status === "drawn" ? "Already drawn" : "Draw winner now"}

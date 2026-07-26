@@ -7,7 +7,6 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { Countdown } from "@/components/Countdown";
 import { CompCard } from "@/components/CompCard";
 import { Button } from "@/components/ui/button";
-import { SkillQuestionModal } from "@/components/SkillQuestionModal";
 import { COMPETITIONS } from "@/lib/mock-comps";
 import { gbp, shortNumber } from "@/lib/format";
 import {
@@ -26,7 +25,7 @@ export const Route = createFileRoute("/competitions/$slug")({
   head: () => ({
     meta: [
       { title: "Enter now — Lucky Git Comps" },
-      { name: "description", content: "Pick your tickets, answer the skill question, in the draw. Auto-drawn on close." },
+      { name: "description", content: "Pick your tickets, join the draw. Auto-drawn on close." },
       { property: "og:title", content: "Enter now — Lucky Git Comps" },
     ],
   }),
@@ -63,8 +62,6 @@ function CompDetail() {
   const [qty, setQty] = useState(5);
   const [picker, setPicker] = useState<"lucky" | "manual">("lucky");
   const [picked, setPicked] = useState<Set<number>>(new Set());
-  const [skillOpen, setSkillOpen] = useState(false);
-  const [answered, setAnswered] = useState<number | null>(null);
   const [reserving, setReserving] = useState(false);
   const [reserveError, setReserveError] = useState<string | null>(null);
 
@@ -72,7 +69,6 @@ function CompDetail() {
   const soldTotal = c.totalTickets - c.ticketsAvailable;
   const pct = Math.round((soldTotal / c.totalTickets) * 100);
 
-  const canProceed = answered !== null && answered === c.skillQuestion.correct;
   const displayNumbers = picker === "manual" ? picked.size : qty;
 
   const [numberPage, setNumberPage] = useState(0);
@@ -83,25 +79,15 @@ function CompDetail() {
 
   const related = COMPETITIONS.filter((x) => x.slug !== c.slug).slice(0, 3);
 
-  const openSkillModal = () => {
-    setReserveError(null);
-    setAnswered(null);
-    setSkillOpen(true);
-  };
-
   const handleReserve = async () => {
-    if (answered === null || !canProceed) {
-      setReserveError("Answer the skill question correctly to continue.");
-      return;
-    }
     setReserveError(null);
     setReserving(true);
     try {
       const token = newReservationToken();
       const numbers =
         picker === "lucky"
-          ? await reserveLuckyDip(c.slug, qty, token, answered)
-          : await reserveNumbers(c.slug, [...picked], token, answered);
+          ? await reserveLuckyDip(c.slug, qty, token)
+          : await reserveNumbers(c.slug, [...picked], token);
 
       sessionStorage.setItem(
         "lgc:reservation",
@@ -109,9 +95,6 @@ function CompDetail() {
           token,
           slug: c.slug,
           numbers,
-          skillAnswer: answered,
-          skillQuestion: c.skillQuestion.q,
-          skillAnswerText: c.skillQuestion.options[answered],
           expires: Date.now() + 15 * 60_000,
         }),
       );
@@ -253,7 +236,7 @@ function CompDetail() {
                 </div>
               )}
 
-              {reserveError && !skillOpen && (
+              {reserveError && (
                 <div className="mt-3 flex items-start gap-2 text-xs text-hot bg-hot/10 border border-hot/30 rounded-lg p-2">
                   <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" />
                   <span>{reserveError}</span>
@@ -266,12 +249,9 @@ function CompDetail() {
                   <div className="font-display font-black text-3xl leading-none tabular-nums">{gbp(c.pricePerTicket * displayNumbers)}</div>
                   <div className="text-xs text-muted-foreground font-mono tabular-nums">{displayNumbers} ticket{displayNumbers === 1 ? "" : "s"}</div>
                 </div>
-                <Button variant="gold" size="xl" onClick={openSkillModal} disabled={displayNumbers === 0 || reserving}>
-                  Enter now
+                <Button variant="gold" size="xl" onClick={handleReserve} disabled={displayNumbers === 0 || reserving}>
+                  {reserving ? <><Loader2 className="h-4 w-4 animate-spin" /> Locking…</> : "Enter now"}
                 </Button>
-              </div>
-              <div className="mt-2 text-[11px] text-muted-foreground text-center">
-                A skill question is required before checkout. UK law innit.
               </div>
             </div>
 
@@ -311,18 +291,6 @@ function CompDetail() {
           </div>
         </section>
       </main>
-
-      {skillOpen && (
-        <SkillQuestionModal
-          question={c.skillQuestion}
-          answered={answered}
-          onAnswer={setAnswered}
-          onCancel={() => setSkillOpen(false)}
-          onConfirm={handleReserve}
-          reserving={reserving}
-          error={reserveError}
-        />
-      )}
 
       <SiteFooter />
     </div>
