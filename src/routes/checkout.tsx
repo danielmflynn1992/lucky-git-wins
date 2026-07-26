@@ -4,7 +4,7 @@ import { z } from "zod";
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
 import { Button } from "@/components/ui/button";
-import { SmugSmile } from "@/components/Logo";
+import { SmugSmile, StampSeal } from "@/components/Logo";
 import { getComp, COMPETITIONS } from "@/lib/mock-comps";
 import { gbp } from "@/lib/format";
 import { CreditCard, Lock, ShieldCheck, Share2, CheckCircle2, AlertTriangle, Mail } from "lucide-react";
@@ -209,8 +209,12 @@ function SuccessScreen({ compTitle, numbers }: { compTitle: string; numbers: num
       <SiteNav />
       <main className="mx-auto max-w-2xl px-4 py-16 w-full text-center relative overflow-hidden">
         <Confetti />
-        <div className="mx-auto inline-flex h-16 w-16 items-center justify-center rounded-full bg-clover/15 text-clover">
-          <CheckCircle2 className="h-8 w-8" />
+        {/* Stamped over the certificate at a slight angle. */}
+        <div className="mx-auto flex justify-center">
+          <StampSeal size={180} angle={-8} />
+        </div>
+        <div className="mx-auto mt-2 inline-flex h-10 w-10 items-center justify-center rounded-full bg-clover/15 text-clover">
+          <CheckCircle2 className="h-5 w-5" />
         </div>
         <div className="mt-6 text-[10px] font-mono uppercase tracking-[0.25em] text-clover">Entry confirmed · #{Math.floor(Math.random()*90000+10000)}</div>
         <h1 className="mt-2 font-display text-4xl md:text-5xl font-semibold tracking-tight">You're in the draw,<br/><span className="text-clover">you lucky git.</span></h1>

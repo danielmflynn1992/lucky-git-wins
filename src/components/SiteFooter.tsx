@@ -1,12 +1,15 @@
 import { Link } from "@tanstack/react-router";
-import { Logo } from "./Logo";
+import { StampSeal, Wordmark } from "./Logo";
 
 export function SiteFooter() {
   return (
     <footer className="grain relative mt-24 bg-ink text-cream border-t border-border">
       <div className="mx-auto max-w-7xl px-4 py-12 grid gap-10 md:grid-cols-4">
         <div className="md:col-span-1">
-          <Logo variant="stacked" onDark />
+          <div className="flex flex-col items-start gap-3">
+            <StampSeal size={100} tone="cream" />
+            <Wordmark className="text-[18px] text-cream" />
+          </div>
           <p className="mt-4 text-sm text-cream/85 max-w-xs leading-relaxed">
             The odds, out in the open. A UK prize competition platform built on automated, verifiable draws and a public results log.
           </p>

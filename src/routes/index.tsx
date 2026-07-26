@@ -8,7 +8,7 @@ import { CompCard } from "@/components/CompCard";
 import { CompRow } from "@/components/CompRow";
 import { ViewToggle } from "@/routes/competitions.index";
 import { Countdown } from "@/components/Countdown";
-import { SmugSmile } from "@/components/Logo";
+import { SmugSmile, StampSeal } from "@/components/Logo";
 import { NextDropCountdown } from "@/components/NextDropCountdown";
 import { Pinstripe } from "@/components/Pinstripe";
 import { COMPETITIONS, CATEGORIES, WINNERS, type Category } from "@/lib/mock-comps";
@@ -62,7 +62,12 @@ function Home() {
 
       {/* HERO */}
       <section className="grain relative bg-clover-pattern overflow-hidden border-b border-border">
-        <div className="mx-auto max-w-7xl px-4 pt-12 pb-16 md:pt-20 md:pb-24 grid gap-10 md:grid-cols-2 items-center">
+        <div className="mx-auto max-w-7xl px-4 pt-10 pb-16 md:pt-16 md:pb-24">
+          {/* Static stamp — sits in the page content, not the chrome. */}
+          <div className="flex justify-center mb-4 md:mb-6">
+            <StampSeal size={140} />
+          </div>
+          <div className="grid gap-10 md:grid-cols-2 items-center">
           <div>
             <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-[10px] font-mono uppercase tracking-[0.25em] text-foreground/70 shadow-sm">
               <Sparkles className="h-3 w-3 text-gold" /> The odds, out in the open
@@ -146,6 +151,7 @@ function Home() {
                 Every draw automatic. Every ticket number published. No hidden reserves, no house tickets, no funny business.
               </div>
             </div>
+          </div>
           </div>
         </div>
       </section>
