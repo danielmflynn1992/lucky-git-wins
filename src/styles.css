@@ -5,117 +5,129 @@
 @custom-variant dark (&:is(.dark *));
 
 /* ============================================================
- * LUCKY GIT COMPS — Heritage v5 (painted signboard + brass)
- * Warm brown-black default (pitch), sheepskin islands for reading.
+ * LUCKY GIT COMPS — Mint v1 (engraved security document)
+ * A national mint that happens to run prize draws.
+ * Two-plate ink (deep green + oxide red) on aged paper.
  * Fonts loaded via <link> in src/routes/__root.tsx.
  * ============================================================ */
 
 @theme {
-  /* ---------- SURFACES (warm, painted) ---------- */
-  --color-pitch:         #14100C;
-  --color-pitch-raised:  #1E1811;
-  --color-pitch-line:    #2C2418;
-  --color-pitch-deep:    #100D09;
-  --color-pitch-hairline:var(--color-pitch-line);
-  /* Back-compat: existing components reference `ink*`. Point them at pitch. */
-  --color-ink-deep:      var(--color-pitch-deep);
-  --color-ink:           var(--color-pitch);
-  --color-ink-raised:    var(--color-pitch-raised);
-  --color-ink-hairline:  var(--color-pitch-line);
+  /* ---------- INK & PAPER ---------- */
+  /* Paper — aged, warm off-white. Never pure #FFF. */
+  --color-paper:           #F1E9D6;
+  --color-paper-raised:    #F7F1E1;
+  --color-paper-deep:      #E8DEC4;
+  --color-paper-line:      #D5C7A2;
+  --color-paper-hairline:  var(--color-paper-line);
 
-  /* Light content surfaces */
-  --color-sheepskin:      #F0E7D4;
-  --color-parchment:      #FAF4E6;
-  --color-sheepskin-line: #DCCFB4;
-  --color-sheepskin-raised: var(--color-parchment);
-  --color-sheepskin-hairline: var(--color-sheepskin-line);
-  --color-bone:          var(--color-sheepskin);
-  --color-bone-raised:   var(--color-parchment);
-  --color-bone-hairline: var(--color-sheepskin-line);
+  /* Two plates only. */
+  --color-ink-green:       #0F4A2E;   /* primary engraving plate */
+  --color-ink-green-deep:  #0A3520;
+  --color-ink-green-soft:  #2A6F4B;
+  --color-ink-red:         #6E1E1A;   /* second plate: seals, serials, countersigning */
+  --color-ink-red-soft:    #8A2E27;
 
-  /* ---------- BRAND ---------- */
-  --color-forest:        #14563A;
-  --color-forest-deep:   #0D3A26;
-  --color-forest-lift:   #1C7049;
-  --color-forest-hover:  var(--color-forest-deep);
-  --color-clover:        var(--color-forest);
-  --color-clover-hover:  var(--color-forest-deep);
-  --color-clover-lift:   var(--color-forest-lift);
-  --color-clover-deep:   var(--color-forest-deep);
+  /* Legacy aliases so untouched pages keep rendering coherently.
+     Everything old maps into the two-plate ink system. */
+  --color-pitch:           var(--color-paper-deep);
+  --color-pitch-raised:    var(--color-paper);
+  --color-pitch-line:      var(--color-paper-line);
+  --color-pitch-deep:      var(--color-paper);
+  --color-pitch-hairline:  var(--color-paper-line);
+  --color-ink-deep:        var(--color-ink-green-deep);
+  --color-ink:             var(--color-ink-green);
+  --color-ink-raised:      var(--color-paper-raised);
+  --color-ink-hairline:    var(--color-paper-line);
 
-  /* Brass — never flat. Use the gradient + emboss shadows for real elements. */
-  --color-brass:            #C9A227;
-  --color-brass-light:      #EDD79A;
-  --color-brass-deep:       #8F6E15;
-  --color-brass-foreground: #16120D;
-  --color-gold:             var(--color-brass);
-  --color-gold-light:       var(--color-brass-light);
-  --color-gold-deep:        var(--color-brass-deep);
-  --color-gold-foreground:  var(--color-brass-foreground);
+  --color-sheepskin:       var(--color-paper);
+  --color-parchment:       var(--color-paper-raised);
+  --color-sheepskin-line:  var(--color-paper-line);
+  --color-sheepskin-raised: var(--color-paper-raised);
+  --color-sheepskin-hairline: var(--color-paper-line);
+  --color-bone:            var(--color-paper);
+  --color-bone-raised:     var(--color-paper-raised);
+  --color-bone-hairline:   var(--color-paper-line);
 
-  /* Ember — desaturated rust, never brick red. */
-  --color-ember:            #B4593A;
-  --color-urgent:           var(--color-ember);
-  --color-urgent-foreground:#FAF6EE;
-  --color-hot:              var(--color-ember);
-  --color-hot-foreground:   #FAF6EE;
+  --color-forest:          var(--color-ink-green);
+  --color-forest-deep:     var(--color-ink-green-deep);
+  --color-forest-lift:     var(--color-ink-green-soft);
+  --color-forest-hover:    var(--color-ink-green-deep);
+  --color-clover:          var(--color-ink-green);
+  --color-clover-hover:    var(--color-ink-green-deep);
+  --color-clover-lift:     var(--color-ink-green-soft);
+  --color-clover-deep:     var(--color-ink-green-deep);
 
-  /* ---------- NEUTRAL RAMP ---------- */
-  --color-n-100: #FAF6EE;
-  --color-n-200: #EAE3D6;
-  --color-n-300: #CFC6B4;
-  --color-n-400: #A79D8A;
-  --color-n-500: #7B7261;
-  --color-n-600: #554E42;
-  --color-n-700: #3A352C;
-  --color-n-800: #241F19;
-  --color-n-900: #16120D;
+  /* "Brass" no longer exists as metal — it's the second red plate now.
+     Old .brass surfaces resolve to a flat red-ink plate. */
+  --color-brass:            var(--color-ink-red);
+  --color-brass-light:      var(--color-ink-red-soft);
+  --color-brass-deep:       var(--color-ink-red);
+  --color-brass-foreground: var(--color-paper);
+  --color-gold:             var(--color-ink-red);
+  --color-gold-light:       var(--color-ink-red-soft);
+  --color-gold-deep:        var(--color-ink-red);
+  --color-gold-foreground:  var(--color-paper);
 
-  --color-cream:          var(--color-sheepskin);
-  --color-surface:        var(--color-pitch);
-  --color-surface-raised: var(--color-pitch-raised);
+  --color-ember:            var(--color-ink-red);
+  --color-urgent:           var(--color-ink-red);
+  --color-urgent-foreground:var(--color-paper);
+  --color-hot:              var(--color-ink-red);
+  --color-hot-foreground:   var(--color-paper);
 
-  /* ---------- SEMANTIC ---------- */
-  --color-background:        var(--color-pitch);
-  --color-foreground:        var(--color-n-100);
-  --color-card:              var(--color-pitch-raised);
-  --color-card-foreground:   var(--color-n-100);
-  --color-popover:           var(--color-pitch-raised);
-  --color-popover-foreground: var(--color-n-100);
-  --color-primary:           var(--color-forest);
-  --color-primary-foreground: var(--color-n-100);
-  --color-secondary:         var(--color-pitch-raised);
-  --color-secondary-foreground: var(--color-n-100);
-  --color-muted:             var(--color-n-800);
-  --color-muted-foreground:  var(--color-n-400);
-  --color-accent:            var(--color-brass);
-  --color-accent-foreground: var(--color-brass-foreground);
-  --color-destructive:       var(--color-ember);
-  --color-destructive-foreground: var(--color-n-100);
-  --color-border:            var(--color-pitch-line);
-  --color-input:             var(--color-pitch-line);
-  --color-ring:              var(--color-brass);
+  /* Neutral ramp — green-tinted greys on paper */
+  --color-n-100: #F7F1E1;
+  --color-n-200: #E8DEC4;
+  --color-n-300: #C9BFA1;
+  --color-n-400: #9A907A;
+  --color-n-500: #6B6553;
+  --color-n-600: #4A4638;
+  --color-n-700: #2E2B22;
+  --color-n-800: #1B1913;
+  --color-n-900: #12100B;
 
-  /* ---------- GRADIENTS ---------- */
-  --gradient-brass: linear-gradient(160deg, #8F6E15 0%, #C9A227 22%, #EDD79A 46%, #C9A227 64%, #7E5F11 100%);
-  --gradient-brass-soft: linear-gradient(160deg, #A8821C 0%, #D8B84E 50%, #9A7818 100%);
+  --color-cream:          var(--color-paper);
+  --color-surface:        var(--color-paper);
+  --color-surface-raised: var(--color-paper-raised);
+
+  /* ---------- SEMANTIC (light default) ---------- */
+  --color-background:        var(--color-paper);
+  --color-foreground:        var(--color-ink-green-deep);
+  --color-card:              var(--color-paper-raised);
+  --color-card-foreground:   var(--color-ink-green-deep);
+  --color-popover:           var(--color-paper-raised);
+  --color-popover-foreground: var(--color-ink-green-deep);
+  --color-primary:           var(--color-ink-green);
+  --color-primary-foreground: var(--color-paper);
+  --color-secondary:         var(--color-paper-deep);
+  --color-secondary-foreground: var(--color-ink-green-deep);
+  --color-muted:             var(--color-paper-deep);
+  --color-muted-foreground:  var(--color-n-600);
+  --color-accent:            var(--color-ink-red);
+  --color-accent-foreground: var(--color-paper);
+  --color-destructive:       var(--color-ink-red);
+  --color-destructive-foreground: var(--color-paper);
+  --color-border:            var(--color-paper-line);
+  --color-input:             var(--color-paper-line);
+  --color-ring:              var(--color-ink-green);
+
+  /* ---------- LINE-WORK (no gradients elsewhere) ---------- */
+  --gradient-brass: linear-gradient(180deg, var(--color-ink-red) 0%, var(--color-ink-red) 100%);
+  --gradient-brass-soft: var(--gradient-brass);
   --gradient-gold:  var(--gradient-brass);
-  --gradient-stage: radial-gradient(ellipse at 50% 42%, #241C13 0%, #16110C 58%, #100D09 100%);
-  --gradient-fade-dark: linear-gradient(180deg, transparent 0%, #100D09 100%);
-  --gradient-forest: linear-gradient(180deg, #1A6344 0%, #14563A 55%, #0D3A26 100%);
-  --rim-gold: radial-gradient(ellipse 90% 40% at 50% 100%, rgba(201, 162, 39, 0.14) 0%, transparent 62%);
-
-  /* Brass emboss shadow (used inside inset shadows for stamped-metal feel). */
-  --shadow-brass-emboss: inset 0 1px 0 rgba(255,255,255,.38), inset 0 -1px 0 rgba(0,0,0,.32), 0 1px 0 rgba(0,0,0,.25);
+  --gradient-stage: none;
+  --gradient-fade-dark: none;
+  --gradient-forest: linear-gradient(180deg, var(--color-ink-green) 0%, var(--color-ink-green-deep) 100%);
+  --rim-gold: none;
+  --shadow-brass-emboss: none;
 
   /* ---------- TYPOGRAPHY ---------- */
-  --font-display:  "Archivo Black", Impact, sans-serif;
-  --font-victorian:"Abril Fatface", Georgia, serif;
-  --font-fair:     var(--font-victorian);
-  --font-body:     "Archivo", system-ui, sans-serif;
-  --font-sans:     var(--font-body);
-  --font-mono:     "JetBrains Mono", ui-monospace, monospace;
-  --font-serif:    var(--font-victorian);
+  --font-display:  "Cormorant Garamond", "Times New Roman", serif;
+  --font-victorian:"Cormorant Garamond", "Times New Roman", serif;
+  --font-fair:     var(--font-display);
+  --font-body:     "Spectral", Georgia, serif;
+  --font-sans:     "Inter", system-ui, sans-serif; /* admin only */
+  --font-mono:     "IBM Plex Mono", ui-monospace, monospace;
+  --font-serif:    var(--font-display);
 
   --text-display-xl: clamp(3rem, 8.5vw, 5.75rem);
   --text-display-lg: clamp(2.25rem, 6vw, 4rem);
@@ -150,13 +162,14 @@
   --width-prose:      42rem;
 
   /* ---------- ELEVATION ---------- */
-  --shadow-hung:  0 2px 0 rgba(0,0,0,.5), 0 14px 34px -14px rgba(0,0,0,.7);
-  --shadow-board: 0 1px 0 rgba(0,0,0,.4), 0 8px 20px -10px rgba(0,0,0,.55);
+  /* Single paper-lift shadow — the ONLY shadow on the site. */
+  --shadow-paper: 0 1px 0 rgba(80,60,20,.08), 0 8px 22px -14px rgba(70,50,20,.30);
+  --shadow-hung:  var(--shadow-paper);
+  --shadow-board: var(--shadow-paper);
   --shadow-lift: var(--shadow-hung);
-  --shadow-sticker: 0 1px 0 rgba(0, 0, 0, 0.25);
-  --shadow-card: 0 1px 0 rgba(0, 0, 0, 0.2);
-  /* Brass frame — 2px gradient border simulated via layered box shadows. */
-  --shadow-brass-frame: 0 0 0 1px #7E5F11, 0 0 0 2px #C9A227, 0 0 0 3px #4A3810, 0 12px 30px -14px rgba(0,0,0,.6);
+  --shadow-sticker: none;
+  --shadow-card: var(--shadow-paper);
+  --shadow-brass-frame: 0 0 0 1px var(--color-ink-green), 0 0 0 3px var(--color-paper), 0 0 0 4px var(--color-ink-green), var(--shadow-paper);
 }
 
 :root {
@@ -175,21 +188,25 @@
     line-height: var(--leading-body);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    color-scheme: dark;
+    color-scheme: light;
   }
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-body);
-    font-feature-settings: "ss01", "cv11";
+    font-feature-settings: "onum", "kern";
     line-height: var(--leading-body);
     font-variant-numeric: tabular-nums;
+    background-image:
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='260' height='260'><filter id='f'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' seed='7'/><feColorMatrix values='0 0 0 0 .40  0 0 0 0 .30  0 0 0 0 .12  0 0 0 .35 0'/></filter><rect width='100%25' height='100%25' filter='url(%23f)' opacity='.55'/></svg>");
+    background-blend-mode: multiply;
   }
   h1, h2, h3, h4, .display, .font-display, .font-serif {
     font-family: var(--font-display);
-    font-weight: 400;
-    letter-spacing: var(--tracking-display);
+    font-weight: 600;
+    letter-spacing: 0;
     line-height: var(--leading-display);
+    color: var(--color-ink-green-deep);
   }
   h1 { font-size: var(--text-display-xl); }
   h2 { font-size: var(--text-display-lg); }
@@ -199,8 +216,8 @@
   .font-mono, .tabular-nums, .num, time, [data-numeral] {
     font-family: var(--font-mono);
     font-variant-numeric: tabular-nums;
-    font-feature-settings: "zero", "ss01";
-    letter-spacing: -0.01em;
+    font-feature-settings: "zero";
+    letter-spacing: 0.02em;
   }
 
   input, button, textarea, select, optgroup {
@@ -222,231 +239,185 @@
 
   iframe, embed, object, video {
     font-family: var(--font-sans);
-    color-scheme: dark;
+    color-scheme: light;
   }
-  ::selection { background: rgba(201, 162, 39, 0.35); color: var(--color-n-100); }
+  ::selection { background: rgba(15, 74, 46, 0.22); color: var(--color-ink-green-deep); }
 }
 
 .font-serif { font-family: var(--font-serif); }
 
-/* small caps label style for micro labels */
+/* Printed-field label — like "DENOMINATION · SERIES · ISSUED". */
 .label-micro {
-  font-family: var(--font-body);
-  font-size: var(--text-micro);
-  letter-spacing: var(--tracking-micro);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--color-muted-foreground);
+  color: var(--color-ink-green);
+  font-weight: 500;
 }
 
-/* ---------- LIGHT CONTEXT ---------- */
-/* Sheepskin content island for reading. Semantic tokens flip so nested
-   cards, buttons, and text read correctly on the cream surface. */
+/* .on-light stays a legacy name — page IS light by default now. Kept
+   as a no-op wrapper so old routes that opt-in still get raised paper. */
 .on-light {
-  --color-background:        var(--color-sheepskin);
-  --color-foreground:        var(--color-n-900);
-  --color-card:              var(--color-sheepskin-raised);
-  --color-card-foreground:   var(--color-n-900);
-  --color-popover:           var(--color-sheepskin-raised);
-  --color-popover-foreground: var(--color-n-900);
-  --color-secondary:         #E5D8B4;
-  --color-secondary-foreground: var(--color-n-900);
-  --color-muted:             #E5D8B4;
-  --color-muted-foreground:  var(--color-n-600);
-  --color-border:            var(--color-sheepskin-hairline);
-  --color-input:             var(--color-sheepskin-hairline);
-  background-color: var(--color-sheepskin);
-  color: var(--color-n-900);
+  background-color: var(--color-paper);
+  color: var(--color-ink-green-deep);
   position: relative;
 }
-/* Aged paper texture — stops sheepskin cream looking like flat #F1E7CE. */
-.on-light::before {
-  content: "";
-  position: absolute; inset: 0;
-  pointer-events: none;
-  opacity: 0.06;
-  mix-blend-mode: multiply;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='p'><feTurbulence type='fractalNoise' baseFrequency='0.55' numOctaves='2' seed='4'/><feColorMatrix values='0 0 0 0 0.32  0 0 0 0 0.22  0 0 0 0 0.08  0 0 0 0.9 0'/></filter><rect width='100%25' height='100%25' filter='url(%23p)'/></svg>");
+
+/* Photographic negative of the plate — draw reveal only. */
+.plate-negative {
+  --color-background:        var(--color-ink-green-deep);
+  --color-foreground:        var(--color-paper);
+  --color-card:              #0A2A1B;
+  --color-card-foreground:   var(--color-paper);
+  --color-muted:             #0A2A1B;
+  --color-muted-foreground:  #B8C8BE;
+  --color-border:            #1E4735;
+  --color-input:             #1E4735;
+  --color-primary:           var(--color-paper);
+  --color-primary-foreground: var(--color-ink-green-deep);
+  --color-accent:            #E8B4B0;
+  background-color: var(--color-ink-green-deep);
+  color: var(--color-paper);
+  color-scheme: dark;
+}
+.plate-negative h1, .plate-negative h2, .plate-negative h3, .plate-negative h4 {
+  color: var(--color-paper);
 }
 
+/* Old dark-mode wrapper — kept as no-op alias. */
 .on-dark {
-  --color-background:        var(--color-pitch-deep);
-  --color-foreground:        var(--color-n-100);
-  --color-card:              var(--color-pitch);
-  --color-card-foreground:   var(--color-n-100);
-  --color-secondary:         var(--color-pitch-raised);
-  --color-secondary-foreground: var(--color-n-100);
-  --color-muted:             var(--color-n-800);
-  --color-muted-foreground:  var(--color-n-400);
-  --color-border:            var(--color-pitch-hairline);
-  background-color: var(--color-pitch-deep);
-  color: var(--color-n-100);
+  background-color: var(--color-paper);
+  color: var(--color-ink-green-deep);
 }
 
 /* ---------- UTILITIES ---------- */
 
-/* Hero backdrop — soft forest wash on painted pitch */
 @utility bg-clover-pattern {
-  background-color: var(--color-pitch-deep);
-  background-image:
-    radial-gradient(circle at 15% 10%, rgba(15, 74, 52, 0.42) 0%, transparent 55%),
-    radial-gradient(circle at 85% 90%, rgba(201, 162, 74, 0.20) 0%, transparent 55%);
+  background-color: var(--color-paper);
 }
 
-/* Ambient site-wide background */
 @utility bg-ambient {
-  background-color: var(--color-pitch-deep);
-  background-image:
-    radial-gradient(ellipse 80% 60% at 20% 0%, rgba(15, 74, 52, 0.24) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 40% at 90% 100%, rgba(201, 162, 74, 0.12) 0%, transparent 60%);
-  background-attachment: fixed;
+  background-color: var(--color-paper);
 }
 
-/* Prize / hero stage — painted radial backdrop with warm brass rim */
 @utility bg-prize-stage {
-  background-color: var(--color-pitch-deep);
-  background-image: var(--rim-gold), var(--gradient-stage);
+  background-color: var(--color-paper-raised);
 }
 
 /* ============================================================
- * HERITAGE MOTIFS — painted signboard, brass fittings, market stall
+ * MINT MOTIFS — engraved certificate, plates, seals
  * ============================================================ */
 
-/* Painted display type — hard-edged offset shadow + thin brass keyline,
-   mimicking hand-painted signwriting. Apply to display headlines only. */
 @utility painted {
-  text-shadow:
-    2px 2px 0 var(--color-forest-deep),
-    3px 3px 0 rgba(0,0,0,.45);
-  -webkit-text-stroke: 0.6px var(--color-brass-deep);
-  paint-order: stroke fill;
+  color: var(--color-ink-green-deep);
+  font-variant: small-caps;
+  letter-spacing: 0.06em;
 }
 
-/* Metallic brass type — for oversized numerals ("£23,940") */
 @utility painted-gold {
-  background: var(--gradient-brass);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-  filter: drop-shadow(2px 2px 0 rgba(0,0,0,.5));
+  color: var(--color-ink-red);
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.06em;
 }
 
-/* Victorian accent — Abril Fatface for oversized numerals / pull quotes. */
 @utility victorian {
   font-family: var(--font-victorian);
   letter-spacing: 0;
   line-height: 0.9;
 }
 
-/* Brass surface — stamped metal look. Combine with .painted-emboss for text. */
 @utility brass {
-  background-image: var(--gradient-brass);
-  color: var(--color-brass-foreground);
-  box-shadow: var(--shadow-brass-emboss);
-  border: 1px solid rgba(74,56,16,.55);
+  background-color: transparent;
+  color: var(--color-ink-red);
+  border: 1px solid var(--color-ink-red);
+  font-family: var(--font-mono);
+  font-weight: 500;
 }
 
-/* Brass-framed picture: 2px gradient border, sharp corners, inner shadow. */
 @utility brass-frame {
-  box-shadow: var(--shadow-brass-frame), inset 0 0 24px rgba(0,0,0,.35);
+  box-shadow: var(--shadow-brass-frame);
   border-radius: var(--radius-sharp);
 }
 
-/* Stall-board header bar — forest green plaque under the prize name. */
 @utility stall-header {
-  background-image: var(--gradient-forest);
-  color: var(--color-n-100);
-  border-bottom: 2px solid var(--color-brass-deep);
-  box-shadow: inset 0 -1px 0 rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.06);
+  background-color: var(--color-ink-green);
+  color: var(--color-paper);
+  border-bottom: 1px solid var(--color-ink-green-deep);
 }
 
-/* Alternating hand-hung rotation on grid cards. Disabled under reduced-motion. */
-@utility stall-tilt-l { transform: rotate(-0.6deg); }
-@utility stall-tilt-r { transform: rotate(0.5deg); }
+@utility stall-tilt-l { transform: none; }
+@utility stall-tilt-r { transform: none; }
 
-/* ---------- STALL BOARD CARD ---------- */
-/* Painted parchment card, brass-framed, hand-hung tilt. */
+/* Legacy stall-board — retargeted as a plain plate card. */
 .stall-board {
-  background: var(--color-parchment);
-  color: var(--color-n-900);
+  background: var(--color-paper-raised);
+  color: var(--color-ink-green-deep);
   border-radius: var(--radius-sharp);
-  box-shadow: var(--shadow-board);
+  border: 1px solid var(--color-ink-green);
+  box-shadow: var(--shadow-paper);
   position: relative;
   overflow: hidden;
-  transition: transform .18s ease, box-shadow .18s ease;
+  transition: box-shadow .18s ease, transform .18s ease;
 }
 .stall-board__header {
-  background: var(--gradient-forest);
-  color: var(--color-n-100);
+  background: var(--color-ink-green);
+  color: var(--color-paper);
   font-family: var(--font-display);
-  border-bottom: 2px solid var(--color-brass-deep);
+  border-bottom: 1px solid var(--color-ink-green-deep);
 }
-/* Alternating rotation across grid rows */
-.stall-grid > .stall-board:nth-child(odd)  { transform: rotate(-0.5deg); }
-.stall-grid > .stall-board:nth-child(even) { transform: rotate(0.45deg); }
-.stall-grid > .stall-board:hover           { transform: rotate(0deg) translateY(-3px); box-shadow: var(--shadow-hung); }
+.stall-grid > .stall-board:hover { transform: translateY(-2px); box-shadow: var(--shadow-paper), 0 12px 28px -18px rgba(70,50,20,.4); }
 
-/* ---------- PINSTRIPE DIVIDER ---------- */
+/* ---------- MICROTEXT / PINSTRIPE ---------- */
 .pinstripe-rule {
   position: relative;
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--color-brass-deep) 12%, var(--color-brass) 50%, var(--color-brass-deep) 88%, transparent);
+  background: var(--color-ink-green);
+  opacity: .8;
   margin-block: var(--space-block);
 }
 .pinstripe-rule::after {
   content: '';
   position: absolute; left: 50%; top: 50%;
-  width: 7px; height: 7px;
+  width: 5px; height: 5px;
   transform: translate(-50%,-50%) rotate(45deg);
-  background: var(--gradient-brass);
+  background: var(--color-ink-green);
   box-shadow: 0 0 0 3px var(--color-background);
 }
 
-/* ---------- PAPER TEXTURE (for cream cards) ---------- */
+/* ---------- PAPER TEXTURE ---------- */
 .paper { position: relative; }
 .paper::before {
   content: '';
   position: absolute; inset: 0;
   pointer-events: none;
-  opacity: .05;
+  opacity: .10;
   mix-blend-mode: multiply;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='f'><feTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='2' seed='3'/><feColorMatrix values='0 0 0 0 .35  0 0 0 0 .25  0 0 0 0 .10  0 0 0 .8 0'/></filter><rect width='100%25' height='100%25' filter='url(%23f)'/></svg>");
 }
 
-/* ---------- PLAIN CONTEXT (trust / legal pages) ---------- */
-/* Strips ornament: no rotation, no grain, no painted shadows. */
-.plain .stall-board,
-.plain .stall-grid > .stall-board:nth-child(odd),
-.plain .stall-grid > .stall-board:nth-child(even) {
-  transform: none;
-  box-shadow: none;
-  border: 1px solid var(--color-border);
-}
-.plain .painted {
-  text-shadow: none;
-  -webkit-text-stroke: 0;
-  color: inherit;
-}
+/* ---------- PLAIN CONTEXT (legal / static prose) ---------- */
+.plain .stall-board { box-shadow: none; }
+.plain .painted { font-variant: normal; letter-spacing: 0; }
 .plain .grain::before,
 .plain .grain::after,
 .plain .paper::before { display: none; }
 .plain .bg-grain::after { display: none; }
+.plain .guilloche-bg { display: none; }
 
-/* Prize stage wrapper class variant */
+/* Legacy prize-stage → paper plate */
 .prize-stage {
-  background: var(--gradient-stage);
+  background: var(--color-paper-raised);
   position: relative;
   border-radius: var(--radius-sharp);
   overflow: hidden;
+  border: 1px solid var(--color-paper-line);
 }
 .prize-stage::after {
-  content: '';
-  position: absolute; inset: 0;
-  background: radial-gradient(ellipse at 50% 100%, rgba(201,162,74,.14) 0%, transparent 60%);
-  pointer-events: none;
+  content: none;
 }
 
-/* Painted grain — 2–4% opacity noise, gives dark surfaces a painted feel. */
 @utility bg-grain {
   position: relative;
 }
@@ -455,72 +426,57 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
-  opacity: 0.035;
+  opacity: 0.05;
   mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .3  0 0 0 0 .2  0 0 0 0 .1  0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
 }
 .grain::before {
   content: '';
   position: absolute; inset: 0;
   pointer-events: none;
-  opacity: .04;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: .08;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 .35  0 0 0 0 .25  0 0 0 0 .10  0 0 0 .8 0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-/* Card surface */
 @utility glass {
   background-color: var(--color-card);
-  border: 1px solid var(--color-border);
-  box-shadow: var(--shadow-lift);
+  border: 1px solid var(--color-ink-green);
+  box-shadow: var(--shadow-paper);
 }
 
-/* Metallic brass surface + brass text gradient */
 @utility bg-gradient-gold {
-  background-image: var(--gradient-brass);
-  color: var(--color-brass-foreground);
-  box-shadow: var(--shadow-brass-emboss);
+  background-color: var(--color-ink-red);
+  color: var(--color-paper);
 }
 @utility text-gradient-gold {
-  background-image: var(--gradient-brass);
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
+  color: var(--color-ink-red);
 }
 .gold-metal {
-  background: var(--gradient-brass);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
+  color: var(--color-ink-red);
+  font-family: var(--font-mono);
 }
 .gold-metal-surface {
-  background: var(--gradient-brass);
-  color: var(--color-n-900);
-  box-shadow: var(--shadow-brass-emboss);
+  background: var(--color-ink-red);
+  color: var(--color-paper);
 }
 
-/* Cinematic gradient text — cream to brass */
 @utility text-gradient-mint {
-  background-image: linear-gradient(100deg, #F7F1E1 0%, #F7F1E1 55%, #C9A24A 100%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
+  color: var(--color-ink-green-deep);
 }
 
 @utility sticker-tilt-l { transform: none; }
 @utility sticker-tilt-r { transform: none; }
 
 @utility shimmer {
-  background: linear-gradient(90deg, var(--color-forest) 0%, var(--color-brass) 100%);
+  background: var(--color-ink-green);
 }
 
 @utility hover-wobble { transition: opacity 0.15s ease, background-color 0.15s ease; }
 
 @utility urgent-pulse {
-  border-color: var(--color-ember);
-  color: var(--color-ember);
+  border-color: var(--color-ink-red);
+  color: var(--color-ink-red);
 }
 
 @keyframes tickerScroll {
@@ -545,6 +501,134 @@
   to { opacity: 1; transform: translateY(0); }
 }
 @utility rise-in { animation: riseIn 0.4s ease both; }
+
+/* ============================================================
+ * ENGRAVING SYSTEM — Guilloché, Plate, Ribbon, Microtext, Seal
+ * ============================================================ */
+
+/* Serial number — banknote style, second-plate red, wide tracking. */
+.serial-num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.18em;
+  color: var(--color-ink-red);
+  font-weight: 500;
+}
+
+/* Plate border — fine double rule + optional corner flourishes. */
+.plate-border {
+  position: relative;
+  border: 1px solid var(--color-ink-green);
+  outline: 1px solid var(--color-ink-green);
+  outline-offset: 3px;
+  padding: 1.25rem;
+  background: var(--color-paper-raised);
+}
+.plate-border--tight { padding: 0.75rem; outline-offset: 2px; }
+.plate-border--flush { padding: 0; }
+
+/* Guilloché backdrop — subtle line rosette. Absolutely positioned. */
+.guilloche-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.10;
+  color: var(--color-ink-green);
+}
+.guilloche-bg--strong { opacity: 0.18; }
+.guilloche-bg--faint  { opacity: 0.045; }
+
+/* Microtext rule — repeating tiny text as a horizontal divider. */
+.microtext-rule {
+  font-family: var(--font-mono);
+  font-size: 6px;
+  letter-spacing: 0.15em;
+  color: var(--color-ink-green);
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  padding-block: 6px;
+  border-block: 1px solid var(--color-ink-green);
+  opacity: 0.85;
+  user-select: none;
+  line-height: 1;
+}
+
+/* Wax seal — round, red, slightly rotated stamp mark. */
+.wax-seal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--color-ink-red);
+  color: var(--color-ink-red);
+  font-family: var(--font-mono);
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  border-radius: 9999px;
+  padding: 0.5rem 0.85rem;
+  transform: rotate(-6deg);
+  background: transparent;
+  box-shadow: inset 0 0 0 4px transparent, inset 0 0 0 5px var(--color-ink-red);
+  font-size: 0.7rem;
+  line-height: 1;
+}
+.wax-seal--sm { padding: 0.35rem 0.6rem; font-size: 0.6rem; box-shadow: inset 0 0 0 3px transparent, inset 0 0 0 4px var(--color-ink-red); }
+
+@media (prefers-reduced-motion: reduce) {
+  .wax-seal { transform: none; }
+}
+
+/* Ribbon banner — engraved ribbon for section headings. */
+.ribbon-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--color-ink-green);
+}
+.ribbon-title__text {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-variant: small-caps;
+  letter-spacing: 0.14em;
+  color: var(--color-ink-green-deep);
+}
+
+/* Ticket note — a printed rectangle: guilloche field, double rule, serial. */
+.ticket-note {
+  position: relative;
+  background: var(--color-paper-raised);
+  border: 1px solid var(--color-ink-green);
+  outline: 1px solid var(--color-ink-green);
+  outline-offset: 2px;
+  padding: 0.9rem 1rem;
+  overflow: hidden;
+  isolation: isolate;
+}
+.ticket-note > * { position: relative; z-index: 1; }
+
+/* Uncut sheet cell — a single tiny note rectangle in the OddsPlate grid. */
+.note-cell {
+  aspect-ratio: 8 / 5;
+  border: 1px solid var(--color-ink-green);
+  background: var(--color-paper-raised);
+  position: relative;
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.05em;
+  color: var(--color-ink-green);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.note-cell--sold {
+  color: var(--color-ink-red);
+  border-color: var(--color-ink-red);
+  background:
+    linear-gradient(to top right, transparent calc(50% - 0.5px), var(--color-ink-red) calc(50% - 0.5px), var(--color-ink-red) calc(50% + 0.5px), transparent calc(50% + 0.5px)),
+    var(--color-paper-raised);
+  opacity: .85;
+}
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
