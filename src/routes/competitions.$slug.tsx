@@ -11,6 +11,7 @@ import { COMPETITIONS } from "@/lib/mock-comps";
 import { gbp, shortNumber } from "@/lib/format";
 import {
   competitionQueryOptions,
+  explainReservationFailure,
   newReservationToken,
   reserveLuckyDip,
   reserveNumbers,
@@ -64,6 +65,9 @@ function CompDetail() {
   const [picked, setPicked] = useState<Set<number>>(new Set());
   const [reserving, setReserving] = useState(false);
   const [reserveError, setReserveError] = useState<string | null>(null);
+  const [availableLeft, setAvailableLeft] = useState<number | null>(null);
+  const [soldOut, setSoldOut] = useState(false);
+  const queryClient = useQueryClient();
 
   const takenSet = useMemo(() => new Set(c.takenNumbers), [c.takenNumbers]);
   const soldTotal = c.totalTickets - c.ticketsAvailable;
@@ -81,6 +85,8 @@ function CompDetail() {
 
   const handleReserve = async () => {
     setReserveError(null);
+    setAvailableLeft(null);
+    setSoldOut(false);
     setReserving(true);
     try {
       const token = newReservationToken();
@@ -102,7 +108,19 @@ function CompDetail() {
 
       navigate({ to: "/checkout", search: { slug: c.slug, qty: numbers.length } });
     } catch (err) {
-      setReserveError(err instanceof Error ? err.message : "Reservation failed.");
+      const raw = err instanceof Error ? err.message : "Reservation failed.";
+      const requested = picker === "lucky" ? qty : picked.size;
+      const { message, availability } = await explainReservationFailure(c.slug, requested, raw);
+      setReserveError(message);
+      if (availability) {
+        setAvailableLeft(availability.available);
+        setSoldOut(availability.available === 0 || availability.closed);
+        if (picker === "lucky" && availability.available > 0 && availability.available < qty) {
+          setQty(availability.available);
+        }
+      }
+      // Refresh grid so taken numbers reflect what just went.
+      queryClient.invalidateQueries({ queryKey: ["competition", c.slug] });
       setReserving(false);
     }
   };
@@ -237,9 +255,21 @@ function CompDetail() {
               )}
 
               {reserveError && (
-                <div className="mt-3 flex items-start gap-2 text-xs text-hot bg-hot/10 border border-hot/30 rounded-lg p-2">
-                  <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" />
-                  <span>{reserveError}</span>
+                <div className="mt-3 rounded-lg border-2 border-hot/40 bg-hot/10 p-3 text-xs text-hot">
+                  <div className="flex items-start gap-2 font-bold">
+                    <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" />
+                    <span>{reserveError}</span>
+                  </div>
+                  {availableLeft !== null && !soldOut && (
+                    <div className="mt-1 pl-6 font-mono text-[11px] tabular-nums text-hot/80">
+                      {availableLeft} of {c.totalTickets} tickets left
+                    </div>
+                  )}
+                  {soldOut && (
+                    <div className="mt-1 pl-6 font-mono text-[11px] tabular-nums text-hot/80">
+                      Sold out — 0 tickets remaining
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -249,7 +279,7 @@ function CompDetail() {
                   <div className="font-display font-black text-3xl leading-none tabular-nums">{gbp(c.pricePerTicket * displayNumbers)}</div>
                   <div className="text-xs text-muted-foreground font-mono tabular-nums">{displayNumbers} ticket{displayNumbers === 1 ? "" : "s"}</div>
                 </div>
-                <Button variant="gold" size="xl" onClick={handleReserve} disabled={displayNumbers === 0 || reserving}>
+                <Button variant="gold" size="xl" onClick={handleReserve} disabled={displayNumbers === 0 || reserving || soldOut}>
                   {reserving ? <><Loader2 className="h-4 w-4 animate-spin" /> Locking…</> : "Enter now"}
                 </Button>
               </div>
