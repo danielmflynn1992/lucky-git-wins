@@ -60,7 +60,7 @@ export const COMPETITIONS: Competition[] = [
     cashAlternative: 4500,
     maxPerPerson: 150,
     endsAt: inHours(11),
-    instantWin: true,
+    instantWin: false,
     hot: true,
     description:
       "The whole shiny lot: iPhone 17 Pro Max, 16\" MacBook Pro M-something, AirPods Pro. Plus 20 instant win tickets worth £50 each hidden inside. Yes, really.",
