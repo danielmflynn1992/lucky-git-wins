@@ -10,6 +10,7 @@ import { toast } from "sonner";
 
 const leftLinks = [
   { to: "/competitions", label: "Get Tickets" },
+  { to: "/free-entry", label: "Free Entry" },
   { to: "/odds", label: "Best Odds" },
   { to: "/winners", label: "Winners" },
   { to: "/how-it-works", label: "How It Works" },
