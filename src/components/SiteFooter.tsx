@@ -127,9 +127,10 @@ export function SiteFooter() {
           <FooterCol
             heading="Play"
             links={[
-              { to: "/competitions", label: "Live Competitions" },
-              { to: "/winners", label: "Winners Wall" },
-              { to: "/how-it-works", label: "How it works" },
+              { to: "/competitions", label: "Competitions" },
+              { to: "/winners", label: "Winners" },
+              { to: "/about", label: "About" },
+              { to: "/verify", label: "Verify" },
             ]}
           />
           <FooterCol
@@ -161,7 +162,7 @@ export function SiteFooter() {
               >
                 <span
                   aria-label="18 plus"
-                  className="inline-flex items-center justify-center w-6 h-6 border-2 border-current text-xs font-black"
+                  className="inline-flex items-center justify-center min-w-8 h-7 px-1.5 border-2 border-current text-xs font-black leading-none"
                 >
                   18+
                 </span>
