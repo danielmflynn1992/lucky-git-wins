@@ -80,17 +80,17 @@ export function CompCard({ c }: { c: Competition }) {
         </div>
 
         {/* CTA row — View + Quick add */}
-        <div className="flex gap-1 sm:gap-1.5 min-w-0">
-          <div className="flex-1 min-w-0 rounded-md bg-clover text-primary-foreground text-center py-1.5 sm:py-2.5 px-2 font-display font-extrabold text-[11px] sm:text-sm uppercase tracking-[-0.01em] leading-tight group-hover:bg-clover-deep transition-colors truncate">
+        <div className="flex gap-1.5 min-w-0 items-stretch">
+          <div className="flex-1 min-w-0 h-9 inline-flex items-center justify-center rounded-md bg-clover text-primary-foreground px-2 font-display font-extrabold text-xs uppercase tracking-[-0.01em] leading-none group-hover:bg-clover-deep transition-colors truncate">
             Enter Now →
           </div>
           <button
             type="button"
             aria-label={`Quick add tickets for ${c.title}`}
             onClick={(e) => { e.preventDefault(); e.stopPropagation(); setQuickOpen(true); }}
-            className="shrink-0 rounded-md bg-gold text-gold-foreground px-2 sm:px-3 py-1.5 sm:py-2.5 font-display font-extrabold text-[11px] sm:text-sm uppercase tracking-[-0.01em] leading-tight inline-flex items-center gap-1 hover:bg-gold/90 transition-colors"
+            className="shrink-0 h-9 rounded-md bg-gold text-gold-foreground px-2.5 font-display font-extrabold text-xs uppercase tracking-[-0.01em] leading-none inline-flex items-center gap-1 hover:bg-gold/90 transition-colors"
           >
-            <Plus className="h-3 w-3 sm:h-3.5 sm:w-3.5" /> Add
+            <Plus className="h-3.5 w-3.5" /> Add
           </button>
         </div>
 
