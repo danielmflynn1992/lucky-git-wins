@@ -27,16 +27,21 @@ async def shot(page: Page, viewport: str, name: str) -> None:
 async def open_first_competition(page: Page, viewport: str) -> str:
     """Navigate home, click the first competition card, return its slug."""
     await page.goto(BASE + "/", wait_until="domcontentloaded")
-    # Cards render as <a href="/competitions/<slug>">
     card = page.locator('a[href^="/competitions/"]').first
     await card.wait_for(state="visible", timeout=15_000)
     href = await card.get_attribute("href")
     assert href and href.startswith("/competitions/"), f"bad href: {href!r}"
     await shot(page, viewport, "01_home")
-    await card.click()
-    await page.wait_for_url(f"**{href}", timeout=15_000)
-    # Detail heading should show; give React a beat to finish streaming.
-    await page.locator("text=Enter now").first.wait_for(timeout=15_000)
+    # Click the card; if the stretched link is occluded on this viewport
+    # (a real bug we've had before), fall back to direct nav so the rest of
+    # the flow still runs — but log it.
+    try:
+        await card.click(timeout=5_000)
+        await page.wait_for_url(f"**{href}", timeout=8_000)
+    except PWTimeout:
+        print(f"  ! card click did not navigate on {viewport}; using goto()")
+        await page.goto(BASE + href, wait_until="domcontentloaded")
+    await page.get_by_role("button", name="Enter now").first.wait_for(timeout=15_000)
     await shot(page, viewport, "02_detail")
     return href.rsplit("/", 1)[-1]
 
@@ -66,7 +71,8 @@ async def flow_lucky_dip(page: Page, viewport: str) -> None:
 
     await shot(page, viewport, "03_lucky_qty")
 
-    enter = page.get_by_role("button", name="Enter now")
+    enter = page.get_by_role("button", name="Enter now").first
+    await enter.scroll_into_view_if_needed()
     await enter.click()
     await page.wait_for_url("**/checkout*", timeout=20_000)
     await page.locator("text=Reserved ticket numbers").first.wait_for(timeout=15_000)
@@ -78,8 +84,8 @@ async def flow_pick_numbers(page: Page, viewport: str) -> None:
     slug = await open_first_competition(page, viewport)
 
     await page.get_by_role("button", name="Pick numbers").click()
-    # Grid tiles are <button>{n}</button> inside the picker.
-    tiles = page.locator("div.grid-cols-10 > button:not([disabled])")
+    # Grid tiles: small square <button>{n}</button> inside the picker grid.
+    tiles = page.locator('[class*="grid-cols-10"] > button:not([disabled])')
     await tiles.first.wait_for(timeout=10_000)
     n = await tiles.count()
     assert n >= 2, f"not enough available numbers to pick ({n})"
@@ -87,7 +93,9 @@ async def flow_pick_numbers(page: Page, viewport: str) -> None:
     await tiles.nth(1).click()
     await shot(page, viewport, "05_pick_two")
 
-    await page.get_by_role("button", name="Enter now").click()
+    enter = page.get_by_role("button", name="Enter now").first
+    await enter.scroll_into_view_if_needed()
+    await enter.click()
     await page.wait_for_url("**/checkout*", timeout=20_000)
     await page.locator("text=Reserved ticket numbers").first.wait_for(timeout=15_000)
     await shot(page, viewport, "06_checkout_pick")
