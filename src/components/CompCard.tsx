@@ -82,7 +82,7 @@ export function CompCard({ c }: { c: Competition }) {
 
         {/* CTA row — equal-width buttons, never push the card */}
         <div className="mt-auto grid grid-cols-2 gap-1.5 min-w-0 items-stretch">
-          <div className="min-w-0 h-9 inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md bg-clover text-primary-foreground px-1 font-display font-extrabold text-[10px] sm:text-xs uppercase tracking-[-0.03em] leading-none shadow-sm group-hover:bg-clover-deep group-hover:shadow-md group-focus-visible:bg-clover-deep group-focus-visible:ring-2 group-focus-visible:ring-clover/40 group-focus-visible:ring-offset-2 group-focus-visible:ring-offset-card transition-all">
+          <div className="min-w-0 h-9 rounded-md bg-clover text-primary-foreground px-1 font-display font-extrabold text-[10px] sm:text-xs uppercase tracking-[-0.03em] leading-none inline-flex items-center justify-center gap-1 whitespace-nowrap shadow-sm group-hover:bg-clover-deep group-hover:shadow-md group-focus-visible:bg-clover-deep group-focus-visible:ring-2 group-focus-visible:ring-clover/40 group-focus-visible:ring-offset-2 group-focus-visible:ring-offset-card transition-all">
             <span>Enter Now</span>
             <ArrowRight className="h-3 w-3 sm:h-3.5 sm:w-3.5 shrink-0" aria-hidden="true" />
           </div>
@@ -92,7 +92,8 @@ export function CompCard({ c }: { c: Competition }) {
             onClick={(e) => { e.preventDefault(); e.stopPropagation(); setQuickOpen(true); }}
             className="min-w-0 h-9 rounded-md bg-gold text-gold-foreground px-1 font-display font-extrabold text-[10px] sm:text-xs uppercase tracking-[-0.03em] leading-none inline-flex items-center justify-center gap-1 whitespace-nowrap shadow-sm hover:bg-gold/90 hover:shadow-md hover:-translate-y-px active:translate-y-0 active:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-card transition-all"
           >
-            <Plus className="h-3 w-3 sm:h-3.5 sm:w-3.5 shrink-0" /> Add
+            <Plus className="h-3 w-3 sm:h-3.5 sm:w-3.5 shrink-0" aria-hidden="true" />
+            <span>Add</span>
           </button>
         </div>
 
