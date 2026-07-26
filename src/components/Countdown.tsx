@@ -12,10 +12,8 @@ export function Countdown({ target, compact = false }: { target: string; compact
   const pad = (n: number) => String(n).padStart(2, "0");
   const urgent = t?.urgent;
   const digits = t
-    ? compact
-      ? `${pad(t.d)}d ${pad(t.h)}:${pad(t.m)}`
-      : `${pad(t.d)}d ${pad(t.h)}:${pad(t.m)}:${pad(t.s)}`
-    : compact ? "--d --:--" : "--d --:--:--";
+    ? `${pad(t.d)}d ${pad(t.h)}:${pad(t.m)}:${pad(t.s)}`
+    : "--d --:--:--";
   return (
     <div
       className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 font-mono font-bold tabular-nums shadow-sm ${

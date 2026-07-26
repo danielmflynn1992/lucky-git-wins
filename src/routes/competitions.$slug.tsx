@@ -71,7 +71,6 @@ function CompDetail() {
   const takenSet = useMemo(() => new Set(c.takenNumbers), [c.takenNumbers]);
   const soldTotal = c.totalTickets - c.ticketsAvailable;
   const pct = Math.round((soldTotal / c.totalTickets) * 100);
-  const odds = Math.max(1, Math.round(c.totalTickets / Math.max(1, soldTotal)));
 
   const canProceed = answered !== null && answered === c.skillQuestion.correct;
   const displayNumbers = picker === "manual" ? picked.size : qty;
@@ -170,7 +169,7 @@ function CompDetail() {
               <div className="h-[2px] rounded-full bg-white/10 overflow-hidden">
                 <div className="h-full bg-gradient-to-r from-clover to-gold" style={{ width: `${pct}%` }} />
               </div>
-              <div className="mt-1 text-xs text-muted-foreground font-mono tabular-nums">Odds 1 : {odds.toLocaleString()}</div>
+
             </div>
 
             <div className="mt-6 rounded-2xl bg-card border-2 border-border p-4">

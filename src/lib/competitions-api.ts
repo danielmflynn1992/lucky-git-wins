@@ -8,7 +8,7 @@ import ps5 from "@/assets/prize-ps5.jpg";
 import watch from "@/assets/prize-watch.jpg";
 
 // Slug → bundled asset. Keeps the DB free of build-time paths.
-const IMAGES: Record<string, string> = {
+export const IMAGES: Record<string, string> = {
   "audi-rs3-25k-cash": audi,
   "apple-tech-bundle": tech,
   "10k-cash": cash,

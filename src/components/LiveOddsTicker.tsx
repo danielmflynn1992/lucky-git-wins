@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import { Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Ticket, TrendingUp, Clock, Users } from "lucide-react";
+import { Ticket, Clock, Users } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { liveOddsQueryOptions, type LiveOdds } from "@/lib/competitions-api";
-import { gbp, timeLeft } from "@/lib/format";
+import { timeLeft } from "@/lib/format";
 import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 
 /**
@@ -97,9 +97,6 @@ function TickerItem({ c }: { c: LiveOdds }) {
           <span className="text-muted-foreground font-mono tabular-nums">
             {c.ticketsSold.toLocaleString()}/{c.totalTickets.toLocaleString()} SOLD
           </span>
-          <span className="text-clover font-mono tabular-nums">
-            ODDS 1:{c.odds.toLocaleString()}
-          </span>
           <span className="text-clover font-black">●</span>
         </Link>
       </TooltipTrigger>
@@ -128,12 +125,6 @@ function TickerItem({ c }: { c: LiveOdds }) {
             />
           )}
           <TooltipRow
-            icon={<TrendingUp className="h-3 w-3 text-clover" />}
-            label={`Odds 1:${c.odds.toLocaleString()}`}
-            value={`${gbp(c.pricePerTicket)}/ticket`}
-            hint="Right now, roughly 1 in every this many tickets wins."
-          />
-          <TooltipRow
             icon={<Clock className="h-3 w-3 text-hot" />}
             label="Closes in"
             value={closes}
@@ -141,7 +132,7 @@ function TickerItem({ c }: { c: LiveOdds }) {
           />
         </dl>
         <div className="px-3 py-2 border-t border-border text-[10px] text-cream/60 leading-snug">
-          Tap to open. Odds update live as tickets sell.
+          Tap to open. Live ticket counts update as they sell.
         </div>
       </TooltipContent>
     </Tooltip>
