@@ -38,10 +38,15 @@ async def main() -> int:
             for card in cards:
                 slug = await card.get_attribute("data-vr-card")
                 # Every clickable/link CTA inside the card footer.
+                # Only measure the small CTA controls, not the full-card link wrapper.
                 ctas = await card.query_selector_all("a, button")
                 for cta in ctas:
                     label = (await cta.inner_text()).strip().replace("\n", " ")
-                    if not label:
+                    if not label or len(label) > 20:
+                        continue
+                    # Skip anything that isn't a compact CTA-shaped control.
+                    box = await cta.bounding_box()
+                    if not box or box["height"] > 60:
                         continue
                     metrics = await cta.evaluate(
                         "el => ({ sw: el.scrollWidth, cw: el.clientWidth, sh: el.scrollHeight, ch: el.clientHeight })"
