@@ -292,26 +292,6 @@ function Home() {
 
       <div className="mx-auto max-w-7xl px-4"><Pinstripe /></div>
 
-      {/* NEWSLETTER */}
-      <section className="mx-auto max-w-7xl px-4 mt-24 w-full">
-        <div className="rounded-lg bg-ink text-cream p-8 md:p-12 relative overflow-hidden">
-          <div className="relative max-w-xl">
-            <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-clover font-bold">New comps · Weekly</div>
-            <h2 className="mt-2 font-display text-3xl md:text-4xl font-black tracking-[-0.02em]">Give us your email.</h2>
-            <p className="mt-3 text-cream/60 leading-relaxed">We promise not to spam you with rubbish — just the good stuff. One email a week, tops. Unsubscribe with one click, no hard feelings.</p>
-            <form className="mt-6 flex gap-2 flex-col sm:flex-row" onSubmit={(e) => e.preventDefault()}>
-              <input
-                type="email"
-                required
-                placeholder="you@somewhere.co.uk"
-                className="flex-1 rounded-md bg-background/40 border border-cream/15 px-4 py-3 text-cream placeholder:text-cream/70 focus:outline-none focus:border-clover"
-              />
-              <Button variant="git" size="lg" type="submit">Go on then</Button>
-            </form>
-          </div>
-        </div>
-      </section>
-
       <SiteFooter />
     </div>
   );
