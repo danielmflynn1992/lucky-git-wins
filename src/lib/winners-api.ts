@@ -11,6 +11,12 @@ export type Winner = {
   winner_town: string;
   drawn_at: string;
   image: string | null;
+  winner_photo_url: string | null;
+  photo_consent: boolean;
+  winner_quote: string | null;
+  verification_hash: string;
+  seed_revealed: string;
+  qualifying_pool_size: number | null;
 };
 
 export const winnersQuery = queryOptions({
@@ -19,7 +25,7 @@ export const winnersQuery = queryOptions({
     const { data, error } = await supabase
       .from("draws")
       .select(
-        "id, competition_id, competition_title, prize, winning_number, winner_display_name, winner_town, drawn_at, competitions(slug, image)",
+        "id, competition_id, competition_title, prize, winning_number, winner_display_name, winner_town, drawn_at, winner_photo_url, photo_consent, winner_quote, verification_hash, seed_revealed, qualifying_pool_size, competitions(slug, image)",
       )
       .order("drawn_at", { ascending: false });
     if (error) throw error;
@@ -31,6 +37,12 @@ export const winnersQuery = queryOptions({
       winner_display_name: string;
       winner_town: string;
       drawn_at: string;
+      winner_photo_url: string | null;
+      photo_consent: boolean | null;
+      winner_quote: string | null;
+      verification_hash: string;
+      seed_revealed: string;
+      qualifying_pool_size: number | null;
       competitions: { slug: string; image: string } | null;
     }) => {
       const slug = d.competitions?.slug;
@@ -48,6 +60,12 @@ export const winnersQuery = queryOptions({
         winner_town: d.winner_town,
         drawn_at: d.drawn_at,
         image,
+        winner_photo_url: d.winner_photo_url,
+        photo_consent: !!d.photo_consent,
+        winner_quote: d.winner_quote,
+        verification_hash: d.verification_hash,
+        seed_revealed: d.seed_revealed,
+        qualifying_pool_size: d.qualifying_pool_size,
       };
     });
   },

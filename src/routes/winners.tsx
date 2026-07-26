@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -31,6 +32,7 @@ export const Route = createFileRoute("/winners")({
 
 function WinnersPage() {
   const { data: winners } = useSuspenseQuery(winnersQuery);
+  const [openId, setOpenId] = useState<string | null>(null);
   return (
     <div className="min-h-screen flex flex-col bg-ambient">
       <SiteNav />
@@ -50,7 +52,12 @@ function WinnersPage() {
         ) : (
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {winners.map((w) => (
-              <WinnerCard key={w.id} w={w} />
+              <WinnerCard
+                key={w.id}
+                w={w}
+                expanded={openId === w.id}
+                onToggle={(id) => setOpenId((cur) => (cur === id ? null : id))}
+              />
             ))}
           </div>
         )}

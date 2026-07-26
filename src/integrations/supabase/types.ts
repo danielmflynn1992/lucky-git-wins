@@ -169,6 +169,7 @@ export type Database = {
           drew_from: string
           id: string
           notes: string
+          photo_consent: boolean
           prize: string
           qualifying_pool_size: number | null
           seed_hash: string
@@ -177,6 +178,8 @@ export type Database = {
           total_tickets: number
           verification_hash: string
           winner_display_name: string
+          winner_photo_url: string | null
+          winner_quote: string | null
           winner_town: string
           winning_number: number
         }
@@ -190,6 +193,7 @@ export type Database = {
           drew_from?: string
           id?: string
           notes?: string
+          photo_consent?: boolean
           prize: string
           qualifying_pool_size?: number | null
           seed_hash?: string
@@ -198,6 +202,8 @@ export type Database = {
           total_tickets: number
           verification_hash?: string
           winner_display_name: string
+          winner_photo_url?: string | null
+          winner_quote?: string | null
           winner_town?: string
           winning_number: number
         }
@@ -211,6 +217,7 @@ export type Database = {
           drew_from?: string
           id?: string
           notes?: string
+          photo_consent?: boolean
           prize?: string
           qualifying_pool_size?: number | null
           seed_hash?: string
@@ -219,6 +226,8 @@ export type Database = {
           total_tickets?: number
           verification_hash?: string
           winner_display_name?: string
+          winner_photo_url?: string | null
+          winner_quote?: string | null
           winner_town?: string
           winning_number?: number
         }
@@ -573,6 +582,7 @@ export type Database = {
           drew_from: string
           id: string
           notes: string
+          photo_consent: boolean
           prize: string
           qualifying_pool_size: number | null
           seed_hash: string
@@ -581,6 +591,8 @@ export type Database = {
           total_tickets: number
           verification_hash: string
           winner_display_name: string
+          winner_photo_url: string | null
+          winner_quote: string | null
           winner_town: string
           winning_number: number
         }[]
@@ -629,6 +641,7 @@ export type Database = {
           drew_from: string
           id: string
           notes: string
+          photo_consent: boolean
           prize: string
           qualifying_pool_size: number | null
           seed_hash: string
@@ -637,6 +650,8 @@ export type Database = {
           total_tickets: number
           verification_hash: string
           winner_display_name: string
+          winner_photo_url: string | null
+          winner_quote: string | null
           winner_town: string
           winning_number: number
         }
