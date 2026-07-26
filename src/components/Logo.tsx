@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import crest from "@/assets/crest.png.asset.json";
+import crest from "@/assets/lucky-git-seal.png.asset.json";
 
 const CREST_URL = crest.url;
 
@@ -11,8 +11,8 @@ export function SmugSmile({ className = "" }: { className?: string }) {
       alt=""
       aria-hidden="true"
       className={className}
-      width={1420}
-      height={800}
+      width={1400}
+      height={1400}
       loading="lazy"
     />
   );
@@ -43,8 +43,8 @@ export function Logo({
         src={CREST_URL}
         alt="Lucky Git Comps"
         className={`${sizing} object-contain max-w-none ${blend}`}
-        width={1420}
-        height={800}
+        width={1400}
+        height={1400}
         loading="eager"
       />
     </Link>
@@ -87,11 +87,10 @@ export function WaxSeal({
         <img
           src={CREST_URL}
           alt="Lucky Git Comps"
-          width={1420}
-          height={800}
+          width={1400}
+          height={1400}
           loading="eager"
-          className="block h-[170%] w-[170%] max-w-none -translate-x-[20%] -translate-y-[18%] object-cover mix-blend-multiply"
-          style={{ objectPosition: "50% 30%" }}
+          className="block h-full w-full object-cover mix-blend-multiply"
         />
       </span>
     </Link>
