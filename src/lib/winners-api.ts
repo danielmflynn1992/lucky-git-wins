@@ -1,6 +1,26 @@
 import { queryOptions } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { IMAGES } from "@/lib/competitions-api";
+import audi from "@/assets/prize-audi.jpg";
+import tech from "@/assets/prize-tech.jpg";
+import cash from "@/assets/prize-cash.jpg";
+import holiday from "@/assets/prize-holiday.jpg";
+import ps5 from "@/assets/prize-ps5.jpg";
+import watch from "@/assets/prize-watch.jpg";
+
+// Keyword → bundled asset. Used when a draw's competition has no image
+// (older seed rows, deleted comps) so the Smug Gits wall never shows an
+// empty typographic panel.
+function placeholderForPrize(prize: string, title: string): string {
+  const s = `${prize} ${title}`.toLowerCase();
+  if (/(rolex|watch|submariner|omega|tag|timepiece)/.test(s)) return watch;
+  if (/(audi|bmw|merc|porsche|car|motor|rs3|golf|m3)/.test(s)) return audi;
+  if (/(ps5|xbox|playstation|console|iphone|macbook|ipad|apple|tech|gadget|airpods)/.test(s)) return tech;
+  if (/(maldives|holiday|getaway|villa|trip|flight|dubai|ibiza)/.test(s)) return holiday;
+  if (/(ps5)/.test(s)) return ps5;
+  if (/(£|cash|readies|grand|k\b|pony|monkey)/.test(s)) return cash;
+  return cash;
+}
 
 export type Winner = {
   id: string;
@@ -50,7 +70,7 @@ export const winnersQuery = queryOptions({
       const image =
         (slug && IMAGES[slug]) ||
         (dbImage && /^https?:\/\//i.test(dbImage) ? dbImage : null) ||
-        null;
+        placeholderForPrize(d.prize ?? "", d.competition_title ?? "");
       return {
         id: d.id,
         competition_title: d.competition_title,
