@@ -150,7 +150,7 @@ export function SiteNav() {
           className={
             "relative mx-auto max-w-7xl px-3 md:px-6 grid items-center gap-2 md:gap-4 mast-transition overflow-hidden " +
             "grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] " +
-            (scrolled ? "h-16" : "h-24")
+            "h-16"
           }
         >
           {/* LEFT edge — hamburger only, unchanged position. */}
@@ -172,9 +172,7 @@ export function SiteNav() {
             aria-label="Lucky Git Comps — home"
             className={
               "relative justify-self-center block overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-clover " +
-              (scrolled
-                ? "h-14 w-[min(64vw,178px)]"
-                : "h-[88px] w-[min(68vw,279px)]")
+              "h-12 w-[min(58vw,160px)]"
             }
           >
             {/* The source PNG includes a large transparent canvas. Crop that
