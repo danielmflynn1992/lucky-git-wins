@@ -34,7 +34,10 @@
   --color-gold-foreground: #14130F;
 
   --color-ember:         #B4593A;
-  /* Back-compat aliases — old markup uses `hot` */
+  /* Urgency accent — rust ember, never brick red */
+  --color-urgent:            #B4593A;
+  --color-urgent-foreground: #F7F6F3;
+  /* Back-compat aliases */
   --color-hot:           #B4593A;
   --color-hot-foreground: #F7F6F3;
 

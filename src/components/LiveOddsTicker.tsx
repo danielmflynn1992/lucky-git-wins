@@ -125,7 +125,7 @@ function TickerItem({ c }: { c: LiveOdds }) {
             />
           )}
           <TooltipRow
-            icon={<Clock className="h-3 w-3 text-hot" />}
+            icon={<Clock className="h-3 w-3 text-urgent" />}
             label="Closes in"
             value={closes}
             hint="Automatic draw as soon as the timer hits zero."

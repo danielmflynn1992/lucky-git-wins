@@ -20,7 +20,7 @@ export function Countdown({ target, compact = false }: { target: string; compact
         compact ? "text-[11px]" : "text-xs"
       } ${
         urgent
-          ? "bg-hot text-hot-foreground"
+          ? "bg-urgent text-urgent-foreground"
           : "bg-ink text-cream"
       }`}
     >

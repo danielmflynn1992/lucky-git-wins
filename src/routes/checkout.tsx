@@ -67,7 +67,7 @@ function Checkout() {
       <div className="min-h-screen flex flex-col">
         <SiteNav />
         <main className="mx-auto max-w-xl px-4 py-16 w-full flex-1 text-center">
-          <div className="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-full bg-hot/15 text-hot">
+          <div className="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-full bg-urgent/15 text-urgent">
             <AlertTriangle className="h-7 w-7" />
           </div>
           <h1 className="mt-6 font-display text-3xl font-semibold tracking-tight">Your basket is tragically empty.</h1>
@@ -241,7 +241,7 @@ function SuccessScreen({ compTitle, numbers }: { compTitle: string; numbers: num
 
 function Confetti() {
   const bits = Array.from({ length: 40 });
-  const colors = ["#10B77F", "#E8B54D", "#0B1F17"];
+  const colors = ["#12503A", "#C9A227", "#0A100D"];
   return (
     <div className="absolute inset-0 pointer-events-none" aria-hidden>
       {bits.map((_, i) => (

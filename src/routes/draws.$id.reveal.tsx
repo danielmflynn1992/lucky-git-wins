@@ -172,7 +172,7 @@ function RevealPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-ink text-cream">
+    <div className="grain relative min-h-screen flex flex-col bg-ink text-cream">
       <SiteNav />
       <main className="flex-1 w-full">
         <section className="mx-auto max-w-4xl px-4 pt-14 pb-6">
@@ -356,7 +356,7 @@ function VerdictPill({ matches, children }: { matches: boolean; children: React.
         "mt-3 rounded-md p-3 flex items-start gap-2 text-sm font-semibold " +
         (matches
           ? "bg-clover/15 text-clover-foreground border border-clover/40 text-clover"
-          : "bg-hot/15 border border-hot/40 text-hot")
+          : "bg-urgent/15 border border-urgent/40 text-urgent")
       }
     >
       {matches ? <CheckCircle2 className="h-4 w-4 mt-0.5" /> : <XCircle className="h-4 w-4 mt-0.5" />}

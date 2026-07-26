@@ -152,7 +152,7 @@ function CompDetail() {
                 loading="eager"
               />
               <div className="absolute top-4 left-4 flex gap-1.5">
-                {c.hot && <span className="rounded-sm bg-hot text-hot-foreground px-2 py-1 text-[10px] font-semibold uppercase tracking-wider">Hot</span>}
+                {c.hot && <span className="rounded-sm bg-urgent text-urgent-foreground px-2 py-1 text-[10px] font-semibold uppercase tracking-wider">Hot</span>}
                 {c.instantWin && <span className="rounded-sm bg-gold text-gold-foreground px-2 py-1 text-[10px] font-semibold uppercase tracking-wider">Instant wins inside</span>}
               </div>
             </div>
@@ -264,18 +264,18 @@ function CompDetail() {
               )}
 
               {reserveError && (
-                <div className="mt-3 rounded-lg border-2 border-hot/40 bg-hot/10 p-3 text-xs text-hot">
+                <div className="mt-3 rounded-lg border-2 border-urgent/40 bg-urgent/10 p-3 text-xs text-urgent">
                   <div className="flex items-start gap-2 font-bold">
                     <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" />
                     <span>{reserveError}</span>
                   </div>
                   {availableLeft !== null && !soldOut && (
-                    <div className="mt-1 pl-6 font-mono text-[11px] tabular-nums text-hot/80">
+                    <div className="mt-1 pl-6 font-mono text-[11px] tabular-nums text-urgent/80">
                       {availableLeft} of {c.totalTickets} tickets left
                     </div>
                   )}
                   {soldOut && (
-                    <div className="mt-1 pl-6 font-mono text-[11px] tabular-nums text-hot/80">
+                    <div className="mt-1 pl-6 font-mono text-[11px] tabular-nums text-urgent/80">
                       Sold out — 0 tickets remaining
                     </div>
                   )}

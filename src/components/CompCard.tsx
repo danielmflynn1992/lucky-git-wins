@@ -40,7 +40,7 @@ export function CompCard({ c }: { c: Competition }) {
         )}
         <NoDeadCompsBadge />
         {almostGone && (
-          <span className="hidden sm:inline-block rounded-full bg-hot text-hot-foreground px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider shadow-sm whitespace-nowrap">
+          <span className="hidden sm:inline-block rounded-full bg-urgent text-urgent-foreground px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider shadow-sm whitespace-nowrap">
             Only {remaining} left
           </span>
         )}

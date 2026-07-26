@@ -45,7 +45,7 @@ export function LetterboxImage({
       : {};
   return (
     <div
-      className={`relative overflow-hidden ${style === "solid" || style === "gradient" ? "bg-muted" : "bg-muted"} ${className}`}
+      className={`prize-stage relative overflow-hidden ${style === "solid" || style === "gradient" ? "bg-muted" : "bg-muted"} ${className}`}
       style={gradientStyle}
       data-letterbox={style}
     >
