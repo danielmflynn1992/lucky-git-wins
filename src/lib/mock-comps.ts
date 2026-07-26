@@ -45,11 +45,6 @@ export const COMPETITIONS: Competition[] = [
     hot: true,
     description:
       "A brand new Audi RS3 in Tango Red with the Vorsprung pack. If a car isn't your thing, or you'd rather not explain a new Audi to your accountant, take £45,000 in cash instead. We won't judge. Much.",
-    skillQuestion: {
-      q: "Which of these is a German car manufacturer?",
-      options: ["Ferrari", "Toyota", "Audi", "Rolls-Royce"],
-      correct: 2,
-    },
   },
   {
     slug: "apple-tech-bundle",
@@ -68,11 +63,6 @@ export const COMPETITIONS: Competition[] = [
     hot: true,
     description:
       "The whole shiny lot: iPhone 17 Pro Max, 16\" MacBook Pro M-something, AirPods Pro. Plus 20 instant win tickets worth £50 each hidden inside. Yes, really.",
-    skillQuestion: {
-      q: "AirPods are made by which company?",
-      options: ["Samsung", "Sony", "Apple", "Google"],
-      correct: 2,
-    },
   },
   {
     slug: "10k-cash",
@@ -90,11 +80,6 @@ export const COMPETITIONS: Competition[] = [
     instantWin: false,
     description:
       "Ten grand. In your bank. Within 48 hours of the draw. Do what you like with it — we'd suggest not the horses.",
-    skillQuestion: {
-      q: "How many pounds in a thousand?",
-      options: ["10", "100", "1,000", "10,000"],
-      correct: 2,
-    },
   },
   {
     slug: "maldives-getaway",
@@ -112,11 +97,6 @@ export const COMPETITIONS: Competition[] = [
     instantWin: false,
     description:
       "A week of pretending you're the sort of person who deserves this. Business class flights, overwater bungalow, all inclusive. Bring someone you actually like.",
-    skillQuestion: {
-      q: "The Maldives are in which ocean?",
-      options: ["Atlantic", "Indian", "Pacific", "Arctic"],
-      correct: 1,
-    },
   },
   {
     slug: "ps5-pro-instant",
@@ -135,11 +115,6 @@ export const COMPETITIONS: Competition[] = [
     hot: true,
     description:
       "A quid a ticket, 25 instant-win prizes hidden throughout (£10 credits, wireless pads, an OLED telly), and one absolute champion walks off with the console bundle.",
-    skillQuestion: {
-      q: "PlayStation is made by which company?",
-      options: ["Microsoft", "Nintendo", "Sony", "Sega"],
-      correct: 2,
-    },
   },
   {
     slug: "rolex-submariner",
@@ -157,11 +132,6 @@ export const COMPETITIONS: Competition[] = [
     instantWin: false,
     description:
       "Genuine, boxed, papered. The watch that says 'I've done alright.' Or take the eleven grand and just tell people you did.",
-    skillQuestion: {
-      q: "Rolex was founded in which country?",
-      options: ["Italy", "Switzerland", "Germany", "France"],
-      correct: 1,
-    },
   },
 ];
 
