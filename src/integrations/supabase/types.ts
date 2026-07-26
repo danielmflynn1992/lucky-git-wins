@@ -313,50 +313,28 @@ export type Database = {
         }
       }
       claim_admin_if_empty: { Args: never; Returns: boolean }
-      create_competition_with_tickets:
-        | {
-            Args: {
-              p_cash_alternative: number
-              p_category: string
-              p_description: string
-              p_ends_at: string
-              p_hot: boolean
-              p_image: string
-              p_instant_win: boolean
-              p_instant_win_count: number
-              p_instant_win_prize: number
-              p_max_per_person: number
-              p_price_per_ticket: number
-              p_slug: string
-              p_status: string
-              p_subtitle: string
-              p_title: string
-              p_total_tickets: number
-            }
-            Returns: string
-          }
-        | {
-            Args: {
-              p_cash_alternative: number
-              p_category: string
-              p_description: string
-              p_ends_at: string
-              p_hot: boolean
-              p_image: string
-              p_instant_win: boolean
-              p_instant_win_count: number
-              p_instant_win_prize: number
-              p_letterbox_style?: string
-              p_max_per_person: number
-              p_price_per_ticket: number
-              p_slug: string
-              p_status: string
-              p_subtitle: string
-              p_title: string
-              p_total_tickets: number
-            }
-            Returns: string
-          }
+      create_competition_with_tickets: {
+        Args: {
+          p_cash_alternative: number
+          p_category: string
+          p_description: string
+          p_ends_at: string
+          p_hot: boolean
+          p_image: string
+          p_instant_win: boolean
+          p_instant_win_count: number
+          p_instant_win_prize: number
+          p_letterbox_style?: string
+          p_max_per_person: number
+          p_price_per_ticket: number
+          p_slug: string
+          p_status: string
+          p_subtitle: string
+          p_title: string
+          p_total_tickets: number
+        }
+        Returns: string
+      }
       draw_competition: {
         Args: { p_comp_id: string; p_notes?: string }
         Returns: {
