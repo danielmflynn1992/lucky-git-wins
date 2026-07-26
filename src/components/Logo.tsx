@@ -1,9 +1,9 @@
 import { Link } from "@tanstack/react-router";
 import crest from "@/assets/lucky-git-seal.png.asset.json";
-import lockupHorizontalSrc from "@/assets/lockups/lockup-horizontal-simple.svg?raw";
-import lockupStackedSrc from "@/assets/lockups/lockup-stacked.svg?raw";
+import lockupImage from "@/assets/lockups/lockup-horizontal.png.asset.json";
 
 const CREST_URL = crest.url;
+const LOCKUP_URL = lockupImage.url;
 
 /**
  * StampSeal — the crest at scale, used as a static stamp on non-scrolling
@@ -67,19 +67,27 @@ export function Lockup({
   variant = "horizontal",
   className = "",
   style,
+  tone = "ink",
 }: {
   variant?: "horizontal" | "stacked";
   className?: string;
   style?: React.CSSProperties;
+  tone?: "ink" | "cream";
 }) {
-  const svg = variant === "stacked" ? lockupStackedSrc : lockupHorizontalSrc;
+  // Single raster lockup for every surface. White background is dropped via
+  // mix-blend-multiply on light surfaces; on dark surfaces we invert to get
+  // a cream lockup on ink (black → transparent via mix-blend-screen).
+  const blend =
+    tone === "cream"
+      ? "[filter:invert(1)] mix-blend-screen"
+      : "mix-blend-multiply";
   return (
-    <span
-      aria-label="Lucky Git Comps"
-      role="img"
-      className={`inline-block [&_svg]:block [&_svg]:h-full [&_svg]:w-full ${className}`}
-      style={{ lineHeight: 0, ...style }}
-      dangerouslySetInnerHTML={{ __html: svg }}
+    <img
+      src={LOCKUP_URL}
+      alt="Lucky Git Comps"
+      draggable={false}
+      className={`block object-contain select-none ${blend} ${className}`}
+      style={{ maxWidth: "100%", height: "auto", ...style }}
     />
   );
 }
