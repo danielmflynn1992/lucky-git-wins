@@ -12,6 +12,7 @@ import { LetterboxImage } from "@/components/LetterboxImage";
 import { COMPETITIONS } from "@/lib/mock-comps";
 import { gbp, shortNumber, pickLoadingQuip, moneySlang } from "@/lib/format";
 import { LuckyMark } from "@/components/GaryMascot";
+import { CouponGrid } from "@/components/CouponGrid";
 import {
   competitionQueryOptions,
   explainReservationFailure,
@@ -80,13 +81,31 @@ function CompDetail() {
 
   const displayNumbers = picker === "manual" ? picked.size : qty;
 
-  const [numberPage, setNumberPage] = useState(0);
-  const PAGE_SIZE = 120;
-  const pageCount = Math.ceil(c.totalTickets / PAGE_SIZE);
-  const startNum = numberPage * PAGE_SIZE + 1;
-  const endNum = Math.min(c.totalTickets, startNum + PAGE_SIZE - 1);
-
   const related = COMPETITIONS.filter((x) => x.slug !== c.slug).slice(0, 3);
+
+  const toggleNumber = (n: number) => {
+    setPicked((prev) => {
+      const next = new Set(prev);
+      if (next.has(n)) next.delete(n);
+      else if (next.size < Math.min(c.maxPerPerson, c.ticketsAvailable)) next.add(n);
+      return next;
+    });
+  };
+
+  const doLuckyDip = () => {
+    const available: number[] = [];
+    for (let n = 1; n <= c.totalTickets && available.length < c.ticketsAvailable; n++) {
+      if (!takenSet.has(n)) available.push(n);
+    }
+    const want = Math.min(qty || 5, available.length, c.maxPerPerson);
+    const next = new Set<number>();
+    while (next.size < want && available.length > 0) {
+      const i = Math.floor(Math.random() * available.length);
+      next.add(available.splice(i, 1)[0]);
+    }
+    setPicker("manual");
+    setPicked(next);
+  };
 
   const handleReserve = async () => {
     setReserveError(null);
@@ -231,40 +250,22 @@ function CompDetail() {
                 </div>
               ) : (
                 <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Tap to pick</div>
-                    <div className="flex items-center gap-1 text-xs font-mono tabular-nums">
-                      <button disabled={numberPage === 0} onClick={() => setNumberPage((p) => Math.max(0, p - 1))} className="px-2 py-1 rounded border border-border disabled:opacity-30">←</button>
-                      <span className="px-2">{startNum}–{endNum}</span>
-                      <button disabled={numberPage >= pageCount - 1} onClick={() => setNumberPage((p) => Math.min(pageCount - 1, p + 1))} className="px-2 py-1 rounded border border-border disabled:opacity-30">→</button>
-                    </div>
+                  <div className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-2">
+                    Tap a number, or type them in.
                   </div>
-                  <div className="rounded-xl border-2 border-border p-2 bg-background grid grid-cols-10 gap-1">
-                    {Array.from({ length: endNum - startNum + 1 }, (_, i) => startNum + i).map((n) => {
-                      const taken = takenSet.has(n);
-                      const isPicked = picked.has(n);
-                      return (
-                        <button
-                          key={n}
-                          disabled={taken}
-                          onClick={() => {
-                            const next = new Set(picked);
-                            next.has(n) ? next.delete(n) : next.add(n);
-                            setPicked(next);
-                          }}
-                          className={`text-[10px] font-mono tabular-nums aspect-square rounded ${
-                            taken ? "bg-white/5 text-foreground/20 line-through cursor-not-allowed" :
-                            isPicked ? "bg-clover text-ink ring-1 ring-clover" :
-                            "bg-card hover:bg-clover/10"
-                          }`}
-                        >{n}</button>
-                      );
-                    })}
-                  </div>
-                  <div className="mt-2 flex items-center justify-between text-xs text-muted-foreground font-mono tabular-nums">
-                    <span>{picked.size} selected</span>
-                    {picked.size > 0 && <button onClick={() => setPicked(new Set())} className="underline">clear</button>}
-                  </div>
+                  <CouponGrid
+                    total={c.totalTickets}
+                    sold={takenSet}
+                    picked={picked}
+                    onToggle={toggleNumber}
+                    onLuckyDip={doLuckyDip}
+                    cols={Math.min(25, Math.max(10, Math.ceil(Math.sqrt(c.totalTickets * 1.6))))}
+                  />
+                  {picked.size > 0 && (
+                    <button onClick={() => setPicked(new Set())} className="mt-2 text-xs font-mono underline text-muted-foreground">
+                      clear selection
+                    </button>
+                  )}
                 </div>
               )}
 
