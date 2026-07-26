@@ -128,7 +128,7 @@ export function SiteNav() {
         to="/"
         aria-label="Lucky Git Comps — home"
         className="block w-full overflow-hidden bg-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-clover"
-        style={{ height: "clamp(64px, 22vw, 108px)", padding: "6px 0" }}
+        style={{ height: "clamp(56px, 18vw, 96px)", padding: "4px 0" }}
       >
         <img
           src={LOCKUP_HORIZONTAL_URL}
