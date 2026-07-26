@@ -163,9 +163,7 @@ function Home() {
             { i: Ticket, t: "Every ticket number published" },
           ].map(({ i: Icon, t }) => (
             <div key={t} className="flex items-center gap-3">
-              <span className="h-9 w-9 rounded-md bg-clover/10 text-clover flex items-center justify-center shrink-0">
-                <Icon className="h-4 w-4" />
-              </span>
+              <Icon className="h-4 w-4 shrink-0 text-[var(--color-ink-blue)]" strokeWidth={2.25} />
               <span className="font-semibold text-foreground/85">{t}</span>
             </div>
           ))}

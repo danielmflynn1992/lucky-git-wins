@@ -126,11 +126,11 @@ export function SiteNav() {
           Height 68px mobile / 80px desktop, condensing to 56px on scroll.
           Bottom border is a double rule (2px clover + 1px paper-edge hairline
           3px beneath) — the certificate-header treatment. */}
-      {/* overflow-visible so the oversized centre lockup can extend
-          above/below the fixed row height without pushing the header
-          taller. The guilloché backdrop has its own overflow-hidden
-          wrapper below so it stays clipped. */}
-      <div className="relative bg-card overflow-visible mast-transition data-[scrolled=true]:h-14" data-scrolled={scrolled ? "true" : "false"}>
+      {/* Masthead container. Height is fixed but tall enough to fully
+          contain the 68px banner plus vertical breathing room and the
+          double-rule bottom border. No overflow tricks — the banner
+          fits inside the row so nothing is clipped top or bottom. */}
+      <div className="relative bg-card mast-transition" data-scrolled={scrolled ? "true" : "false"}>
         {/* Faint guilloché backdrop — fades to the edges, disappears on scroll. */}
         <div
           aria-hidden="true"
@@ -150,7 +150,7 @@ export function SiteNav() {
           className={
             "relative mx-auto max-w-7xl px-3 md:px-6 grid items-center gap-2 md:gap-4 mast-transition " +
             "grid-cols-[1fr_auto_1fr] " +
-            (scrolled ? "h-14" : "h-[88px]")
+            (scrolled ? "h-16" : "h-24")
           }
         >
           {/* LEFT edge — hamburger only, unchanged position. */}
@@ -170,20 +170,18 @@ export function SiteNav() {
           <Link
             to="/"
             aria-label="Lucky Git Comps — home"
-            className="justify-self-center inline-flex items-center bg-transparent p-0 border-0 shadow-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-clover rounded-sm overflow-visible"
+            className="justify-self-center inline-flex items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-clover"
           >
-            {/* Lockup PNG has ~15% whitespace padding baked in, so the
-                visible wordmark is smaller than the bounding box. Height
-                is set well above the header row (88px normal / 56px
-                scrolled) and the parents allow overflow so the artwork
-                extends slightly above/below the row without pushing the
-                header taller. */}
+            {/* Transparent-background banner. Fits entirely within the
+                96px header row with ~8px clearance from the double-rule
+                bottom border. No wrapper background, padding, or border. */}
             <Lockup
               style={{
-                height: 56,
+                height: scrolled ? 48 : 68,
                 width: "auto",
-                maxWidth: "74vw",
+                maxWidth: "78vw",
                 objectFit: "contain",
+                display: "block",
               }}
             />
           </Link>
@@ -232,7 +230,9 @@ export function SiteNav() {
         {/* Double-rule bottom border — 2px clover line, then a 1px paper-edge
             hairline 3px beneath. Certificate-plate treatment; persists on
             scroll so the masthead always reads as engraved. */}
-        <div aria-hidden="true" className="absolute left-0 right-0 -bottom-1 pointer-events-none">
+        {/* Double-rule sits BELOW the banner with clearance so it never
+            crosses the artwork. */}
+        <div aria-hidden="true" className="absolute left-0 right-0 bottom-0 pointer-events-none">
           <div className="h-[2px] bg-clover" />
           <div className="h-px bg-[var(--color-paper-edge)] mt-[3px]" />
         </div>
