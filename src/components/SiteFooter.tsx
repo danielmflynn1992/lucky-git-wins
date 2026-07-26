@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Bell } from "lucide-react";
-import { StampSeal, Wordmark } from "./Logo";
+import { Lockup } from "./Logo";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
@@ -26,9 +26,8 @@ export function SiteFooter() {
     <footer className="grain relative mt-24 bg-ink text-cream border-t border-border">
       <div className="mx-auto max-w-7xl px-4 py-12 grid gap-10 md:grid-cols-4">
         <div className="md:col-span-1">
-          <div className="flex flex-col items-start gap-3">
-            <StampSeal size={100} tone="cream" />
-            <Wordmark variant="detailed" className="h-16 text-cream" style={{ minWidth: 240 }} />
+          <div className="flex">
+            <Lockup variant="stacked" className="text-cream" style={{ maxWidth: 220, width: "100%", height: "auto" }} />
           </div>
           <p className="mt-4 text-sm text-cream/85 max-w-xs leading-relaxed">
             The odds, out in the open. A UK prize competition platform built on automated, verifiable draws and a public results log.
