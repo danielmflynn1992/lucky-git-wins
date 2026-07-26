@@ -115,23 +115,42 @@ export function WinnerCard({
       >
         <div ref={panelRef} className="border-t-[1.5px] border-dashed border-[var(--color-ink-black)] relative">
           {w.image ? (
-            <div className="prize-treatment pointer-events-none relative z-0 mx-3 mt-3 aspect-[4/3]">
-              <img
-                src={w.image}
-                alt={w.prize}
-                loading="lazy"
-                width={1280}
-                height={960}
-              />
+            <div className="relative mx-3 mt-3">
+              <div className="prize-treatment pointer-events-none relative z-0 aspect-[4/3]">
+                <img
+                  src={w.image}
+                  alt={w.prize}
+                  loading="lazy"
+                  width={1280}
+                  height={960}
+                />
+              </div>
+              <span
+                aria-hidden
+                className="pointer-events-none absolute z-20 font-display uppercase tracking-[0.18em] text-[22px] text-[var(--color-ink-red)] border-[2.5px] border-[var(--color-ink-red)] px-2.5 py-0.5 select-none mix-blend-multiply"
+                style={{
+                  right: "24px",
+                  bottom: "24px",
+                  transform: "rotate(-8deg)",
+                  opacity: 0.85,
+                  fontFamily: "var(--font-display, inherit)",
+                }}
+              >
+                Paid Out
+              </span>
             </div>
           ) : null}
 
           {showWinnerPhoto ? (
-            <div className="px-3 pt-4 flex justify-center">
+            <div className={cn("px-3 flex justify-center relative", w.image ? "-mt-10 z-10" : "pt-4") }>
               <figure
-                className="bg-[var(--color-card-white)] p-2 pb-6 shadow-[0_4px_10px_rgba(0,0,0,0.18)] border border-[var(--color-paper-edge)] max-w-[180px]"
-                style={{ transform: "rotate(-2.5deg)" }}
+                className="relative bg-[var(--color-card-white)] p-3 pb-10 shadow-[0_10px_24px_rgba(0,0,0,0.28)] border border-[var(--color-paper-edge)] w-full max-w-[320px]"
+                style={{ transform: "rotate(-2deg)" }}
               >
+                <span
+                  aria-hidden
+                  className="absolute -top-2 left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-[var(--color-ink-red)] shadow-[0_1px_2px_rgba(0,0,0,0.4)]"
+                />
                 <div className="aspect-square overflow-hidden bg-[var(--color-paper-deep)]">
                   <img
                     src={w.winner_photo_url!}
@@ -140,7 +159,7 @@ export function WinnerCard({
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <figcaption className="mt-1 font-mono text-[10px] text-center text-[var(--color-ink-black)]">
+                <figcaption className="mt-2 font-mono text-[11px] text-center text-[var(--color-ink-black)]">
                   {w.winner_display_name}
                   {w.winner_town ? ` · ${w.winner_town}` : ""}
                 </figcaption>
@@ -179,14 +198,6 @@ export function WinnerCard({
           ) : (
             <div className="pb-4" />
           )}
-
-          <span
-            aria-hidden
-            className="pointer-events-none absolute bottom-2 right-2 font-display uppercase tracking-[0.18em] text-[18px] text-[var(--color-coupon-red)]/85 border-[2.5px] border-[var(--color-coupon-red)]/85 px-2 py-0.5 rotate-[-8deg] select-none mix-blend-multiply"
-            style={{ fontFamily: "var(--font-display, inherit)" }}
-          >
-            Paid Out
-          </span>
         </div>
       </div>
     </article>
