@@ -10,11 +10,13 @@ import { toast } from "sonner";
 
 const leftLinks = [
   { to: "/competitions", label: "Get Tickets" },
+  { to: "/odds", label: "Best Odds" },
   { to: "/winners", label: "Winners" },
   { to: "/how-it-works", label: "How It Works" },
 ];
 const rightLinks = [
   { to: "/past-draws", label: "Results" },
+  { to: "/promise", label: "The 499 Promise" },
   { to: "/faq", label: "FAQ" },
   { to: "/", label: "Contact" },
 ];
