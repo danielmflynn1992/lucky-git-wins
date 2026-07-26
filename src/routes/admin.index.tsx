@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { drawCompetition, autoDrawExpired } from "@/lib/admin.functions";
 import { gbp, shortNumber } from "@/lib/format";
-import { Copy, Plus, Play, Pause, Trophy, Loader2, Zap } from "lucide-react";
+import { Copy, Plus, Play, Pause, Trophy, Loader2, Zap, AlertTriangle } from "lucide-react";
 
 interface AdminRow {
   id: string;
@@ -97,6 +97,16 @@ function Admin() {
     <div className="min-h-screen flex flex-col bg-background">
       <SiteNav />
       <main className="mx-auto max-w-7xl px-4 py-6 w-full flex-1">
+        <div className="mb-6 rounded-2xl border-2 border-hot/50 bg-hot/10 p-4 flex items-start gap-3">
+          <AlertTriangle className="h-5 w-5 text-hot shrink-0 mt-0.5" />
+          <div className="text-sm">
+            <div className="font-display font-bold text-hot">Do not enable live Stripe payments without a gambling-law review.</div>
+            <p className="mt-1 text-foreground/80">
+              The site is structured as a free draw under Schedule 2 of the Gambling Act 2005: every competition ships with a free entry route at{" "}
+              <code className="font-mono">/free-entry</code>, linked at equal prominence from every competition page and checkout. Before accepting real money, have a UK gambling-law solicitor confirm the structure, T&amp;Cs, and free-entry mechanics.
+            </p>
+          </div>
+        </div>
         <div className="flex items-center justify-between flex-wrap gap-3">
           <div>
             <h1 className="font-display text-3xl md:text-4xl font-black">Admin</h1>

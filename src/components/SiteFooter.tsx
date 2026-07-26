@@ -17,6 +17,7 @@ export function SiteFooter() {
             <li><Link to="/competitions" className="hover:text-gold">Live Competitions</Link></li>
             <li><Link to="/winners" className="hover:text-gold">Winners Wall</Link></li>
             <li><Link to="/how-it-works" className="hover:text-gold">How it works</Link></li>
+            <li><Link to="/free-entry" className="hover:text-gold font-bold">Free entry (no purchase)</Link></li>
           </ul>
         </div>
         <div>
@@ -25,6 +26,7 @@ export function SiteFooter() {
             <li><Link to="/terms" className="hover:text-gold">Terms & Conditions</Link></li>
             <li><Link to="/privacy" className="hover:text-gold">Privacy Policy</Link></li>
             <li><Link to="/responsible-play" className="hover:text-gold">Responsible Play</Link></li>
+            <li><Link to="/legal-structure" className="hover:text-gold">Legal structure</Link></li>
             <li><Link to="/faq" className="hover:text-gold">FAQ</Link></li>
           </ul>
         </div>
