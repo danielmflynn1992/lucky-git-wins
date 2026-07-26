@@ -17,7 +17,7 @@ export function CompCard({ c }: { c: Competition }) {
     <Link
       to="/competitions/$slug"
       params={{ slug: c.slug }}
-      className="group relative flex flex-col rounded-lg bg-card border border-border overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 min-w-0 max-w-full [overflow-wrap:anywhere]"
+      className="group relative flex h-full flex-col rounded-lg bg-card border border-border overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 min-w-0 max-w-full [overflow-wrap:anywhere]"
     >
       {/* Tag row */}
       <div className="absolute top-3 left-3 z-10 flex gap-1.5">
@@ -51,8 +51,8 @@ export function CompCard({ c }: { c: Competition }) {
       </div>
 
       {/* Content */}
-      <div className="p-2.5 sm:p-4 flex flex-col gap-2 sm:gap-3 min-w-0 overflow-hidden">
-        <div className="min-w-0">
+      <div className="p-2.5 sm:p-4 flex flex-1 flex-col gap-2 sm:gap-3 min-w-0 overflow-hidden">
+        <div className="min-w-0 min-h-[2.75rem] sm:min-h-[3.25rem]">
           <div className="text-[9px] sm:text-[10px] uppercase tracking-[0.12em] sm:tracking-[0.15em] font-semibold text-clover mb-0.5 sm:mb-1 truncate">{c.category}</div>
           <h3 className="font-display text-sm sm:text-lg font-bold leading-snug text-foreground line-clamp-2 break-words">{c.title}</h3>
         </div>
@@ -81,7 +81,7 @@ export function CompCard({ c }: { c: Competition }) {
         </div>
 
         {/* CTA row — equal-width buttons, never push the card */}
-        <div className="grid grid-cols-2 gap-1.5 min-w-0 items-stretch">
+        <div className="mt-auto grid grid-cols-2 gap-1.5 min-w-0 items-stretch">
           <div className="min-w-0 h-9 inline-flex items-center justify-center whitespace-nowrap rounded-md bg-clover text-primary-foreground px-1 font-display font-extrabold text-[11px] sm:text-xs uppercase tracking-[-0.02em] leading-none shadow-sm group-hover:bg-clover-deep group-hover:shadow-md group-focus-visible:bg-clover-deep group-focus-visible:ring-2 group-focus-visible:ring-clover/40 group-focus-visible:ring-offset-2 group-focus-visible:ring-offset-card transition-all">
             Enter&nbsp;Now&nbsp;→
           </div>
