@@ -31,6 +31,7 @@ import { Route as CompetitionsIndexRouteImport } from './routes/competitions.ind
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as DevCompcardRouteImport } from './routes/dev.compcard'
 import { Route as CompetitionsSlugRouteImport } from './routes/competitions.$slug'
+import { Route as DrawsIdRevealRouteImport } from './routes/draws.$id.reveal'
 import { Route as AdminCompetitionsNewRouteImport } from './routes/admin.competitions.new'
 
 const WinnersRoute = WinnersRouteImport.update({
@@ -143,6 +144,11 @@ const CompetitionsSlugRoute = CompetitionsSlugRouteImport.update({
   path: '/competitions/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DrawsIdRevealRoute = DrawsIdRevealRouteImport.update({
+  id: '/draws/$id/reveal',
+  path: '/draws/$id/reveal',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminCompetitionsNewRoute = AdminCompetitionsNewRouteImport.update({
   id: '/admin/competitions/new',
   path: '/admin/competitions/new',
@@ -173,6 +179,7 @@ export interface FileRoutesByFullPath {
   '/admin/': typeof AdminIndexRoute
   '/competitions/': typeof CompetitionsIndexRoute
   '/admin/competitions/new': typeof AdminCompetitionsNewRoute
+  '/draws/$id/reveal': typeof DrawsIdRevealRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -198,6 +205,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminIndexRoute
   '/competitions': typeof CompetitionsIndexRoute
   '/admin/competitions/new': typeof AdminCompetitionsNewRoute
+  '/draws/$id/reveal': typeof DrawsIdRevealRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -224,6 +232,7 @@ export interface FileRoutesById {
   '/admin/': typeof AdminIndexRoute
   '/competitions/': typeof CompetitionsIndexRoute
   '/admin/competitions/new': typeof AdminCompetitionsNewRoute
+  '/draws/$id/reveal': typeof DrawsIdRevealRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -251,6 +260,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/competitions/'
     | '/admin/competitions/new'
+    | '/draws/$id/reveal'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -276,6 +286,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/competitions'
     | '/admin/competitions/new'
+    | '/draws/$id/reveal'
   id:
     | '__root__'
     | '/'
@@ -301,6 +312,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/competitions/'
     | '/admin/competitions/new'
+    | '/draws/$id/reveal'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -327,6 +339,7 @@ export interface RootRouteChildren {
   AdminIndexRoute: typeof AdminIndexRoute
   CompetitionsIndexRoute: typeof CompetitionsIndexRoute
   AdminCompetitionsNewRoute: typeof AdminCompetitionsNewRoute
+  DrawsIdRevealRoute: typeof DrawsIdRevealRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -485,6 +498,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CompetitionsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/draws/$id/reveal': {
+      id: '/draws/$id/reveal'
+      path: '/draws/$id/reveal'
+      fullPath: '/draws/$id/reveal'
+      preLoaderRoute: typeof DrawsIdRevealRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/competitions/new': {
       id: '/admin/competitions/new'
       path: '/admin/competitions/new'
@@ -519,6 +539,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminIndexRoute: AdminIndexRoute,
   CompetitionsIndexRoute: CompetitionsIndexRoute,
   AdminCompetitionsNewRoute: AdminCompetitionsNewRoute,
+  DrawsIdRevealRoute: DrawsIdRevealRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
