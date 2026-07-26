@@ -33,6 +33,8 @@ export interface DbCompetition {
   subtitle: string;
   category: string;
   image: string;
+  thumbUrl: string;
+  supportingImages: string[];
   letterboxStyle: LetterboxStyle;
   pricePerTicket: number;
   totalTickets: number;
@@ -73,6 +75,8 @@ export async function fetchCompetitionBySlug(slug: string): Promise<DbCompetitio
     subtitle: comp.subtitle,
     category: comp.category,
     image: resolveImage(comp.image, comp.slug),
+    thumbUrl: (comp as { thumb_url?: string | null }).thumb_url || "",
+    supportingImages: ((comp as { supporting_images?: string[] | null }).supporting_images ?? []).filter(Boolean),
     letterboxStyle: ((comp as { letterbox_style?: string }).letterbox_style ?? "blur") as LetterboxStyle,
     pricePerTicket: Number(comp.price_per_ticket),
     totalTickets: comp.total_tickets,

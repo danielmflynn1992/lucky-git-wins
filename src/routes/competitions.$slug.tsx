@@ -8,7 +8,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { Countdown } from "@/components/Countdown";
 import { CompCard } from "@/components/CompCard";
 import { Button } from "@/components/ui/button";
-import { LetterboxImage } from "@/components/LetterboxImage";
+import { PrizeGallery } from "@/components/PrizeImage";
 import { COMPETITIONS } from "@/lib/mock-comps";
 import { gbp, shortNumber, pickLoadingQuip, moneySlang } from "@/lib/format";
 import { LuckyMark } from "@/components/GaryMascot";
@@ -165,19 +165,16 @@ function CompDetail() {
 
         <div className="grid gap-8 lg:grid-cols-5">
           <div className="lg:col-span-3">
-            <div className="relative rounded-3xl overflow-hidden bg-card border-2 border-border">
-              <LetterboxImage
-                src={c.image}
-                alt={c.title}
-                style={c.letterboxStyle}
-                className="w-full aspect-[4/3] rounded-lg"
-                width={1280}
-                height={960}
-                loading="eager"
+            <div className="relative">
+              <PrizeGallery
+                hero={c.image}
+                supporting={c.supportingImages}
+                title={c.title}
+                eyebrow={c.category}
               />
-              <div className="absolute top-4 left-4 flex gap-1.5">
-                {c.hot && <span className="rounded-sm bg-urgent text-urgent-foreground px-2 py-1 text-[10px] font-semibold uppercase tracking-wider">Hot</span>}
-              </div>
+              {c.hot && (
+                <span className="absolute top-3 left-3 z-10 rounded-sm bg-urgent text-urgent-foreground px-2 py-1 text-[10px] font-semibold uppercase tracking-wider">Hot</span>
+              )}
             </div>
           </div>
 

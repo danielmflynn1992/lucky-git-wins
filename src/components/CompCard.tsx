@@ -8,6 +8,7 @@ import { Plus, ArrowRight } from "lucide-react";
 import { LetterboxImage } from "./LetterboxImage";
 import { StampMark } from "./StampMark";
 import { Perforation } from "./Perforation";
+import { PrizeImage } from "./PrizeImage";
 
 const pad = (n: number, w = 4) => n.toString().padStart(w, "0");
 
@@ -69,22 +70,21 @@ export function CompCard({ c }: { c: Competition }) {
 
       <div className="mx-3 rule-dotted" aria-hidden="true" />
 
-      {/* Prize image on the printed stage — 4:3, cover, halftone + tint. */}
-      <div className="prize-treatment pointer-events-none relative z-0 mx-3 mt-2 aspect-[4/3]">
-        <img
-          src={c.image}
+      {/* Prize image on the printed stage — enforced 4:3 + treatment. */}
+      <div className="pointer-events-none relative z-0 mx-3 mt-2">
+        <PrizeImage
+          src={(c as unknown as { thumbUrl?: string }).thumbUrl || c.image}
           alt={c.title}
-          loading="lazy"
-          width={1280}
-          height={960}
-          className="transition-transform duration-500 group-hover:scale-[1.03]"
+          title={c.title}
+          eyebrow={c.category}
+          size="card"
         />
         {soldOut ? (
-          <span className="absolute inset-0 z-[5] flex items-center justify-center pointer-events-none">
+          <span className="absolute inset-0 z-[6] flex items-center justify-center pointer-events-none">
             <StampMark variant="SOLD OUT" size="lg" angle={-10} />
           </span>
         ) : almostGone ? (
-          <span className="absolute top-2 right-2 z-[5] pointer-events-none">
+          <span className="absolute top-2 right-2 z-[6] pointer-events-none">
             <StampMark variant="LIVE" size="sm" angle={-4} />
           </span>
         ) : null}

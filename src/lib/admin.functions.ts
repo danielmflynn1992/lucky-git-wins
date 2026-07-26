@@ -44,6 +44,8 @@ const createInput = z.object({
   subtitle: z.string().max(200).optional().default(""),
   category: z.string().min(1).max(40),
   image: z.string().max(1024).optional().default(""),
+  thumbUrl: z.string().max(1024).optional().default(""),
+  supportingImages: z.array(z.string().max(1024)).max(5).optional().default([]),
   description: z.string().max(4000).optional().default(""),
   pricePerTicket: z.number().positive().max(10000),
   totalTickets: z.number().int().min(1).max(100000),
@@ -103,6 +105,8 @@ export const createCompetition = createServerFn({ method: "POST" })
         p_option_d: data.optionD,
         p_correct_option: data.correctOption,
         p_letterbox_style: data.letterboxStyle,
+        p_thumb_url: data.thumbUrl || null,
+        p_supporting_images: data.supportingImages ?? [],
       },
     );
 
