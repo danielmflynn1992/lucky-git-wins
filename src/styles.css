@@ -5,42 +5,63 @@
 @custom-variant dark (&:is(.dark *));
 
 /* ============================================================
- * LUCKY GIT COMPS — Mint v2 (engraved security document)
+ * LUCKY GIT COMPS — Pools Coupon (two-colour offset on newsprint)
+ *
+ * PLATES: coupon red (--color-ink-red), pools blue (--color-ink-blue),
+ *         black body ink, purple rubber stamp. All on newsprint cream.
+ *
+ * Restraint rules (enforced in code review):
+ *   - Max 1 highlighter swipe per screen
+ *   - Max 1 rubber stamp per card, 2 per screen
+ *   - Alfa Slab One appears once per screen maximum
+ *   - Misregistration on display headings only
+ *   - Dense inside cards, generous between sections
+ *   - ≤3 distinct textures visible per screen
+ *
+ * Legacy alias tokens are kept and remapped: old "ink-green" now resolves
+ * to pools blue, old "paper" to newsprint cream, etc. This lets untouched
+ * routes inherit the coupon aesthetic without a per-file rewrite.
  * Fonts loaded via <link> in src/routes/__root.tsx.
  * ============================================================ */
 
 @theme {
-  /* ---------- PAPER ---------- */
-  --color-paper:        #F2EDE0;
-  --color-paper-raised: #F8F4EA;
-  --color-paper-deep:   #E7E0CE;
-  --color-paper-edge:   #D6CDB6;
+  /* ---------- NEWSPRINT ---------- */
+  --color-paper:        #F1EBDC;
+  --color-paper-raised: #F7F1E1;
+  --color-paper-deep:   #E4DCC6;
+  --color-paper-edge:   #C9BFA1;
   --color-paper-line:   var(--color-paper-edge);
   --color-paper-hairline: var(--color-paper-edge);
 
-  /* ---------- INK PLATES ---------- */
-  --color-ink-green:      #1F4D38;
-  --color-ink-green-deep: #133425;
-  --color-ink-green-soft: #4A7059;
-  --color-ink-red:        #8C2F26;
-  --color-ink-red-soft:   #B0574B;
+  /* ---------- INK PLATES (only 3 — red / blue / black) ---------- */
+  --color-ink-red:        #C8202B;   /* coupon red — mastheads, stamps, prizes */
+  --color-ink-red-soft:   #E24A54;
+  --color-ink-blue:       #1E3A8A;   /* pools blue — biro marks, verified rules */
+  --color-ink-blue-soft:  #3B5BC0;
+  --color-ink-purple:     #4A1E5C;   /* rubber stamp only */
+  --color-ink-yellow:     #F5D547;   /* highlighter only */
+  --color-ink-black:      #14110E;
+  --color-ink-grey:       #4E4A40;
 
-  --color-ink-black:      #1A1A17;
-  --color-ink-grey:       #5D5A50;
+  /* Legacy "green" tokens now resolve to pools blue so untouched code
+     that references --color-ink-green still gets a coherent plate colour. */
+  --color-ink-green:      var(--color-ink-blue);
+  --color-ink-green-deep: #14235C;
+  --color-ink-green-soft: var(--color-ink-blue-soft);
 
   /* ---------- NEGATIVE PLATE (draw reveal only) ---------- */
-  --color-plate-dark:     #0E1A14;
-  --color-plate-dark-2:   #14261C;
-  --color-plate-light:    #E8E4D6;
+  --color-plate-dark:     #0A0A0A;
+  --color-plate-dark-2:   #141410;
+  --color-plate-light:    #F5EEDC;
 
-  /* ---------- LEGACY ALIASES (kept so untouched code still resolves) ---------- */
+  /* ---------- LEGACY ALIASES ---------- */
   --color-pitch:           var(--color-paper-deep);
   --color-pitch-raised:    var(--color-paper);
   --color-pitch-line:      var(--color-paper-edge);
   --color-pitch-deep:      var(--color-paper);
   --color-pitch-hairline:  var(--color-paper-edge);
-  --color-ink-deep:        var(--color-ink-green-deep);
-  --color-ink:             var(--color-ink-green);
+  --color-ink-deep:        var(--color-ink-black);
+  --color-ink:             var(--color-ink-black);
   --color-ink-raised:      var(--color-paper-raised);
   --color-ink-hairline:    var(--color-paper-edge);
   --color-sheepskin:       var(--color-paper);
@@ -51,13 +72,13 @@
   --color-bone:            var(--color-paper);
   --color-bone-raised:     var(--color-paper-raised);
   --color-bone-hairline:   var(--color-paper-edge);
-  --color-forest:          var(--color-ink-green);
+  --color-forest:          var(--color-ink-blue);
   --color-forest-deep:     var(--color-ink-green-deep);
-  --color-forest-lift:     var(--color-ink-green-soft);
+  --color-forest-lift:     var(--color-ink-blue-soft);
   --color-forest-hover:    var(--color-ink-green-deep);
-  --color-clover:          var(--color-ink-green);
+  --color-clover:          var(--color-ink-blue);
   --color-clover-hover:    var(--color-ink-green-deep);
-  --color-clover-lift:     var(--color-ink-green-soft);
+  --color-clover-lift:     var(--color-ink-blue-soft);
   --color-clover-deep:     var(--color-ink-green-deep);
   --color-brass:            var(--color-ink-red);
   --color-brass-light:      var(--color-ink-red-soft);
@@ -74,13 +95,13 @@
   --color-cream:            var(--color-paper);
   --color-surface-raised:   var(--color-paper-raised);
 
-  /* Neutral ramp */
+  /* Neutral ramp — cool newsprint greys */
   --color-n-100: #F8F4EA;
   --color-n-200: #E7E0CE;
   --color-n-300: #C9BFA1;
   --color-n-400: #9A907A;
   --color-n-500: #6B6553;
-  --color-n-600: #4A4638;
+  --color-n-600: #3E3B33;
   --color-n-700: #2E2B22;
   --color-n-800: #1B1913;
   --color-n-900: #12100B;
@@ -96,11 +117,11 @@
   --color-popover:               var(--color-paper-raised);
   --color-popover-foreground:    var(--color-ink-black);
   --color-secondary:             var(--color-paper-deep);
-  --color-secondary-foreground:  var(--color-ink-green-deep);
+  --color-secondary-foreground:  var(--color-ink-black);
   --color-border:                var(--color-paper-edge);
   --color-input:                 var(--color-paper-edge);
-  --color-ring:                  var(--color-ink-green);
-  --color-primary:               var(--color-ink-green);
+  --color-ring:                  var(--color-ink-red);
+  --color-primary:               var(--color-ink-red);
   --color-primary-foreground:    var(--color-paper);
   --color-accent:                var(--color-ink-red);
   --color-accent-foreground:     var(--color-paper);
@@ -114,18 +135,18 @@
   --gradient-gold: var(--gradient-brass);
   --gradient-stage: none;
   --gradient-fade-dark: none;
-  --gradient-forest: linear-gradient(180deg, var(--color-ink-green) 0%, var(--color-ink-green-deep) 100%);
+  --gradient-forest: linear-gradient(180deg, var(--color-ink-blue) 0%, var(--color-ink-green-deep) 100%);
   --rim-gold: none;
   --shadow-brass-emboss: none;
 
   /* ---------- TYPOGRAPHY ---------- */
-  --font-display:  "Cormorant Garamond", Garamond, "Times New Roman", serif;
+  --font-display:   "Anton", "Impact", "Arial Narrow", sans-serif;   /* pools masthead */
+  --font-fair:      "Alfa Slab One", "Rockwell", Georgia, serif;     /* one instance per screen */
   --font-victorian: var(--font-display);
-  --font-fair:     var(--font-display);
-  --font-body:     "Spectral", Georgia, serif;
-  --font-sans:     "Inter", system-ui, sans-serif;
-  --font-mono:     "IBM Plex Mono", ui-monospace, monospace;
-  --font-serif:    var(--font-display);
+  --font-body:      "Archivo", system-ui, "Helvetica Neue", sans-serif;
+  --font-sans:      "Archivo", system-ui, sans-serif;
+  --font-mono:      "Courier Prime", "Courier New", ui-monospace, monospace; /* typewriter */
+  --font-serif:     "Cormorant Garamond", Georgia, serif;            /* kept for legacy only */
 
   --text-display-xl: clamp(3rem, 8vw, 5.5rem);
   --text-display-lg: clamp(2.25rem, 5.5vw, 3.75rem);
@@ -136,15 +157,15 @@
   --text-body-sm:  0.8125rem;
   --text-micro:    0.68rem;
 
-  --tracking-display: 0.14em;
+  --tracking-display: 0.02em;
   --tracking-micro:   0.2em;
-  --tracking-serial:  0.18em;
-  --leading-display:  1.08;
-  --leading-body:     1.7;
+  --tracking-serial:  0.08em;
+  --leading-display:  0.95;
+  --leading-body:     1.55;
 
-  /* ---------- SHAPE — documents have no rounded corners ---------- */
+  /* ---------- SHAPE — coupons are printed on grids, no rounded corners ---------- */
   --radius-sharp: 0px;
-  --radius-soft:  2px;
+  --radius-soft:  0px;
   --radius-pill:  9999px;
   --radius-sm: 0px;
   --radius-md: 0px;
@@ -154,6 +175,7 @@
   --radius-3xl: 0px;
   --rule-hair:    1px;
   --rule-plate:   2px;
+  --rule-heavy:   3px;
 
   /* ---------- SPACE ---------- */
   --space-section: clamp(4.5rem, 10vw, 8rem);
@@ -162,14 +184,14 @@
   --width-content: 74rem;
   --width-prose:   40rem;
 
-  /* ---------- ELEVATION ---------- */
-  --shadow-paper: 0 1px 1px rgba(60,50,30,.06), 0 10px 24px -16px rgba(60,50,30,.28);
+  /* ---------- ELEVATION — printed matter has no shadow, only rules ---------- */
+  --shadow-paper: none;
   --shadow-hung:  var(--shadow-paper);
   --shadow-board: var(--shadow-paper);
   --shadow-lift:  var(--shadow-paper);
   --shadow-sticker: none;
   --shadow-card:  var(--shadow-paper);
-  --shadow-brass-frame: 0 0 0 1px var(--color-ink-green), 0 0 0 3px var(--color-paper), 0 0 0 4px var(--color-ink-green), var(--shadow-paper);
+  --shadow-brass-frame: 0 0 0 1px var(--color-ink-black);
 }
 
 :root { --radius: 0px; }
@@ -181,7 +203,7 @@
     background: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-body);
-    font-size: 17px;
+    font-size: 16px;
     line-height: var(--leading-body);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -191,16 +213,16 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-body);
-    font-feature-settings: "onum", "kern";
+    font-feature-settings: "kern";
     line-height: var(--leading-body);
   }
   h1, h2, h3, h4, .display, .font-display, .font-serif {
     font-family: var(--font-display);
-    font-weight: 600;
-    font-variant: small-caps;
+    font-weight: 400;
+    text-transform: uppercase;
     letter-spacing: var(--tracking-display);
     line-height: var(--leading-display);
-    color: var(--color-ink-green);
+    color: var(--color-ink-black);
   }
   h1 { font-size: var(--text-display-xl); }
   h2 { font-size: var(--text-display-lg); }
@@ -210,7 +232,7 @@
   .font-mono, .tabular-nums, .num, time, [data-numeral] {
     font-family: var(--font-mono);
     font-variant-numeric: tabular-nums;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.02em;
   }
 
   input, button, textarea, select, optgroup {
@@ -225,128 +247,157 @@
     font-variant-numeric: tabular-nums;
   }
   iframe, embed, object, video { font-family: var(--font-sans); color-scheme: light; }
-  ::selection { background: rgba(31, 77, 56, 0.22); color: var(--color-ink-green-deep); }
+  ::selection { background: rgba(200, 32, 43, 0.24); color: var(--color-ink-black); }
 }
 
 .font-serif { font-family: var(--font-serif); }
+.font-fair  { font-family: var(--font-fair); font-weight: 400; letter-spacing: 0; }
 
-/* Printed field label — certificate small caps */
+/* Printed field label — Archivo caps, form-style */
 .label-plate,
-.label-micro {
-  font-family: var(--font-mono);
+.label-micro,
+.label {
+  font-family: var(--font-body);
+  font-weight: 700;
   font-size: var(--text-micro);
-  letter-spacing: var(--tracking-micro);
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--color-ink-grey);
-  font-weight: 500;
+  color: var(--color-ink-black);
 }
 
-/* Serial number — banknote style */
+/* Serial number — typewritten */
 .serial,
 .serial-num {
   font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
   letter-spacing: var(--tracking-serial);
-  color: var(--color-ink-red);
-  font-weight: 500;
+  color: var(--color-ink-black);
+  font-weight: 700;
 }
 
-/* legacy no-ops */
-.on-light { background-color: var(--color-paper); color: var(--color-ink-black); position: relative; }
-.on-dark  { background-color: var(--color-paper); color: var(--color-ink-black); }
+/* ---------- MISREGISTRATION ---------- *
+ * Two-plate print offset — red plate slightly out of line with black.
+ * Display headings ONLY. Never body copy, never UI labels.
+ */
+.misreg {
+  position: relative;
+  color: var(--color-ink-black);
+  text-shadow:
+     1.5px 1.5px 0 var(--color-ink-red),
+    -0.5px 0     0 var(--color-ink-blue);
+}
+.misreg--tight { text-shadow: 1px 1px 0 var(--color-ink-red); }
+.misreg--wide  { text-shadow: 2px 2px 0 var(--color-ink-red), -1px 0 0 var(--color-ink-blue); }
 
-/* ---------- PAPER FIBRE TEXTURE ---------- */
+/* ---------- HALFTONE ---------- *
+ * Low-opacity newsprint dot pattern. Apply to page or hero backgrounds.
+ * Never on cards (would double-up with paper texture). Textures per screen ≤ 3.
+ */
+.halftone { position: relative; }
+.halftone::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  opacity: 0.08; mix-blend-mode: multiply;
+  background-image: radial-gradient(circle at 1px 1px, var(--color-ink-black) 0.6px, transparent 1.4px);
+  background-size: 4px 4px;
+}
+.halftone--strong::before { opacity: 0.14; }
+.halftone--dense::before  { background-size: 3px 3px; opacity: 0.11; }
+
+/* ---------- PRINTED RULES ---------- */
+.rule-heavy   { border-top: var(--rule-heavy) solid var(--color-ink-black); }
+.rule-hair    { border-top: 1px solid var(--color-ink-black); }
+.rule-dotted  { border-top: 1.5px dotted var(--color-ink-black); }
+.rule-dashed  { border-top: 1.5px dashed var(--color-ink-black); }
+.rule-double  { border-top: 3px double var(--color-ink-black); }
+
+/* legacy — .on-light now a printed white panel with a black rule */
+.on-light { background-color: var(--color-paper-raised); color: var(--color-ink-black); position: relative; }
+.on-dark  { background-color: var(--color-paper-raised); color: var(--color-ink-black); }
+
+/* ---------- NEWSPRINT FIBRE ---------- */
 .paper,
 .paper-stock { position: relative; }
 .paper::before,
 .paper-stock::before {
   content: ''; position: absolute; inset: 0; pointer-events: none;
-  opacity: .055; mix-blend-mode: multiply;
+  opacity: .08; mix-blend-mode: multiply;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23f)'/%3E%3C/svg%3E");
 }
 
-/* ---------- GUILLOCHE FIELD ---------- */
+/* ---------- GUILLOCHE (legacy — flattened to faint dot field) ---------- */
 .guilloche {
   position: relative;
   isolation: isolate;
 }
 .guilloche::before {
   content: ''; position: absolute; inset: 0; z-index: 0; pointer-events: none;
-  opacity: .13;
-  background-image:
-    repeating-radial-gradient(circle at 50% 50%, transparent 0 6px, var(--color-ink-green) 6px 6.6px),
-    repeating-radial-gradient(circle at 22% 38%, transparent 0 9px, var(--color-ink-green-soft) 9px 9.5px),
-    repeating-radial-gradient(circle at 78% 62%, transparent 0 9px, var(--color-ink-green-soft) 9px 9.5px);
-  mask-image: radial-gradient(ellipse at 50% 50%, #000 35%, transparent 78%);
+  opacity: .08; mix-blend-mode: multiply;
+  background-image: radial-gradient(circle at 1px 1px, var(--color-ink-black) 0.5px, transparent 1.2px);
+  background-size: 4px 4px;
 }
 .guilloche > * { position: relative; z-index: 1; }
 
 .guilloche-bg {
   position: absolute; inset: 0; pointer-events: none;
-  opacity: 0.13; color: var(--color-ink-green);
+  opacity: 0.08; color: var(--color-ink-black);
 }
-.guilloche-bg--strong { opacity: 0.22; }
-.guilloche-bg--faint  { opacity: 0.06; }
+.guilloche-bg--strong { opacity: 0.12; }
+.guilloche-bg--faint  { opacity: 0.04; }
 
-/* ---------- PLATE BORDER ---------- */
+/* ---------- PLATE BORDER (legacy — now a printed black frame) ---------- */
 .plate-border {
-  border: var(--rule-plate) solid var(--color-ink-green);
-  outline: var(--rule-hair) solid var(--color-ink-green);
-  outline-offset: 3px;
+  border: 1px solid var(--color-ink-black);
   background: var(--color-paper-raised);
   border-radius: var(--radius-sharp);
   position: relative;
   padding: 1.25rem;
 }
-.plate-border--lift  { box-shadow: var(--shadow-paper); }
-.plate-border--tight { padding: 0.75rem; outline-offset: 2px; }
+.plate-border--lift  { box-shadow: none; }
+.plate-border--tight { padding: 0.75rem; }
 .plate-border--flush { padding: 0; }
-/* Corner ornaments are rendered by <PlateCorners /> in PlateBorder.tsx.
-   The old ::before/::after diamond glyphs were doubling up and clipping in
-   card corners, so we intentionally omit them here. */
 
-/* ---------- MICROTEXT RULE ---------- */
+/* ---------- MICROTEXT RULE (legacy) ---------- */
 .microtext,
 .microtext-rule {
   overflow: hidden;
   white-space: nowrap;
   font-family: var(--font-mono);
-  font-size: 5px;
-  letter-spacing: 0.14em;
+  font-size: 6px;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--color-ink-green-soft);
-  border-top: var(--rule-hair) solid var(--color-paper-edge);
-  border-bottom: var(--rule-hair) solid var(--color-paper-edge);
-  padding-block: 3px;
+  color: var(--color-ink-black);
+  border-top: 1.5px dotted var(--color-ink-black);
+  border-bottom: 1.5px dotted var(--color-ink-black);
+  padding-block: 4px;
   user-select: none;
   margin-block: var(--space-block);
   line-height: 1;
 }
 
-/* ---------- WAX SEAL / OVERPRINT STAMP ---------- */
+/* ---------- STAMP (rubber-stamp overprint) ---------- */
+/* Prefer <StampMark />; these classes retained for legacy call-sites. */
 .seal,
 .wax-seal {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   font-family: var(--font-display);
-  font-variant: small-caps;
-  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
   color: var(--color-ink-red);
-  border: 2px solid var(--color-ink-red);
-  outline: 1px solid var(--color-ink-red);
-  outline-offset: 2px;
-  padding: .3rem .9rem;
-  transform: rotate(-7deg);
-  opacity: .9;
+  border: 2.5px solid var(--color-ink-red);
+  padding: .35rem 1rem;
+  transform: rotate(-6deg);
+  opacity: .82;
   background: transparent;
   border-radius: var(--radius-sharp);
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   line-height: 1;
+  mix-blend-mode: multiply;
 }
 .wax-seal--sm { padding: .2rem .55rem; font-size: 0.68rem; }
 
-/* ---------- CANCELLED NOTE ---------- */
+/* ---------- CANCELLED NOTE (biro-cross) ---------- */
 .note-cancelled {
   position: relative;
   opacity: .55;
@@ -354,107 +405,179 @@
 .note-cancelled::after {
   content: ''; position: absolute; inset: 0; pointer-events: none;
   background: repeating-linear-gradient(
-    -45deg, transparent 0 3px, var(--color-ink-red) 3px 3.7px
+    -45deg, transparent 0 3px, var(--color-ink-blue) 3px 3.7px
   );
   opacity: .5;
 }
 
-/* ---------- RIBBON ---------- */
-.ribbon-title { display: inline-flex; align-items: center; gap: 0.75rem; color: var(--color-ink-green); }
+/* ---------- RIBBON (legacy) — flattened to red masthead bar ---------- */
+.ribbon-title { display: inline-flex; align-items: center; gap: 0.75rem; color: var(--color-paper); background: var(--color-ink-red); padding: 0.35rem 0.9rem; }
 .ribbon-title__text {
   font-family: var(--font-display);
-  font-weight: 600;
-  font-variant: small-caps;
+  font-weight: 400;
+  text-transform: uppercase;
   letter-spacing: var(--tracking-display);
-  color: var(--color-ink-green-deep);
+  color: var(--color-paper);
 }
 
-/* ---------- TICKET NOTE ---------- */
+/* ---------- TICKET NOTE (legacy) ---------- */
 .ticket-note {
   position: relative;
   background: var(--color-paper-raised);
-  border: 1px solid var(--color-ink-green);
-  outline: 1px solid var(--color-ink-green);
-  outline-offset: 2px;
+  border: 1px solid var(--color-ink-black);
   padding: 0.9rem 1rem;
   overflow: hidden;
   isolation: isolate;
 }
 .ticket-note > * { position: relative; z-index: 1; }
 
+/* ---------- COUPON GRID CELL ---------- */
 .note-cell {
-  aspect-ratio: 8 / 5;
-  border: 1px solid var(--color-ink-green);
-  background: var(--color-paper-raised);
+  aspect-ratio: 1 / 1;
+  border: 1px solid var(--color-ink-black);
+  background: var(--color-paper);
   position: relative;
   font-family: var(--font-mono);
-  font-size: 8px;
-  letter-spacing: 0.05em;
-  color: var(--color-ink-green);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--color-ink-black);
   display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: background-color 120ms ease;
 }
+.note-cell:hover:not(.note-cell--sold):not(.note-cell--picked) { background: var(--color-ink-yellow); }
+.note-cell:focus-visible { outline: 2px solid var(--color-ink-red); outline-offset: -3px; z-index: 2; }
 .note-cell--sold {
-  color: var(--color-ink-red);
-  border-color: var(--color-ink-red);
+  cursor: not-allowed; color: transparent;
   background:
-    linear-gradient(to top right, transparent calc(50% - 0.5px), var(--color-ink-red) calc(50% - 0.5px), var(--color-ink-red) calc(50% + 0.5px), transparent calc(50% + 0.5px)),
-    var(--color-paper-raised);
-  opacity: .85;
+    linear-gradient(to top right, transparent 44%, var(--color-ink-blue) 47%, var(--color-ink-blue) 53%, transparent 56%),
+    linear-gradient(to top left,  transparent 44%, var(--color-ink-blue) 47%, var(--color-ink-blue) 53%, transparent 56%),
+    var(--color-paper);
+  opacity: .95;
+}
+.note-cell--picked {
+  color: transparent;
+  background:
+    linear-gradient(to top right, transparent 42%, var(--color-ink-red) 46%, var(--color-ink-red) 54%, transparent 58%),
+    linear-gradient(to top left,  transparent 42%, var(--color-ink-red) 46%, var(--color-ink-red) 54%, transparent 58%),
+    var(--color-paper);
+}
+
+/* ---------- HIGHLIGHTER MARKER ---------- *
+ * One per screen. Sits behind text that already passes contrast on cream.
+ */
+.marker {
+  position: relative;
+  display: inline;
+  background-image: linear-gradient(
+    100deg,
+    transparent 0.5%,
+    color-mix(in oklab, var(--color-ink-yellow) 88%, transparent) 3%,
+    color-mix(in oklab, var(--color-ink-yellow) 88%, transparent) 97%,
+    transparent 99.5%
+  );
+  background-repeat: no-repeat;
+  background-size: 100% 68%;
+  background-position: 0 78%;
+  padding: 0 0.15em;
+}
+
+/* ---------- PERFORATION EDGE ---------- */
+.perf-top,
+.perf-bottom {
+  position: relative;
+  --perf-c: var(--color-background);
+}
+.perf-bottom::after,
+.perf-top::before {
+  content: ""; position: absolute; left: 0; right: 0; height: 12px;
+  background-image: radial-gradient(circle at 6px 6px, var(--perf-c) 4px, transparent 4.5px);
+  background-size: 12px 12px;
+  background-repeat: repeat-x;
+  pointer-events: none;
+}
+.perf-bottom::after { bottom: -6px; }
+.perf-top::before   { top: -6px; }
+
+/* ---------- BIRO INK ANIMATION ---------- */
+@keyframes biroDraw { from { stroke-dashoffset: 100; } to { stroke-dashoffset: 0; } }
+@utility biro-draw {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: biroDraw 260ms ease-out forwards;
+}
+
+/* ---------- ARCADE (draw reveal cabinet) ---------- */
+.arcade {
+  background:
+    radial-gradient(ellipse at 50% 40%, #1a1a1a 0%, #050505 70%),
+    #000;
+  color: #d4ffb8;
+  font-family: var(--font-mono);
+}
+.arcade-segment {
+  font-family: var(--font-mono);
+  color: #7cff5c;
+  text-shadow:
+    0 0 8px rgba(124,255,92,0.7),
+    0 0 22px rgba(124,255,92,0.45),
+    0 0 42px rgba(124,255,92,0.28);
 }
 
 /* ---------- LEGACY UTILITIES (mapped, kept as no-ops or aliases) ---------- */
 @utility bg-clover-pattern { background-color: var(--color-paper); }
 @utility bg-ambient        { background-color: var(--color-paper); }
 @utility bg-prize-stage    { background-color: var(--color-paper-raised); }
-@utility painted           { color: var(--color-ink-green-deep); font-variant: small-caps; letter-spacing: 0.06em; }
-@utility painted-gold      { color: var(--color-ink-red); font-family: var(--font-mono); font-variant-numeric: tabular-nums; letter-spacing: 0.06em; }
+@utility painted           { color: var(--color-ink-black); text-transform: uppercase; letter-spacing: 0.06em; }
+@utility painted-gold      { color: var(--color-ink-red); font-family: var(--font-mono); font-variant-numeric: tabular-nums; letter-spacing: 0.02em; font-weight: 700; }
 @utility victorian         { font-family: var(--font-display); letter-spacing: 0; line-height: 0.9; }
-@utility brass             { background-color: transparent; color: var(--color-ink-red); border: 1px solid var(--color-ink-red); font-family: var(--font-mono); font-weight: 500; }
+@utility brass             { background-color: transparent; color: var(--color-ink-red); border: 1.5px solid var(--color-ink-red); font-family: var(--font-mono); font-weight: 700; }
 @utility brass-frame       { box-shadow: var(--shadow-brass-frame); border-radius: var(--radius-sharp); }
-@utility stall-header      { background-color: var(--color-ink-green); color: var(--color-paper); border-bottom: 1px solid var(--color-ink-green-deep); }
+@utility stall-header      { background-color: var(--color-ink-red); color: var(--color-paper); border-bottom: 1px solid var(--color-ink-black); }
 @utility stall-tilt-l      { transform: none; }
 @utility stall-tilt-r      { transform: none; }
 @utility sticker-tilt-l    { transform: none; }
 @utility sticker-tilt-r    { transform: none; }
-@utility shimmer           { background: var(--color-ink-green); }
+@utility shimmer           { background: var(--color-ink-red); }
 @utility hover-wobble      { transition: opacity 0.15s ease, background-color 0.15s ease; }
 @utility urgent-pulse      { border-color: var(--color-ink-red); color: var(--color-ink-red); }
 @utility bg-gradient-gold  { background-color: var(--color-ink-red); color: var(--color-paper); }
 @utility text-gradient-gold { color: var(--color-ink-red); }
-@utility text-gradient-mint { color: var(--color-ink-green-deep); }
-@utility glass             { background-color: var(--color-card); border: 1px solid var(--color-ink-green); box-shadow: var(--shadow-paper); }
+@utility text-gradient-mint { color: var(--color-ink-black); }
+@utility glass             { background-color: var(--color-card); border: 1px solid var(--color-ink-black); box-shadow: none; }
 @utility bg-grain          { position: relative; }
 .bg-grain::after {
   content: ""; position: absolute; inset: 0; pointer-events: none;
-  opacity: 0.05; mix-blend-mode: overlay;
+  opacity: 0.09; mix-blend-mode: multiply;
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
 }
 .grain::before {
   content: ''; position: absolute; inset: 0; pointer-events: none;
-  opacity: .08; mix-blend-mode: multiply;
+  opacity: .09; mix-blend-mode: multiply;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-/* Legacy stall-board → plain plate card */
+/* Legacy stall-board → coupon-style card */
 .stall-board {
-  background: var(--color-paper-raised);
+  background: var(--color-paper);
   color: var(--color-ink-black);
   border-radius: var(--radius-sharp);
-  border: 1px solid var(--color-ink-green);
-  box-shadow: var(--shadow-paper);
+  border: 1.5px solid var(--color-ink-black);
+  box-shadow: none;
   position: relative;
   overflow: hidden;
-  transition: box-shadow .18s ease, transform .18s ease;
+  transition: transform .18s ease;
 }
 .stall-board__header {
-  background: var(--color-ink-green);
+  background: var(--color-ink-red);
   color: var(--color-paper);
   font-family: var(--font-display);
-  border-bottom: 1px solid var(--color-ink-green-deep);
+  border-bottom: 1px solid var(--color-ink-black);
 }
-.stall-grid > .stall-board:hover { transform: translateY(-2px); box-shadow: var(--shadow-paper), 0 12px 28px -18px rgba(70,50,20,.4); }
+.stall-grid > .stall-board:hover { transform: translateY(-1px); }
 
-.gold-metal { color: var(--color-ink-red); font-family: var(--font-mono); }
+.gold-metal { color: var(--color-ink-red); font-family: var(--font-mono); font-weight: 700; }
 .gold-metal-surface { background: var(--color-ink-red); color: var(--color-paper); }
 
 .prize-stage {
@@ -462,20 +585,22 @@
   position: relative;
   border-radius: var(--radius-sharp);
   overflow: hidden;
-  border: 1px solid var(--color-paper-edge);
+  border: 1.5px solid var(--color-ink-black);
 }
 
 .pinstripe-rule {
-  position: relative; height: 1px;
-  background: var(--color-ink-green);
-  opacity: .8; margin-block: var(--space-block);
+  position: relative; height: 0;
+  border-top: 1.5px dotted var(--color-ink-black);
+  margin-block: var(--space-block);
 }
 .pinstripe-rule::after {
-  content: ''; position: absolute; left: 50%; top: 50%;
-  width: 5px; height: 5px;
-  transform: translate(-50%,-50%) rotate(45deg);
-  background: var(--color-ink-green);
-  box-shadow: 0 0 0 3px var(--color-background);
+  content: '★'; position: absolute; left: 50%; top: 50%;
+  transform: translate(-50%,-50%);
+  color: var(--color-ink-red);
+  background: var(--color-background);
+  padding: 0 8px;
+  font-size: 12px;
+  line-height: 1;
 }
 
 .plain .stall-board { box-shadow: none; }
