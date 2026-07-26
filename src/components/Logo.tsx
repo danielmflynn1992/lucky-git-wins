@@ -3,6 +3,82 @@ import crest from "@/assets/lucky-git-seal.png.asset.json";
 
 const CREST_URL = crest.url;
 
+/**
+ * StampSeal — the crest at scale, used as a static stamp on non-scrolling
+ * surfaces (homepage hero, checkout confirmation, draw reveal, footer).
+ *
+ * The source PNG has a cream disc baked in around the engraved ring; the
+ * clip-path crops to a perfect circle so it reads as a transparent stamp
+ * on paper. No wrapper disc, ring, or drop shadow — it sits FLAT on the
+ * page, not floating.
+ *
+ * `angle` prop rotates the seal for the "stamped in ink" effect on
+ * receipts / confirmations. `tone="cream"` inverts it for dark surfaces.
+ */
+export function StampSeal({
+  size = 140,
+  angle = 0,
+  tone = "ink",
+  className = "",
+  as = "div",
+}: {
+  size?: number;
+  angle?: number;
+  tone?: "ink" | "cream";
+  className?: string;
+  as?: "div" | "a";
+}) {
+  const Tag: any = as;
+  return (
+    <Tag
+      className={`inline-block ${className}`}
+      style={{ width: size, height: size, transform: angle ? `rotate(${angle}deg)` : undefined }}
+      aria-hidden="true"
+    >
+      <img
+        src={CREST_URL}
+        alt=""
+        width={size}
+        height={size}
+        loading="lazy"
+        draggable={false}
+        className={`block h-full w-full object-contain select-none pointer-events-none [clip-path:circle(50%_at_50%_50%)] ${
+          tone === "cream" ? "opacity-90 [filter:invert(1)_sepia(0.2)_brightness(1.35)_contrast(0.9)]" : ""
+        }`}
+      />
+    </Tag>
+  );
+}
+
+/**
+ * Wordmark — the "LUCKY GIT COMPS" text lockup used in the header centre.
+ * Cormorant Garamond, small caps, wide tracking, deep green. Text-only so
+ * it never pixelates and needs no background knocked out.
+ */
+export function Wordmark({
+  className = "",
+  as: Tag = "span",
+}: {
+  className?: string;
+  as?: any;
+}) {
+  return (
+    <Tag
+      className={`font-display text-clover ${className}`}
+      style={{
+        fontVariant: "small-caps",
+        fontFeatureSettings: '"smcp"',
+        letterSpacing: "0.22em",
+        fontWeight: 600,
+        lineHeight: 1,
+        whiteSpace: "nowrap",
+      }}
+    >
+      Lucky Git Comps
+    </Tag>
+  );
+}
+
 /** Legacy export — renders just the crest as a badge. */
 export function SmugSmile({ className = "" }: { className?: string }) {
   return (
@@ -10,7 +86,7 @@ export function SmugSmile({ className = "" }: { className?: string }) {
       src={CREST_URL}
       alt=""
       aria-hidden="true"
-      className={className}
+      className={`${className} [clip-path:circle(50%_at_50%_50%)]`}
       width={1400}
       height={1400}
       loading="lazy"
