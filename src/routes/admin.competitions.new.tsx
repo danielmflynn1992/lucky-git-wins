@@ -10,6 +10,7 @@ import { ImagePlus, Zap, Copy, Save, ArrowLeft, Loader2, AlertTriangle, CheckCir
 import { createCompetition } from "@/lib/admin.functions";
 import { supabase } from "@/integrations/supabase/client";
 import { optimizeImage, formatBytes, type OptimizeResult } from "@/lib/image-optimize";
+import { LetterboxImage, type LetterboxStyle } from "@/components/LetterboxImage";
 import type { ReactNode } from "react";
 
 export const Route = createFileRoute("/admin/competitions/new")({
@@ -43,6 +44,7 @@ function NewComp() {
   const [instantWinPrize, setInstantWinPrize] = useState(50);
   const [status, setStatus] = useState<"draft" | "live" | "paused">("draft");
   const [imageUrl, setImageUrl] = useState<string>("");
+  const [letterboxStyle, setLetterboxStyle] = useState<LetterboxStyle>("blur");
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [optimizeInfo, setOptimizeInfo] = useState<OptimizeResult | null>(null);
@@ -123,6 +125,7 @@ function NewComp() {
           instantWin,
           instantWinCount: Math.floor(Number(instantWinCount) || 0),
           instantWinPrize: Number(instantWinPrize) || 0,
+          letterboxStyle,
         },
       }),
     onSuccess: (res) => {
