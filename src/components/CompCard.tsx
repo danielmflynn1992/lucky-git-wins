@@ -21,13 +21,15 @@ export function CompCard({ c }: { c: Competition }) {
       {/* Tag row */}
       <div className="absolute top-3 left-3 z-10 flex gap-1.5">
         {c.instantWin && (
-          <span className="inline-flex items-center gap-1 rounded-full bg-gold text-gold-foreground px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider shadow-sm">
-            <Zap className="h-3 w-3" /> Instant win
+          <span className="inline-flex items-center gap-1 rounded-full bg-gold text-gold-foreground px-1.5 sm:px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider shadow-sm">
+            <Zap className="h-3 w-3 shrink-0" />
+            <span className="hidden sm:inline">Instant win</span>
           </span>
         )}
         {almostGone && (
-          <span className="rounded-full bg-hot text-hot-foreground px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider shadow-sm">
-            Only {remaining} left
+          <span className="rounded-full bg-hot text-hot-foreground px-1.5 sm:px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider shadow-sm whitespace-nowrap">
+            <span className="sm:hidden">{remaining} left</span>
+            <span className="hidden sm:inline">Only {remaining} left</span>
           </span>
         )}
       </div>
