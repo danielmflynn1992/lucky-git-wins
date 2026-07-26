@@ -241,7 +241,7 @@ function SuccessScreen({ compTitle, numbers }: { compTitle: string; numbers: num
 
 function Confetti() {
   const bits = Array.from({ length: 40 });
-  const colors = ["#10B77F", "#E8B54D", "#0B1F17"];
+  const colors = ["#12503A", "#C9A227", "#0A100D"];
   return (
     <div className="absolute inset-0 pointer-events-none" aria-hidden>
       {bits.map((_, i) => (
