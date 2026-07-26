@@ -148,7 +148,7 @@ export function SiteNav() {
 
         <div
           className={
-            "relative mx-auto max-w-7xl px-3 md:px-6 grid items-center gap-2 md:gap-4 mast-transition overflow-visible " +
+            "relative mx-auto max-w-7xl px-3 md:px-6 grid items-center gap-2 md:gap-4 mast-transition overflow-hidden " +
             "grid-cols-[1fr_auto_1fr] " +
             (scrolled ? "h-16" : "h-24")
           }
@@ -177,7 +177,7 @@ export function SiteNav() {
                 bottom border. No wrapper background, padding, or border. */}
             <Lockup
               style={{
-                height: scrolled ? 96 : 140,
+                height: scrolled ? 56 : 88,
                 width: "auto",
                 maxWidth: "82vw",
                 objectFit: "contain",
