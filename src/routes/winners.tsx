@@ -1,62 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
-import { supabase } from "@/integrations/supabase/client";
-import { IMAGES } from "@/lib/competitions-api";
-
-type WinnerRow = {
-  id: string;
-  competition_title: string;
-  prize: string;
-  winning_number: number;
-  winner_display_name: string;
-  winner_town: string;
-  drawn_at: string;
-  image: string | null;
-};
-
-const winnersQuery = queryOptions({
-  queryKey: ["winners"],
-  queryFn: async (): Promise<WinnerRow[]> => {
-    const { data, error } = await supabase
-      .from("draws")
-      .select("id, competition_id, competition_title, prize, winning_number, winner_display_name, winner_town, drawn_at, competitions(slug, image)")
-      .order("drawn_at", { ascending: false });
-    if (error) throw error;
-    return (data ?? []).map((d: {
-      id: string;
-      competition_title: string;
-      prize: string;
-      winning_number: number;
-      winner_display_name: string;
-      winner_town: string;
-      drawn_at: string;
-      competitions: { slug: string; image: string } | null;
-    }) => {
-      const slug = d.competitions?.slug;
-      const image = (slug && IMAGES[slug]) || d.competitions?.image || null;
-      return {
-        id: d.id,
-        competition_title: d.competition_title,
-        prize: d.prize,
-        winning_number: d.winning_number,
-        winner_display_name: d.winner_display_name,
-        winner_town: d.winner_town,
-        drawn_at: d.drawn_at,
-        image,
-      };
-    });
-  },
-});
-
-function formatWhen(iso: string) {
-  return new Date(iso).toLocaleDateString("en-GB", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  });
-}
+import { WinnerCard } from "@/components/WinnerCard";
+import { winnersQuery } from "@/lib/winners-api";
 
 export const Route = createFileRoute("/winners")({
   loader: ({ context }) => context.queryClient.ensureQueryData(winnersQuery),
@@ -101,47 +48,9 @@ function WinnersPage() {
             No winners yet — the first draw hasn't landed. Check back after the next competition closes.
           </div>
         ) : (
-          <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {winners.map((w) => (
-              <article
-                key={w.id}
-                className="group flex flex-col rounded-xl bg-card border border-border overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all"
-              >
-                <div className="aspect-[5/4] overflow-hidden bg-muted">
-                  {w.image ? (
-                    <img
-                      src={w.image}
-                      alt={w.prize}
-                      loading="lazy"
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-                    />
-                  ) : (
-                    <div className="h-full w-full grid place-items-center text-muted-foreground font-mono text-xs uppercase tracking-widest">
-                      No image
-                    </div>
-                  )}
-                </div>
-                <div className="p-5 flex flex-col gap-3">
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="min-w-0">
-                      <div className="text-[10px] font-mono uppercase tracking-[0.15em] text-clover">Winner</div>
-                      <div className="font-display font-bold text-lg leading-tight truncate">{w.winner_display_name}</div>
-                      {w.winner_town && (
-                        <div className="text-sm text-muted-foreground truncate">from {w.winner_town}</div>
-                      )}
-                    </div>
-                    <div className="shrink-0 text-right">
-                      <div className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">Ticket</div>
-                      <div className="font-mono tabular-nums font-bold text-clover">#{w.winning_number}</div>
-                    </div>
-                  </div>
-                  <div className="pt-3 border-t border-border">
-                    <div className="text-[10px] font-mono uppercase tracking-[0.15em] text-muted-foreground">Won</div>
-                    <div className="font-semibold text-foreground leading-tight">{w.prize}</div>
-                    <div className="text-xs text-muted-foreground mt-1">{w.competition_title} · {formatWhen(w.drawn_at)}</div>
-                  </div>
-                </div>
-              </article>
+              <WinnerCard key={w.id} w={w} />
             ))}
           </div>
         )}
