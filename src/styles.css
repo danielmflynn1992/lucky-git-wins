@@ -12,84 +12,108 @@
 
 @theme {
   /* ---------- CORE SURFACES ---------- */
-  --color-ink-deep:      #0A100D;
-  --color-ink:           #0C1410;
-  --color-ink-raised:    #141E19;
-  --color-ink-hairline:  #1E2B24;
+  /* Painted signboard — warm brown-black, not cool near-black.
+     This warmth is what makes brass and cream sing against it. */
+  --color-pitch-deep:    #16110C;
+  --color-pitch:         #1B1610;
+  --color-pitch-raised:  #241C14;
+  --color-pitch-hairline:#2E251A;
+  /* Back-compat: existing components reference `ink*`. Point them at pitch. */
+  --color-ink-deep:      var(--color-pitch-deep);
+  --color-ink:           var(--color-pitch);
+  --color-ink-raised:    var(--color-pitch-raised);
+  --color-ink-hairline:  var(--color-pitch-hairline);
 
-  --color-bone:          #F4F1EA;
-  --color-bone-raised:   #FBFAF7;
-  --color-bone-hairline: #E2DED4;
+  /* Sheepskin cream — reading surface, aged paper. */
+  --color-sheepskin:         #F1E7CE;
+  --color-sheepskin-raised:  #F8F0DA;
+  --color-sheepskin-hairline:#DCCFA9;
+  --color-bone:          var(--color-sheepskin);
+  --color-bone-raised:   var(--color-sheepskin-raised);
+  --color-bone-hairline: var(--color-sheepskin-hairline);
 
   /* ---------- BRAND ---------- */
-  --color-clover:        #12503A;
-  --color-clover-hover:  #0D3D2C;
-  --color-clover-lift:   #1A6B4D;
-  /* Back-compat alias — existing components use `clover-deep` */
-  --color-clover-deep:   #0D3D2C;
+  /* Forest — structural surface: panels, primary buttons, stall headers. */
+  --color-forest:        #0F4A34;
+  --color-forest-hover:  #0A3826;
+  --color-forest-lift:   #16603F;
+  --color-clover:        var(--color-forest);
+  --color-clover-hover:  var(--color-forest-hover);
+  --color-clover-lift:   var(--color-forest-lift);
+  --color-clover-deep:   var(--color-forest-hover);
 
-  --color-gold:          #C9A227;
-  --color-gold-light:    #E5CE8F;
-  --color-gold-deep:     #A8821C;
-  --color-gold-foreground: #14130F;
+  /* Brass — never flat. Use the gradient + emboss shadows for real elements. */
+  --color-brass:            #C9A24A;
+  --color-brass-light:      #F0D783;
+  --color-brass-deep:       #8C6A1E;
+  --color-brass-foreground: #15110A;
+  --color-gold:             var(--color-brass);
+  --color-gold-light:       var(--color-brass-light);
+  --color-gold-deep:        var(--color-brass-deep);
+  --color-gold-foreground:  var(--color-brass-foreground);
 
-  --color-ember:         #B4593A;
-  /* Urgency accent — rust ember, never brick red */
-  --color-urgent:            #B4593A;
-  --color-urgent-foreground: #F7F6F3;
-  /* Back-compat aliases */
-  --color-hot:           #B4593A;
-  --color-hot-foreground: #F7F6F3;
+  /* Ember — rust urgency, never brick red. */
+  --color-ember:            #A84A26;
+  --color-urgent:           var(--color-ember);
+  --color-urgent-foreground:#F7F1E1;
+  --color-hot:              var(--color-ember);
+  --color-hot-foreground:   #F7F1E1;
 
   /* ---------- NEUTRAL RAMP ---------- */
-  --color-n-100: #F7F6F3;
-  --color-n-200: #E8E6E0;
-  --color-n-300: #CFCCC4;
-  --color-n-400: #A8A49A;
-  --color-n-500: #7D7970;
-  --color-n-600: #575349;
-  --color-n-700: #3A372F;
-  --color-n-800: #24221D;
-  --color-n-900: #14130F;
+  --color-n-100: #F7F1E1;
+  --color-n-200: #E8DEC3;
+  --color-n-300: #CDBF9A;
+  --color-n-400: #9E9273;
+  --color-n-500: #746A52;
+  --color-n-600: #4E4735;
+  --color-n-700: #362F22;
+  --color-n-800: #221C13;
+  --color-n-900: #15110A;
 
-  /* Back-compat alias — old markup uses `cream` */
-  --color-cream: #F4F1EA;
-  --color-surface: #0C1410;
-  --color-surface-raised: #141E19;
+  --color-cream:          var(--color-sheepskin);
+  --color-surface:        var(--color-pitch);
+  --color-surface-raised: var(--color-pitch-raised);
 
   /* ---------- SEMANTIC ---------- */
-  --color-background:        var(--color-ink-deep);
+  --color-background:        var(--color-pitch-deep);
   --color-foreground:        var(--color-n-100);
-  --color-card:              var(--color-ink);
+  --color-card:              var(--color-pitch);
   --color-card-foreground:   var(--color-n-100);
-  --color-popover:           var(--color-ink);
+  --color-popover:           var(--color-pitch);
   --color-popover-foreground: var(--color-n-100);
-  --color-primary:           var(--color-clover);
+  --color-primary:           var(--color-forest);
   --color-primary-foreground: var(--color-n-100);
-  --color-secondary:         var(--color-ink-raised);
+  --color-secondary:         var(--color-pitch-raised);
   --color-secondary-foreground: var(--color-n-100);
   --color-muted:             var(--color-n-800);
   --color-muted-foreground:  var(--color-n-400);
-  --color-accent:            var(--color-gold);
-  --color-accent-foreground: var(--color-gold-foreground);
+  --color-accent:            var(--color-brass);
+  --color-accent-foreground: var(--color-brass-foreground);
   --color-destructive:       var(--color-ember);
   --color-destructive-foreground: var(--color-n-100);
-  --color-border:            var(--color-ink-hairline);
-  --color-input:             var(--color-ink-hairline);
-  --color-ring:              var(--color-gold);
+  --color-border:            var(--color-pitch-hairline);
+  --color-input:             var(--color-pitch-hairline);
+  --color-ring:              var(--color-brass);
 
   /* ---------- GRADIENTS ---------- */
-  --gradient-gold: linear-gradient(135deg, #A8821C 0%, #E5CE8F 45%, #C9A227 60%, #8F6E15 100%);
-  --gradient-stage: radial-gradient(ellipse at 50% 45%, #182620 0%, #0C1410 55%, #0A100D 100%);
-  --gradient-fade-dark: linear-gradient(180deg, transparent 0%, #0A100D 100%);
-  --rim-gold: radial-gradient(ellipse 90% 40% at 50% 100%, rgba(201, 162, 39, 0.12) 0%, transparent 60%);
+  --gradient-brass: linear-gradient(160deg, #8C6A1E 0%, #E7CE7A 30%, #F5E1A0 48%, #C9A24A 62%, #7A5A18 100%);
+  --gradient-gold:  var(--gradient-brass);
+  --gradient-stage: radial-gradient(ellipse at 50% 45%, #2A2013 0%, #1B1610 55%, #16110C 100%);
+  --gradient-fade-dark: linear-gradient(180deg, transparent 0%, #16110C 100%);
+  --rim-gold: radial-gradient(ellipse 90% 40% at 50% 100%, rgba(201, 162, 74, 0.14) 0%, transparent 60%);
+
+  /* Brass emboss shadow (used inside inset shadows for stamped-metal feel). */
+  --shadow-brass-emboss: inset 0 1px 0 rgba(255,255,255,.38), inset 0 -1px 0 rgba(0,0,0,.32), 0 1px 0 rgba(0,0,0,.25);
 
   /* ---------- TYPOGRAPHY ---------- */
-  --font-display: "Instrument Serif", Georgia, serif;
-  --font-sans:    "Inter Tight", system-ui, sans-serif;
-  --font-body:    "Inter Tight", system-ui, sans-serif;
+  /* Archivo Black — signage-heavy display, sits alongside the script logo. */
+  --font-display: "Archivo Black", "Archivo", system-ui, sans-serif;
+  /* Abril Fatface — Victorian accent for oversized numerals and pull quotes. */
+  --font-fair:    "Abril Fatface", Georgia, serif;
+  --font-sans:    "Archivo", system-ui, sans-serif;
+  --font-body:    "Archivo", system-ui, sans-serif;
   --font-mono:    "JetBrains Mono", ui-monospace, monospace;
-  --font-serif:   "Instrument Serif", Georgia, serif;
+  --font-serif:   "Abril Fatface", Georgia, serif;
 
   --text-display-xl: clamp(3.5rem, 9vw, 6.5rem);
   --text-display-lg: clamp(2.75rem, 6.5vw, 4.5rem);
@@ -124,9 +148,11 @@
   --width-prose:      42rem;
 
   /* ---------- ELEVATION ---------- */
-  --shadow-lift: 0 1px 2px rgba(0,0,0,.4), 0 12px 40px -12px rgba(0,0,0,.6);
+  --shadow-lift: 0 1px 2px rgba(0,0,0,.45), 0 14px 44px -14px rgba(0,0,0,.65);
   --shadow-sticker: 0 1px 0 rgba(0, 0, 0, 0.25);
   --shadow-card: 0 1px 0 rgba(0, 0, 0, 0.2);
+  /* Brass frame — 2px gradient border simulated via layered box shadows. */
+  --shadow-brass-frame: 0 0 0 1px #7A5A18, 0 0 0 2px #C9A24A, 0 0 0 3px #4A3810, 0 12px 30px -14px rgba(0,0,0,.6);
 }
 
 :root {
@@ -209,63 +235,112 @@
 }
 
 /* ---------- LIGHT CONTEXT ---------- */
-/* Bone content island for reading. Semantic tokens flip so nested
-   cards, buttons, and text read correctly on the bone surface. */
+/* Sheepskin content island for reading. Semantic tokens flip so nested
+   cards, buttons, and text read correctly on the cream surface. */
 .on-light {
-  --color-background:        var(--color-bone);
+  --color-background:        var(--color-sheepskin);
   --color-foreground:        var(--color-n-900);
-  --color-card:              var(--color-bone-raised);
+  --color-card:              var(--color-sheepskin-raised);
   --color-card-foreground:   var(--color-n-900);
-  --color-popover:           var(--color-bone-raised);
+  --color-popover:           var(--color-sheepskin-raised);
   --color-popover-foreground: var(--color-n-900);
-  --color-secondary:         #E7E3D6;
+  --color-secondary:         #E5D8B4;
   --color-secondary-foreground: var(--color-n-900);
-  --color-muted:             #E7E3D6;
+  --color-muted:             #E5D8B4;
   --color-muted-foreground:  var(--color-n-600);
-  --color-border:            var(--color-bone-hairline);
-  --color-input:             var(--color-bone-hairline);
-  background-color: var(--color-bone);
+  --color-border:            var(--color-sheepskin-hairline);
+  --color-input:             var(--color-sheepskin-hairline);
+  background-color: var(--color-sheepskin);
   color: var(--color-n-900);
+  position: relative;
+}
+/* Aged paper texture — stops sheepskin cream looking like flat #F1E7CE. */
+.on-light::before {
+  content: "";
+  position: absolute; inset: 0;
+  pointer-events: none;
+  opacity: 0.06;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='p'><feTurbulence type='fractalNoise' baseFrequency='0.55' numOctaves='2' seed='4'/><feColorMatrix values='0 0 0 0 0.32  0 0 0 0 0.22  0 0 0 0 0.08  0 0 0 0.9 0'/></filter><rect width='100%25' height='100%25' filter='url(%23p)'/></svg>");
 }
 
 .on-dark {
-  --color-background:        var(--color-ink-deep);
+  --color-background:        var(--color-pitch-deep);
   --color-foreground:        var(--color-n-100);
-  --color-card:              var(--color-ink);
+  --color-card:              var(--color-pitch);
   --color-card-foreground:   var(--color-n-100);
-  --color-secondary:         var(--color-ink-raised);
+  --color-secondary:         var(--color-pitch-raised);
   --color-secondary-foreground: var(--color-n-100);
   --color-muted:             var(--color-n-800);
   --color-muted-foreground:  var(--color-n-400);
-  --color-border:            var(--color-ink-hairline);
-  background-color: var(--color-ink-deep);
+  --color-border:            var(--color-pitch-hairline);
+  background-color: var(--color-pitch-deep);
   color: var(--color-n-100);
 }
 
 /* ---------- UTILITIES ---------- */
 
-/* Hero backdrop — soft emerald wash on dark ink */
+/* Hero backdrop — soft forest wash on painted pitch */
 @utility bg-clover-pattern {
-  background-color: var(--color-ink-deep);
+  background-color: var(--color-pitch-deep);
   background-image:
-    radial-gradient(circle at 15% 10%, rgba(18, 80, 58, 0.35) 0%, transparent 55%),
-    radial-gradient(circle at 85% 90%, rgba(201, 162, 39, 0.18) 0%, transparent 55%);
+    radial-gradient(circle at 15% 10%, rgba(15, 74, 52, 0.42) 0%, transparent 55%),
+    radial-gradient(circle at 85% 90%, rgba(201, 162, 74, 0.20) 0%, transparent 55%);
 }
 
 /* Ambient site-wide background */
 @utility bg-ambient {
-  background-color: var(--color-ink-deep);
+  background-color: var(--color-pitch-deep);
   background-image:
-    radial-gradient(ellipse 80% 60% at 20% 0%, rgba(18, 80, 58, 0.20) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 40% at 90% 100%, rgba(201, 162, 39, 0.10) 0%, transparent 60%);
+    radial-gradient(ellipse 80% 60% at 20% 0%, rgba(15, 74, 52, 0.24) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 90% 100%, rgba(201, 162, 74, 0.12) 0%, transparent 60%);
   background-attachment: fixed;
 }
 
-/* Prize / hero stage — dark radial cinematic backdrop with warm rim */
+/* Prize / hero stage — painted radial backdrop with warm brass rim */
 @utility bg-prize-stage {
-  background-color: var(--color-ink-deep);
+  background-color: var(--color-pitch-deep);
   background-image: var(--rim-gold), var(--gradient-stage);
 }
+
+/* ============================================================
+ * HERITAGE MOTIFS — painted signboard, brass fittings, market stall
+ * ============================================================ */
+
+/* Painted display type — hard-edged offset shadow + thin brass keyline,
+   mimicking hand-painted signwriting. Apply to display headlines only. */
+@utility painted {
+  text-shadow:
+    2px 2px 0 rgba(0,0,0,.55),
+    3px 3px 0 rgba(201,162,74,.18);
+  -webkit-text-stroke: 0.4px rgba(240,215,131,.35);
+}
+
+/* Brass surface — stamped metal look. Combine with .painted-emboss for text. */
+@utility brass {
+  background-image: var(--gradient-brass);
+  color: var(--color-brass-foreground);
+  box-shadow: var(--shadow-brass-emboss);
+  border: 1px solid rgba(74,56,16,.55);
+}
+
+/* Brass-framed picture: 2px gradient border, sharp corners, inner shadow. */
+@utility brass-frame {
+  box-shadow: var(--shadow-brass-frame), inset 0 0 24px rgba(0,0,0,.35);
+  border-radius: var(--radius-sharp);
+}
+
+/* Stall-board header bar — forest green plaque under the prize name. */
+@utility stall-header {
+  background-color: var(--color-forest);
+  color: var(--color-n-100);
+  border-bottom: 2px solid var(--color-brass-deep);
+  box-shadow: inset 0 -1px 0 rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.06);
+}
+
+/* Alternating hand-hung rotation on grid cards. Disabled under reduced-motion. */
+@utility stall-tilt-l { transform: rotate(-0.6deg); }
+@utility stall-tilt-r { transform: rotate(0.5deg); }
 
 /* Prize stage wrapper class variant */
 .prize-stage {
@@ -277,11 +352,11 @@
 .prize-stage::after {
   content: '';
   position: absolute; inset: 0;
-  background: radial-gradient(ellipse at 50% 100%, rgba(201,162,39,.12) 0%, transparent 60%);
+  background: radial-gradient(ellipse at 50% 100%, rgba(201,162,74,.14) 0%, transparent 60%);
   pointer-events: none;
 }
 
-/* Subtle grain overlay */
+/* Painted grain — 2–4% opacity noise, gives dark surfaces a painted feel. */
 @utility bg-grain {
   position: relative;
 }
@@ -290,7 +365,7 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
-  opacity: 0.025;
+  opacity: 0.035;
   mix-blend-mode: overlay;
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
 }
@@ -298,7 +373,7 @@
   content: '';
   position: absolute; inset: 0;
   pointer-events: none;
-  opacity: .025;
+  opacity: .04;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
@@ -309,33 +384,35 @@
   box-shadow: var(--shadow-lift);
 }
 
-/* Metallic gold surface + gold text gradient */
+/* Metallic brass surface + brass text gradient */
 @utility bg-gradient-gold {
-  background-image: var(--gradient-gold);
-  color: var(--color-gold-foreground);
+  background-image: var(--gradient-brass);
+  color: var(--color-brass-foreground);
+  box-shadow: var(--shadow-brass-emboss);
 }
 @utility text-gradient-gold {
-  background-image: var(--gradient-gold);
+  background-image: var(--gradient-brass);
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
   -webkit-text-fill-color: transparent;
 }
 .gold-metal {
-  background: var(--gradient-gold);
+  background: var(--gradient-brass);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
   -webkit-text-fill-color: transparent;
 }
 .gold-metal-surface {
-  background: var(--gradient-gold);
+  background: var(--gradient-brass);
   color: var(--color-n-900);
+  box-shadow: var(--shadow-brass-emboss);
 }
 
-/* Cinematic gradient text — bone to gold */
+/* Cinematic gradient text — cream to brass */
 @utility text-gradient-mint {
-  background-image: linear-gradient(100deg, #F7F6F3 0%, #F7F6F3 55%, #C9A227 100%);
+  background-image: linear-gradient(100deg, #F7F1E1 0%, #F7F1E1 55%, #C9A24A 100%);
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
@@ -346,7 +423,7 @@
 @utility sticker-tilt-r { transform: none; }
 
 @utility shimmer {
-  background: linear-gradient(90deg, var(--color-clover) 0%, var(--color-gold) 100%);
+  background: linear-gradient(90deg, var(--color-forest) 0%, var(--color-brass) 100%);
 }
 
 @utility hover-wobble { transition: opacity 0.15s ease, background-color 0.15s ease; }
@@ -392,4 +469,5 @@
   .group:hover .group-hover\:scale-\[1\.04\],
   .group:hover .group-hover\:scale-\[1\.05\],
   .hover\:scale-105:hover { transform: none !important; }
+  .stall-tilt-l, .stall-tilt-r { transform: none !important; }
 }
