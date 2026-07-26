@@ -145,15 +145,15 @@ export function SiteNav() {
         <div
           className={
             "relative mx-auto max-w-7xl px-3 md:px-6 grid items-center gap-2 md:gap-4 mast-transition " +
-            "grid-cols-[auto_1fr_auto] " +
-            (scrolled ? "h-14" : "h-[68px] md:h-[80px]")
+            "grid-cols-[1fr_auto_1fr] " +
+            (scrolled ? "h-14" : "h-[84px]")
           }
         >
           {/* LEFT edge — hamburger only, unchanged position. */}
           <button
             ref={toggleRef}
             onClick={() => setOpen((o) => !o)}
-            className="p-2 -ml-2 rounded-md hover:bg-muted text-foreground/80 shrink-0"
+            className="p-2 -ml-2 rounded-md hover:bg-muted text-foreground/80 shrink-0 justify-self-start"
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
             aria-controls="mobile-menu"
@@ -162,20 +162,17 @@ export function SiteNav() {
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
 
-          {/* CENTRE — single combined lockup SVG. Height fixed at 40px,
-              width auto with a firm max-width so it never blows out the row. */}
-          <div className="flex justify-center min-w-0">
-            <Link
-              to="/"
-              aria-label="Lucky Git Comps — home"
-              className="inline-flex items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-clover rounded-sm"
-            >
-              <Lockup style={{ height: 38, width: "auto", maxWidth: "62vw" }} />
-            </Link>
-          </div>
+          {/* CENTRE — single combined lockup image, transparent wrapper. */}
+          <Link
+            to="/"
+            aria-label="Lucky Git Comps — home"
+            className="justify-self-center inline-flex items-center bg-transparent p-0 border-0 shadow-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-clover rounded-sm"
+          >
+            <Lockup style={{ height: 56, width: "auto", maxWidth: "66vw" }} />
+          </Link>
 
           {/* RIGHT edge — auth (md+) + basket, unchanged position. */}
-          <div className="flex items-center justify-end gap-3 md:gap-4 shrink-0">
+          <div className="flex items-center justify-end gap-3 md:gap-4 shrink-0 justify-self-end">
             <div className="hidden md:flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.16em] text-foreground/60">
               {signedIn ? (
                 <>
