@@ -200,8 +200,8 @@ export function SiteNav() {
               ) : (
                 !loading && (
                   <>
-                    <Link to="/auth" className="hover:text-clover transition-colors">Login</Link>
-                    <Link to="/auth" className="hover:text-clover transition-colors">Register</Link>
+                    <Link to="/auth" search={{ redirect: undefined }} className="hover:text-clover transition-colors">Login</Link>
+                    <Link to="/auth" search={{ redirect: undefined }} className="hover:text-clover transition-colors">Register</Link>
                   </>
                 )
               )}
@@ -297,8 +297,8 @@ export function SiteNav() {
             ) : (
               !loading && (
                 <>
-                  <Link to="/auth" onClick={() => setOpen(false)} className="text-foreground/85 hover:text-clover">Login</Link>
-                  <Link to="/auth" onClick={() => setOpen(false)} className="text-foreground/85 hover:text-clover">Register</Link>
+                  <Link to="/auth" search={{ redirect: undefined }} onClick={() => setOpen(false)} className="text-foreground/85 hover:text-clover">Login</Link>
+                  <Link to="/auth" search={{ redirect: undefined }} onClick={() => setOpen(false)} className="text-foreground/85 hover:text-clover">Register</Link>
                 </>
               )
             )}
