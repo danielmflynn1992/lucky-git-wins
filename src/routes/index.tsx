@@ -10,6 +10,8 @@ import { ViewToggle } from "@/routes/competitions.index";
 import { Countdown } from "@/components/Countdown";
 import { Lockup } from "@/components/Logo";
 import { Pinstripe } from "@/components/Pinstripe";
+import { Marker } from "@/components/Marker";
+import { Perforation } from "@/components/Perforation";
 import { COMPETITIONS, CATEGORIES, WINNERS, type Category } from "@/lib/mock-comps";
 import { gbp } from "@/lib/format";
 import { Button } from "@/components/ui/button";
@@ -58,8 +60,8 @@ function Home() {
     <div className="min-h-screen flex flex-col bg-ambient">
       <SiteNav />
 
-      {/* HERO */}
-      <section className="grain relative bg-clover-pattern overflow-hidden border-b border-border">
+      {/* HERO — pools-coupon masthead */}
+      <section className="halftone relative overflow-hidden rule-heavy border-b-[3px] border-[var(--color-ink-black)]">
         <div className="mx-auto max-w-7xl px-4 pt-10 pb-16 md:pt-16 md:pb-24">
           {/* Single combined lockup — seal + wordmark in one SVG. */}
           <div className="flex justify-center mb-3 md:mb-4">
@@ -67,12 +69,15 @@ function Home() {
           </div>
           <div className="grid gap-10 md:grid-cols-2 items-center">
           <div>
-            <h1 className="font-display text-5xl md:text-7xl lg:text-[5.5rem] font-black leading-[0.95] tracking-[-0.035em] text-foreground">
+            <h1
+              className="misreg font-display uppercase leading-[0.9] tracking-[0.01em] text-foreground"
+              style={{ fontSize: "clamp(2.75rem, 9vw, 6rem)" }}
+            >
               Real odds.<br />
               Automatic draws.
             </h1>
             <p className="mt-5 text-muted-foreground max-w-md text-base leading-relaxed">
-              <span className="text-foreground font-semibold">Might as well be you.</span> Cars, cash, tech and holidays. Every ticket counted, every draw published. No smoke, no mirrors, no bloke pulling names out of a hat in a back room.
+              <Marker><span className="text-foreground font-bold">Might as well be you.</span></Marker> Cars, cash, tech and holidays. Every ticket counted, every draw published. No smoke, no mirrors, no bloke pulling names out of a hat in a back room.
             </p>
 
             {/* Featured comp mini card */}
@@ -150,8 +155,10 @@ function Home() {
         </div>
       </section>
 
+      <Perforation color="var(--color-ink-black)" className="text-transparent" />
+
       {/* TRUST STRIP */}
-      <section className="border-y border-border bg-card">
+      <section className="border-y-[1.5px] border-[var(--color-ink-black)] bg-[var(--color-paper-raised)]">
         <div className="mx-auto max-w-7xl px-4 py-6 grid grid-cols-2 md:grid-cols-4 gap-6 text-sm">
           {[
             { i: Radio, t: "Automatic random draws" },
