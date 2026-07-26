@@ -26,7 +26,7 @@ async def shot(page: Page, viewport: str, name: str) -> None:
 
 async def open_first_competition(page: Page, viewport: str) -> str:
     """Navigate home, click the first competition card, return its slug."""
-    await page.goto(BASE + "/", wait_until="domcontentloaded")
+    await page.goto(BASE + "/", wait_until="networkidle")
     # Scope to CompCard's stretched link inside a .paper wrapper — the
     # bare `a[href^="/competitions/"]` selector also matches the animated
     # LiveOddsTicker links, which never report as "stable" to Playwright.
@@ -43,7 +43,10 @@ async def open_first_competition(page: Page, viewport: str) -> str:
         await page.wait_for_url(f"**{href}", timeout=8_000)
     except PWTimeout:
         print(f"  ! card click did not navigate on {viewport}; using goto()")
-        await page.goto(BASE + href, wait_until="domcontentloaded")
+        await page.goto(BASE + href, wait_until="networkidle")
+    # Wait for React hydration to attach event handlers — without this,
+    # the SSR HTML is clickable but state-updating buttons silently no-op.
+    await page.wait_for_load_state("networkidle")
     await page.get_by_role("button", name="Enter now").first.wait_for(timeout=15_000)
     await shot(page, viewport, "02_detail")
     return href.rsplit("/", 1)[-1]
