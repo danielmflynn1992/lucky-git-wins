@@ -9,7 +9,6 @@ import { CompRow } from "@/components/CompRow";
 import { ViewToggle } from "@/routes/competitions.index";
 import { Countdown } from "@/components/Countdown";
 import { SmugSmile, StampSeal } from "@/components/Logo";
-import { NextDropCountdown } from "@/components/NextDropCountdown";
 import { Pinstripe } from "@/components/Pinstripe";
 import { COMPETITIONS, CATEGORIES, WINNERS, type Category } from "@/lib/mock-comps";
 import { gbp } from "@/lib/format";
@@ -58,7 +57,6 @@ function Home() {
   return (
     <div className="min-h-screen flex flex-col bg-ambient">
       <SiteNav />
-      <NextDropCountdown />
 
       {/* HERO */}
       <section className="grain relative bg-clover-pattern overflow-hidden border-b border-border">
