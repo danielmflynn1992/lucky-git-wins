@@ -22,10 +22,10 @@ export function Countdown({ target, compact = false }: { target: string; compact
       } ${
         urgent
           ? "bg-urgent text-urgent-foreground"
-          : "bg-ink text-cream"
+          : "bg-[var(--color-ink-blue)] text-[var(--color-paper)]"
       }`}
     >
-      <span className={`h-1.5 w-1.5 rounded-full ${urgent ? "bg-white animate-pulse" : "bg-clover"}`} />
+      <span className={`h-1.5 w-1.5 rounded-full ${urgent ? "bg-white animate-pulse" : "bg-[var(--color-ink-yellow)]"}`} />
       <span>{digits}</span>
     </div>
   );
