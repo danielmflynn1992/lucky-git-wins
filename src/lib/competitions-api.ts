@@ -1,5 +1,6 @@
 import { queryOptions } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import type { LetterboxStyle } from "@/components/LetterboxImage";
 import audi from "@/assets/prize-audi.jpg";
 import tech from "@/assets/prize-tech.jpg";
 import cash from "@/assets/prize-cash.jpg";
@@ -24,6 +25,7 @@ export interface DbCompetition {
   subtitle: string;
   category: string;
   image: string;
+  letterboxStyle: LetterboxStyle;
   pricePerTicket: number;
   totalTickets: number;
   ticketsSold: number;
@@ -64,6 +66,7 @@ export async function fetchCompetitionBySlug(slug: string): Promise<DbCompetitio
     subtitle: comp.subtitle,
     category: comp.category,
     image: comp.image || IMAGES[comp.slug] || "",
+    letterboxStyle: ((comp as { letterbox_style?: string }).letterbox_style ?? "blur") as LetterboxStyle,
     pricePerTicket: Number(comp.price_per_ticket),
     totalTickets: comp.total_tickets,
     ticketsSold: sold,

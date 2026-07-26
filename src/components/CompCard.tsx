@@ -6,6 +6,7 @@ import { Countdown } from "./Countdown";
 import { QuickAddDialog } from "./QuickAddDialog";
 import { Repeat2, Zap, Plus, ArrowRight } from "lucide-react";
 import { NoDeadCompsBadge } from "./NoDeadCompsBadge";
+import { LetterboxImage } from "./LetterboxImage";
 
 export function CompCard({ c }: { c: Competition }) {
   const pct = Math.round((c.ticketsSold / c.totalTickets) * 100);
@@ -48,25 +49,17 @@ export function CompCard({ c }: { c: Competition }) {
         <Countdown target={c.endsAt} compact />
       </div>
 
-      {/* Massive edge-to-edge prize image. Blurred backdrop fills the frame
-          width-to-width, while the foreground image stays fully visible
-          (object-contain) so nothing important gets cropped. */}
-      <div className="relative z-0 aspect-[5/4] overflow-hidden bg-muted">
-        <img
-          src={c.image}
-          alt=""
-          aria-hidden="true"
-          className="absolute inset-0 h-full w-full object-cover scale-110 blur-2xl opacity-60"
-        />
-        <img
-          src={c.image}
-          alt={c.title}
-          loading="lazy"
-          width={1280}
-          height={1024}
-          className="relative h-full w-full object-contain transition-transform duration-500 group-hover:scale-[1.05]"
-        />
-      </div>
+      {/* Prize image fills the 5:4 frame without cropping; the letterbox
+          backdrop (solid / gradient / blur) is picked per-competition. */}
+      <LetterboxImage
+        src={c.image}
+        alt={c.title}
+        style={c.letterboxStyle ?? "blur"}
+        className="z-0 aspect-[5/4]"
+        imgClassName="transition-transform duration-500 group-hover:scale-[1.05]"
+        width={1280}
+        height={1024}
+      />
 
       {/* Content */}
       <div className="relative z-10 pointer-events-none p-2.5 sm:p-4 flex flex-1 flex-col gap-2 sm:gap-3 min-w-0 overflow-hidden">

@@ -51,6 +51,7 @@ export type Database = {
           id: string
           image: string
           instant_win: boolean
+          letterbox_style: Database["public"]["Enums"]["letterbox_style"]
           max_per_person: number
           price_per_ticket: number
           seed_hash: string
@@ -71,6 +72,7 @@ export type Database = {
           id?: string
           image?: string
           instant_win?: boolean
+          letterbox_style?: Database["public"]["Enums"]["letterbox_style"]
           max_per_person?: number
           price_per_ticket: number
           seed_hash?: string
@@ -91,6 +93,7 @@ export type Database = {
           id?: string
           image?: string
           instant_win?: boolean
+          letterbox_style?: Database["public"]["Enums"]["letterbox_style"]
           max_per_person?: number
           price_per_ticket?: number
           seed_hash?: string
@@ -310,27 +313,50 @@ export type Database = {
         }
       }
       claim_admin_if_empty: { Args: never; Returns: boolean }
-      create_competition_with_tickets: {
-        Args: {
-          p_cash_alternative: number
-          p_category: string
-          p_description: string
-          p_ends_at: string
-          p_hot: boolean
-          p_image: string
-          p_instant_win: boolean
-          p_instant_win_count: number
-          p_instant_win_prize: number
-          p_max_per_person: number
-          p_price_per_ticket: number
-          p_slug: string
-          p_status: string
-          p_subtitle: string
-          p_title: string
-          p_total_tickets: number
-        }
-        Returns: string
-      }
+      create_competition_with_tickets:
+        | {
+            Args: {
+              p_cash_alternative: number
+              p_category: string
+              p_description: string
+              p_ends_at: string
+              p_hot: boolean
+              p_image: string
+              p_instant_win: boolean
+              p_instant_win_count: number
+              p_instant_win_prize: number
+              p_max_per_person: number
+              p_price_per_ticket: number
+              p_slug: string
+              p_status: string
+              p_subtitle: string
+              p_title: string
+              p_total_tickets: number
+            }
+            Returns: string
+          }
+        | {
+            Args: {
+              p_cash_alternative: number
+              p_category: string
+              p_description: string
+              p_ends_at: string
+              p_hot: boolean
+              p_image: string
+              p_instant_win: boolean
+              p_instant_win_count: number
+              p_instant_win_prize: number
+              p_letterbox_style?: string
+              p_max_per_person: number
+              p_price_per_ticket: number
+              p_slug: string
+              p_status: string
+              p_subtitle: string
+              p_title: string
+              p_total_tickets: number
+            }
+            Returns: string
+          }
       draw_competition: {
         Args: { p_comp_id: string; p_notes?: string }
         Returns: {
@@ -377,6 +403,7 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
+      letterbox_style: "solid" | "gradient" | "blur"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -505,6 +532,7 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "moderator", "user"],
+      letterbox_style: ["solid", "gradient", "blur"],
     },
   },
 } as const

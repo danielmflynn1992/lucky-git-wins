@@ -55,6 +55,7 @@ const createInput = z.object({
   instantWin: z.boolean().default(false),
   instantWinCount: z.number().int().min(0).max(10000).default(0),
   instantWinPrize: z.number().min(0).max(1000000).default(0),
+  letterboxStyle: z.enum(["solid", "gradient", "blur"]).default("blur"),
 });
 
 export const createCompetition = createServerFn({ method: "POST" })
@@ -95,6 +96,7 @@ export const createCompetition = createServerFn({ method: "POST" })
         p_instant_win: data.instantWin,
         p_instant_win_count: data.instantWin ? data.instantWinCount : 0,
         p_instant_win_prize: data.instantWin ? data.instantWinPrize : 0,
+        p_letterbox_style: data.letterboxStyle,
       },
     );
 
