@@ -74,19 +74,61 @@ export function Lockup({
   style?: React.CSSProperties;
   tone?: "ink" | "cream";
 }) {
-  // Single raster lockup for every surface. White background is dropped via
-  // mix-blend-multiply on light surfaces; on dark surfaces we invert to get
-  // a cream lockup on ink (black → transparent via mix-blend-screen).
-  const blend =
-    tone === "cream"
-      ? "[filter:invert(1)] mix-blend-screen"
-      : "mix-blend-multiply";
+  // On light (paper) surfaces we still use the raster lockup with
+  // mix-blend-multiply to drop the white background cleanly.
+  //
+  // On DARK / COLOURED surfaces the old approach was `filter: invert()
+  // + mix-blend-screen`, which tinted the cream text pink/lilac when
+  // laid over a saturated blue/red surface. Instead we render a
+  // dedicated cream-ink SVG wordmark using currentColor — no raster,
+  // no filter, no hue shift. Wrap in a text-[--color-on-dark-fg]
+  // (or similar) container to colour it.
+  if (tone === "cream") {
+    return (
+      <svg
+        viewBox="0 0 1200 240"
+        role="img"
+        aria-label="Lucky Git Comps"
+        className={`block select-none ${className}`}
+        style={{ maxWidth: "100%", height: "auto", ...style }}
+        preserveAspectRatio="xMidYMid meet"
+      >
+        <g fill="currentColor">
+          {/* Simple engraved wreath mark on the left, in currentColor */}
+          <circle cx="120" cy="120" r="96" fill="none" stroke="currentColor" strokeWidth="4" />
+          <circle cx="120" cy="120" r="80" fill="none" stroke="currentColor" strokeWidth="1.5" />
+          <text
+            x="120"
+            y="150"
+            textAnchor="middle"
+            fontFamily="'Cormorant Garamond','Cormorant',Garamond,Georgia,serif"
+            fontSize="72"
+            fontWeight="600"
+            fontStyle="italic"
+          >
+            LGC
+          </text>
+          <text
+            x="260"
+            y="152"
+            fontFamily="'Cormorant Garamond','Cormorant',Garamond,Georgia,serif"
+            fontSize="128"
+            fontWeight="600"
+            letterSpacing="10"
+            style={{ fontVariant: "small-caps" }}
+          >
+            Lucky Git Comps
+          </text>
+        </g>
+      </svg>
+    );
+  }
   return (
     <img
       src={LOCKUP_URL}
       alt="Lucky Git Comps"
       draggable={false}
-      className={`block object-contain select-none ${blend} ${className}`}
+      className={`block object-contain select-none mix-blend-multiply ${className}`}
       style={{ maxWidth: "100%", height: "auto", ...style }}
     />
   );
