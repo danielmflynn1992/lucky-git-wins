@@ -23,11 +23,6 @@ export interface Competition {
   instantWin: boolean;
   hot?: boolean;
   description: string;
-  skillQuestion: {
-    q: string;
-    options: string[];
-    correct: number;
-  };
 }
 
 const inHours = (h: number) => new Date(Date.now() + h * 3_600_000).toISOString();
