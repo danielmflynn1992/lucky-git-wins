@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 type Variant = "DRAWN" | "SOLD OUT" | "VERIFIED" | "PAID" | "WINNER" | "LIVE" | "NEW";
 
 const inkFor: Record<Variant, string> = {
-  DRAWN:        "var(--color-ink-purple)",
+  DRAWN:        "var(--color-ink-blue)",
   "SOLD OUT":   "var(--color-ink-red)",
   VERIFIED:     "var(--color-ink-blue)",
   PAID:         "var(--color-ink-red)",
