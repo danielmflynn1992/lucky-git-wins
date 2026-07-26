@@ -84,7 +84,8 @@ async def flow_pick_numbers(page: Page, viewport: str) -> None:
     slug = await open_first_competition(page, viewport)
 
     await page.get_by_role("button", name="Pick numbers").click()
-    # Grid tiles: small square <button>{n}</button> inside the picker grid.
+    # Give the picker mode a beat to swap in before querying tiles.
+    await page.wait_for_timeout(300)
     tiles = page.locator('[class*="grid-cols-10"] > button:not([disabled])')
     await tiles.first.wait_for(timeout=10_000)
     n = await tiles.count()
