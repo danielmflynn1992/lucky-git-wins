@@ -130,9 +130,9 @@ function Admin() {
         </div>
 
         <div className="mt-8 rounded-2xl bg-card border-2 border-border overflow-hidden">
-          <div className="p-4 flex items-center justify-between border-b border-border">
+          <div className="p-4 flex items-center justify-between gap-3 flex-wrap border-b border-border">
             <h2 className="font-display text-lg font-bold">Competitions</h2>
-            <div className="flex gap-2">
+            <div className="flex gap-2 flex-wrap">
               <Button variant="cream" size="sm"><Pause className="h-3.5 w-3.5" /> Pause selected</Button>
               <Button variant="cream" size="sm"><Play className="h-3.5 w-3.5" /> Resume selected</Button>
             </div>

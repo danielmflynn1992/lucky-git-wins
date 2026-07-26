@@ -182,13 +182,13 @@ export function SiteNav() {
               <WaxSeal
                 size={
                   scrolled
-                    ? "h-[44px] w-[44px]"
-                    : "h-[64px] w-[64px] md:h-[88px] md:w-[88px]"
+                    ? "h-[48px] w-[48px]"
+                    : "h-[84px] w-[84px] md:h-[120px] md:w-[120px]"
                 }
                 className={
                   scrolled
                     ? "translate-y-0"
-                    : "translate-y-[26px] md:translate-y-[35px]"
+                    : "translate-y-[36px] md:translate-y-[52px]"
                 }
               />
             </div>
@@ -236,7 +236,7 @@ export function SiteNav() {
       {/* Spacer reserving the seal's overhang so first-page content is never
           occluded on initial render. Sits outside the sticky header, in normal
           flow, so it pushes the page body down by the overhang height. */}
-      <div aria-hidden="true" className="h-[26px] md:h-[35px] pointer-events-none" />
+      <div aria-hidden="true" className="h-[36px] md:h-[52px] pointer-events-none" />
 
       {/* Screen-reader live region — announces basket changes globally */}
       <div
