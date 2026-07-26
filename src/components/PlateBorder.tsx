@@ -28,7 +28,7 @@ export function PlateBorder({
 }
 
 function PlateCorners() {
-  const c = "absolute h-3 w-3";
+  const c = "absolute h-3 w-3 pointer-events-none";
   return (
     <>
       <Flourish className={`${c} top-1 left-1`} />
