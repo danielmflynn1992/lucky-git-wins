@@ -7,7 +7,7 @@ export function StaticPage({ title, kicker, children }: { title: string; kicker?
     <div className="min-h-screen flex flex-col">
       <SiteNav />
       <main className="w-full flex-1 py-[var(--space-section)] px-4">
-        <article className="on-light mx-auto max-w-3xl rounded-sm p-8 md:p-14 shadow-[var(--shadow-lift)]">
+        <article className="plain on-light paper mx-auto max-w-3xl rounded-sm p-8 md:p-14 shadow-[var(--shadow-lift)]">
           {kicker && (
             <div className="text-[11px] font-mono uppercase tracking-[0.25em] text-clover font-bold">
               {kicker}
