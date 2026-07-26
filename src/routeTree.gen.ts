@@ -17,6 +17,7 @@ import { Route as PromiseRouteImport } from './routes/promise'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PastDrawsRouteImport } from './routes/past-draws'
 import { Route as OddsRouteImport } from './routes/odds'
+import { Route as LegalStructureRouteImport } from './routes/legal-structure'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as FreeEntryRouteImport } from './routes/free-entry'
 import { Route as FaqRouteImport } from './routes/faq'
@@ -70,6 +71,11 @@ const PastDrawsRoute = PastDrawsRouteImport.update({
 const OddsRoute = OddsRouteImport.update({
   id: '/odds',
   path: '/odds',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LegalStructureRoute = LegalStructureRouteImport.update({
+  id: '/legal-structure',
+  path: '/legal-structure',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HowItWorksRoute = HowItWorksRouteImport.update({
@@ -153,6 +159,7 @@ export interface FileRoutesByFullPath {
   '/faq': typeof FaqRoute
   '/free-entry': typeof FreeEntryRoute
   '/how-it-works': typeof HowItWorksRoute
+  '/legal-structure': typeof LegalStructureRoute
   '/odds': typeof OddsRoute
   '/past-draws': typeof PastDrawsRoute
   '/privacy': typeof PrivacyRoute
@@ -177,6 +184,7 @@ export interface FileRoutesByTo {
   '/faq': typeof FaqRoute
   '/free-entry': typeof FreeEntryRoute
   '/how-it-works': typeof HowItWorksRoute
+  '/legal-structure': typeof LegalStructureRoute
   '/odds': typeof OddsRoute
   '/past-draws': typeof PastDrawsRoute
   '/privacy': typeof PrivacyRoute
@@ -202,6 +210,7 @@ export interface FileRoutesById {
   '/faq': typeof FaqRoute
   '/free-entry': typeof FreeEntryRoute
   '/how-it-works': typeof HowItWorksRoute
+  '/legal-structure': typeof LegalStructureRoute
   '/odds': typeof OddsRoute
   '/past-draws': typeof PastDrawsRoute
   '/privacy': typeof PrivacyRoute
@@ -228,6 +237,7 @@ export interface FileRouteTypes {
     | '/faq'
     | '/free-entry'
     | '/how-it-works'
+    | '/legal-structure'
     | '/odds'
     | '/past-draws'
     | '/privacy'
@@ -252,6 +262,7 @@ export interface FileRouteTypes {
     | '/faq'
     | '/free-entry'
     | '/how-it-works'
+    | '/legal-structure'
     | '/odds'
     | '/past-draws'
     | '/privacy'
@@ -276,6 +287,7 @@ export interface FileRouteTypes {
     | '/faq'
     | '/free-entry'
     | '/how-it-works'
+    | '/legal-structure'
     | '/odds'
     | '/past-draws'
     | '/privacy'
@@ -301,6 +313,7 @@ export interface RootRouteChildren {
   FaqRoute: typeof FaqRoute
   FreeEntryRoute: typeof FreeEntryRoute
   HowItWorksRoute: typeof HowItWorksRoute
+  LegalStructureRoute: typeof LegalStructureRoute
   OddsRoute: typeof OddsRoute
   PastDrawsRoute: typeof PastDrawsRoute
   PrivacyRoute: typeof PrivacyRoute
@@ -372,6 +385,13 @@ declare module '@tanstack/react-router' {
       path: '/odds'
       fullPath: '/odds'
       preLoaderRoute: typeof OddsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/legal-structure': {
+      id: '/legal-structure'
+      path: '/legal-structure'
+      fullPath: '/legal-structure'
+      preLoaderRoute: typeof LegalStructureRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/how-it-works': {
@@ -485,6 +505,7 @@ const rootRouteChildren: RootRouteChildren = {
   FaqRoute: FaqRoute,
   FreeEntryRoute: FreeEntryRoute,
   HowItWorksRoute: HowItWorksRoute,
+  LegalStructureRoute: LegalStructureRoute,
   OddsRoute: OddsRoute,
   PastDrawsRoute: PastDrawsRoute,
   PrivacyRoute: PrivacyRoute,
