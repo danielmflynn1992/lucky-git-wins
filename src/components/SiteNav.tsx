@@ -154,9 +154,11 @@ export function SiteNav() {
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
 
-          {/* Centred wax seal — overhangs the header's bottom edge by ~40% of
-              its size, then shrinks and settles inside the bar on scroll. */}
-          <div className="justify-self-center shrink-0 relative z-50 pointer-events-auto">
+          {/* Centred wax seal — overhangs the header's bottom edge by half
+              its size, then shrinks and settles inside the bar on scroll.
+              The min-w reserves clear space in the grid centre column so
+              left/right nav links can't crash into the emblem. */}
+          <div className="justify-self-center shrink-0 relative z-50 pointer-events-auto min-w-[96px] md:min-w-[132px] flex justify-center">
             <div className={`relative flex justify-center ${scrolled ? "items-center" : "items-end"}`}>
               <WaxSeal
                 size={
