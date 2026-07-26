@@ -63,11 +63,7 @@ function Home() {
         <div className="mx-auto max-w-7xl px-4 pt-10 pb-16 md:pt-16 md:pb-24">
           {/* Single combined lockup — seal + wordmark in one SVG. */}
           <div className="flex justify-center mb-6 md:mb-8">
-            <Lockup
-              variant="stacked"
-              className="text-clover"
-              style={{ maxWidth: "min(320px, 70vw)", width: "100%", height: "auto" }}
-            />
+            <Lockup style={{ maxWidth: "min(340px, 78vw)", width: "100%", height: "auto" }} />
           </div>
           <div className="grid gap-10 md:grid-cols-2 items-center">
           <div>
@@ -126,7 +122,6 @@ function Home() {
             <div className="rounded-lg bg-card border border-border p-6 shadow-md">
               <div className="flex items-center justify-between">
                 <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-muted-foreground">Platform stats · Live</div>
-                <SmugSmile className="h-8 w-8" />
               </div>
               <dl className="mt-6 grid grid-cols-2 gap-6">
                 <div>

@@ -27,7 +27,7 @@ export function SiteFooter() {
       <div className="mx-auto max-w-7xl px-4 py-12 grid gap-10 md:grid-cols-4">
         <div className="md:col-span-1">
           <div className="flex">
-            <Lockup variant="stacked" className="text-cream" style={{ maxWidth: 220, width: "100%", height: "auto" }} />
+            <Lockup tone="cream" style={{ maxWidth: 240, width: "100%", height: "auto" }} />
           </div>
           <p className="mt-4 text-sm text-cream/85 max-w-xs leading-relaxed">
             The odds, out in the open. A UK prize competition platform built on automated, verifiable draws and a public results log.
