@@ -19,6 +19,9 @@ type Draw = {
   winner_display_name: string;
   winner_town: string;
   total_tickets: number;
+  total_sold: number | null;
+  qualifying_pool_size: number | null;
+  draw_pool: string | null;
   draw_method: string;
   notes: string;
   drawn_at: string;
@@ -29,7 +32,7 @@ const drawsQuery = queryOptions({
   queryFn: async (): Promise<Draw[]> => {
     const { data, error } = await supabase
       .from("draws")
-      .select("id, competition_id, competition_title, prize, winning_number, winner_display_name, winner_town, total_tickets, draw_method, notes, drawn_at")
+      .select("id, competition_id, competition_title, prize, winning_number, winner_display_name, winner_town, total_tickets, total_sold, qualifying_pool_size, draw_pool, draw_method, notes, drawn_at")
       .order("drawn_at", { ascending: false });
     if (error) throw error;
     return (data ?? []) as Draw[];
@@ -301,8 +304,17 @@ function PastDrawsPage() {
                         {d.winning_number}
                       </span>
                     </div>
-                    <div className="text-[11px] font-mono text-muted-foreground mt-1">
-                      of {d.total_tickets.toLocaleString()}
+                    <div className="text-[11px] font-mono text-muted-foreground mt-1 space-y-0.5">
+                      <div>of {d.total_tickets.toLocaleString()} total</div>
+                      {d.total_sold != null && (
+                        <div>{d.total_sold.toLocaleString()} sold</div>
+                      )}
+                      {d.qualifying_pool_size != null && (
+                        <div className="text-clover font-bold">
+                          pool: {d.qualifying_pool_size.toLocaleString()}
+                          {d.draw_pool === "all" && " (void)"}
+                        </div>
+                      )}
                     </div>
                   </div>
 
