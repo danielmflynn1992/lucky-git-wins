@@ -5,7 +5,7 @@ import holiday from "@/assets/prize-holiday.jpg";
 import ps5 from "@/assets/prize-ps5.jpg";
 import watch from "@/assets/prize-watch.jpg";
 
-export type Category = "Cars" | "Tech" | "Cash" | "Holidays" | "Watches";
+export type Category = "Motors" | "Gadgets" | "Readies" | "Getaways" | "Timepieces";
 
 export interface Competition {
   slug: string;
@@ -32,7 +32,7 @@ export const COMPETITIONS: Competition[] = [
     slug: "audi-rs3-25k-cash",
     title: "Audi RS3 (or £45,000 cash)",
     subtitle: "400bhp of German silliness. Yours if you're the lucky git.",
-    category: "Cars",
+    category: "Motors",
     image: audi,
     gallery: [audi],
     pricePerTicket: 14.99,
@@ -49,7 +49,7 @@ export const COMPETITIONS: Competition[] = [
     slug: "apple-tech-bundle",
     title: "Full Apple Tech Bundle",
     subtitle: "iPhone 17 Pro, MacBook Pro, AirPods Pro. The lot.",
-    category: "Tech",
+    category: "Gadgets",
     image: tech,
     gallery: [tech],
     pricePerTicket: 4.99,
@@ -66,7 +66,7 @@ export const COMPETITIONS: Competition[] = [
     slug: "10k-cash",
     title: "£10,000 Tax-Free Cash",
     subtitle: "Ten grand. Straight in your bank. No strings, no cars.",
-    category: "Cash",
+    category: "Readies",
     image: cash,
     gallery: [cash],
     pricePerTicket: 24.99,
@@ -82,7 +82,7 @@ export const COMPETITIONS: Competition[] = [
     slug: "maldives-getaway",
     title: "Maldives Getaway for Two",
     subtitle: "7 nights, overwater villa, flights included.",
-    category: "Holidays",
+    category: "Getaways",
     image: holiday,
     gallery: [holiday],
     pricePerTicket: 14.99,
@@ -98,7 +98,7 @@ export const COMPETITIONS: Competition[] = [
     slug: "ps5-pro-bundle",
     title: "PS5 Pro + Games Bundle",
     subtitle: "Console, extra pad, three top games. Answer to enter.",
-    category: "Tech",
+    category: "Gadgets",
     image: ps5,
     gallery: [ps5],
     pricePerTicket: 4.99,
@@ -115,7 +115,7 @@ export const COMPETITIONS: Competition[] = [
     slug: "rolex-submariner",
     title: "Rolex Submariner",
     subtitle: "Or £11,000 cash if you're not a watch person.",
-    category: "Watches",
+    category: "Timepieces",
     image: watch,
     gallery: [watch],
     pricePerTicket: 9.99,
@@ -129,7 +129,7 @@ export const COMPETITIONS: Competition[] = [
   },
 ];
 
-export const CATEGORIES: Category[] = ["Cars", "Tech", "Watches", "Cash", "Holidays"];
+export const CATEGORIES: Category[] = ["Motors", "Gadgets", "Timepieces", "Readies", "Getaways"];
 
 export const WINNERS = [
   { name: "Dave", town: "Cardiff", prize: "Land Rover Defender", quote: "I actually cried. Ask my wife.", when: "2 weeks ago" },
