@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 260" role="img" aria-label="Lucky Git Comps">
+  <g fill="currentColor">
+    <text x="500" y="150" text-anchor="middle"
+          font-family="'Cormorant Garamond', 'Cormorant', Garamond, Georgia, serif"
+          font-size="150" font-weight="700"
+          letter-spacing="10"
+          font-variant="small-caps">Lucky Git Comps</text>
+    <rect x="60" y="200" width="410" height="2"/>
+    <rect x="530" y="200" width="410" height="2"/>
+    <path d="M500 190 l-14 11 l14 11 l14 -11 z"/>
+    <rect x="60" y="207" width="410" height="1" opacity="0.55"/>
+    <rect x="530" y="207" width="410" height="1" opacity="0.55"/>
+  </g>
+</svg>
