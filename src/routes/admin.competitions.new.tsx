@@ -244,7 +244,7 @@ function NewComp() {
               </div>
             </Card>
 
-            <Card title="Cover image">
+            <Card title="Prize images">
               <input
                 ref={fileInputRef}
                 type="file"
@@ -252,95 +252,90 @@ function NewComp() {
                 className="hidden"
                 onChange={(e) => {
                   const f = e.target.files?.[0];
-                  if (f) void handleFile(f);
+                  if (f) void handleFile(f, "hero");
                   e.target.value = "";
                 }}
               />
+              <input
+                ref={supportInputRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => {
+                  const f = e.target.files?.[0];
+                  if (f) void handleFile(f, supportingImages.length);
+                  e.target.value = "";
+                }}
+              />
+
+              <label className="mb-3 flex items-start gap-2 text-[11px] leading-relaxed text-foreground/80">
+                <input
+                  type="checkbox"
+                  checked={flattenBackground}
+                  onChange={(e) => setFlattenBackground(e.target.checked)}
+                  className="mt-0.5 h-4 w-4 accent-clover"
+                />
+                <span>
+                  Auto-flatten near-uniform backgrounds onto cream paper. Turn off if it removes
+                  legitimate detail from your source.
+                </span>
+              </label>
+
               {imageUrl ? (
-                <div className="space-y-3">
-                  {/* Live card-frame preview honouring the chosen letterbox
-                      style. The dashed outline marks the visible card area. */}
-                  <div className="relative rounded-xl overflow-hidden border-2 border-border aspect-[5/4]">
-                    <LetterboxImage
-                      src={imageUrl}
-                      alt="Cover preview"
-                      style={letterboxStyle}
-                      className="absolute inset-0 h-full w-full"
-                      loading="eager"
-                    />
-                    <div className="pointer-events-none absolute inset-0" style={{ outline: "2px dashed rgb(15 107 63 / 0.7)", outlineOffset: "-6px" }} />
-                    <span className="absolute top-2 left-2 rounded-md bg-ink/80 text-cream px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider">Card frame · 5:4</span>
-                    <button
-                    type="button"
-                    onClick={() => setImageUrl("")}
-                    className="absolute top-2 right-2 h-8 w-8 rounded-full bg-ink/80 text-cream inline-flex items-center justify-center hover:bg-ink"
-                    aria-label="Remove image"
-                  >
-                    <X className="h-4 w-4" />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => fileInputRef.current?.click()}
-                    disabled={uploading}
-                    className="absolute bottom-2 right-2 rounded-full bg-cream text-ink px-3 py-1 text-xs font-bold shadow hover:bg-white"
-                  >
-                    Replace
-                  </button>
-                  </div>
-                  <div>
-                    <div className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-2">Letterbox background</div>
-                    <div className="grid grid-cols-3 gap-2">
-                      {(["solid", "gradient", "blur"] as const).map((opt) => {
-                        const active = letterboxStyle === opt;
-                        const labels: Record<LetterboxStyle, string> = {
-                          solid: "Solid",
-                          gradient: "Gradient",
-                          blur: "Blur",
-                        };
-                        const hints: Record<LetterboxStyle, string> = {
-                          solid: "Flat neutral",
-                          gradient: "Brand warmth",
-                          blur: "Image echo",
-                        };
-                        return (
-                          <button
-                            key={opt}
-                            type="button"
-                            onClick={() => setLetterboxStyle(opt)}
-                            aria-pressed={active}
-                            className={`group relative rounded-lg overflow-hidden border-2 text-left transition-all ${active ? "border-clover ring-2 ring-clover/30" : "border-border hover:border-clover/60"}`}
-                          >
-                            <LetterboxImage
-                              src={imageUrl}
-                              alt=""
-                              style={opt}
-                              className="aspect-[5/4] w-full"
-                              blur="md"
-                              loading="eager"
-                            />
-                            <div className="px-2 py-1.5 bg-card">
-                              <div className="text-[11px] font-bold">{labels[opt]}</div>
-                              <div className="text-[10px] text-muted-foreground">{hints[opt]}</div>
-                            </div>
-                          </button>
-                        );
-                      })}
+                <div className="space-y-4">
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    <div>
+                      <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-1">In-card preview</div>
+                      <div className="relative">
+                        <PrizeImage src={thumbUrl || imageUrl} alt="Card preview" title={title || "Prize title"} eyebrow={category} size="card" priority />
+                        <button
+                          type="button"
+                          onClick={() => { setImageUrl(""); setThumbUrl(""); }}
+                          className="absolute top-1 right-1 h-7 w-7 rounded-full bg-ink/80 text-cream inline-flex items-center justify-center hover:bg-ink z-10"
+                          aria-label="Remove image"
+                        >
+                          <X className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-1">On the detail page</div>
+                      <PrizeImage src={imageUrl} alt="Detail preview" title={title || "Prize title"} eyebrow={category} size="hero" priority />
                     </div>
                   </div>
-                  <p className="text-[11px] text-muted-foreground leading-relaxed">
-                    Your full image sits inside the dashed 5:4 frame — nothing is cropped. The letterbox
-                    background you pick above fills any empty space on cards and the detail page.
-                    For edge-to-edge sharpness, upload a native <strong>5:4</strong> image (e.g. 1200×960).
-                  </p>
+
+                  <div className="flex flex-wrap gap-2">
+                    <button
+                      type="button"
+                      onClick={() => fileInputRef.current?.click()}
+                      disabled={uploading === "hero"}
+                      className="rounded-xl border-2 border-border bg-background px-3 py-2 text-xs font-bold hover:border-clover disabled:opacity-60"
+                    >
+                      {uploading === "hero" ? "Uploading…" : "Replace hero"}
+                    </button>
+                    {optimizeInfo && (
+                      <span className="rounded-xl bg-clover/10 border border-clover/30 px-3 py-2 text-[11px] font-mono tabular-nums text-clover">
+                        {formatBytes(optimizeInfo.originalBytes)} → {formatBytes(optimizeInfo.optimizedBytes)} · {optimizeInfo.width}×{optimizeInfo.height}
+                        {optimizeInfo.flattened && " · bg flattened"}
+                      </span>
+                    )}
+                  </div>
+
+                  {optimizeInfo && optimizeInfo.sourceWidth < 800 && (
+                    <div className="rounded-lg border-2 border-urgent/40 bg-urgent/10 p-2.5 text-[11px] text-urgent flex items-start gap-2">
+                      <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" />
+                      <span>Source is only {optimizeInfo.sourceWidth}px wide. The stage treatment will still look consistent, but you may see softness on the detail page. Try to source at least 1200px.</span>
+                    </div>
+                  )}
                 </div>
               ) : (
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  disabled={uploading}
-                  className="w-full aspect-[5/4] rounded-xl border-2 border-dashed border-border bg-background flex flex-col items-center justify-center gap-2 text-sm font-bold text-muted-foreground hover:border-clover hover:text-clover disabled:opacity-60"
+                  disabled={uploading === "hero"}
+                  className="w-full aspect-[4/3] rounded-xl border-2 border-dashed border-border bg-background flex flex-col items-center justify-center gap-2 text-sm font-bold text-muted-foreground hover:border-clover hover:text-clover disabled:opacity-60"
                 >
-                  {uploading ? (
+                  {uploading === "hero" ? (
                     <>
                       <Loader2 className="h-6 w-6 animate-spin" />
                       Uploading…
@@ -348,32 +343,51 @@ function NewComp() {
                   ) : (
                     <>
                       <ImagePlus className="h-7 w-7" />
-                      Upload cover image
-                      <span className="text-xs font-normal text-muted-foreground">JPG, PNG or WEBP · auto-optimized to WEBP</span>
+                      Upload hero image
+                      <span className="text-xs font-normal text-muted-foreground">Auto-cropped to 4:3 · WEBP · thumbnail generated</span>
                     </>
                   )}
                 </button>
               )}
+
+              {/* Supporting images (up to 5) */}
+              {imageUrl && (
+                <div className="mt-5">
+                  <div className="flex items-baseline justify-between">
+                    <div className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Supporting images ({supportingImages.length}/5)</div>
+                  </div>
+                  <div className="mt-2 grid grid-cols-3 sm:grid-cols-5 gap-2">
+                    {supportingImages.map((src, i) => (
+                      <div key={src + i} className="relative">
+                        <PrizeImage src={src} alt={`Supporting ${i + 1}`} title={title || "Prize"} size="thumb" />
+                        <button
+                          type="button"
+                          aria-label={`Remove supporting image ${i + 1}`}
+                          onClick={() => setSupportingImages((p) => p.filter((_, j) => j !== i))}
+                          className="absolute top-1 right-1 h-6 w-6 rounded-full bg-ink/80 text-cream inline-flex items-center justify-center z-10"
+                        >
+                          <X className="h-3 w-3" />
+                        </button>
+                      </div>
+                    ))}
+                    {supportingImages.length < 5 && (
+                      <button
+                        type="button"
+                        onClick={() => supportInputRef.current?.click()}
+                        disabled={typeof uploading === "number"}
+                        className="aspect-[4/3] rounded-lg border-2 border-dashed border-border flex items-center justify-center text-muted-foreground hover:border-clover hover:text-clover disabled:opacity-60"
+                      >
+                        {typeof uploading === "number" ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-5 w-5" />}
+                      </button>
+                    )}
+                  </div>
+                  <p className="mt-2 text-[11px] text-muted-foreground">Detail, scale, angle, extras. All get the same stage treatment.</p>
+                </div>
+              )}
+
               {uploadError && (
                 <div className="mt-3 text-xs text-urgent flex items-start gap-1.5">
                   <AlertTriangle className="h-3.5 w-3.5 mt-0.5 shrink-0" /> <span>{uploadError}</span>
-                </div>
-              )}
-              {optimizeInfo && !uploadError && (
-                <div className="mt-3 rounded-lg border border-clover/30 bg-clover/5 p-3 text-[11px] leading-relaxed text-foreground/80">
-                  <div className="font-bold text-clover uppercase tracking-wider text-[10px] mb-1">
-                    {optimizeInfo.converted ? "Optimized before upload" : "Uploaded as-is"}
-                  </div>
-                  {optimizeInfo.converted ? (
-                    <div className="font-mono tabular-nums">
-                      {formatBytes(optimizeInfo.originalBytes)} → <strong>{formatBytes(optimizeInfo.optimizedBytes)}</strong>
-                      {" "}({Math.max(0, Math.round((1 - optimizeInfo.optimizedBytes / optimizeInfo.originalBytes) * 100))}% smaller)
-                      {" · "}{optimizeInfo.width}×{optimizeInfo.height}
-                      {" · "}{optimizeInfo.contentType.replace("image/", "").toUpperCase()} q{Math.round(optimizeInfo.quality * 100)}
-                    </div>
-                  ) : (
-                    <div>Source already smaller than the WEBP output — kept the original.</div>
-                  )}
                 </div>
               )}
             </Card>
