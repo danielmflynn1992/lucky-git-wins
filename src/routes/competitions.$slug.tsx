@@ -292,6 +292,17 @@ function CompDetail() {
                   {reserving ? <><Loader2 className="h-4 w-4 animate-spin" /> Locking…</> : "Enter now"}
                 </Button>
               </div>
+
+              <div className="mt-4 pt-4 border-t-2 border-dashed border-border">
+                <div className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground mb-2">Or, enter this competition for free</div>
+                <Button asChild variant="cream" size="xl" className="w-full border-2 border-clover text-clover hover:bg-clover hover:text-cream">
+                  <Link to="/free-entry" search={{ slug: c.slug }}>Free entry — no purchase necessary</Link>
+                </Button>
+                <p className="mt-2 text-[11px] text-muted-foreground text-center">
+                  Same pool. Same odds. One free entry per person.{" "}
+                  <Link to="/legal-structure" className="underline">How this works</Link>
+                </p>
+              </div>
             </div>
 
             <div className="mt-4 grid grid-cols-2 gap-3 text-xs">
