@@ -273,6 +273,12 @@ function RevealPage() {
                 <span className="text-cream/50"> — of {draw.total_tickets.toLocaleString()} tickets</span>
               </div>
 
+              {step >= 4 && (
+                <div className="mt-6">
+                  <span className="lucky-git-stamp lucky-git-stamp--lg">You Lucky Git.</span>
+                </div>
+              )}
+
               <div className="mt-6 flex flex-wrap gap-3 justify-center">
                 <Button variant="gold" size="lg" onClick={share}>
                   <Share2 className="h-4 w-4" /> Share this draw

@@ -122,34 +122,32 @@ function Home() {
                 />
               ))}
             </div>
+
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Button asChild variant="git" size="lg">
+                <Link to="/competitions">See what's live →</Link>
+              </Button>
+              <Button asChild variant="cream" size="lg">
+                <Link to="/odds">Best odds now</Link>
+              </Button>
+            </div>
           </div>
 
-          {/* Live stats panel */}
+          {/* Live stats panel — honest numbers only. Hidden until at least
+              one draw has been published, so nothing on the site claims
+              100% of anything before we've done any of it. */}
           <div className="relative hidden md:block">
             <div className="rounded-lg bg-card border border-border p-6 shadow-md">
-              <div className="flex items-center justify-between">
-                <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-muted-foreground">Platform stats · Live</div>
-              </div>
+              <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-muted-foreground">Platform stats · Live</div>
               <dl className="mt-6 grid grid-cols-2 gap-6">
-                <div>
-                  <dt className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground">Tickets flogged</dt>
-                  <dd className="mt-1 font-display font-black tabular-nums text-3xl text-foreground">{totals.sold.toLocaleString()}</dd>
-                </div>
-                <div>
-                  <dt className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground">Prizes in play</dt>
-                  <dd className="mt-1 font-display font-black tabular-nums text-3xl text-clover">{gbp(totals.prizes)}</dd>
-                </div>
-                <div>
-                  <dt className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground">Live comps</dt>
-                  <dd className="mt-1 font-display font-black tabular-nums text-3xl text-foreground">{COMPETITIONS.length.toString().padStart(2, "0")}</dd>
-                </div>
-                <div>
-                  <dt className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground">Draws published</dt>
-                  <dd className="mt-1 font-display font-black tabular-nums text-3xl text-foreground">100%</dd>
-                </div>
+                <Stat label="Prizes on the table" value={gbp(totals.prizes)} tone="clover" />
+                <Stat label="Comps running" value={COMPETITIONS.length.toString().padStart(2, "0")} />
+                <Stat label="Tickets flogged" value={totals.sold.toLocaleString()} />
+                <Stat label="Draws gone off" value={winners.length.toString().padStart(2, "0")} />
               </dl>
               <div className="mt-6 pt-4 border-t border-border text-[11px] font-mono text-muted-foreground leading-relaxed">
-                Every draw automatic. Every ticket number published. No hidden reserves, no house tickets, no funny business.
+                Every draw automatic. Every ticket number published. No hidden reserves, no house tickets, no funny business.{" "}
+                <Link to="/transparency" className="underline">See the numbers</Link>.
               </div>
             </div>
           </div>
@@ -289,6 +287,17 @@ function Home() {
 
       <NewsletterSlip />
       <SiteFooter />
+    </div>
+  );
+}
+
+function Stat({ label, value, tone }: { label: string; value: string; tone?: "clover" }) {
+  return (
+    <div>
+      <dt className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground">{label}</dt>
+      <dd className={"mt-1 font-display font-black tabular-nums text-3xl " + (tone === "clover" ? "text-clover" : "text-foreground")}>
+        {value}
+      </dd>
     </div>
   );
 }

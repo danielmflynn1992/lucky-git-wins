@@ -11,12 +11,14 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WinnersRouteImport } from './routes/winners'
 import { Route as VerifyRouteImport } from './routes/verify'
+import { Route as TransparencyRouteImport } from './routes/transparency'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as ResponsiblePlayRouteImport } from './routes/responsible-play'
 import { Route as PromiseRouteImport } from './routes/promise'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PastDrawsRouteImport } from './routes/past-draws'
 import { Route as OddsRouteImport } from './routes/odds'
+import { Route as NextDropRouteImport } from './routes/next-drop'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as HowEntryWorksRouteImport } from './routes/how-entry-works'
 import { Route as FaqRouteImport } from './routes/faq'
@@ -28,6 +30,7 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CompetitionsIndexRouteImport } from './routes/competitions.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as SlipsIdRouteImport } from './routes/slips.$id'
 import { Route as DevCompcardRouteImport } from './routes/dev.compcard'
 import { Route as CompetitionsSlugRouteImport } from './routes/competitions.$slug'
 import { Route as AdminQuestionPerformanceRouteImport } from './routes/admin.question-performance'
@@ -43,6 +46,11 @@ const WinnersRoute = WinnersRouteImport.update({
 const VerifyRoute = VerifyRouteImport.update({
   id: '/verify',
   path: '/verify',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TransparencyRoute = TransparencyRouteImport.update({
+  id: '/transparency',
+  path: '/transparency',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TermsRoute = TermsRouteImport.update({
@@ -73,6 +81,11 @@ const PastDrawsRoute = PastDrawsRouteImport.update({
 const OddsRoute = OddsRouteImport.update({
   id: '/odds',
   path: '/odds',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NextDropRoute = NextDropRouteImport.update({
+  id: '/next-drop',
+  path: '/next-drop',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HowItWorksRoute = HowItWorksRouteImport.update({
@@ -130,6 +143,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/admin/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SlipsIdRoute = SlipsIdRouteImport.update({
+  id: '/slips/$id',
+  path: '/slips/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DevCompcardRoute = DevCompcardRouteImport.update({
   id: '/dev/compcard',
   path: '/dev/compcard',
@@ -172,18 +190,21 @@ export interface FileRoutesByFullPath {
   '/faq': typeof FaqRoute
   '/how-entry-works': typeof HowEntryWorksRoute
   '/how-it-works': typeof HowItWorksRoute
+  '/next-drop': typeof NextDropRoute
   '/odds': typeof OddsRoute
   '/past-draws': typeof PastDrawsRoute
   '/privacy': typeof PrivacyRoute
   '/promise': typeof PromiseRoute
   '/responsible-play': typeof ResponsiblePlayRoute
   '/terms': typeof TermsRoute
+  '/transparency': typeof TransparencyRoute
   '/verify': typeof VerifyRoute
   '/winners': typeof WinnersRoute
   '/admin/errors': typeof AdminErrorsRoute
   '/admin/question-performance': typeof AdminQuestionPerformanceRoute
   '/competitions/$slug': typeof CompetitionsSlugRoute
   '/dev/compcard': typeof DevCompcardRoute
+  '/slips/$id': typeof SlipsIdRoute
   '/admin/': typeof AdminIndexRoute
   '/competitions/': typeof CompetitionsIndexRoute
   '/admin/competitions/new': typeof AdminCompetitionsNewRoute
@@ -199,18 +220,21 @@ export interface FileRoutesByTo {
   '/faq': typeof FaqRoute
   '/how-entry-works': typeof HowEntryWorksRoute
   '/how-it-works': typeof HowItWorksRoute
+  '/next-drop': typeof NextDropRoute
   '/odds': typeof OddsRoute
   '/past-draws': typeof PastDrawsRoute
   '/privacy': typeof PrivacyRoute
   '/promise': typeof PromiseRoute
   '/responsible-play': typeof ResponsiblePlayRoute
   '/terms': typeof TermsRoute
+  '/transparency': typeof TransparencyRoute
   '/verify': typeof VerifyRoute
   '/winners': typeof WinnersRoute
   '/admin/errors': typeof AdminErrorsRoute
   '/admin/question-performance': typeof AdminQuestionPerformanceRoute
   '/competitions/$slug': typeof CompetitionsSlugRoute
   '/dev/compcard': typeof DevCompcardRoute
+  '/slips/$id': typeof SlipsIdRoute
   '/admin': typeof AdminIndexRoute
   '/competitions': typeof CompetitionsIndexRoute
   '/admin/competitions/new': typeof AdminCompetitionsNewRoute
@@ -227,18 +251,21 @@ export interface FileRoutesById {
   '/faq': typeof FaqRoute
   '/how-entry-works': typeof HowEntryWorksRoute
   '/how-it-works': typeof HowItWorksRoute
+  '/next-drop': typeof NextDropRoute
   '/odds': typeof OddsRoute
   '/past-draws': typeof PastDrawsRoute
   '/privacy': typeof PrivacyRoute
   '/promise': typeof PromiseRoute
   '/responsible-play': typeof ResponsiblePlayRoute
   '/terms': typeof TermsRoute
+  '/transparency': typeof TransparencyRoute
   '/verify': typeof VerifyRoute
   '/winners': typeof WinnersRoute
   '/admin/errors': typeof AdminErrorsRoute
   '/admin/question-performance': typeof AdminQuestionPerformanceRoute
   '/competitions/$slug': typeof CompetitionsSlugRoute
   '/dev/compcard': typeof DevCompcardRoute
+  '/slips/$id': typeof SlipsIdRoute
   '/admin/': typeof AdminIndexRoute
   '/competitions/': typeof CompetitionsIndexRoute
   '/admin/competitions/new': typeof AdminCompetitionsNewRoute
@@ -256,18 +283,21 @@ export interface FileRouteTypes {
     | '/faq'
     | '/how-entry-works'
     | '/how-it-works'
+    | '/next-drop'
     | '/odds'
     | '/past-draws'
     | '/privacy'
     | '/promise'
     | '/responsible-play'
     | '/terms'
+    | '/transparency'
     | '/verify'
     | '/winners'
     | '/admin/errors'
     | '/admin/question-performance'
     | '/competitions/$slug'
     | '/dev/compcard'
+    | '/slips/$id'
     | '/admin/'
     | '/competitions/'
     | '/admin/competitions/new'
@@ -283,18 +313,21 @@ export interface FileRouteTypes {
     | '/faq'
     | '/how-entry-works'
     | '/how-it-works'
+    | '/next-drop'
     | '/odds'
     | '/past-draws'
     | '/privacy'
     | '/promise'
     | '/responsible-play'
     | '/terms'
+    | '/transparency'
     | '/verify'
     | '/winners'
     | '/admin/errors'
     | '/admin/question-performance'
     | '/competitions/$slug'
     | '/dev/compcard'
+    | '/slips/$id'
     | '/admin'
     | '/competitions'
     | '/admin/competitions/new'
@@ -310,18 +343,21 @@ export interface FileRouteTypes {
     | '/faq'
     | '/how-entry-works'
     | '/how-it-works'
+    | '/next-drop'
     | '/odds'
     | '/past-draws'
     | '/privacy'
     | '/promise'
     | '/responsible-play'
     | '/terms'
+    | '/transparency'
     | '/verify'
     | '/winners'
     | '/admin/errors'
     | '/admin/question-performance'
     | '/competitions/$slug'
     | '/dev/compcard'
+    | '/slips/$id'
     | '/admin/'
     | '/competitions/'
     | '/admin/competitions/new'
@@ -338,18 +374,21 @@ export interface RootRouteChildren {
   FaqRoute: typeof FaqRoute
   HowEntryWorksRoute: typeof HowEntryWorksRoute
   HowItWorksRoute: typeof HowItWorksRoute
+  NextDropRoute: typeof NextDropRoute
   OddsRoute: typeof OddsRoute
   PastDrawsRoute: typeof PastDrawsRoute
   PrivacyRoute: typeof PrivacyRoute
   PromiseRoute: typeof PromiseRoute
   ResponsiblePlayRoute: typeof ResponsiblePlayRoute
   TermsRoute: typeof TermsRoute
+  TransparencyRoute: typeof TransparencyRoute
   VerifyRoute: typeof VerifyRoute
   WinnersRoute: typeof WinnersRoute
   AdminErrorsRoute: typeof AdminErrorsRoute
   AdminQuestionPerformanceRoute: typeof AdminQuestionPerformanceRoute
   CompetitionsSlugRoute: typeof CompetitionsSlugRoute
   DevCompcardRoute: typeof DevCompcardRoute
+  SlipsIdRoute: typeof SlipsIdRoute
   AdminIndexRoute: typeof AdminIndexRoute
   CompetitionsIndexRoute: typeof CompetitionsIndexRoute
   AdminCompetitionsNewRoute: typeof AdminCompetitionsNewRoute
@@ -370,6 +409,13 @@ declare module '@tanstack/react-router' {
       path: '/verify'
       fullPath: '/verify'
       preLoaderRoute: typeof VerifyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/transparency': {
+      id: '/transparency'
+      path: '/transparency'
+      fullPath: '/transparency'
+      preLoaderRoute: typeof TransparencyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/terms': {
@@ -412,6 +458,13 @@ declare module '@tanstack/react-router' {
       path: '/odds'
       fullPath: '/odds'
       preLoaderRoute: typeof OddsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/next-drop': {
+      id: '/next-drop'
+      path: '/next-drop'
+      fullPath: '/next-drop'
+      preLoaderRoute: typeof NextDropRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/how-it-works': {
@@ -491,6 +544,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/slips/$id': {
+      id: '/slips/$id'
+      path: '/slips/$id'
+      fullPath: '/slips/$id'
+      preLoaderRoute: typeof SlipsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dev/compcard': {
       id: '/dev/compcard'
       path: '/dev/compcard'
@@ -546,18 +606,21 @@ const rootRouteChildren: RootRouteChildren = {
   FaqRoute: FaqRoute,
   HowEntryWorksRoute: HowEntryWorksRoute,
   HowItWorksRoute: HowItWorksRoute,
+  NextDropRoute: NextDropRoute,
   OddsRoute: OddsRoute,
   PastDrawsRoute: PastDrawsRoute,
   PrivacyRoute: PrivacyRoute,
   PromiseRoute: PromiseRoute,
   ResponsiblePlayRoute: ResponsiblePlayRoute,
   TermsRoute: TermsRoute,
+  TransparencyRoute: TransparencyRoute,
   VerifyRoute: VerifyRoute,
   WinnersRoute: WinnersRoute,
   AdminErrorsRoute: AdminErrorsRoute,
   AdminQuestionPerformanceRoute: AdminQuestionPerformanceRoute,
   CompetitionsSlugRoute: CompetitionsSlugRoute,
   DevCompcardRoute: DevCompcardRoute,
+  SlipsIdRoute: SlipsIdRoute,
   AdminIndexRoute: AdminIndexRoute,
   CompetitionsIndexRoute: CompetitionsIndexRoute,
   AdminCompetitionsNewRoute: AdminCompetitionsNewRoute,
