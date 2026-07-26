@@ -160,7 +160,7 @@ function CompDetail() {
 
           <div className="lg:col-span-2">
             <div className="text-xs font-bold uppercase tracking-widest text-clover">{c.category}</div>
-            <h1 className="mt-1 font-display text-3xl md:text-4xl font-black">{c.title}</h1>
+            <h1 className="mt-1 font-display font-black leading-[1.05] break-words hyphens-auto text-[clamp(1.55rem,5.5vw,2.5rem)]">{c.title}</h1>
             <p className="mt-2 text-muted-foreground">{c.subtitle}</p>
 
             <div className="mt-4 flex items-center gap-3">
