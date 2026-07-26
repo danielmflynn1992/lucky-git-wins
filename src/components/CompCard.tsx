@@ -71,28 +71,30 @@ export function CompCard({ c }: { c: Competition }) {
       <div className="mx-3 rule-dotted" aria-hidden="true" />
 
       {/* Prize image on the printed stage — enforced 4:3 + treatment. */}
-      <div className="pointer-events-none relative z-0 mx-3 mt-2">
-        <PrizeImage
-          src={(c as unknown as { thumbUrl?: string }).thumbUrl || c.image}
-          alt={c.title}
-          title={c.title}
-          eyebrow={c.category}
-          size="card"
-        />
+      <div className="relative z-0 mx-3 mt-2 mb-6">
+        <div className="pointer-events-none">
+          <PrizeImage
+            src={(c as unknown as { thumbUrl?: string }).thumbUrl || c.image}
+            alt={c.title}
+            title={c.title}
+            eyebrow={c.category}
+            size="card"
+          />
+        </div>
+        {soldOut ? (
+          <span className="pointer-events-none absolute z-[6]" style={{ right: "14px", bottom: "-14px" }}>
+            <StampMark variant="SOLD OUT" size="lg" angle={-8} />
+          </span>
+        ) : almostGone ? (
+          <span className="pointer-events-none absolute z-[6]" style={{ right: "14px", bottom: "-10px" }}>
+            <StampMark variant="LIVE" size="sm" angle={-4} />
+          </span>
+        ) : null}
       </div>
 
       {/* FORM-STYLE DATA BLOCK */}
       <div className="relative z-10 pointer-events-none px-3 pt-3 flex flex-1 flex-col gap-2 min-w-0 overflow-hidden">
-        <dl className="relative grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 min-w-0">
-          {soldOut ? (
-            <span className="pointer-events-none absolute inset-0 z-[6] flex items-center justify-center">
-              <StampMark variant="SOLD OUT" size="lg" angle={-8} />
-            </span>
-          ) : almostGone ? (
-            <span className="pointer-events-none absolute -top-1 right-0 z-[6]">
-              <StampMark variant="LIVE" size="sm" angle={-4} />
-            </span>
-          ) : null}
+        <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 min-w-0">
           <FormRow label="STAKE" value={<span className="font-bold text-[var(--color-ink-red)]">{gbp(c.pricePerTicket)}</span>} />
           <FormRow label="ODDS" value={<>1 in <b>{c.totalTickets}</b></>} />
           <FormRow label="LEFT" value={<b>{remaining.toLocaleString()}</b>} />
