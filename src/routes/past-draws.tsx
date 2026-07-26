@@ -318,6 +318,13 @@ function PastDrawsPage() {
                     >
                       <Shield className="h-3 w-3" /> Verify this draw
                     </Link>
+                    <Link
+                      to="/draws/$id/reveal"
+                      params={{ id: d.id }}
+                      className="mt-1 block text-[11px] font-mono uppercase tracking-widest text-gold font-bold hover:underline"
+                    >
+                      ▶ Watch the reveal
+                    </Link>
                   </div>
                 </div>
 
