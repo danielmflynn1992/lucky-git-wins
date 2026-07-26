@@ -22,7 +22,7 @@ export function SiteFooter() {
   };
 
   return (
-    <footer className="relative mt-24">
+    <footer className="relative mt-12 md:mt-20">
       {/* -------- NEWSLETTER REPLY-SLIP --------
           Cream printed reply-slip sitting on the paper surface ABOVE the
           dark footer. Perforated top edge, heavy 2px black rule border,
@@ -103,13 +103,13 @@ export function SiteFooter() {
 
       {/* -------- INK-BLUE LINK GRID -------- */}
       <div
-        className="mt-12"
+        className="mt-8 md:mt-12"
         style={{
           background: "var(--color-ink-blue)",
           color: "var(--color-on-dark-fg)",
         }}
       >
-        <div className="mx-auto max-w-7xl px-4 py-14 grid gap-10 md:grid-cols-4">
+        <div className="mx-auto max-w-7xl px-4 pt-6 pb-10 md:pt-8 md:pb-12 grid gap-10 md:grid-cols-4">
           <div className="md:col-span-1">
             <div
               className="flex"
