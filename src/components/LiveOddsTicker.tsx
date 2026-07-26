@@ -61,8 +61,13 @@ export function LiveOddsTicker() {
           {/* Wide left mask + matching left padding + trailing gap-8 spacer
               guarantee the first item is never mid-word at rest and the
               seamless loop hand-off never clips a partial word. */}
-          <div className="relative flex-1 overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_4%,#000_96%,transparent)] py-1.5">
+          <div className="relative flex-1 overflow-hidden [mask-image:linear-gradient(90deg,#000_0%,#000_94%,transparent)] py-1.5">
             <div className="ticker-scroll flex gap-8 whitespace-nowrap text-[11px] font-bold tracking-wide text-cream pr-8">
+              {/* Leading spacer = full container width. Guarantees the first
+                  item is preceded by empty space, so even at t=0 or after
+                  any animation reset, no partial word is visible at the left
+                  edge of the marquee. */}
+              <span aria-hidden="true" className="shrink-0 basis-full min-w-full" />
               {loop.map((it, i) => (
                 <TickerItem key={`${it.id}-${i}`} c={it} />
               ))}
