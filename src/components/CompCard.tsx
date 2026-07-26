@@ -102,16 +102,9 @@ export function CompCard({ c }: { c: Competition }) {
       </div>
     </Link>
 
-    {/* Add button — sibling of the Link so clicks never nest inside an <a>.
-        Positioned to sit over the right half of the CTA row. */}
-    <button
-      type="button"
-      aria-label={`Quick add tickets for ${c.title}`}
-      onClick={(e) => { e.preventDefault(); e.stopPropagation(); setQuickOpen(true); }}
-      className="absolute right-2.5 sm:right-4 bottom-[calc(0.625rem+2.25rem+0.375rem)] sm:bottom-[calc(1rem+2.25rem+0.375rem)] hidden"
-      tabIndex={-1}
-    />
-    <div className="pointer-events-none absolute inset-x-2.5 sm:inset-x-4 bottom-2.5 sm:bottom-4">
+    {/* Add button — sibling of the Link (not nested inside an <a>) so clicks
+        can't bubble into the card link and navigate away from the modal. */}
+    <div className="pointer-events-none absolute inset-x-2.5 sm:inset-x-4 bottom-[calc(0.625rem+1.25rem)] sm:bottom-4">
       {/* Only the Add half is interactive; the Enter Now half is handled by the underlying Link. */}
       <div className="grid grid-cols-2 gap-1.5">
         <div />
