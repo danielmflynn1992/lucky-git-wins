@@ -1,16 +1,18 @@
 import { Link } from "@tanstack/react-router";
-import logoLockup from "@/assets/luckygit-mascot-logo.png";
+import crest from "@/assets/crest.png.asset.json";
 
-/** Legacy export kept for any lingering imports — renders the mascot lockup image. */
+const CREST_URL = crest.url;
+
+/** Legacy export — renders just the crest as a badge. */
 export function SmugSmile({ className = "" }: { className?: string }) {
   return (
     <img
-      src={logoLockup}
+      src={CREST_URL}
       alt=""
       aria-hidden="true"
       className={className}
-      width={1536}
-      height={1024}
+      width={1420}
+      height={800}
       loading="lazy"
     />
   );
@@ -19,20 +21,20 @@ export function SmugSmile({ className = "" }: { className?: string }) {
 export function Logo({ variant = "horizontal", className = "" }: { variant?: "horizontal" | "stacked"; className?: string }) {
   const sizing =
     variant === "stacked"
-      ? "h-28 w-auto"
-      : "h-20 sm:h-24 md:h-28 w-auto -my-4 md:-my-6";
+      ? "h-24 w-auto"
+      : "h-14 sm:h-16 md:h-20 w-auto";
   return (
     <Link
       to="/"
-      aria-label="LuckyGitComps home"
+      aria-label="Lucky Git Comps — home"
       className={`inline-flex items-center ${className}`}
     >
       <img
-        src={logoLockup}
-        alt="LuckyGitComps"
-        className={`${sizing} object-contain max-w-none translate-y-1 md:translate-y-2`}
-        width={1536}
-        height={1024}
+        src={CREST_URL}
+        alt="Lucky Git Comps"
+        className={`${sizing} object-contain max-w-none`}
+        width={1420}
+        height={800}
         loading="eager"
       />
     </Link>
