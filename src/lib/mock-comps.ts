@@ -60,7 +60,7 @@ export const COMPETITIONS: Competition[] = [
     endsAt: inHours(11),
     hot: true,
     description:
-      "The whole shiny lot: iPhone 17 Pro Max, 16\" MacBook Pro M-something, AirPods Pro. Plus 20 instant win tickets worth £50 each hidden inside. Yes, really.",
+      "The whole shiny lot: iPhone 17 Pro Max, 16\" MacBook Pro M-something, AirPods Pro. Answer the skill question correctly to be entered in the draw.",
   },
   {
     slug: "10k-cash",
