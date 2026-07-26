@@ -81,14 +81,14 @@ export function CompCard({ c }: { c: Competition }) {
 
         {/* CTA row — equal-width buttons, never push the card */}
         <div className="grid grid-cols-2 gap-1.5 min-w-0 items-stretch">
-          <div className="min-w-0 h-9 inline-flex items-center justify-center rounded-md bg-clover text-primary-foreground px-2 font-display font-extrabold text-xs uppercase tracking-[-0.01em] leading-none group-hover:bg-clover-deep transition-colors truncate">
+          <div className="min-w-0 h-9 inline-flex items-center justify-center rounded-md bg-clover text-primary-foreground px-2 font-display font-extrabold text-xs uppercase tracking-[-0.01em] leading-none shadow-sm group-hover:bg-clover-deep group-hover:shadow-md group-focus-visible:bg-clover-deep group-focus-visible:ring-2 group-focus-visible:ring-clover/40 group-focus-visible:ring-offset-2 group-focus-visible:ring-offset-card transition-all truncate">
             Enter Now →
           </div>
           <button
             type="button"
             aria-label={`Quick add tickets for ${c.title}`}
             onClick={(e) => { e.preventDefault(); e.stopPropagation(); setQuickOpen(true); }}
-            className="min-w-0 h-9 rounded-md bg-gold text-gold-foreground px-2 font-display font-extrabold text-xs uppercase tracking-[-0.01em] leading-none inline-flex items-center justify-center gap-1 hover:bg-gold/90 transition-colors truncate"
+            className="min-w-0 h-9 rounded-md bg-gold text-gold-foreground px-2 font-display font-extrabold text-xs uppercase tracking-[-0.01em] leading-none inline-flex items-center justify-center gap-1 shadow-sm hover:bg-gold/90 hover:shadow-md hover:-translate-y-px active:translate-y-0 active:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-card transition-all truncate"
           >
             <Plus className="h-3.5 w-3.5 shrink-0" /> Add
           </button>
