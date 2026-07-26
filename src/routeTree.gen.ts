@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WinnersRouteImport } from './routes/winners'
 import { Route as VerifyRouteImport } from './routes/verify'
+import { Route as TransparencyRouteImport } from './routes/transparency'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as ResponsiblePlayRouteImport } from './routes/responsible-play'
 import { Route as PromiseRouteImport } from './routes/promise'
@@ -43,6 +44,11 @@ const WinnersRoute = WinnersRouteImport.update({
 const VerifyRoute = VerifyRouteImport.update({
   id: '/verify',
   path: '/verify',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TransparencyRoute = TransparencyRouteImport.update({
+  id: '/transparency',
+  path: '/transparency',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TermsRoute = TermsRouteImport.update({
@@ -178,6 +184,7 @@ export interface FileRoutesByFullPath {
   '/promise': typeof PromiseRoute
   '/responsible-play': typeof ResponsiblePlayRoute
   '/terms': typeof TermsRoute
+  '/transparency': typeof TransparencyRoute
   '/verify': typeof VerifyRoute
   '/winners': typeof WinnersRoute
   '/admin/errors': typeof AdminErrorsRoute
@@ -205,6 +212,7 @@ export interface FileRoutesByTo {
   '/promise': typeof PromiseRoute
   '/responsible-play': typeof ResponsiblePlayRoute
   '/terms': typeof TermsRoute
+  '/transparency': typeof TransparencyRoute
   '/verify': typeof VerifyRoute
   '/winners': typeof WinnersRoute
   '/admin/errors': typeof AdminErrorsRoute
@@ -233,6 +241,7 @@ export interface FileRoutesById {
   '/promise': typeof PromiseRoute
   '/responsible-play': typeof ResponsiblePlayRoute
   '/terms': typeof TermsRoute
+  '/transparency': typeof TransparencyRoute
   '/verify': typeof VerifyRoute
   '/winners': typeof WinnersRoute
   '/admin/errors': typeof AdminErrorsRoute
@@ -262,6 +271,7 @@ export interface FileRouteTypes {
     | '/promise'
     | '/responsible-play'
     | '/terms'
+    | '/transparency'
     | '/verify'
     | '/winners'
     | '/admin/errors'
@@ -289,6 +299,7 @@ export interface FileRouteTypes {
     | '/promise'
     | '/responsible-play'
     | '/terms'
+    | '/transparency'
     | '/verify'
     | '/winners'
     | '/admin/errors'
@@ -316,6 +327,7 @@ export interface FileRouteTypes {
     | '/promise'
     | '/responsible-play'
     | '/terms'
+    | '/transparency'
     | '/verify'
     | '/winners'
     | '/admin/errors'
@@ -344,6 +356,7 @@ export interface RootRouteChildren {
   PromiseRoute: typeof PromiseRoute
   ResponsiblePlayRoute: typeof ResponsiblePlayRoute
   TermsRoute: typeof TermsRoute
+  TransparencyRoute: typeof TransparencyRoute
   VerifyRoute: typeof VerifyRoute
   WinnersRoute: typeof WinnersRoute
   AdminErrorsRoute: typeof AdminErrorsRoute
@@ -370,6 +383,13 @@ declare module '@tanstack/react-router' {
       path: '/verify'
       fullPath: '/verify'
       preLoaderRoute: typeof VerifyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/transparency': {
+      id: '/transparency'
+      path: '/transparency'
+      fullPath: '/transparency'
+      preLoaderRoute: typeof TransparencyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/terms': {
@@ -552,6 +572,7 @@ const rootRouteChildren: RootRouteChildren = {
   PromiseRoute: PromiseRoute,
   ResponsiblePlayRoute: ResponsiblePlayRoute,
   TermsRoute: TermsRoute,
+  TransparencyRoute: TransparencyRoute,
   VerifyRoute: VerifyRoute,
   WinnersRoute: WinnersRoute,
   AdminErrorsRoute: AdminErrorsRoute,
