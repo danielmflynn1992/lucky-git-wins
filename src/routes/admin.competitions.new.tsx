@@ -207,9 +207,17 @@ function NewComp() {
                 }}
               />
               {imageUrl ? (
-                <div className="relative rounded-xl overflow-hidden border-2 border-border bg-background">
-                  <img src={imageUrl} alt="Cover preview" className="w-full aspect-[5/4] object-cover" />
-                  <button
+                <div className="space-y-3">
+                  {/* Live card-frame preview: mirrors the exact treatment used
+                      by CompCard (5:4 frame, blurred backdrop + object-contain
+                      foreground). The dashed outline marks the visible card
+                      area so admins can see the crop-safe zone before saving. */}
+                  <div className="relative rounded-xl overflow-hidden border-2 border-border bg-muted aspect-[5/4]">
+                    <img src={imageUrl} alt="" aria-hidden="true" className="absolute inset-0 h-full w-full object-cover scale-110 blur-2xl opacity-60" />
+                    <img src={imageUrl} alt="Cover preview" className="relative h-full w-full object-contain" />
+                    <div className="pointer-events-none absolute inset-0 ring-2 ring-dashed ring-clover/70 rounded-xl" style={{ outline: "2px dashed rgb(15 107 63 / 0.7)", outlineOffset: "-6px" }} />
+                    <span className="absolute top-2 left-2 rounded-md bg-ink/80 text-cream px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider">Card frame · 5:4</span>
+                    <button
                     type="button"
                     onClick={() => setImageUrl("")}
                     className="absolute top-2 right-2 h-8 w-8 rounded-full bg-ink/80 text-cream inline-flex items-center justify-center hover:bg-ink"
@@ -225,6 +233,12 @@ function NewComp() {
                   >
                     Replace
                   </button>
+                  </div>
+                  <p className="text-[11px] text-muted-foreground leading-relaxed">
+                    Your full image sits inside the dashed 5:4 frame — nothing is cropped. Any empty space
+                    is filled with a soft blurred backdrop of the same image on the live card.
+                    For sharpest edge-to-edge results, upload a native <strong>5:4</strong> image (e.g. 1200×960).
+                  </p>
                 </div>
               ) : (
                 <button
@@ -289,11 +303,18 @@ function NewComp() {
 
           {/* Sidebar */}
           <div className="space-y-5">
-            <Card title="Preview">
+            <Card title="Live card preview">
               <div className="rounded-xl bg-background border-2 border-border p-4">
-                {imageUrl && (
-                  <img src={imageUrl} alt="" className="w-full aspect-[5/4] object-cover rounded-lg mb-3" />
-                )}
+                <div className="relative w-full aspect-[5/4] overflow-hidden rounded-lg bg-muted mb-3">
+                  {imageUrl ? (
+                    <>
+                      <img src={imageUrl} alt="" aria-hidden="true" className="absolute inset-0 h-full w-full object-cover scale-110 blur-2xl opacity-60" />
+                      <img src={imageUrl} alt="" className="relative h-full w-full object-contain" />
+                    </>
+                  ) : (
+                    <div className="h-full w-full flex items-center justify-center text-[11px] font-mono uppercase tracking-widest text-muted-foreground">No image yet</div>
+                  )}
+                </div>
                 <div className="text-[10px] font-mono uppercase tracking-widest text-clover/80">{category}</div>
                 <div className="font-display font-black text-lg leading-tight mt-1 truncate">{title || "Prize title"}</div>
                 <div className="text-xs text-muted-foreground truncate">{subtitle || "Short subtitle"}</div>
