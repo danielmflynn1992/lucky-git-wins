@@ -59,8 +59,11 @@ export function LiveOddsTicker() {
           <LiveChip />
           {/* Wider left mask fade so the first item scrolls in cleanly
               instead of appearing mid-word at rest. */}
-          <div className="relative flex-1 overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_12%,#000_96%,transparent)] py-1.5">
-            <div className="ticker-scroll flex gap-8 whitespace-nowrap text-[11px] font-bold tracking-wide text-cream pl-[12%]">
+          {/* Wide left mask + matching left padding + trailing gap-8 spacer
+              guarantee the first item is never mid-word at rest and the
+              seamless loop hand-off never clips a partial word. */}
+          <div className="relative flex-1 overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_18%,#000_94%,transparent)] py-1.5">
+            <div className="ticker-scroll flex gap-8 whitespace-nowrap text-[11px] font-bold tracking-wide text-cream pl-[20%] pr-8">
               {loop.map((it, i) => (
                 <TickerItem key={`${it.id}-${i}`} c={it} />
               ))}
