@@ -11,6 +11,7 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { installClientErrorMonitor } from "../lib/client-error-monitor";
 
 function NotFoundComponent() {
   return (
@@ -121,6 +122,7 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  useEffect(() => { installClientErrorMonitor(); }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
