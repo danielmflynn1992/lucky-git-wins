@@ -11,6 +11,7 @@ import { Countdown } from "@/components/Countdown";
 import { SmugSmile } from "@/components/Logo";
 import { LiveOddsTicker } from "@/components/LiveOddsTicker";
 import { NextDropCountdown } from "@/components/NextDropCountdown";
+import { Pinstripe } from "@/components/Pinstripe";
 import { COMPETITIONS, CATEGORIES, WINNERS, type Category } from "@/lib/mock-comps";
 import { gbp } from "@/lib/format";
 import { Button } from "@/components/ui/button";
@@ -208,7 +209,7 @@ function Home() {
         </div>
 
         {view === "grid" ? (
-          <div className="mt-6 grid gap-3 sm:gap-5 grid-cols-2 md:grid-cols-3 items-stretch">
+          <div className="stall-grid mt-6 grid gap-3 sm:gap-5 grid-cols-2 md:grid-cols-3 items-stretch">
             {filtered.map((c) => (
               <div key={c.slug} className="rise-in h-full">
                 <CompCard c={c} />
@@ -225,6 +226,8 @@ function Home() {
           </div>
         )}
       </section>
+
+      <div className="mx-auto max-w-7xl px-4"><Pinstripe /></div>
 
       {/* HOW IT WORKS */}
       <section className="mx-auto max-w-7xl px-4 mt-24 w-full">
@@ -288,6 +291,8 @@ function Home() {
           ))}
         </div>
       </section>
+
+      <div className="mx-auto max-w-7xl px-4"><Pinstripe /></div>
 
       {/* NEWSLETTER */}
       <section className="mx-auto max-w-7xl px-4 mt-24 w-full">

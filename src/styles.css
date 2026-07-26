@@ -5,81 +5,82 @@
 @custom-variant dark (&:is(.dark *));
 
 /* ============================================================
- * LUCKY GIT COMPS — Design System v4 ("Premium Ink")
- * Deep ink-green stage default. Bone islands for reading.
+ * LUCKY GIT COMPS — Heritage v5 (painted signboard + brass)
+ * Warm brown-black default (pitch), sheepskin islands for reading.
  * Fonts loaded via <link> in src/routes/__root.tsx.
  * ============================================================ */
 
 @theme {
-  /* ---------- CORE SURFACES ---------- */
-  /* Painted signboard — warm brown-black, not cool near-black.
-     This warmth is what makes brass and cream sing against it. */
-  --color-pitch-deep:    #16110C;
-  --color-pitch:         #1B1610;
-  --color-pitch-raised:  #241C14;
-  --color-pitch-hairline:#2E251A;
+  /* ---------- SURFACES (warm, painted) ---------- */
+  --color-pitch:         #14100C;
+  --color-pitch-raised:  #1E1811;
+  --color-pitch-line:    #2C2418;
+  --color-pitch-deep:    #100D09;
+  --color-pitch-hairline:var(--color-pitch-line);
   /* Back-compat: existing components reference `ink*`. Point them at pitch. */
   --color-ink-deep:      var(--color-pitch-deep);
   --color-ink:           var(--color-pitch);
   --color-ink-raised:    var(--color-pitch-raised);
-  --color-ink-hairline:  var(--color-pitch-hairline);
+  --color-ink-hairline:  var(--color-pitch-line);
 
-  /* Sheepskin cream — reading surface, aged paper. */
-  --color-sheepskin:         #F1E7CE;
-  --color-sheepskin-raised:  #F8F0DA;
-  --color-sheepskin-hairline:#DCCFA9;
+  /* Light content surfaces */
+  --color-sheepskin:      #F0E7D4;
+  --color-parchment:      #FAF4E6;
+  --color-sheepskin-line: #DCCFB4;
+  --color-sheepskin-raised: var(--color-parchment);
+  --color-sheepskin-hairline: var(--color-sheepskin-line);
   --color-bone:          var(--color-sheepskin);
-  --color-bone-raised:   var(--color-sheepskin-raised);
-  --color-bone-hairline: var(--color-sheepskin-hairline);
+  --color-bone-raised:   var(--color-parchment);
+  --color-bone-hairline: var(--color-sheepskin-line);
 
   /* ---------- BRAND ---------- */
-  /* Forest — structural surface: panels, primary buttons, stall headers. */
-  --color-forest:        #0F4A34;
-  --color-forest-hover:  #0A3826;
-  --color-forest-lift:   #16603F;
+  --color-forest:        #14563A;
+  --color-forest-deep:   #0D3A26;
+  --color-forest-lift:   #1C7049;
+  --color-forest-hover:  var(--color-forest-deep);
   --color-clover:        var(--color-forest);
-  --color-clover-hover:  var(--color-forest-hover);
+  --color-clover-hover:  var(--color-forest-deep);
   --color-clover-lift:   var(--color-forest-lift);
-  --color-clover-deep:   var(--color-forest-hover);
+  --color-clover-deep:   var(--color-forest-deep);
 
   /* Brass — never flat. Use the gradient + emboss shadows for real elements. */
-  --color-brass:            #C9A24A;
-  --color-brass-light:      #F0D783;
-  --color-brass-deep:       #8C6A1E;
-  --color-brass-foreground: #15110A;
+  --color-brass:            #C9A227;
+  --color-brass-light:      #EDD79A;
+  --color-brass-deep:       #8F6E15;
+  --color-brass-foreground: #16120D;
   --color-gold:             var(--color-brass);
   --color-gold-light:       var(--color-brass-light);
   --color-gold-deep:        var(--color-brass-deep);
   --color-gold-foreground:  var(--color-brass-foreground);
 
-  /* Ember — rust urgency, never brick red. */
-  --color-ember:            #A84A26;
+  /* Ember — desaturated rust, never brick red. */
+  --color-ember:            #B4593A;
   --color-urgent:           var(--color-ember);
-  --color-urgent-foreground:#F7F1E1;
+  --color-urgent-foreground:#FAF6EE;
   --color-hot:              var(--color-ember);
-  --color-hot-foreground:   #F7F1E1;
+  --color-hot-foreground:   #FAF6EE;
 
   /* ---------- NEUTRAL RAMP ---------- */
-  --color-n-100: #F7F1E1;
-  --color-n-200: #E8DEC3;
-  --color-n-300: #CDBF9A;
-  --color-n-400: #9E9273;
-  --color-n-500: #746A52;
-  --color-n-600: #4E4735;
-  --color-n-700: #362F22;
-  --color-n-800: #221C13;
-  --color-n-900: #15110A;
+  --color-n-100: #FAF6EE;
+  --color-n-200: #EAE3D6;
+  --color-n-300: #CFC6B4;
+  --color-n-400: #A79D8A;
+  --color-n-500: #7B7261;
+  --color-n-600: #554E42;
+  --color-n-700: #3A352C;
+  --color-n-800: #241F19;
+  --color-n-900: #16120D;
 
   --color-cream:          var(--color-sheepskin);
   --color-surface:        var(--color-pitch);
   --color-surface-raised: var(--color-pitch-raised);
 
   /* ---------- SEMANTIC ---------- */
-  --color-background:        var(--color-pitch-deep);
+  --color-background:        var(--color-pitch);
   --color-foreground:        var(--color-n-100);
-  --color-card:              var(--color-pitch);
+  --color-card:              var(--color-pitch-raised);
   --color-card-foreground:   var(--color-n-100);
-  --color-popover:           var(--color-pitch);
+  --color-popover:           var(--color-pitch-raised);
   --color-popover-foreground: var(--color-n-100);
   --color-primary:           var(--color-forest);
   --color-primary-foreground: var(--color-n-100);
@@ -91,47 +92,48 @@
   --color-accent-foreground: var(--color-brass-foreground);
   --color-destructive:       var(--color-ember);
   --color-destructive-foreground: var(--color-n-100);
-  --color-border:            var(--color-pitch-hairline);
-  --color-input:             var(--color-pitch-hairline);
+  --color-border:            var(--color-pitch-line);
+  --color-input:             var(--color-pitch-line);
   --color-ring:              var(--color-brass);
 
   /* ---------- GRADIENTS ---------- */
-  --gradient-brass: linear-gradient(160deg, #8C6A1E 0%, #E7CE7A 30%, #F5E1A0 48%, #C9A24A 62%, #7A5A18 100%);
+  --gradient-brass: linear-gradient(160deg, #8F6E15 0%, #C9A227 22%, #EDD79A 46%, #C9A227 64%, #7E5F11 100%);
+  --gradient-brass-soft: linear-gradient(160deg, #A8821C 0%, #D8B84E 50%, #9A7818 100%);
   --gradient-gold:  var(--gradient-brass);
-  --gradient-stage: radial-gradient(ellipse at 50% 45%, #2A2013 0%, #1B1610 55%, #16110C 100%);
-  --gradient-fade-dark: linear-gradient(180deg, transparent 0%, #16110C 100%);
-  --rim-gold: radial-gradient(ellipse 90% 40% at 50% 100%, rgba(201, 162, 74, 0.14) 0%, transparent 60%);
+  --gradient-stage: radial-gradient(ellipse at 50% 42%, #241C13 0%, #16110C 58%, #100D09 100%);
+  --gradient-fade-dark: linear-gradient(180deg, transparent 0%, #100D09 100%);
+  --gradient-forest: linear-gradient(180deg, #1A6344 0%, #14563A 55%, #0D3A26 100%);
+  --rim-gold: radial-gradient(ellipse 90% 40% at 50% 100%, rgba(201, 162, 39, 0.14) 0%, transparent 62%);
 
   /* Brass emboss shadow (used inside inset shadows for stamped-metal feel). */
   --shadow-brass-emboss: inset 0 1px 0 rgba(255,255,255,.38), inset 0 -1px 0 rgba(0,0,0,.32), 0 1px 0 rgba(0,0,0,.25);
 
   /* ---------- TYPOGRAPHY ---------- */
-  /* Archivo Black — signage-heavy display, sits alongside the script logo. */
-  --font-display: "Archivo Black", "Archivo", system-ui, sans-serif;
-  /* Abril Fatface — Victorian accent for oversized numerals and pull quotes. */
-  --font-fair:    "Abril Fatface", Georgia, serif;
-  --font-sans:    "Archivo", system-ui, sans-serif;
-  --font-body:    "Archivo", system-ui, sans-serif;
-  --font-mono:    "JetBrains Mono", ui-monospace, monospace;
-  --font-serif:   "Abril Fatface", Georgia, serif;
+  --font-display:  "Archivo Black", Impact, sans-serif;
+  --font-victorian:"Abril Fatface", Georgia, serif;
+  --font-fair:     var(--font-victorian);
+  --font-body:     "Archivo", system-ui, sans-serif;
+  --font-sans:     var(--font-body);
+  --font-mono:     "JetBrains Mono", ui-monospace, monospace;
+  --font-serif:    var(--font-victorian);
 
-  --text-display-xl: clamp(3.5rem, 9vw, 6.5rem);
-  --text-display-lg: clamp(2.75rem, 6.5vw, 4.5rem);
-  --text-display-md: clamp(2rem, 4.5vw, 3rem);
-  --text-display-sm: clamp(1.5rem, 3vw, 2rem);
+  --text-display-xl: clamp(3rem, 8.5vw, 5.75rem);
+  --text-display-lg: clamp(2.25rem, 6vw, 4rem);
+  --text-display-md: clamp(1.75rem, 4vw, 2.75rem);
+  --text-display-sm: clamp(1.375rem, 2.8vw, 1.875rem);
   --text-body-lg:    1.125rem;
   --text-body:       1rem;
   --text-body-sm:    0.875rem;
   --text-micro:      0.75rem;
 
-  --tracking-display: -0.03em;
-  --tracking-micro:    0.08em;
-  --leading-display:   0.95;
-  --leading-body:      1.65;
+  --tracking-display: -0.02em;
+  --tracking-micro:    0.12em;
+  --leading-display:   0.98;
+  --leading-body:      1.6;
 
   /* ---------- SHAPE ---------- */
   --radius-sharp: 2px;
-  --radius-soft:  6px;
+  --radius-soft:  4px;
   --radius-pill:  9999px;
   --radius-sm: 2px;
   --radius-md: 2px;
@@ -141,18 +143,20 @@
   --radius-3xl: 2px;
 
   /* ---------- SPACE ---------- */
-  --space-section:    clamp(5rem, 12vw, 10rem);
-  --space-block:      clamp(2.5rem, 5vw, 4rem);
+  --space-section:    clamp(4.5rem, 10vw, 8.5rem);
+  --space-block:      clamp(2.25rem, 4.5vw, 3.5rem);
   --space-gutter:     clamp(1.25rem, 4vw, 3rem);
   --width-content:    76rem;
   --width-prose:      42rem;
 
   /* ---------- ELEVATION ---------- */
-  --shadow-lift: 0 1px 2px rgba(0,0,0,.45), 0 14px 44px -14px rgba(0,0,0,.65);
+  --shadow-hung:  0 2px 0 rgba(0,0,0,.5), 0 14px 34px -14px rgba(0,0,0,.7);
+  --shadow-board: 0 1px 0 rgba(0,0,0,.4), 0 8px 20px -10px rgba(0,0,0,.55);
+  --shadow-lift: var(--shadow-hung);
   --shadow-sticker: 0 1px 0 rgba(0, 0, 0, 0.25);
   --shadow-card: 0 1px 0 rgba(0, 0, 0, 0.2);
   /* Brass frame — 2px gradient border simulated via layered box shadows. */
-  --shadow-brass-frame: 0 0 0 1px #7A5A18, 0 0 0 2px #C9A24A, 0 0 0 3px #4A3810, 0 12px 30px -14px rgba(0,0,0,.6);
+  --shadow-brass-frame: 0 0 0 1px #7E5F11, 0 0 0 2px #C9A227, 0 0 0 3px #4A3810, 0 12px 30px -14px rgba(0,0,0,.6);
 }
 
 :root {
@@ -311,9 +315,27 @@
    mimicking hand-painted signwriting. Apply to display headlines only. */
 @utility painted {
   text-shadow:
-    2px 2px 0 rgba(0,0,0,.55),
-    3px 3px 0 rgba(201,162,74,.18);
-  -webkit-text-stroke: 0.4px rgba(240,215,131,.35);
+    2px 2px 0 var(--color-forest-deep),
+    3px 3px 0 rgba(0,0,0,.45);
+  -webkit-text-stroke: 0.6px var(--color-brass-deep);
+  paint-order: stroke fill;
+}
+
+/* Metallic brass type — for oversized numerals ("£23,940") */
+@utility painted-gold {
+  background: var(--gradient-brass);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(2px 2px 0 rgba(0,0,0,.5));
+}
+
+/* Victorian accent — Abril Fatface for oversized numerals / pull quotes. */
+@utility victorian {
+  font-family: var(--font-victorian);
+  letter-spacing: 0;
+  line-height: 0.9;
 }
 
 /* Brass surface — stamped metal look. Combine with .painted-emboss for text. */
@@ -332,7 +354,7 @@
 
 /* Stall-board header bar — forest green plaque under the prize name. */
 @utility stall-header {
-  background-color: var(--color-forest);
+  background-image: var(--gradient-forest);
   color: var(--color-n-100);
   border-bottom: 2px solid var(--color-brass-deep);
   box-shadow: inset 0 -1px 0 rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.06);
@@ -341,6 +363,74 @@
 /* Alternating hand-hung rotation on grid cards. Disabled under reduced-motion. */
 @utility stall-tilt-l { transform: rotate(-0.6deg); }
 @utility stall-tilt-r { transform: rotate(0.5deg); }
+
+/* ---------- STALL BOARD CARD ---------- */
+/* Painted parchment card, brass-framed, hand-hung tilt. */
+.stall-board {
+  background: var(--color-parchment);
+  color: var(--color-n-900);
+  border-radius: var(--radius-sharp);
+  box-shadow: var(--shadow-board);
+  position: relative;
+  overflow: hidden;
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.stall-board__header {
+  background: var(--gradient-forest);
+  color: var(--color-n-100);
+  font-family: var(--font-display);
+  border-bottom: 2px solid var(--color-brass-deep);
+}
+/* Alternating rotation across grid rows */
+.stall-grid > .stall-board:nth-child(odd)  { transform: rotate(-0.5deg); }
+.stall-grid > .stall-board:nth-child(even) { transform: rotate(0.45deg); }
+.stall-grid > .stall-board:hover           { transform: rotate(0deg) translateY(-3px); box-shadow: var(--shadow-hung); }
+
+/* ---------- PINSTRIPE DIVIDER ---------- */
+.pinstripe-rule {
+  position: relative;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-brass-deep) 12%, var(--color-brass) 50%, var(--color-brass-deep) 88%, transparent);
+  margin-block: var(--space-block);
+}
+.pinstripe-rule::after {
+  content: '';
+  position: absolute; left: 50%; top: 50%;
+  width: 7px; height: 7px;
+  transform: translate(-50%,-50%) rotate(45deg);
+  background: var(--gradient-brass);
+  box-shadow: 0 0 0 3px var(--color-background);
+}
+
+/* ---------- PAPER TEXTURE (for cream cards) ---------- */
+.paper { position: relative; }
+.paper::before {
+  content: '';
+  position: absolute; inset: 0;
+  pointer-events: none;
+  opacity: .05;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---------- PLAIN CONTEXT (trust / legal pages) ---------- */
+/* Strips ornament: no rotation, no grain, no painted shadows. */
+.plain .stall-board,
+.plain .stall-grid > .stall-board:nth-child(odd),
+.plain .stall-grid > .stall-board:nth-child(even) {
+  transform: none;
+  box-shadow: none;
+  border: 1px solid var(--color-border);
+}
+.plain .painted {
+  text-shadow: none;
+  -webkit-text-stroke: 0;
+  color: inherit;
+}
+.plain .grain::before,
+.plain .grain::after,
+.plain .paper::before { display: none; }
+.plain .bg-grain::after { display: none; }
 
 /* Prize stage wrapper class variant */
 .prize-stage {
