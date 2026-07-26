@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as WinnersRouteImport } from './routes/winners'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as ResponsiblePlayRouteImport } from './routes/responsible-play'
+import { Route as PromiseRouteImport } from './routes/promise'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PastDrawsRouteImport } from './routes/past-draws'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
@@ -42,6 +43,11 @@ const TermsRoute = TermsRouteImport.update({
 const ResponsiblePlayRoute = ResponsiblePlayRouteImport.update({
   id: '/responsible-play',
   path: '/responsible-play',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PromiseRoute = PromiseRouteImport.update({
+  id: '/promise',
+  path: '/promise',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PrivacyRoute = PrivacyRouteImport.update({
@@ -136,6 +142,7 @@ export interface FileRoutesByFullPath {
   '/how-it-works': typeof HowItWorksRoute
   '/past-draws': typeof PastDrawsRoute
   '/privacy': typeof PrivacyRoute
+  '/promise': typeof PromiseRoute
   '/responsible-play': typeof ResponsiblePlayRoute
   '/terms': typeof TermsRoute
   '/winners': typeof WinnersRoute
@@ -156,6 +163,7 @@ export interface FileRoutesByTo {
   '/how-it-works': typeof HowItWorksRoute
   '/past-draws': typeof PastDrawsRoute
   '/privacy': typeof PrivacyRoute
+  '/promise': typeof PromiseRoute
   '/responsible-play': typeof ResponsiblePlayRoute
   '/terms': typeof TermsRoute
   '/winners': typeof WinnersRoute
@@ -178,6 +186,7 @@ export interface FileRoutesById {
   '/how-it-works': typeof HowItWorksRoute
   '/past-draws': typeof PastDrawsRoute
   '/privacy': typeof PrivacyRoute
+  '/promise': typeof PromiseRoute
   '/responsible-play': typeof ResponsiblePlayRoute
   '/terms': typeof TermsRoute
   '/winners': typeof WinnersRoute
@@ -200,6 +209,7 @@ export interface FileRouteTypes {
     | '/how-it-works'
     | '/past-draws'
     | '/privacy'
+    | '/promise'
     | '/responsible-play'
     | '/terms'
     | '/winners'
@@ -220,6 +230,7 @@ export interface FileRouteTypes {
     | '/how-it-works'
     | '/past-draws'
     | '/privacy'
+    | '/promise'
     | '/responsible-play'
     | '/terms'
     | '/winners'
@@ -241,6 +252,7 @@ export interface FileRouteTypes {
     | '/how-it-works'
     | '/past-draws'
     | '/privacy'
+    | '/promise'
     | '/responsible-play'
     | '/terms'
     | '/winners'
@@ -263,6 +275,7 @@ export interface RootRouteChildren {
   HowItWorksRoute: typeof HowItWorksRoute
   PastDrawsRoute: typeof PastDrawsRoute
   PrivacyRoute: typeof PrivacyRoute
+  PromiseRoute: typeof PromiseRoute
   ResponsiblePlayRoute: typeof ResponsiblePlayRoute
   TermsRoute: typeof TermsRoute
   WinnersRoute: typeof WinnersRoute
@@ -293,6 +306,13 @@ declare module '@tanstack/react-router' {
       path: '/responsible-play'
       fullPath: '/responsible-play'
       preLoaderRoute: typeof ResponsiblePlayRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/promise': {
+      id: '/promise'
+      path: '/promise'
+      fullPath: '/promise'
+      preLoaderRoute: typeof PromiseRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/privacy': {
@@ -434,6 +454,7 @@ const rootRouteChildren: RootRouteChildren = {
   HowItWorksRoute: HowItWorksRoute,
   PastDrawsRoute: PastDrawsRoute,
   PrivacyRoute: PrivacyRoute,
+  PromiseRoute: PromiseRoute,
   ResponsiblePlayRoute: ResponsiblePlayRoute,
   TermsRoute: TermsRoute,
   WinnersRoute: WinnersRoute,
