@@ -58,18 +58,18 @@ function CompetitionsPage() {
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <SiteNav />
-      <main className="mx-auto max-w-7xl px-4 py-8 md:py-12 w-full">
+      <main className="mx-auto max-w-7xl px-4 py-4 md:py-6 w-full">
         <h1 className="font-display text-4xl md:text-5xl font-black text-foreground">Live Competitions</h1>
         <p className="text-muted-foreground mt-1">All the current lot. Sort them, filter them, buy the lot.</p>
         <div className="mt-6 flex items-center justify-between gap-3 flex-wrap">
           <div className="flex gap-2 flex-wrap">
-            {CATEGORIES.map((c) => {
-              const active = activeCat === c;
+            {(["All", ...CATEGORIES] as const).map((c) => {
+              const active = c === "All" ? activeCat === null : activeCat === c;
               return (
                 <button
                   key={c}
                   type="button"
-                  onClick={() => setActiveCat(active ? null : c)}
+                  onClick={() => setActiveCat(c === "All" ? null : (active ? null : c))}
                   className={
                     "whitespace-nowrap border-2 border-[var(--color-ink-black)] px-3 py-1 text-[11px] font-body font-bold uppercase tracking-[0.14em] transition-colors " +
                     (active
