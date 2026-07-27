@@ -176,7 +176,7 @@ function Home() {
       </section>
 
       {/* LIVE COMPETITIONS GRID */}
-      <section className="mx-auto max-w-7xl px-4 pt-6 pb-2 w-full">
+      <section className="mx-auto max-w-7xl px-4 pt-3 pb-2 w-full">
         <div className="flex items-end justify-between gap-4 flex-wrap">
           <div>
             <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-clover mb-2 font-bold">Live · {COMPETITIONS.length.toString().padStart(2, "0")}</div>
