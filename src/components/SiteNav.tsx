@@ -119,29 +119,29 @@ export function SiteNav() {
       {/* Tier 0 — live ticker, topmost element on the page, dark green strip. */}
       <LiveOddsTicker />
 
-      {/* Row 1 — full-bleed masthead banner. Zero horizontal padding. The
-          source PNG carries baked-in transparent padding on all sides;
-          the wrapper crops it with overflow-hidden + a scaled/positioned
-          <img>, leaving ≤8px of vertical breathing room above/below the
-          printed artwork. */}
+      {/* Row 1 — full-bleed masthead banner. The source PNG carries baked-in
+          transparent padding (content bbox = 35..1341 x 192..603 of 1376x768).
+          We crop it with an aspect-ratio wrapper + absolutely positioned img
+          so the banner defines the row height, with only 8px breathing room
+          above/below. */}
       <Link
         to="/"
         aria-label="Lucky Git Comps — home"
         className="block w-full bg-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-clover"
-        style={{ padding: "6px 0" }}
+        style={{ padding: "8px 0" }}
       >
-        <img
-          src={LOCKUP_HORIZONTAL_URL}
-          alt="Lucky Git Comps"
-          draggable={false}
-          className="block select-none pointer-events-none mx-auto"
-          style={{
-            width: "88%",
-            maxWidth: "88vw",
-            height: "auto",
-            objectFit: "contain",
-          }}
-        />
+        <div
+          className="relative mx-auto overflow-hidden"
+          style={{ width: "88%", maxWidth: "88vw", aspectRatio: "1306 / 411" }}
+        >
+          <img
+            src={LOCKUP_HORIZONTAL_URL}
+            alt="Lucky Git Comps"
+            draggable={false}
+            className="absolute select-none pointer-events-none"
+            style={{ width: "105.36%", left: "-2.68%", top: "-46.72%" }}
+          />
+        </div>
       </Link>
 
       {/* 2px black rule separating row 1 from row 2. */}
