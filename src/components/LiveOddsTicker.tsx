@@ -25,22 +25,9 @@ export function LiveOddsTicker() {
     "THE ODDS ARE THE ODDS",
   ] as const;
 
-  // Empty / loading state — still render the shell so layout doesn't jump.
-  if (items.length === 0) {
-    return (
-      <div data-dynamic="ticker" className="relative overflow-hidden bg-clover-deep text-cream">
-        <div className="flex items-stretch">
-          <LiveChip />
-          <div className="flex-1 px-4 py-1.5 text-[11px] font-bold text-cream/75 tracking-wide">
-            No live competitions right now. New ones drop weekly.
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // Show filler chips only when fewer than three real items are live.
-  const showFiller = items.length > 0 && items.length < 3;
+  // Show filler chips when fewer than three real items are live (including
+  // the zero case, where the marquee is filler-only).
+  const showFiller = items.length < 3;
 
   return (
     <TooltipProvider delayDuration={150}>
@@ -52,13 +39,8 @@ export function LiveOddsTicker() {
           {/* Wide left mask + matching left padding + trailing gap-8 spacer
               guarantee the first item is never mid-word at rest and the
               seamless loop hand-off never clips a partial word. */}
-          <div className="relative flex-1 overflow-hidden [mask-image:linear-gradient(90deg,transparent_0%,#000_4%,#000_100%)] py-1.5">
-            <div className="ticker-scroll flex gap-8 whitespace-nowrap text-[11px] font-bold tracking-wide text-cream pr-8">
-              {/* Leading spacer = full container width. Guarantees the first
-                  item is preceded by empty space, so even at t=0 or after
-                  any animation reset, no partial word is visible at the left
-                  edge of the marquee. */}
-              <span aria-hidden="true" className="shrink-0 basis-full min-w-full" />
+          <div className="relative flex-1 overflow-hidden [mask-image:linear-gradient(90deg,transparent_0%,#000_2%,#000_98%,transparent_100%)] py-1.5">
+            <div className="ticker-scroll flex gap-8 whitespace-nowrap text-[11px] font-bold tracking-wide text-cream pl-6 pr-8">
               {items.map((it, i) => (
                 <TickerItem key={`${it.slug}-${i}`} c={it} />
               ))}
