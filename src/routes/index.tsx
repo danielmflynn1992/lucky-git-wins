@@ -173,6 +173,7 @@ function Home() {
       <Perforation color="var(--color-ink-black)" className="text-transparent" />
 
       {/* TRUST STRIP */}
+      {/* placeholder-anchor */}
       <section className="border-y-[1.5px] border-[var(--color-ink-black)] bg-[var(--color-paper-raised)]">
         <div className="mx-auto max-w-7xl px-4 py-6 grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3">
           {[
