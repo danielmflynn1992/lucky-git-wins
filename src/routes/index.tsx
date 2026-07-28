@@ -94,6 +94,7 @@ function Home() {
             </p>
 
             {/* Featured comp mini card */}
+            {featured && (
             <div className="mt-6 rounded-lg bg-card border border-border text-foreground p-4 max-w-md shadow-md">
               <div className="flex gap-3">
                 <div className="prize-treatment shrink-0 h-20 w-20">
@@ -124,6 +125,7 @@ function Home() {
                 </Button>
               </div>
             </div>
+            )}
 
             <div className="mt-5 flex gap-1.5">
               {hero.map((_, i) => (
