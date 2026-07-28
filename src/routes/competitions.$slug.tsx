@@ -341,6 +341,28 @@ function CompDetail() {
           </div>
         </div>
 
+        {/* Post-close only: personal result, then the pick board. */}
+        {result && (
+          <section className="mt-10">
+            {result.soldNumbers.length === 0 ? (
+              <div className="border-[1.5px] border-[var(--color-ink-black)] bg-[var(--color-paper-raised)] p-4">
+                <p className="font-display uppercase text-lg leading-tight">
+                  Nobody entered. Not one of you. We're not angry, just disappointed.
+                </p>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  This one closed with an empty coupon, so the void-comp process in the{" "}
+                  <Link to="/terms" className="underline">T&amp;Cs</Link> applies.
+                </p>
+              </div>
+            ) : (
+              <>
+                <NearMiss slug={c.slug} competitionTitle={c.title} />
+                <PickHeatmap result={result} />
+              </>
+            )}
+          </section>
+        )}
+
         <section className="mt-12 grid gap-8 lg:grid-cols-3">
           <div className="lg:col-span-2">
             <h2 className="font-display text-2xl font-black">What you're playing for</h2>
