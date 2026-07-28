@@ -20,8 +20,9 @@ let installed = false;
 
 function fingerprint(kind: string, message: string, stack?: string) {
   const firstFrame = stack?.split("\n").find((l) => l.includes("://"))?.trim() ?? "";
-  // Truncate message to keep dedup buckets useful
-  return `${kind}::${message.slice(0, 160)}::${firstFrame.slice(0, 160)}`;
+  // Server caps fingerprints at 128 chars — anything longer is rejected outright,
+  // which silently drops the whole batch. Keep buckets useful but inside the cap.
+  return `${kind}::${message.slice(0, 60)}::${firstFrame.slice(0, 55)}`.slice(0, 128);
 }
 
 function ctx() {
