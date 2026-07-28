@@ -145,16 +145,14 @@ export async function fetchAllCompetitions(): Promise<Competition[]> {
   if (error) throw error;
   if (!comps || comps.length === 0) return [];
 
-  const ids = comps.map((c) => c.id);
-  const { data: tickets, error: tErr } = await supabase
-    .from("tickets")
-    .select("competition_id, status")
-    .in("competition_id", ids)
-    .eq("status", "sold");
+  // Count server-side. Selecting sold ticket rows hits the Data API's 1000-row
+  // cap once a handful of competitions are live, which silently zeroed the
+  // "sold" figure on whichever comps fell off the end of the page.
+  const { data: counts, error: tErr } = await supabase.rpc("competition_sold_counts");
   if (tErr) throw tErr;
 
   const sold = new Map<string, number>();
-  for (const t of tickets ?? []) sold.set(t.competition_id, (sold.get(t.competition_id) ?? 0) + 1);
+  for (const row of counts ?? []) sold.set(row.competition_id, row.sold);
 
   return comps.map((c) => {
     const image = resolveImage(c.image, c.slug);
