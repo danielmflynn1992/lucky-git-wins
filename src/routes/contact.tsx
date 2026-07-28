@@ -12,14 +12,15 @@ export const Route = createFileRoute("/contact")({
   }),
   component: () => (
     <StaticPage kicker="Get in touch" title="Contact & Support">
-      <p>All support goes through email — that way we've got a record and nothing slips through the cracks. Real UK humans reply, usually within a few hours on weekdays.</p>
+      <p>Email us. A real human in the UK reads it — usually the same day, always the same week. No bots, no ticket numbers seventeen digits long, no "your call is important to us".</p>
       <p className="text-lg"><strong>Email:</strong> <a href="mailto:hello@luckygitcomps.co.uk">hello@luckygitcomps.co.uk</a></p>
-      <h2>When you email, please include</h2>
+      <h2>Chuck in the following so we can sort it quicker:</h2>
       <ul>
         <li>The competition name (if it's about a specific one)</li>
         <li>Your order reference (from your email confirmation)</li>
         <li>What's up — as much detail as you like</li>
       </ul>
+      <p>Compliments also accepted.</p>
     </StaticPage>
   ),
 });

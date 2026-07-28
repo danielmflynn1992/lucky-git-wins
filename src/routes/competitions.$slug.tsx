@@ -9,12 +9,12 @@ import { Countdown } from "@/components/Countdown";
 import { CompCard } from "@/components/CompCard";
 import { Button } from "@/components/ui/button";
 import { PrizeGallery } from "@/components/PrizeImage";
-import { COMPETITIONS } from "@/lib/mock-comps";
 import { gbp, shortNumber, pickLoadingQuip, moneySlang } from "@/lib/format";
 import { LuckyMark } from "@/components/GaryMascot";
 import { CouponGrid } from "@/components/CouponGrid";
 import {
   competitionQueryOptions,
+  allCompetitionsQueryOptions,
   explainReservationFailure,
   newReservationToken,
   reserveLuckyDip,
@@ -64,6 +64,7 @@ function CompDetail() {
   const navigate = useNavigate();
   const { data } = useSuspenseQuery(competitionQueryOptions(slug));
   const c = data as DbCompetition;
+  const { data: allComps = [] } = useQuery(allCompetitionsQueryOptions);
 
   const [qty, setQty] = useState(5);
   const [picker, setPicker] = useState<"lucky" | "manual">("lucky");
@@ -81,9 +82,10 @@ function CompDetail() {
 
   const displayNumbers = picker === "manual" ? picked.size : qty;
 
-  const related = COMPETITIONS.filter((x) => x.slug !== c.slug).slice(0, 3);
+  const related = allComps.filter((x) => x.slug !== c.slug).slice(0, 3);
 
   const toggleNumber = (n: number) => {
+    setPicker("manual");
     setPicked((prev) => {
       const next = new Set(prev);
       if (next.has(n)) next.delete(n);
@@ -156,7 +158,7 @@ function CompDetail() {
 
       <main className="mx-auto max-w-7xl px-4 py-6 md:py-10 w-full">
         <div className="text-xs font-semibold text-muted-foreground mb-4">
-          <Link to="/" className="hover:text-clover">Home</Link>
+          <Link to="/" className="hover:text-clover">The stall</Link>
           <span className="mx-2">/</span>
           <span className="text-foreground">{c.category}</span>
           <span className="mx-2">/</span>
@@ -235,7 +237,9 @@ function CompDetail() {
                     <button onClick={() => setQty(Math.min(c.maxPerPerson, c.ticketsAvailable, qty + 1))} className="h-11 w-11 rounded-xl border-2 border-border bg-background font-bold text-lg">+</button>
                   </div>
                   <div className="mt-2 flex gap-1.5 flex-wrap">
-                    {[1, 5, 10, 25, 50].filter((n) => n <= c.ticketsAvailable).map((n) => (
+                    {[1, 5, 10, 25, 50, 100, c.maxPerPerson]
+                      .filter((n, i, arr) => n <= c.ticketsAvailable && n <= c.maxPerPerson && arr.indexOf(n) === i)
+                      .map((n) => (
                       <button key={n} onClick={() => setQty(n)} className="rounded-lg px-2.5 py-1 text-xs font-bold bg-background border border-border hover:border-clover">
                         {n}
                       </button>
@@ -245,26 +249,27 @@ function CompDetail() {
                     {c.ticketsAvailable.toLocaleString()} tickets available
                   </div>
                 </div>
-              ) : (
-                <div>
-                  <div className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-2">
-                    Tap a number, or type them in.
-                  </div>
-                  <CouponGrid
-                    total={c.totalTickets}
-                    sold={takenSet}
-                    picked={picked}
-                    onToggle={toggleNumber}
-                    onLuckyDip={doLuckyDip}
-                    cols={Math.min(25, Math.max(10, Math.ceil(Math.sqrt(c.totalTickets * 1.6))))}
-                  />
-                  {picked.size > 0 && (
-                    <button onClick={() => setPicked(new Set())} className="mt-2 text-xs font-mono underline text-muted-foreground">
-                      clear selection
-                    </button>
-                  )}
+              ) : null}
+
+              {/* The pool, always on show. Sold numbers X'd off in biro. */}
+              <div className="mt-4 pt-4 border-t border-dashed border-border">
+                <div className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-2">
+                  The coupon — tap a number, or type them in.
                 </div>
-              )}
+                <CouponGrid
+                  total={c.totalTickets}
+                  sold={takenSet}
+                  picked={picked}
+                  onToggle={toggleNumber}
+                  onLuckyDip={doLuckyDip}
+                  cols={Math.min(25, Math.max(10, Math.ceil(Math.sqrt(c.totalTickets * 1.6))))}
+                />
+                {picked.size > 0 && (
+                  <button onClick={() => setPicked(new Set())} className="mt-2 text-xs font-mono underline text-muted-foreground">
+                    clear selection
+                  </button>
+                )}
+              </div>
 
               {reserveError && (
                 <div className="mt-3 rounded-lg border-2 border-urgent/40 bg-urgent/10 p-3 text-xs text-urgent">
@@ -288,7 +293,9 @@ function CompDetail() {
               <div className="mt-4 pt-4 border-t border-border flex items-center justify-between">
                 <div>
                   <div className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground">Total</div>
-                  <div className="font-display font-black text-3xl leading-none tabular-nums">{gbp(c.pricePerTicket * displayNumbers)}</div>
+                  <div className="font-display font-black text-3xl leading-none tabular-nums">
+                    <Odometer value={c.pricePerTicket * displayNumbers} format={gbp} />
+                  </div>
                   <div className="text-xs text-muted-foreground font-mono tabular-nums">{displayNumbers} ticket{displayNumbers === 1 ? "" : "s"}</div>
                 </div>
                 <Button variant="gold" size="xl" onClick={handleReserve} disabled={displayNumbers === 0 || reserving || soldOut}>
@@ -323,7 +330,7 @@ function CompDetail() {
 
         <section className="mt-12 grid gap-8 lg:grid-cols-3">
           <div className="lg:col-span-2">
-            <h2 className="font-display text-2xl font-black">About this prize</h2>
+            <h2 className="font-display text-2xl font-black">What you're playing for</h2>
             <p className="mt-3 text-foreground/80 leading-relaxed">{c.description}</p>
 
             <h3 className="mt-8 font-display text-xl font-black">The important bits</h3>
@@ -346,7 +353,7 @@ function CompDetail() {
             </ul>
           </div>
           <aside className="rounded-2xl bg-gold/10 border-2 border-gold/40 p-5">
-            <h3 className="font-display text-lg font-black">Automatic draw</h3>
+            <h3 className="font-display text-lg font-black">How the draw goes off</h3>
             <p className="mt-2 text-sm text-foreground/80">Winners are picked automatically the moment the timer hits zero (or the last ticket sells). Provably random, verified, and published on the Winners Wall.</p>
             <Link to="/winners" className="mt-3 inline-block font-bold text-clover underline">See recent winners →</Link>
           </aside>

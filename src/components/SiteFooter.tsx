@@ -87,6 +87,9 @@ export function SiteFooter() {
           © {new Date().getFullYear()} LUCKYGITCOMPS
           <span className="mx-2 opacity-40">·</span>
           GITS MADE LUCKY SO FAR: <b className="tabular-nums">{gitsCount.toString().padStart(3, "0")}</b>
+          <div className="mt-1.5 text-[10px] tracking-[0.18em] uppercase opacity-70">
+            Built in Britain. Fuelled by tea and other people's luck.
+          </div>
         </div>
       </div>
     </footer>
