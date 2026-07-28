@@ -1,11 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { LayoutGrid, List } from "lucide-react";
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
 import { CompCard } from "@/components/CompCard";
 import { CompRow } from "@/components/CompRow";
-import { COMPETITIONS, CATEGORIES } from "@/lib/mock-comps";
+import { allCompetitionsQueryOptions } from "@/lib/competitions-api";
 import { LuckyMark } from "@/components/GaryMascot";
 
 type SortKey = "ending-soon" | "highest-prize" | "best-odds" | "lowest-price" | "hot";
@@ -19,6 +20,9 @@ const SORTS: { key: SortKey; label: string }[] = [
 ];
 
 export const Route = createFileRoute("/competitions/")({
+  loader: ({ context }) => {
+    context.queryClient.ensureQueryData(allCompetitionsQueryOptions);
+  },
   head: () => ({
     meta: [
       { title: "All Live Competitions — Lucky Git Comps" },
@@ -33,9 +37,14 @@ export const Route = createFileRoute("/competitions/")({
 });
 
 function CompetitionsPage() {
+  const { data: COMPETITIONS } = useSuspenseQuery(allCompetitionsQueryOptions);
+  const CATEGORIES = useMemo(
+    () => [...new Set(COMPETITIONS.map((c) => c.category))],
+    [COMPETITIONS],
+  );
   const [view, setView] = useState<"grid" | "list">("grid");
   const [sort, setSort] = useState<SortKey>("ending-soon");
-  const [activeCat, setActiveCat] = useState<(typeof CATEGORIES)[number] | null>(null);
+  const [activeCat, setActiveCat] = useState<string | null>(null);
   const sorted = useMemo(() => {
     const arr = COMPETITIONS.filter((c) => (activeCat ? c.category === activeCat : true));
     switch (sort) {
@@ -54,7 +63,7 @@ function CompetitionsPage() {
       default:
         return arr;
     }
-  }, [sort, activeCat]);
+  }, [sort, activeCat, COMPETITIONS]);
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <SiteNav />
@@ -63,7 +72,7 @@ function CompetitionsPage() {
         <p className="text-muted-foreground mt-1">All the current lot. Sort them, filter them, buy the lot.</p>
         <div className="mt-6 flex items-center justify-between gap-3 flex-wrap">
           <div className="flex gap-2 flex-wrap">
-            {(["All", ...CATEGORIES] as const).map((c) => {
+            {["All", ...CATEGORIES].map((c) => {
               const active = c === "All" ? activeCat === null : activeCat === c;
               return (
                 <button

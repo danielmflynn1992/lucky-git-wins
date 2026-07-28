@@ -40,7 +40,7 @@ function VerifyPage() {
           <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-clover font-bold">Provably fair</div>
           <h1 className="mt-3 font-display text-5xl md:text-6xl font-black tracking-[-0.03em]">Verify any draw.</h1>
           <p className="mt-4 text-lg text-muted-foreground max-w-2xl leading-relaxed">
-            No presenter, no delay, no room for a stitch-up — just an algorithm and a hash you can check yourself.
+            No presenter, no delay, no room for a stitch-up — just maths. Check it yourself, don't take our word for it.
           </p>
         </section>
 
@@ -76,6 +76,9 @@ function VerifyPage() {
 
           <p className="mt-6 text-xs text-muted-foreground text-center">
             Or head back to <Link to="/past-draws" className="text-clover font-semibold hover:underline">every past draw</Link>.
+          </p>
+          <p className="mt-3 text-center font-display uppercase tracking-[0.14em] text-sm text-foreground">
+            Still suspicious? Good. That's what it's for.
           </p>
         </section>
       </main>

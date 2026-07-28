@@ -23,6 +23,7 @@ export function CompCard({ c }: { c: Competition }) {
   const soldOut = pct >= 100;
   const almostGone = pct >= 80 && !soldOut;
   const remaining = c.totalTickets - c.ticketsSold;
+  const fresh = c.ticketsSold === 0;
   const [quickOpen, setQuickOpen] = useState(false);
   const serialWidth = 4;
   const navigate = useNavigate();
@@ -89,6 +90,13 @@ export function CompCard({ c }: { c: Competition }) {
           <span className="pointer-events-none absolute z-[6]" style={{ right: "14px", bottom: "-10px" }}>
             <StampMark variant="LIVE" size="sm" angle={-4} />
           </span>
+        ) : fresh ? (
+          <span
+            className="pointer-events-none absolute z-[6] border-2 border-[var(--color-ink-blue)] bg-[var(--color-paper-raised)] px-1.5 py-0.5 font-display uppercase tracking-[0.14em] text-[9px] text-[var(--color-ink-blue)] rotate-[-4deg]"
+            style={{ right: "14px", bottom: "-10px" }}
+          >
+            Fresh on the stall
+          </span>
         ) : null}
       </div>
 
@@ -97,6 +105,7 @@ export function CompCard({ c }: { c: Competition }) {
         <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 min-w-0">
           <FormRow label="STAKE" value={<span className="font-bold text-[var(--color-ink-red)]">{gbp(c.pricePerTicket)}</span>} />
           <FormRow label="ODDS" value={<>1 in <b>{c.totalTickets}</b></>} />
+          <FormRow label="SOLD" value={fresh ? <span className="text-[var(--color-ink-blue)]">First one's yours</span> : <b>{c.ticketsSold.toLocaleString()}</b>} />
           <FormRow label="LEFT" value={<b>{remaining.toLocaleString()}</b>} />
           <FormRow label="CLOSES" value={<Countdown target={c.endsAt} compact />} />
         </dl>

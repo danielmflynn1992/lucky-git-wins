@@ -1,6 +1,7 @@
 import { queryOptions } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import type { LetterboxStyle } from "@/components/LetterboxImage";
+import type { Competition } from "@/lib/mock-comps";
 import audi from "@/assets/prize-audi.jpg";
 import tech from "@/assets/prize-tech.jpg";
 import cash from "@/assets/prize-cash.jpg";
@@ -98,6 +99,64 @@ export const competitionQueryOptions = (slug: string) =>
     staleTime: 15_000,
   });
 
+// --- Every live competition (single source of truth for cards/rows) ----------
+
+/**
+ * One query every browse surface reads from, so the homepage, the
+ * /competitions grid, the odds board and the detail page can never disagree
+ * about price, category or how many tickets have gone.
+ */
+export async function fetchAllCompetitions(): Promise<Competition[]> {
+  const { data: comps, error } = await supabase
+    .from("competitions")
+    .select("*")
+    .eq("status", "live")
+    .order("ends_at", { ascending: true });
+  if (error) throw error;
+  if (!comps || comps.length === 0) return [];
+
+  const ids = comps.map((c) => c.id);
+  const { data: tickets, error: tErr } = await supabase
+    .from("tickets")
+    .select("competition_id, status")
+    .in("competition_id", ids)
+    .eq("status", "sold");
+  if (tErr) throw tErr;
+
+  const sold = new Map<string, number>();
+  for (const t of tickets ?? []) sold.set(t.competition_id, (sold.get(t.competition_id) ?? 0) + 1);
+
+  return comps.map((c) => {
+    const image = resolveImage(c.image, c.slug);
+    const supporting = ((c as { supporting_images?: string[] | null }).supporting_images ?? []).filter(Boolean);
+    return {
+      slug: c.slug,
+      title: c.title,
+      subtitle: c.subtitle,
+      category: c.category,
+      image,
+      thumbUrl: (c as { thumb_url?: string | null }).thumb_url || "",
+      letterboxStyle: ((c as { letterbox_style?: string }).letterbox_style ?? "blur") as LetterboxStyle,
+      gallery: supporting.length ? supporting : [image],
+      pricePerTicket: Number(c.price_per_ticket),
+      totalTickets: c.total_tickets,
+      ticketsSold: sold.get(c.id) ?? 0,
+      cashAlternative: c.cash_alternative,
+      maxPerPerson: c.max_per_person,
+      endsAt: c.ends_at,
+      hot: c.hot,
+      description: c.description,
+    } satisfies Competition;
+  });
+}
+
+export const allCompetitionsQueryOptions = queryOptions({
+  queryKey: ["competitions", "live"],
+  queryFn: fetchAllCompetitions,
+  staleTime: 15_000,
+  refetchInterval: 60_000,
+});
+
 // --- Live odds for the ticker ------------------------------------------------
 
 export interface LiveOdds {
@@ -144,7 +203,6 @@ export async function fetchLiveOdds(): Promise<LiveOdds[]> {
   return comps.map((c) => {
     const { sold = 0, reserved = 0 } = counts.get(c.id) ?? {};
     const total = c.total_tickets;
-    const soldEffective = Math.max(1, sold);
     return {
       id: c.id,
       slug: c.slug,
@@ -155,7 +213,9 @@ export async function fetchLiveOdds(): Promise<LiveOdds[]> {
       ticketsSold: sold,
       ticketsReserved: reserved,
       ticketsAvailable: total - sold - reserved,
-      odds: Math.max(1, Math.round(total / soldEffective)),
+      // A single ticket's odds in a raffle are 1 in (total tickets in the pool).
+      // Nothing to do with how many have sold.
+      odds: total,
       pctSold: Math.round((sold / Math.max(1, total)) * 100),
       endsAt: c.ends_at,
     };

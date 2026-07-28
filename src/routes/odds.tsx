@@ -24,8 +24,11 @@ export const Route = createFileRoute("/odds")({
 
 function OddsLeaderboard() {
   const { data } = useSuspenseQuery(liveOddsQueryOptions);
-  // Rank by best current odds: fewest sold vs total → best odds first.
-  const rows = [...data].sort((a, b) => a.odds - b.odds);
+  // Odds on a single ticket are 1 in (pool size). Smallest pool = best odds.
+  // Ties broken by whichever closes first.
+  const rows = [...data].sort(
+    (a, b) => a.totalTickets - b.totalTickets || +new Date(a.endsAt) - +new Date(b.endsAt),
+  );
 
   return (
     <div className="min-h-screen flex flex-col bg-ambient">
@@ -36,7 +39,7 @@ function OddsLeaderboard() {
             <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-clover font-bold">Data · Live</div>
             <h1 className="mt-1 font-display text-4xl md:text-5xl font-black tracking-[-0.02em]">Best odds right now.</h1>
             <p className="text-muted-foreground mt-1 max-w-2xl">
-              Every live comp ranked by current odds, best first. Updated live as tickets sell. The tables move — check back before you enter.
+              Every live comp ranked by odds, best first. For the bargain hunters, the spreadsheet lot, and anyone who checks the price of a pint before ordering. The tables move — check back before you enter.
             </p>
           </div>
           <NoDeadCompsBadge variant="row" />
@@ -48,9 +51,9 @@ function OddsLeaderboard() {
           </div>
         ) : (
           <div className="mt-8 rounded-lg border border-border bg-card overflow-hidden shadow-sm">
-            <div className="hidden md:grid grid-cols-[minmax(0,3fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_auto] gap-4 px-5 py-3 border-b border-border text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground bg-muted/40">
+            <div className="hidden md:grid grid-cols-[minmax(0,3fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_auto] gap-4 px-5 py-3 border-b-2 border-[var(--color-ink-black)] text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground bg-muted/40">
               <div>Competition</div>
-              <div className="text-right">Current odds</div>
+              <div className="text-right">Odds per ticket</div>
               <div className="text-right">Per ticket</div>
               <div className="text-right">Remaining</div>
               <div>Ends</div>
@@ -58,9 +61,15 @@ function OddsLeaderboard() {
             </div>
             <ul className="divide-y divide-border">
               {rows.map((r, i) => (
-                <li key={r.id} className="grid md:grid-cols-[minmax(0,3fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_auto] gap-4 px-5 py-4 items-center">
+                <li
+                  key={r.id}
+                  className={
+                    "relative grid md:grid-cols-[minmax(0,3fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_auto] gap-4 px-5 py-4 items-center " +
+                    (i % 2 === 1 ? "bg-[color-mix(in_oklab,var(--color-ink-black)_5%,transparent)]" : "")
+                  }
+                >
                   <div className="flex items-center gap-3 min-w-0">
-                    <span className="font-mono text-xs tabular-nums text-muted-foreground w-6 text-right">#{i + 1}</span>
+                    <span className="font-fair text-xl leading-none tabular-nums text-[var(--color-ink-red)] w-7 text-right">{i + 1}</span>
                     <div className="h-12 w-12 rounded-md overflow-hidden bg-muted shrink-0">
                       {IMAGES[r.slug] ? (
                         <img src={IMAGES[r.slug]} alt="" className="h-full w-full object-cover" loading="lazy" />
@@ -69,13 +78,18 @@ function OddsLeaderboard() {
                     <div className="min-w-0">
                       <div className="text-[10px] font-mono uppercase tracking-[0.15em] text-clover">{r.category}</div>
                       <div className="font-display font-bold truncate">{r.title}</div>
+                      {i === 0 && (
+                        <span className="mt-1 inline-block border-2 border-[var(--color-ink-red)] px-1.5 py-0.5 font-display uppercase tracking-[0.14em] text-[9px] text-[var(--color-ink-red)] rotate-[-3deg]">
+                          Best on the board
+                        </span>
+                      )}
                     </div>
                   </div>
                   <div className="md:text-right">
                     <div className="md:hidden text-[10px] font-mono uppercase tracking-widest text-muted-foreground">Odds</div>
                     <div className="inline-flex items-center gap-1 font-mono font-bold text-lg tabular-nums text-clover">
                       {i === 0 && <TrendingDown className="h-3.5 w-3.5" />}
-                      1 : {r.odds.toLocaleString()}
+                      1 in {r.totalTickets.toLocaleString()}
                     </div>
                   </div>
                   <div className="md:text-right">
@@ -105,7 +119,7 @@ function OddsLeaderboard() {
         )}
 
         <p className="mt-6 text-xs text-muted-foreground max-w-2xl">
-          Odds are calculated live as <span className="font-mono">1 : (total tickets ÷ tickets already sold)</span>. Ties are broken by the earliest close time. Everything on this page draws automatically the moment it ends — see <Link to="/promise" className="text-clover font-semibold hover:underline">the 499 Promise</Link>.
+          One ticket's odds of winning are <span className="font-mono">1 in (total tickets in the pool)</span> — and the pool never goes above 499. Selling out doesn't change your odds, it just means there's none left, so "remaining" is urgency, not maths. Ties are broken by the earliest close time. Everything here draws automatically the moment it ends — see <Link to="/promise" className="text-clover font-semibold hover:underline">the 499 Promise</Link>.
         </p>
       </main>
       <SiteFooter />
