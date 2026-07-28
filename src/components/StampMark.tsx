@@ -4,11 +4,12 @@
  */
 import { cn } from "@/lib/utils";
 
-type Variant = "DRAWN" | "SOLD OUT" | "VERIFIED" | "PAID" | "WINNER" | "LIVE" | "NEW";
+type Variant = "DRAWN" | "SOLD OUT" | "GONE" | "VERIFIED" | "PAID" | "WINNER" | "LIVE" | "NEW";
 
 const inkFor: Record<Variant, string> = {
   DRAWN:        "var(--color-ink-blue)",
   "SOLD OUT":   "var(--color-ink-red)",
+  GONE:         "var(--color-ink-red)",
   VERIFIED:     "var(--color-ink-blue)",
   PAID:         "var(--color-ink-red)",
   WINNER:       "var(--color-ink-red)",

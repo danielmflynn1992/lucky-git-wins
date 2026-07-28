@@ -17,6 +17,8 @@ export const Route = createFileRoute("/about")({
       <p>The name? We wanted something friendly, self-aware, and a bit British. "Lucky Git" is what your mate calls you when you win. It raised a few eyebrows. We kept it.</p>
       <h2>Meet Terry</h2>
       <p>Terry's been on the market since 1974 and has never once been caught paying full price for anything. He's our mascot, our doorman, and — on paper — our Head of Public Relations. He does not have a phone. He does not answer emails. He is, however, always about.</p>
+      <h2>Terry's Fiver</h2>
+      <p>Once a month, Terry refunds one losing punter at random. No mechanism, no entry route, no strategy. It's just a nice thing.</p>
     </StaticPage>
   ),
 });
