@@ -22,6 +22,7 @@ import { Route as NextDropRouteImport } from './routes/next-drop'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as HowEntryWorksRouteImport } from './routes/how-entry-works'
 import { Route as FaqRouteImport } from './routes/faq'
+import { Route as DrawDayRouteImport } from './routes/draw-day'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as AuthRouteImport } from './routes/auth'
@@ -101,6 +102,11 @@ const HowEntryWorksRoute = HowEntryWorksRouteImport.update({
 const FaqRoute = FaqRouteImport.update({
   id: '/faq',
   path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DrawDayRoute = DrawDayRouteImport.update({
+  id: '/draw-day',
+  path: '/draw-day',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -187,6 +193,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
+  '/draw-day': typeof DrawDayRoute
   '/faq': typeof FaqRoute
   '/how-entry-works': typeof HowEntryWorksRoute
   '/how-it-works': typeof HowItWorksRoute
@@ -217,6 +224,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
+  '/draw-day': typeof DrawDayRoute
   '/faq': typeof FaqRoute
   '/how-entry-works': typeof HowEntryWorksRoute
   '/how-it-works': typeof HowItWorksRoute
@@ -248,6 +256,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
+  '/draw-day': typeof DrawDayRoute
   '/faq': typeof FaqRoute
   '/how-entry-works': typeof HowEntryWorksRoute
   '/how-it-works': typeof HowItWorksRoute
@@ -280,6 +289,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/checkout'
     | '/contact'
+    | '/draw-day'
     | '/faq'
     | '/how-entry-works'
     | '/how-it-works'
@@ -310,6 +320,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/checkout'
     | '/contact'
+    | '/draw-day'
     | '/faq'
     | '/how-entry-works'
     | '/how-it-works'
@@ -340,6 +351,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/checkout'
     | '/contact'
+    | '/draw-day'
     | '/faq'
     | '/how-entry-works'
     | '/how-it-works'
@@ -371,6 +383,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   CheckoutRoute: typeof CheckoutRoute
   ContactRoute: typeof ContactRoute
+  DrawDayRoute: typeof DrawDayRoute
   FaqRoute: typeof FaqRoute
   HowEntryWorksRoute: typeof HowEntryWorksRoute
   HowItWorksRoute: typeof HowItWorksRoute
@@ -488,6 +501,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FaqRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/draw-day': {
+      id: '/draw-day'
+      path: '/draw-day'
+      fullPath: '/draw-day'
+      preLoaderRoute: typeof DrawDayRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/contact': {
       id: '/contact'
       path: '/contact'
@@ -603,6 +623,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   CheckoutRoute: CheckoutRoute,
   ContactRoute: ContactRoute,
+  DrawDayRoute: DrawDayRoute,
   FaqRoute: FaqRoute,
   HowEntryWorksRoute: HowEntryWorksRoute,
   HowItWorksRoute: HowItWorksRoute,
