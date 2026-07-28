@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { GaryMascot } from "./GaryMascot";
+import terryImg from "../assets/luckygit-character.png.asset.json";
 
 /**
  * Terry's Tip of the Week — rotates on the ISO week number so everyone sees
@@ -34,7 +34,12 @@ export function TerrysTip({ className = "" }: { className?: string }) {
         Terry's tip of the week
       </div>
       <div className="flex items-start gap-3 p-3">
-        <GaryMascot className="h-12 w-12 shrink-0" aria-hidden="true" />
+        <img
+          src={terryImg.url}
+          alt="Terry, the Lucky Git Comps mascot"
+          loading="lazy"
+          className="h-14 w-14 shrink-0 object-contain object-center"
+        />
         <div className="min-w-0">
           <p className="font-body text-sm leading-snug text-[var(--color-ink-black)]">{tip}</p>
           <span className="mt-1.5 inline-block font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--color-ink-blue)] underline">
