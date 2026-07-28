@@ -1,6 +1,8 @@
+import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Ticket, Clock } from "lucide-react";
-import { COMPETITIONS, type Competition } from "@/lib/mock-comps";
+import { useQuery } from "@tanstack/react-query";
+import { Ticket, Clock, TrendingUp } from "lucide-react";
+import { liveOddsQueryOptions, type LiveOdds } from "@/lib/competitions-api";
 import { timeLeft } from "@/lib/format";
 import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 
@@ -10,10 +12,9 @@ import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from "@/comp
  * Each item shows a tooltip on hover/tap explaining what the numbers mean.
  */
 export function LiveOddsTicker() {
-  // Ticker mirrors the same source of truth the grid uses so the two never
-  // disagree. When we swap the grid over to live DB data, wire this to the
-  // same query.
-  const items = COMPETITIONS;
+  // Same source of truth the grid and the odds board read from.
+  const { data: items = [] } = useQuery(liveOddsQueryOptions);
+  const deltas = useSalesDeltas(items);
 
   /**
    * Deadpan filler lines. Injected when fewer than three live comps exist
@@ -42,7 +43,7 @@ export function LiveOddsTicker() {
           <div className="relative flex-1 overflow-hidden [mask-image:linear-gradient(90deg,transparent_0%,#000_2%,#000_98%,transparent_100%)] py-1.5">
             <div className="ticker-scroll flex gap-8 whitespace-nowrap text-[11px] font-bold tracking-wide text-cream pl-6 pr-8">
               {items.map((it, i) => (
-                <TickerItem key={`${it.slug}-${i}`} c={it} />
+                <TickerItem key={`${it.slug}-${i}`} c={it} delta={deltas[it.slug] ?? 0} />
               ))}
               {showFiller && FILLER.map((line) => (
                 <span
@@ -73,7 +74,38 @@ function LiveChip() {
   );
 }
 
-function TickerItem({ c }: { c: Competition }) {
+/**
+ * Real movement only: diffs successive polls of the live ticket counts.
+ * Nothing invented — if nothing has sold while you've been watching, the
+ * delta stays at zero and the chip renders nothing.
+ */
+function useSalesDeltas(items: LiveOdds[]) {
+  const prev = useRef<Record<string, number>>({});
+  const [deltas, setDeltas] = useState<Record<string, number>>({});
+
+  useEffect(() => {
+    if (items.length === 0) return;
+    const next: Record<string, number> = {};
+    let changed = false;
+    for (const it of items) {
+      const before = prev.current[it.slug];
+      if (before !== undefined && it.ticketsSold > before) {
+        next[it.slug] = it.ticketsSold - before;
+        changed = true;
+      }
+      prev.current[it.slug] = it.ticketsSold;
+    }
+    if (changed) {
+      setDeltas((d) => ({ ...d, ...next }));
+      const timer = setTimeout(() => setDeltas({}), 60_000);
+      return () => clearTimeout(timer);
+    }
+  }, [items]);
+
+  return deltas;
+}
+
+function TickerItem({ c, delta }: { c: LiveOdds; delta: number }) {
   const t = timeLeft(c.endsAt);
   const closes = `${String(t.d).padStart(2, "0")}d ${String(t.h).padStart(2, "0")}h ${String(t.m).padStart(2, "0")}m`;
   const pctSold = Math.round((c.ticketsSold / c.totalTickets) * 100);
@@ -89,6 +121,12 @@ function TickerItem({ c }: { c: Competition }) {
           <span className="text-cream/60 font-mono tabular-nums">
             {c.ticketsSold.toLocaleString()}/{c.totalTickets.toLocaleString()} SOLD
           </span>
+          {delta > 0 && (
+            <span className="inline-flex items-center gap-1 text-gold font-mono tabular-nums">
+              <TrendingUp className="h-3 w-3" />
+              {delta} just sold
+            </span>
+          )}
           <span className="text-gold font-black">●</span>
         </Link>
       </TooltipTrigger>
