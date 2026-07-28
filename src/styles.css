@@ -965,3 +965,10 @@
   .stamp { transform: none; }
   .coupon-cell--taken::after, .coupon-cell--mine::after { transform: none; }
 }
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
