@@ -150,7 +150,7 @@ export function SiteNav() {
       {/* Row 2 — 40px cream strip: hamburger · centred nav · basket.
           Nav links hide under 380px; hamburger + basket always visible. */}
       <div className="relative bg-card" style={{ height: 40 }}>
-        <div className="h-full px-2 md:px-6 flex items-center justify-center gap-2 md:gap-5">
+        <div className="h-full px-2 md:px-6 flex items-center justify-between md:justify-center gap-2 md:gap-5">
           <button
             ref={toggleRef}
             onClick={() => setOpen((o) => !o)}
