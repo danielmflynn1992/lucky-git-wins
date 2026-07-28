@@ -111,6 +111,7 @@ export type Database = {
           letterbox_style: Database["public"]["Enums"]["letterbox_style"]
           max_per_person: number
           price_per_ticket: number
+          question_id: string | null
           seed_hash: string
           slug: string
           status: string
@@ -132,6 +133,7 @@ export type Database = {
           letterbox_style?: Database["public"]["Enums"]["letterbox_style"]
           max_per_person?: number
           price_per_ticket: number
+          question_id?: string | null
           seed_hash?: string
           slug: string
           status?: string
@@ -153,6 +155,7 @@ export type Database = {
           letterbox_style?: Database["public"]["Enums"]["letterbox_style"]
           max_per_person?: number
           price_per_ticket?: number
+          question_id?: string | null
           seed_hash?: string
           slug?: string
           status?: string
@@ -162,7 +165,15 @@ export type Database = {
           title?: string
           total_tickets?: number
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "competitions_question_id_fkey"
+            columns: ["question_id"]
+            isOneToOne: false
+            referencedRelation: "question_bank"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       draws: {
         Row: {
@@ -281,9 +292,10 @@ export type Database = {
           competition_id: string
           id: string
           is_correct: boolean
+          normalised_answer: number | null
           order_ref: string
-          selected_option: Database["public"]["Enums"]["skill_option"]
-          skill_question_id: string
+          question_id: string | null
+          raw_answer: string
           user_id: string | null
         }
         Insert: {
@@ -291,9 +303,10 @@ export type Database = {
           competition_id: string
           id?: string
           is_correct: boolean
+          normalised_answer?: number | null
           order_ref: string
-          selected_option: Database["public"]["Enums"]["skill_option"]
-          skill_question_id: string
+          question_id?: string | null
+          raw_answer?: string
           user_id?: string | null
         }
         Update: {
@@ -301,9 +314,10 @@ export type Database = {
           competition_id?: string
           id?: string
           is_correct?: boolean
+          normalised_answer?: number | null
           order_ref?: string
-          selected_option?: Database["public"]["Enums"]["skill_option"]
-          skill_question_id?: string
+          question_id?: string | null
+          raw_answer?: string
           user_id?: string | null
         }
         Relationships: [
@@ -322,17 +336,10 @@ export type Database = {
             referencedColumns: ["competition_id"]
           },
           {
-            foreignKeyName: "entry_answers_skill_question_id_fkey"
-            columns: ["skill_question_id"]
+            foreignKeyName: "entry_answers_question_id_fkey"
+            columns: ["question_id"]
             isOneToOne: false
-            referencedRelation: "skill_questions"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "entry_answers_skill_question_id_fkey"
-            columns: ["skill_question_id"]
-            isOneToOne: false
-            referencedRelation: "skill_questions_public"
+            referencedRelation: "question_bank"
             referencedColumns: ["id"]
           },
         ]
@@ -361,6 +368,45 @@ export type Database = {
         }
         Relationships: []
       }
+      question_bank: {
+        Row: {
+          answer_format: string
+          category: string
+          correct_answer: number
+          created_at: string
+          id: string
+          is_active: boolean
+          question_text: string
+          times_correct: number
+          times_served: number
+          updated_at: string
+        }
+        Insert: {
+          answer_format?: string
+          category?: string
+          correct_answer: number
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          question_text: string
+          times_correct?: number
+          times_served?: number
+          updated_at?: string
+        }
+        Update: {
+          answer_format?: string
+          category?: string
+          correct_answer?: number
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          question_text?: string
+          times_correct?: number
+          times_served?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       site_settings: {
         Row: {
           key: string
@@ -378,60 +424,6 @@ export type Database = {
           value?: Json
         }
         Relationships: []
-      }
-      skill_questions: {
-        Row: {
-          competition_id: string
-          correct_option: Database["public"]["Enums"]["skill_option"]
-          created_at: string
-          id: string
-          option_a: string
-          option_b: string
-          option_c: string
-          option_d: string
-          question_text: string
-          updated_at: string
-        }
-        Insert: {
-          competition_id: string
-          correct_option: Database["public"]["Enums"]["skill_option"]
-          created_at?: string
-          id?: string
-          option_a: string
-          option_b: string
-          option_c: string
-          option_d: string
-          question_text: string
-          updated_at?: string
-        }
-        Update: {
-          competition_id?: string
-          correct_option?: Database["public"]["Enums"]["skill_option"]
-          created_at?: string
-          id?: string
-          option_a?: string
-          option_b?: string
-          option_c?: string
-          option_d?: string
-          question_text?: string
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "skill_questions_competition_id_fkey"
-            columns: ["competition_id"]
-            isOneToOne: true
-            referencedRelation: "competitions"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "skill_questions_competition_id_fkey"
-            columns: ["competition_id"]
-            isOneToOne: true
-            referencedRelation: "question_performance"
-            referencedColumns: ["competition_id"]
-          },
-        ]
       }
       tickets: {
         Row: {
@@ -529,53 +521,55 @@ export type Database = {
         }
         Relationships: []
       }
-      skill_questions_public: {
-        Row: {
-          competition_id: string | null
-          id: string | null
-          option_a: string | null
-          option_b: string | null
-          option_c: string | null
-          option_d: string | null
-          question_text: string | null
-        }
-        Insert: {
-          competition_id?: string | null
-          id?: string | null
-          option_a?: string | null
-          option_b?: string | null
-          option_c?: string | null
-          option_d?: string | null
-          question_text?: string | null
-        }
-        Update: {
-          competition_id?: string | null
-          id?: string | null
-          option_a?: string | null
-          option_b?: string | null
-          option_c?: string | null
-          option_d?: string | null
-          question_text?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "skill_questions_competition_id_fkey"
-            columns: ["competition_id"]
-            isOneToOne: true
-            referencedRelation: "competitions"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "skill_questions_competition_id_fkey"
-            columns: ["competition_id"]
-            isOneToOne: true
-            referencedRelation: "question_performance"
-            referencedColumns: ["competition_id"]
-          },
-        ]
-      }
     }
     Functions: {
+      admin_answer_stats: {
+        Args: never
+        Returns: {
+          attempts: number
+          day: string
+          incorrect: number
+        }[]
+      }
+      admin_export_entry_answers: {
+        Args: never
+        Returns: {
+          answered_at: string
+          competition_title: string
+          is_correct: boolean
+          normalised_answer: number
+          order_ref: string
+          question_text: string
+          raw_answer: string
+        }[]
+      }
+      admin_list_questions: {
+        Args: never
+        Returns: {
+          answer_format: string
+          category: string
+          created_at: string
+          id: string
+          is_active: boolean
+          question_text: string
+          times_correct: number
+          times_served: number
+        }[]
+      }
+      admin_set_question_active: {
+        Args: { p_active: boolean; p_id: string }
+        Returns: undefined
+      }
+      admin_upsert_question: {
+        Args: {
+          p_answer_format: string
+          p_category: string
+          p_correct_answer: number
+          p_id: string
+          p_question_text: string
+        }
+        Returns: string
+      }
       auto_draw_expired: {
         Args: never
         Returns: {
@@ -610,6 +604,14 @@ export type Database = {
         }
       }
       claim_admin_if_empty: { Args: never; Returns: boolean }
+      competition_revealed_answer: {
+        Args: { p_slug: string }
+        Returns: {
+          answer_format: string
+          correct_answer: number
+          question_text: string
+        }[]
+      }
       competition_sold_counts: {
         Args: never
         Returns: {
@@ -617,59 +619,28 @@ export type Database = {
           sold: number
         }[]
       }
-      create_competition_with_tickets:
-        | {
-            Args: {
-              p_cash_alternative: number
-              p_category: string
-              p_correct_option: Database["public"]["Enums"]["skill_option"]
-              p_description: string
-              p_ends_at: string
-              p_hot: boolean
-              p_image: string
-              p_letterbox_style?: string
-              p_max_per_person: number
-              p_option_a: string
-              p_option_b: string
-              p_option_c: string
-              p_option_d: string
-              p_price_per_ticket: number
-              p_question: string
-              p_slug: string
-              p_status: string
-              p_subtitle: string
-              p_title: string
-              p_total_tickets: number
-            }
-            Returns: string
-          }
-        | {
-            Args: {
-              p_cash_alternative: number
-              p_category: string
-              p_correct_option: Database["public"]["Enums"]["skill_option"]
-              p_description: string
-              p_ends_at: string
-              p_hot: boolean
-              p_image: string
-              p_letterbox_style?: string
-              p_max_per_person: number
-              p_option_a: string
-              p_option_b: string
-              p_option_c: string
-              p_option_d: string
-              p_price_per_ticket: number
-              p_question: string
-              p_slug: string
-              p_status: string
-              p_subtitle: string
-              p_supporting_images?: string[]
-              p_thumb_url?: string
-              p_title: string
-              p_total_tickets: number
-            }
-            Returns: string
-          }
+      create_competition_with_tickets: {
+        Args: {
+          p_cash_alternative: number
+          p_category: string
+          p_description: string
+          p_ends_at: string
+          p_hot: boolean
+          p_image: string
+          p_letterbox_style?: string
+          p_max_per_person: number
+          p_price_per_ticket: number
+          p_question_id?: string
+          p_slug: string
+          p_status: string
+          p_subtitle: string
+          p_supporting_images?: string[]
+          p_thumb_url?: string
+          p_title: string
+          p_total_tickets: number
+        }
+        Returns: string
+      }
       draw_competition: {
         Args: { p_comp_id: string; p_notes?: string }
         Returns: {
@@ -703,6 +674,14 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      get_competition_question: {
+        Args: { p_slug: string }
+        Returns: {
+          answer_format: string
+          id: string
+          question_text: string
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -724,6 +703,8 @@ export type Database = {
         }
         Returns: undefined
       }
+      normalise_numeric_answer: { Args: { p_raw: string }; Returns: number }
+      pick_question_for_competition: { Args: never; Returns: string }
       release_reservation: { Args: { p_token: string }; Returns: undefined }
       reserve_lucky_dip: {
         Args: { p_qty: number; p_slug: string; p_token: string }
@@ -737,8 +718,8 @@ export type Database = {
         Args: {
           p_order_ref?: string
           p_question_id: string
+          p_raw_answer: string
           p_reservation_token: string
-          p_selected: Database["public"]["Enums"]["skill_option"]
         }
         Returns: Json
       }
@@ -748,7 +729,6 @@ export type Database = {
     Enums: {
       app_role: "admin" | "moderator" | "user"
       letterbox_style: "solid" | "gradient" | "blur"
-      skill_option: "a" | "b" | "c" | "d"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -878,7 +858,6 @@ export const Constants = {
     Enums: {
       app_role: ["admin", "moderator", "user"],
       letterbox_style: ["solid", "gradient", "blur"],
-      skill_option: ["a", "b", "c", "d"],
     },
   },
 } as const

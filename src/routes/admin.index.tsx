@@ -112,11 +112,11 @@ function Admin() {
             <div className="font-display font-bold text-urgent">Do not enable live Stripe payments without a gambling-law review.</div>
             <p className="mt-1 text-foreground/80">
               The site is structured as a prize competition of skill under Section 14 of the Gambling Act 2005:
-              every competition ships with a required skill question, and the draw runs only across correct
+              every competition carries a free-text numeric skill question, and the draw runs only across correct
               entries. Before accepting real money, have a UK gambling-law solicitor confirm the T&amp;Cs and
               the question-authoring workflow. See{" "}
-              <Link to="/admin/question-performance" className="underline font-bold">/admin/question-performance</Link>{" "}
-              for the evidence panel required to defend question difficulty.
+              <Link to="/admin/questions" className="underline font-bold">/admin/questions</Link>{" "}
+              for the question bank, difficulty monitoring and the answer-log export.
             </p>
           </div>
         </div>

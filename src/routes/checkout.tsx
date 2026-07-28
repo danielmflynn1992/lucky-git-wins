@@ -156,11 +156,10 @@ function Checkout() {
               ? `Sort me out — ${gbp(subtotal)}`
               : "Answer the skill question to continue"}
           </Button>
-          {answer && !answer.isCorrect && (
-            <div className="rounded-md border-2 border-[color:var(--color-ink-red)] bg-[color:var(--color-ink-red)]/5 p-3 text-xs text-[color:var(--color-ink-red)]">
-              Heads up: your answer was incorrect. If you proceed, tickets will be issued as
-              non-qualifying and will not be entered in the draw. No refund. Close this page to
-              cancel — no charge yet.
+          {answer && (
+            <div className="rounded-md border-2 border-border bg-card p-3 text-xs text-muted-foreground">
+              Your answer is recorded and sealed until the draw. If it's wrong, those tickets are
+              non-qualifying — payment still completes either way.
             </div>
           )}
           <div className="text-xs text-muted-foreground text-center flex items-center justify-center gap-1.5">

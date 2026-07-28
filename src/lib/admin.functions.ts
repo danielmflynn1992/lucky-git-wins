@@ -54,12 +54,7 @@ const createInput = z.object({
   endsAt: z.string().min(10),
   status: z.enum(["live", "draft", "paused"]),
   hot: z.boolean().default(false),
-  question: z.string().trim().min(8).max(500),
-  optionA: z.string().trim().min(1).max(200),
-  optionB: z.string().trim().min(1).max(200),
-  optionC: z.string().trim().min(1).max(200),
-  optionD: z.string().trim().min(1).max(200),
-  correctOption: z.enum(["a", "b", "c", "d"]),
+  questionId: z.string().uuid().optional(),
   letterboxStyle: z.enum(["solid", "gradient", "blur"]).default("blur"),
 });
 
@@ -82,7 +77,7 @@ export const createCompetition = createServerFn({ method: "POST" })
 
     const endsAtIso = new Date(data.endsAt).toISOString();
 
-    const { data: newId, error } = await supabaseAdmin.rpc(
+    const { data: newId, error } = await context.supabase.rpc(
       "create_competition_with_tickets",
       {
         p_slug: slug,
@@ -98,15 +93,10 @@ export const createCompetition = createServerFn({ method: "POST" })
         p_ends_at: endsAtIso,
         p_status: data.status,
         p_hot: data.hot,
-        p_question: data.question,
-        p_option_a: data.optionA,
-        p_option_b: data.optionB,
-        p_option_c: data.optionC,
-        p_option_d: data.optionD,
-        p_correct_option: data.correctOption,
         p_letterbox_style: data.letterboxStyle,
-        p_thumb_url: data.thumbUrl || null,
+        p_thumb_url: data.thumbUrl || undefined,
         p_supporting_images: data.supportingImages ?? [],
+        p_question_id: data.questionId,
       },
     );
 
