@@ -13,6 +13,9 @@ import { gbp, shortNumber, pickLoadingQuip, moneySlang } from "@/lib/format";
 import { LuckyMark } from "@/components/GaryMascot";
 import { CouponGrid } from "@/components/CouponGrid";
 import { Odometer } from "@/components/Odometer";
+import { NearMiss } from "@/components/NearMiss";
+import { PickHeatmap } from "@/components/PickHeatmap";
+import { competitionResultQuery } from "@/lib/results-api";
 import {
   competitionQueryOptions,
   allCompetitionsQueryOptions,
@@ -75,7 +78,9 @@ function CompDetail() {
   const [availableLeft, setAvailableLeft] = useState<number | null>(null);
   const [soldOut, setSoldOut] = useState(false);
   const [reservingQuip, setReservingQuip] = useState(pickLoadingQuip());
+  const [luckyDipped, setLuckyDipped] = useState(false);
   const queryClient = useQueryClient();
+  const { data: result } = useQuery(competitionResultQuery(slug));
 
   const takenSet = useMemo(() => new Set(c.takenNumbers), [c.takenNumbers]);
   const soldTotal = c.totalTickets - c.ticketsAvailable;
@@ -87,6 +92,7 @@ function CompDetail() {
 
   const toggleNumber = (n: number) => {
     setPicker("manual");
+    setLuckyDipped(false);
     setPicked((prev) => {
       const next = new Set(prev);
       if (next.has(n)) next.delete(n);
@@ -108,6 +114,7 @@ function CompDetail() {
     }
     setPicker("manual");
     setPicked(next);
+    setLuckyDipped(next.size > 0);
   };
 
   const handleReserve = async () => {
@@ -270,6 +277,11 @@ function CompDetail() {
                     clear selection
                   </button>
                 )}
+                {luckyDipped && picked.size > 0 && (
+                  <p className="mt-2 font-mono text-[11px] text-[var(--color-ink-blue)] leading-snug">
+                    The machine has chosen. The machine is never wrong. (The machine is frequently wrong.)
+                  </p>
+                )}
               </div>
 
               {reserveError && (
@@ -328,6 +340,28 @@ function CompDetail() {
             </div>
           </div>
         </div>
+
+        {/* Post-close only: personal result, then the pick board. */}
+        {result && (
+          <section className="mt-10">
+            {result.soldNumbers.length === 0 ? (
+              <div className="border-[1.5px] border-[var(--color-ink-black)] bg-[var(--color-paper-raised)] p-4">
+                <p className="font-display uppercase text-lg leading-tight">
+                  Nobody entered. Not one of you. We're not angry, just disappointed.
+                </p>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  This one closed with an empty coupon, so the void-comp process in the{" "}
+                  <Link to="/terms" className="underline">T&amp;Cs</Link> applies.
+                </p>
+              </div>
+            ) : (
+              <>
+                <NearMiss slug={c.slug} competitionTitle={c.title} />
+                <PickHeatmap result={result} />
+              </>
+            )}
+          </section>
+        )}
 
         <section className="mt-12 grid gap-8 lg:grid-cols-3">
           <div className="lg:col-span-2">

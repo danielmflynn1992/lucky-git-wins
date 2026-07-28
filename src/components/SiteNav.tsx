@@ -170,6 +170,7 @@ export function SiteNav() {
             style={{ color: "var(--color-ink-blue, #123)" }}
           >
             <Link to="/competitions" className="hover:text-clover transition-colors whitespace-nowrap">Competitions</Link>
+            <Link to="/draw-day" className="hover:text-clover transition-colors whitespace-nowrap">Draw Day</Link>
             <Link to="/winners" className="hover:text-clover transition-colors whitespace-nowrap">Winners</Link>
             <Link to="/about" className="hover:text-clover transition-colors whitespace-nowrap">About</Link>
             <Link to="/verify" className="hover:text-clover transition-colors whitespace-nowrap">Verify</Link>

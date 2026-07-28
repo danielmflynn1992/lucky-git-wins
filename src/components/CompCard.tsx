@@ -84,7 +84,7 @@ export function CompCard({ c }: { c: Competition }) {
         </div>
         {soldOut ? (
           <span className="pointer-events-none absolute z-[6]" style={{ right: "14px", bottom: "-14px" }}>
-            <StampMark variant="SOLD OUT" size="lg" angle={-8} />
+            <StampMark variant="GONE" size="lg" angle={-8} />
           </span>
         ) : almostGone ? (
           <span className="pointer-events-none absolute z-[6]" style={{ right: "14px", bottom: "-10px" }}>
@@ -123,9 +123,15 @@ export function CompCard({ c }: { c: Competition }) {
 
       {/* PERFORATED TEAR-OFF with CTAs */}
       <div className="relative z-10 mt-3">
-        <p className="px-3 pb-2 text-[8px] font-mono uppercase tracking-[0.14em] text-[var(--color-ink-grey)]/70 leading-tight">
-          No refunds, no rollovers, no funny business.
-        </p>
+        {soldOut ? (
+          <p className="px-3 pb-2 text-[10px] font-mono uppercase tracking-[0.1em] text-[var(--color-ink-red)] leading-tight">
+            {c.totalTickets} gits had a go. One of them's about to be insufferable.
+          </p>
+        ) : (
+          <p className="px-3 pb-2 text-[8px] font-mono uppercase tracking-[0.14em] text-[var(--color-ink-grey)]/70 leading-tight">
+            No refunds, no rollovers, no funny business.
+          </p>
+        )}
         <Perforation color="var(--color-ink-black)" />
         <div className="grid grid-cols-[1fr_auto] items-stretch">
           <div className="flex items-center justify-center gap-1.5 bg-[var(--color-ink-red)] text-[var(--color-paper)] px-3 py-2.5 font-display uppercase tracking-[0.14em] text-xs whitespace-nowrap">

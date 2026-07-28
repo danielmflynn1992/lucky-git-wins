@@ -1,3 +1,4 @@
+import { TerrysTip } from "@/components/TerrysTip";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
@@ -187,6 +188,11 @@ function Home() {
             </div>
           ))}
         </div>
+      </section>
+
+      {/* TERRY'S TIP OF THE WEEK */}
+      <section className="mx-auto max-w-7xl px-4 pt-6 w-full">
+        <TerrysTip />
       </section>
 
       {/* LIVE COMPETITIONS GRID */}
