@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import terryImg from "../assets/terry-portrait.png.asset.json";
+import terryImg from "../assets/terry-cutout.png.asset.json";
 
 /**
  * Terry's Tip of the Week — rotates on the ISO week number so everyone sees
@@ -30,17 +30,17 @@ export function TerrysTip({ className = "" }: { className?: string }) {
       to="/responsible-play"
       className={`group block border-[1.5px] border-[var(--color-ink-black)] bg-[var(--color-paper-raised)] hover:bg-[var(--color-ink-yellow)]/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ink-red)] ${className}`}
     >
-      {/* Masthead — Terry sits flush in the bar, full bleed left. */}
-      <div className="flex items-stretch bg-[var(--color-ink-blue)]">
+      {/* Masthead — cut-out Terry sits directly on the blue bar, no frame. */}
+      <div className="relative flex items-center bg-[var(--color-ink-blue)] h-9 overflow-hidden pl-12 pr-3">
         <img
           src={terryImg.url}
           alt="Terry, the Lucky Git Comps mascot"
           loading="lazy"
-          className="h-9 w-9 shrink-0 object-cover object-top border-r-[1.5px] border-[var(--color-ink-black)]"
+          className="pointer-events-none absolute left-1.5 bottom-0 h-[42px] w-auto select-none"
         />
-        <div className="flex items-center px-3 font-body font-bold uppercase tracking-[0.16em] text-[9px] text-[var(--color-paper)]">
+        <span className="font-body font-bold uppercase tracking-[0.16em] text-[9px] text-[var(--color-paper)]">
           Terry's tip of the week
-        </div>
+        </span>
       </div>
       <div className="flex items-start gap-3 p-3">
         <div className="min-w-0">
