@@ -227,10 +227,11 @@ export function SiteNav() {
           role="dialog"
           aria-modal="true"
           aria-label="Site navigation"
-          className="lg:hidden border-t border-border bg-card"
+          className="border-t border-border bg-card"
         >
-          {/* Primary nav — same order as desktop (left links then right links) */}
-          <nav className="px-2 py-2 flex flex-col">
+          {/* Primary nav — single column on mobile, two columns from md up so the
+              panel doesn't run tall on desktop. */}
+          <nav className="px-2 py-2 flex flex-col md:grid md:grid-cols-2 md:gap-x-4 md:px-6">
             {allLinks.map((l) => (
               <Link
                 key={l.to + l.label}
