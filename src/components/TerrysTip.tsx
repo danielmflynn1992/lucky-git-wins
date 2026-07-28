@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import terryImg from "../assets/luckygit-character.png.asset.json";
+import terryImg from "../assets/terry-portrait.png.asset.json";
 
 /**
  * Terry's Tip of the Week — rotates on the ISO week number so everyone sees
@@ -30,16 +30,19 @@ export function TerrysTip({ className = "" }: { className?: string }) {
       to="/responsible-play"
       className={`group block border-[1.5px] border-[var(--color-ink-black)] bg-[var(--color-paper-raised)] hover:bg-[var(--color-ink-yellow)]/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ink-red)] ${className}`}
     >
-      <div className="bg-[var(--color-ink-blue)] px-3 py-1.5 font-body font-bold uppercase tracking-[0.16em] text-[9px] text-[var(--color-paper)]">
-        Terry's tip of the week
-      </div>
-      <div className="flex items-start gap-3 p-3">
+      {/* Masthead — Terry sits flush in the bar, full bleed left. */}
+      <div className="flex items-stretch bg-[var(--color-ink-blue)]">
         <img
           src={terryImg.url}
           alt="Terry, the Lucky Git Comps mascot"
           loading="lazy"
-          className="h-14 w-14 shrink-0 object-contain object-center"
+          className="h-9 w-9 shrink-0 object-cover object-top border-r-[1.5px] border-[var(--color-ink-black)]"
         />
+        <div className="flex items-center px-3 font-body font-bold uppercase tracking-[0.16em] text-[9px] text-[var(--color-paper)]">
+          Terry's tip of the week
+        </div>
+      </div>
+      <div className="flex items-start gap-3 p-3">
         <div className="min-w-0">
           <p className="font-body text-sm leading-snug text-[var(--color-ink-black)]">{tip}</p>
           <span className="mt-1.5 inline-block font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--color-ink-blue)] underline">
