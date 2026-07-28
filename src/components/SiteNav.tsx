@@ -150,11 +150,11 @@ export function SiteNav() {
       {/* Row 2 — 40px cream strip: hamburger · centred nav · basket.
           Nav links hide under 380px; hamburger + basket always visible. */}
       <div className="relative bg-card" style={{ height: 40 }}>
-        <div className="mx-auto max-w-7xl h-full px-3 md:px-6 flex items-center gap-2">
+        <div className="mx-auto max-w-3xl h-full px-4 md:px-6 grid grid-cols-[auto_1fr_auto] items-center gap-3">
           <button
             ref={toggleRef}
             onClick={() => setOpen((o) => !o)}
-            className="shrink-0 p-2 -ml-1 rounded-md hover:bg-muted text-foreground/80"
+            className="shrink-0 p-2 -ml-2 rounded-md hover:bg-muted text-foreground/80 justify-self-start"
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
             aria-controls="mobile-menu"
@@ -166,7 +166,7 @@ export function SiteNav() {
           {/* Centred primary nav — visible on all viewports, compressed on mobile. */}
           <nav
             aria-label="Primary"
-            className="flex flex-1 min-w-0 items-center justify-center gap-3 md:gap-6 text-[0.6875rem] tracking-[0.06em] md:text-[0.8125rem] md:tracking-[0.12em] font-bold uppercase"
+            className="flex min-w-0 items-center justify-center gap-3 md:gap-6 text-[0.6875rem] tracking-[0.06em] md:text-[0.8125rem] md:tracking-[0.12em] font-bold uppercase"
             style={{ color: "var(--color-ink-blue, #123)" }}
           >
             <Link to="/competitions" className="hover:text-clover transition-colors whitespace-nowrap">Competitions</Link>
@@ -180,7 +180,7 @@ export function SiteNav() {
             search={basketSlug ? { slug: basketSlug } : undefined}
             aria-label="Basket"
             className={
-              "relative inline-flex items-center justify-center h-8 w-8 -mr-1 rounded-full border transition-colors shrink-0 " +
+              "relative inline-flex items-center justify-center h-8 w-8 rounded-full border transition-colors shrink-0 justify-self-end " +
               (basketCount > 0
                 ? "border-clover text-clover hover:bg-clover hover:text-primary-foreground"
                 : "border-border text-foreground/70 hover:border-clover hover:text-clover")
