@@ -11,15 +11,19 @@ import { Countdown } from "@/components/Countdown";
 import { Lockup } from "@/components/Logo";
 import { Marker } from "@/components/Marker";
 import { Perforation } from "@/components/Perforation";
-import { COMPETITIONS, CATEGORIES, type Category } from "@/lib/mock-comps";
+import type { Category } from "@/lib/mock-comps";
+import { allCompetitionsQueryOptions } from "@/lib/competitions-api";
 import { NewsletterSlip } from "@/components/NewsletterSlip";
 import { WinnerCard } from "@/components/WinnerCard";
 import { winnersQuery } from "@/lib/winners-api";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { gbp } from "@/lib/format";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/")({
+  loader: ({ context }) => {
+    context.queryClient.ensureQueryData(allCompetitionsQueryOptions);
+  },
   head: () => ({
     meta: [
       { title: "Lucky Git Comps — Win Cars, Cash & Tech in the UK" },
@@ -32,7 +36,13 @@ export const Route = createFileRoute("/")({
 });
 
 function Home() {
-  const hero = COMPETITIONS.filter((c) => c.hot).slice(0, 3);
+  const { data: COMPETITIONS } = useSuspenseQuery(allCompetitionsQueryOptions);
+  const CATEGORIES = useMemo(
+    () => [...new Set(COMPETITIONS.map((c) => c.category))],
+    [COMPETITIONS],
+  );
+  const hotOnes = COMPETITIONS.filter((c) => c.hot);
+  const hero = (hotOnes.length ? hotOnes : COMPETITIONS).slice(0, 3);
   const [active, setActive] = useState(0);
   const [cat, setCat] = useState<Category | "All">("All");
   const [sort, setSort] = useState<"ending" | "popular" | "price">("ending");
@@ -47,10 +57,12 @@ function Home() {
     if (sort === "popular") list.sort((a, b) => b.ticketsSold / b.totalTickets - a.ticketsSold / a.totalTickets);
     if (sort === "price") list.sort((a, b) => a.pricePerTicket - b.pricePerTicket);
     return list;
-  }, [cat, sort]);
+  }, [cat, sort, COMPETITIONS]);
 
-  const featured = hero[active];
-  const featuredPct = Math.round((featured.ticketsSold / featured.totalTickets) * 100);
+  const featured = hero[active] ?? hero[0];
+  const featuredPct = featured
+    ? Math.round((featured.ticketsSold / featured.totalTickets) * 100)
+    : 0;
   const totals = COMPETITIONS.reduce(
     (acc, c) => {
       acc.sold += c.ticketsSold;
