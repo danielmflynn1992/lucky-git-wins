@@ -141,11 +141,3 @@ function AnswerRecord() {
   );
 }
 
-function StatLegacy({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-2xl bg-card border-2 border-border p-4">
-      <div className="text-xs uppercase tracking-widest font-bold text-muted-foreground">{label}</div>
-      <div className="font-display text-2xl font-black mt-1">{value}</div>
-    </div>
-  );
-}
