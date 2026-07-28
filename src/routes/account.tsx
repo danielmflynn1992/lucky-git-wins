@@ -1,4 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
 import { Button } from "@/components/ui/button";
@@ -59,6 +61,8 @@ function Account() {
         </div>
 
         <h2 className="mt-10 font-display text-2xl font-black">Refer a mate</h2>
+        <AnswerRecord />
+
         <div className="mt-4 rounded-2xl bg-clover text-cream p-6 flex items-center justify-between gap-4">
           <div>
             <div className="text-cream/70 text-xs font-bold uppercase tracking-widest">Your code</div>
