@@ -132,7 +132,7 @@ export function SiteNav() {
       >
         <div
           className="relative mx-auto overflow-hidden"
-          style={{ width: "88%", maxWidth: "88vw", aspectRatio: "1306 / 411" }}
+          style={{ width: "88%", maxWidth: "640px", aspectRatio: "1306 / 411" }}
         >
           <img
             src={LOCKUP_HORIZONTAL_URL}
