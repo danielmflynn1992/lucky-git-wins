@@ -15,6 +15,7 @@ import { CouponGrid } from "@/components/CouponGrid";
 import { Odometer } from "@/components/Odometer";
 import { NearMiss } from "@/components/NearMiss";
 import { PickHeatmap } from "@/components/PickHeatmap";
+import { RevealedAnswer } from "@/components/RevealedAnswer";
 import { competitionResultQuery } from "@/lib/results-api";
 import {
   competitionQueryOptions,
@@ -358,6 +359,7 @@ function CompDetail() {
               <>
                 <NearMiss slug={c.slug} competitionTitle={c.title} />
                 <PickHeatmap result={result} />
+                <RevealedAnswer slug={c.slug} />
               </>
             )}
           </section>

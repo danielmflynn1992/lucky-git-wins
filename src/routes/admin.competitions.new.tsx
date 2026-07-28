@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMemo, useRef, useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -40,12 +40,7 @@ function NewComp() {
   const [cashAlternative, setCashAlternative] = useState(1000);
   const [endsAt, setEndsAt] = useState("");
   const [hot, setHot] = useState(false);
-  const [question, setQuestion] = useState("");
-  const [optionA, setOptionA] = useState("");
-  const [optionB, setOptionB] = useState("");
-  const [optionC, setOptionC] = useState("");
-  const [optionD, setOptionD] = useState("");
-  const [correctOption, setCorrectOption] = useState<"a" | "b" | "c" | "d">("a");
+  const [questionId, setQuestionId] = useState<string>("");
   const [status, setStatus] = useState<"draft" | "live" | "paused">("draft");
   const [imageUrl, setImageUrl] = useState<string>("");
   const [thumbUrl, setThumbUrl] = useState<string>("");
@@ -63,6 +58,16 @@ function NewComp() {
     return src.replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 60);
   }, [slug, title]);
 
+  const { data: bank = [] } = useQuery({
+    queryKey: ["question-bank"],
+    queryFn: async () => {
+      const { data, error } = await supabase.rpc("admin_list_questions");
+      if (error) throw error;
+      return (data ?? []) as Array<{ id: string; question_text: string; is_active: boolean; times_served: number }>;
+    },
+    staleTime: 30_000,
+  });
+
   const validationErrors = useMemo(() => {
     const errs: string[] = [];
     if (title.trim().length < 2) errs.push("Prize name");
@@ -71,10 +76,8 @@ function NewComp() {
     if (pricePerTicket <= 0) errs.push("Ticket price");
     if (totalTickets < 1) errs.push("Total tickets");
     if (totalTickets > 499) errs.push("Total tickets exceeds the 499 cap");
-    if (question.trim().length < 8) errs.push("Skill question");
-    if (!optionA.trim() || !optionB.trim() || !optionC.trim() || !optionD.trim()) errs.push("All four options");
     return errs;
-  }, [title, derivedSlug, endsAt, pricePerTicket, totalTickets, question, optionA, optionB, optionC, optionD]);
+  }, [title, derivedSlug, endsAt, pricePerTicket, totalTickets]);
 
   async function uploadBlob(blob: Blob, contentType: string, ext: string): Promise<string> {
     const path = `${crypto.randomUUID()}.${ext}`;
@@ -156,12 +159,7 @@ function NewComp() {
           hot,
             thumbUrl,
             supportingImages,
-          question: question.trim(),
-          optionA: optionA.trim(),
-          optionB: optionB.trim(),
-          optionC: optionC.trim(),
-          optionD: optionD.trim(),
-          correctOption,
+          questionId: questionId || undefined,
           letterboxStyle,
         },
       }),
@@ -432,45 +430,25 @@ function NewComp() {
                 entrants answer incorrectly — this is the legal basis for the competition under
                 Section 14 of the Gambling Act 2005.
               </div>
-              <TextArea
-                label="Question text"
-                rows={2}
-                required
-                value={question}
-                onChange={(e) => setQuestion(e.target.value)}
-                placeholder="e.g. In what year was the Ford GT40 first raced at Le Mans?"
-              />
-              <div className="mt-3 grid gap-3 sm:grid-cols-2">
-                {(["a", "b", "c", "d"] as const).map((k, i) => {
-                  const val = [optionA, optionB, optionC, optionD][i];
-                  const setters = [setOptionA, setOptionB, setOptionC, setOptionD];
-                  return (
-                    <div key={k} className="flex items-start gap-2">
-                      <label className="flex items-center gap-1.5 mt-8 shrink-0 text-xs font-bold uppercase tracking-widest">
-                        <input
-                          type="radio"
-                          name="correct-option"
-                          checked={correctOption === k}
-                          onChange={() => setCorrectOption(k)}
-                          className="h-4 w-4 accent-clover"
-                          aria-label={`Mark option ${k.toUpperCase()} as correct`}
-                        />
-                        {k.toUpperCase()}
-                      </label>
-                      <Field
-                        label={`Option ${k.toUpperCase()}${correctOption === k ? " · correct" : ""}`}
-                        className="flex-1"
-                        required
-                        value={val}
-                        onChange={(e) => setters[i](e.target.value)}
-                        placeholder={correctOption === k ? "Correct answer (kept server-side)" : ""}
-                      />
-                    </div>
-                  );
-                })}
-              </div>
+              <SelectField
+                label="Assigned question (auto-picked if left on Auto)"
+                value={questionId}
+                onChange={(e) => setQuestionId(e.target.value)}
+              >
+                <option value="">Auto — rotate from the bank</option>
+                {bank
+                  .filter((q) => q.is_active)
+                  .map((q) => (
+                    <option key={q.id} value={q.id}>
+                      {q.question_text.slice(0, 90)} · served {q.times_served}×
+                    </option>
+                  ))}
+              </SelectField>
               <p className="mt-3 text-[11px] text-muted-foreground">
-                The correct answer is written to the database only and never sent to the browser.
+                Questions come from the shared bank, excluding anything used by a competition that
+                closed in the last 14 days. Correct answers live server-side only — they are never
+                sent to the browser. Manage the bank at{" "}
+                <Link to="/admin/questions" className="underline font-bold">/admin/questions</Link>.
               </p>
             </Card>
           </div>
@@ -504,7 +482,7 @@ function NewComp() {
                 { label: "Cash alternative filled", ok: cashAlternative > 0 },
                 { label: "Closing date", ok: !!endsAt },
                 { label: "Prize title", ok: title.trim().length >= 2 },
-                { label: "Skill question set", ok: question.trim().length >= 8 && optionA.trim() && optionB.trim() && optionC.trim() && optionD.trim() ? true : false },
+                { label: "Question available in the bank", ok: bank.some((q) => q.is_active) },
               ].map((c) => (
                 <div key={c.label} className="flex items-center gap-2 text-sm py-1">
                   {c.ok ? <CheckCircle2 className="h-4 w-4 text-clover" /> : <AlertTriangle className="h-4 w-4 text-urgent" />}

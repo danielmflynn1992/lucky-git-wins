@@ -1,4 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
 import { Button } from "@/components/ui/button";
@@ -58,6 +60,8 @@ function Account() {
           ))}
         </div>
 
+        <AnswerRecord />
+
         <h2 className="mt-10 font-display text-2xl font-black">Refer a mate</h2>
         <div className="mt-4 rounded-2xl bg-clover text-cream p-6 flex items-center justify-between gap-4">
           <div>
@@ -81,3 +85,59 @@ function Stat({ label, value }: { label: string; value: string }) {
     </div>
   );
 }
+
+/** Real answer records. Result stays sealed until the competition is drawn. */
+function AnswerRecord() {
+  const { data = [] } = useQuery({
+    queryKey: ["my-answers"],
+    queryFn: async () => {
+      const { data: answers, error } = await supabase
+        .from("entry_answers")
+        .select("id, competition_id, raw_answer, is_correct, answered_at")
+        .order("answered_at", { ascending: false });
+      if (error) throw error;
+      const ids = [...new Set((answers ?? []).map((a) => a.competition_id))];
+      if (!ids.length) return [];
+      const { data: comps } = await supabase
+        .from("competitions")
+        .select("id, title, slug, status")
+        .in("id", ids);
+      const byId = new Map((comps ?? []).map((c) => [c.id, c]));
+      return (answers ?? []).map((a) => ({ ...a, comp: byId.get(a.competition_id) }));
+    },
+    retry: false,
+  });
+
+  if (!data.length) return null;
+
+  return (
+    <>
+      <h2 className="mt-10 font-display text-2xl font-black">Answer record</h2>
+      <div className="mt-4 space-y-2">
+        {data.map((a) => {
+          const drawn = a.comp?.status === "drawn";
+          return (
+            <div key={a.id} className="rounded-2xl bg-card border-2 border-border p-4 flex items-center gap-4">
+              <div className="flex-1 min-w-0">
+                <div className="font-display truncate">{a.comp?.title ?? "Competition"}</div>
+                <div className="text-xs text-muted-foreground font-mono">
+                  You answered {a.raw_answer} · {new Date(a.answered_at).toLocaleString("en-GB")}
+                </div>
+              </div>
+              <div className="text-[11px] font-mono uppercase tracking-widest text-right">
+                {drawn ? (
+                  <span className={a.is_correct ? "text-clover font-bold" : "text-[color:var(--color-ink-red)] font-bold"}>
+                    {a.is_correct ? "Correct · qualifying" : "Incorrect · not entered"}
+                  </span>
+                ) : (
+                  <span className="text-muted-foreground">Sealed until the draw</span>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </>
+  );
+}
+

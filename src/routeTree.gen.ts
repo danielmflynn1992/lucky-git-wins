@@ -34,6 +34,7 @@ import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as SlipsIdRouteImport } from './routes/slips.$id'
 import { Route as DevCompcardRouteImport } from './routes/dev.compcard'
 import { Route as CompetitionsSlugRouteImport } from './routes/competitions.$slug'
+import { Route as AdminQuestionsRouteImport } from './routes/admin.questions'
 import { Route as AdminQuestionPerformanceRouteImport } from './routes/admin.question-performance'
 import { Route as AdminErrorsRouteImport } from './routes/admin.errors'
 import { Route as DrawsIdRevealRouteImport } from './routes/draws.$id.reveal'
@@ -164,6 +165,11 @@ const CompetitionsSlugRoute = CompetitionsSlugRouteImport.update({
   path: '/competitions/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminQuestionsRoute = AdminQuestionsRouteImport.update({
+  id: '/admin/questions',
+  path: '/admin/questions',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminQuestionPerformanceRoute =
   AdminQuestionPerformanceRouteImport.update({
     id: '/admin/question-performance',
@@ -209,6 +215,7 @@ export interface FileRoutesByFullPath {
   '/winners': typeof WinnersRoute
   '/admin/errors': typeof AdminErrorsRoute
   '/admin/question-performance': typeof AdminQuestionPerformanceRoute
+  '/admin/questions': typeof AdminQuestionsRoute
   '/competitions/$slug': typeof CompetitionsSlugRoute
   '/dev/compcard': typeof DevCompcardRoute
   '/slips/$id': typeof SlipsIdRoute
@@ -240,6 +247,7 @@ export interface FileRoutesByTo {
   '/winners': typeof WinnersRoute
   '/admin/errors': typeof AdminErrorsRoute
   '/admin/question-performance': typeof AdminQuestionPerformanceRoute
+  '/admin/questions': typeof AdminQuestionsRoute
   '/competitions/$slug': typeof CompetitionsSlugRoute
   '/dev/compcard': typeof DevCompcardRoute
   '/slips/$id': typeof SlipsIdRoute
@@ -272,6 +280,7 @@ export interface FileRoutesById {
   '/winners': typeof WinnersRoute
   '/admin/errors': typeof AdminErrorsRoute
   '/admin/question-performance': typeof AdminQuestionPerformanceRoute
+  '/admin/questions': typeof AdminQuestionsRoute
   '/competitions/$slug': typeof CompetitionsSlugRoute
   '/dev/compcard': typeof DevCompcardRoute
   '/slips/$id': typeof SlipsIdRoute
@@ -305,6 +314,7 @@ export interface FileRouteTypes {
     | '/winners'
     | '/admin/errors'
     | '/admin/question-performance'
+    | '/admin/questions'
     | '/competitions/$slug'
     | '/dev/compcard'
     | '/slips/$id'
@@ -336,6 +346,7 @@ export interface FileRouteTypes {
     | '/winners'
     | '/admin/errors'
     | '/admin/question-performance'
+    | '/admin/questions'
     | '/competitions/$slug'
     | '/dev/compcard'
     | '/slips/$id'
@@ -367,6 +378,7 @@ export interface FileRouteTypes {
     | '/winners'
     | '/admin/errors'
     | '/admin/question-performance'
+    | '/admin/questions'
     | '/competitions/$slug'
     | '/dev/compcard'
     | '/slips/$id'
@@ -399,6 +411,7 @@ export interface RootRouteChildren {
   WinnersRoute: typeof WinnersRoute
   AdminErrorsRoute: typeof AdminErrorsRoute
   AdminQuestionPerformanceRoute: typeof AdminQuestionPerformanceRoute
+  AdminQuestionsRoute: typeof AdminQuestionsRoute
   CompetitionsSlugRoute: typeof CompetitionsSlugRoute
   DevCompcardRoute: typeof DevCompcardRoute
   SlipsIdRoute: typeof SlipsIdRoute
@@ -585,6 +598,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CompetitionsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/questions': {
+      id: '/admin/questions'
+      path: '/admin/questions'
+      fullPath: '/admin/questions'
+      preLoaderRoute: typeof AdminQuestionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/question-performance': {
       id: '/admin/question-performance'
       path: '/admin/question-performance'
@@ -639,6 +659,7 @@ const rootRouteChildren: RootRouteChildren = {
   WinnersRoute: WinnersRoute,
   AdminErrorsRoute: AdminErrorsRoute,
   AdminQuestionPerformanceRoute: AdminQuestionPerformanceRoute,
+  AdminQuestionsRoute: AdminQuestionsRoute,
   CompetitionsSlugRoute: CompetitionsSlugRoute,
   DevCompcardRoute: DevCompcardRoute,
   SlipsIdRoute: SlipsIdRoute,
