@@ -1,12 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { z } from "zod";
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
 import { Button } from "@/components/ui/button";
 import { StampSeal } from "@/components/Logo";
 import { LuckyMark } from "@/components/GaryMascot";
-import { getComp, COMPETITIONS } from "@/lib/mock-comps";
+import { allCompetitionsQueryOptions } from "@/lib/competitions-api";
 import { gbp, moneySlang } from "@/lib/format";
 import { CreditCard, Lock, ShieldCheck, Share2, CheckCircle2, AlertTriangle } from "lucide-react";
 import { SkillWarning } from "@/components/SkillWarning";
@@ -38,7 +39,8 @@ export const Route = createFileRoute("/checkout")({
 
 function Checkout() {
   const { slug, qty = 5 } = Route.useSearch();
-  const comp = slug ? getComp(slug) : COMPETITIONS[0];
+  const { data: comps = [] } = useQuery(allCompetitionsQueryOptions);
+  const comp = (slug ? comps.find((c) => c.slug === slug) : comps[0]) ?? null;
   const [done, setDone] = useState(false);
   const [reservation, setReservation] = useState<Reservation | null>(null);
   const [answer, setAnswer] = useState<{ isCorrect: boolean; orderRef: string } | null>(null);
