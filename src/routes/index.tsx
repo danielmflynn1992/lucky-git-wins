@@ -212,7 +212,7 @@ function Home() {
         </div>
 
         <div className="mt-5 flex gap-2 overflow-x-auto pb-2 -mx-4 px-4">
-          {(["All", ...CATEGORIES] as const).map((c) => (
+          {["All", ...CATEGORIES].map((c) => (
             <button
               key={c}
               onClick={() => setCat(c)}
