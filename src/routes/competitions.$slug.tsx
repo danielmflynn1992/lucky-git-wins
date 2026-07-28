@@ -1,6 +1,6 @@
 import { createFileRoute, notFound, Link, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { useSuspenseQuery, useQueryClient } from "@tanstack/react-query";
+import { useSuspenseQuery, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Ticket, Shuffle, Shield, PoundSterling, CheckCircle2, Info, Loader2, AlertTriangle } from "lucide-react";
 import { SkillWarning } from "@/components/SkillWarning";
 import { SiteNav } from "@/components/SiteNav";
@@ -12,6 +12,7 @@ import { PrizeGallery } from "@/components/PrizeImage";
 import { gbp, shortNumber, pickLoadingQuip, moneySlang } from "@/lib/format";
 import { LuckyMark } from "@/components/GaryMascot";
 import { CouponGrid } from "@/components/CouponGrid";
+import { Odometer } from "@/components/Odometer";
 import {
   competitionQueryOptions,
   allCompetitionsQueryOptions,
