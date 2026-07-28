@@ -150,7 +150,7 @@ export function SiteNav() {
       {/* Row 2 — 40px cream strip: hamburger · centred nav · basket.
           Nav links hide under 380px; hamburger + basket always visible. */}
       <div className="relative bg-card" style={{ height: 40 }}>
-        <div className="h-full px-2 md:px-6 flex items-center justify-center gap-2 md:gap-5">
+        <div className="h-full px-2 md:px-6 flex items-center justify-between md:justify-center gap-2 md:gap-5">
           <button
             ref={toggleRef}
             onClick={() => setOpen((o) => !o)}
@@ -163,10 +163,11 @@ export function SiteNav() {
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
 
-          {/* Centred primary nav — visible on all viewports, compressed on mobile. */}
+          {/* Centred primary nav — hidden on mobile (use the hamburger) to stop
+              links running under the basket; centred from md up. */}
           <nav
             aria-label="Primary"
-            className="flex min-w-0 flex-1 md:flex-none items-center justify-start md:justify-center gap-3 md:gap-5 overflow-x-auto no-scrollbar text-[0.625rem] tracking-[0.04em] md:text-[0.8125rem] md:tracking-[0.12em] font-bold uppercase"
+            className="hidden md:flex min-w-0 flex-none items-center justify-center gap-5 text-[0.8125rem] tracking-[0.12em] font-bold uppercase"
             style={{ color: "var(--color-ink-blue, #123)", scrollbarWidth: "none" }}
           >
             <Link to="/competitions" className="hover:text-clover transition-colors whitespace-nowrap">Competitions</Link>
