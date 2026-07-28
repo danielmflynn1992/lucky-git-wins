@@ -5,7 +5,7 @@ import holiday from "@/assets/prize-holiday.jpg";
 import ps5 from "@/assets/prize-ps5.jpg";
 import watch from "@/assets/prize-watch.jpg";
 
-export type Category = "Motors" | "Gadgets" | "Readies" | "Getaways" | "Timepieces";
+export type Category = string;
 
 export interface Competition {
   slug: string;
@@ -13,6 +13,7 @@ export interface Competition {
   subtitle: string;
   category: Category;
   image: string;
+  thumbUrl?: string;
   letterboxStyle?: "solid" | "gradient" | "blur";
   gallery: string[];
   pricePerTicket: number;
