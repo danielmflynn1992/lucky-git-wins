@@ -8,6 +8,21 @@ import cash from "@/assets/prize-cash.jpg";
 import holiday from "@/assets/prize-holiday.jpg";
 import ps5 from "@/assets/prize-ps5.jpg";
 import watch from "@/assets/prize-watch.jpg";
+import bmwM4 from "@/assets/prize-bmw-m4.jpg";
+import defender from "@/assets/prize-defender.jpg";
+import golfGti from "@/assets/prize-golf-gti.jpg";
+import chronograph from "@/assets/prize-chronograph.jpg";
+import dressWatch from "@/assets/prize-dress-watch.jpg";
+import laptop from "@/assets/prize-laptop.jpg";
+import phoneBundle from "@/assets/prize-phone-bundle.jpg";
+import consoleSetup from "@/assets/prize-console-setup.jpg";
+import cashStacks from "@/assets/prize-cash-stacks.jpg";
+import cashFan from "@/assets/prize-cash-fan.jpg";
+import cashEnvelope from "@/assets/prize-cash-envelope.jpg";
+import dubai from "@/assets/prize-dubai.jpg";
+import lapland from "@/assets/prize-lapland.jpg";
+import villa from "@/assets/prize-villa.jpg";
+import ebike from "@/assets/prize-ebike.jpg";
 
 // Slug → bundled asset. Keeps the DB free of build-time paths.
 export const IMAGES: Record<string, string> = {
@@ -17,6 +32,21 @@ export const IMAGES: Record<string, string> = {
   "maldives-getaway": holiday,
   "ps5-pro-instant": ps5,
   "rolex-submariner": watch,
+  "bmw-m4-competition": bmwM4,
+  "land-rover-defender": defender,
+  "golf-gti-clubsport": golfGti,
+  "steel-chronograph": chronograph,
+  "gold-dress-watch": dressWatch,
+  "pro-laptop-16": laptop,
+  "phone-and-buds-bundle": phoneBundle,
+  "console-and-telly": consoleSetup,
+  "25k-cash": cashStacks,
+  "5k-cash": cashFan,
+  "1k-friday-readies": cashEnvelope,
+  "dubai-long-weekend": dubai,
+  "lapland-christmas": lapland,
+  "ibiza-villa-week": villa,
+  "electric-bike": ebike,
 };
 
 // DB rows can hold stale dev paths like "/src/assets/prize-audi.jpg" that don't
@@ -115,16 +145,14 @@ export async function fetchAllCompetitions(): Promise<Competition[]> {
   if (error) throw error;
   if (!comps || comps.length === 0) return [];
 
-  const ids = comps.map((c) => c.id);
-  const { data: tickets, error: tErr } = await supabase
-    .from("tickets")
-    .select("competition_id, status")
-    .in("competition_id", ids)
-    .eq("status", "sold");
+  // Count server-side. Selecting sold ticket rows hits the Data API's 1000-row
+  // cap once a handful of competitions are live, which silently zeroed the
+  // "sold" figure on whichever comps fell off the end of the page.
+  const { data: counts, error: tErr } = await supabase.rpc("competition_sold_counts");
   if (tErr) throw tErr;
 
   const sold = new Map<string, number>();
-  for (const t of tickets ?? []) sold.set(t.competition_id, (sold.get(t.competition_id) ?? 0) + 1);
+  for (const row of counts ?? []) sold.set(row.competition_id, row.sold);
 
   return comps.map((c) => {
     const image = resolveImage(c.image, c.slug);

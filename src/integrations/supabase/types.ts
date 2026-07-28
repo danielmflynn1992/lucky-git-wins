@@ -610,6 +610,13 @@ export type Database = {
         }
       }
       claim_admin_if_empty: { Args: never; Returns: boolean }
+      competition_sold_counts: {
+        Args: never
+        Returns: {
+          competition_id: string
+          sold: number
+        }[]
+      }
       create_competition_with_tickets:
         | {
             Args: {
