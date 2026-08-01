@@ -82,7 +82,8 @@ export function CouponGrid({
   winnerCounts?: Map<number, number>;
   cols?: number;
 }) {
-  const cols = useResponsiveCols(colsOverride);
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const cols = useResponsiveCols(wrapRef, colsOverride);
   const isDesktop = useIsDesktop();
   const [focusIdx, setFocusIdx] = useState<number>(0);
   const [activeNumber, setActiveNumber] = useState<number | null>(null);
