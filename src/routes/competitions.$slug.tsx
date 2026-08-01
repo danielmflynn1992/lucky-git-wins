@@ -271,7 +271,6 @@ function CompDetail() {
                   picked={picked}
                   onToggle={toggleNumber}
                   onLuckyDip={doLuckyDip}
-                  cols={Math.min(25, Math.max(10, Math.ceil(Math.sqrt(c.totalTickets * 1.6))))}
                 />
                 {picked.size > 0 && (
                   <button onClick={() => setPicked(new Set())} className="mt-2 text-xs font-mono underline text-muted-foreground">
