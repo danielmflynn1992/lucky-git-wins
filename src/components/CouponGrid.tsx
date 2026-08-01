@@ -200,11 +200,7 @@ export function CouponGrid({
                         : isPicked
                           ? "text-[var(--color-ink-black)] hover:bg-[var(--color-ink-yellow)] "
                           : "text-[var(--color-ink-black)] hover:bg-[var(--color-ink-yellow)]/30 ") +
-                      (isPicked
-                        ? "bg-[var(--color-ink-yellow)]/60"
-                        : band
-                          ? "bg-[var(--color-ink-blue)]/[0.06]"
-                          : "bg-[var(--color-paper)]");
+                      (isPicked ? "bg-[var(--color-ink-yellow)]/60" : "");
                     return (
                       <button
                         key={n}
@@ -220,6 +216,11 @@ export function CouponGrid({
                         onMouseEnter={() => setActiveNumber(n)}
                         onClick={() => { if (!isSold) { setActiveNumber(n); onToggle(n); } }}
                         className={cls}
+                        style={
+                          isPicked
+                            ? undefined
+                            : { backgroundColor: band ? "rgba(26,58,122,0.07)" : "var(--color-paper)" }
+                        }
                       >
                         <span aria-hidden="true">{n}</span>
                         {isSold && (
