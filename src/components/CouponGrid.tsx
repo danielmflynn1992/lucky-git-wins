@@ -186,8 +186,8 @@ export function CouponGrid({
                   </div>
                 )}
                 <div
-                  className="grid gap-[1px] flex-1"
-                  style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}
+                  className="grid gap-[1px] flex-1 min-w-0"
+                  style={{ gridTemplateColumns: `repeat(${cols}, minmax(${isDesktop ? 34 : 30}px, 1fr))` }}
                 >
                   {row.map((n) => {
                     const i = n - 1;
@@ -219,7 +219,9 @@ export function CouponGrid({
                         style={
                           isPicked
                             ? undefined
-                            : { backgroundColor: band ? "rgba(26,58,122,0.07)" : "var(--color-paper)" }
+                            : { backgroundColor: band
+                                ? "color-mix(in srgb, var(--color-paper) 90%, var(--color-ink-blue))"
+                                : "var(--color-paper)" }
                         }
                       >
                         <span aria-hidden="true">{n}</span>
