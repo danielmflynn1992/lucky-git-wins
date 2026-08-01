@@ -24,18 +24,31 @@ function parseNumberSpec(spec: string, max: number): number[] {
   return [...out];
 }
 
-function useResponsiveCols(override?: number) {
+function useResponsiveCols(
+  wrapRef: React.RefObject<HTMLDivElement | null>,
+  override?: number,
+) {
   const [cols, setCols] = useState(override ?? 10);
   useEffect(() => {
     if (override) { setCols(override); return; }
     const calc = () => {
       const w = window.innerWidth;
-      setCols(w >= 1024 ? 25 : w >= 640 ? 16 : w >= 400 ? 12 : 10);
+      const target = w >= 1024 ? 25 : w >= 640 ? 16 : w >= 400 ? 12 : 10;
+      // never overflow the container: cell min is 30px (34px desktop) + 1px gap
+      const cell = (w >= 1024 ? 34 : 30) + 1;
+      const avail = (wrapRef.current?.clientWidth ?? w) - (w >= 1024 ? 40 : 10);
+      const fit = Math.max(5, Math.floor(avail / cell));
+      setCols(Math.min(target, fit));
     };
     calc();
     window.addEventListener("resize", calc);
-    return () => window.removeEventListener("resize", calc);
-  }, [override]);
+    const ro = new ResizeObserver(calc);
+    if (wrapRef.current) ro.observe(wrapRef.current);
+    return () => {
+      window.removeEventListener("resize", calc);
+      ro.disconnect();
+    };
+  }, [override, wrapRef]);
   return cols;
 }
 
