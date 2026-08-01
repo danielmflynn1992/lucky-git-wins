@@ -178,7 +178,7 @@ export function CouponGrid({
           </button>
         )}
       </div>
-      <div className="max-h-[70vh] overflow-auto">
+      <div ref={wrapRef} className="max-h-[70vh] overflow-auto">
         <div
           data-coupon-grid
           ref={gridRef}
