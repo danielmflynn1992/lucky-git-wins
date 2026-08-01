@@ -38,7 +38,6 @@ function useResponsiveCols(
       const cell = (w >= 1024 ? 34 : 30) + 1;
       const avail = (wrapRef.current?.clientWidth ?? w) - (w >= 1024 ? 40 : 10);
       const fit = Math.max(5, Math.floor(avail / cell));
-      console.log("[cg]", { w, target, cell, avail, fit });
       setCols(Math.min(target, fit));
     };
     calc();
