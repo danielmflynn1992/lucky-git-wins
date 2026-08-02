@@ -80,6 +80,7 @@ function CheckoutInner() {
   const [answer, setAnswer] = useState<{ isCorrect: boolean; orderRef: string } | null>(null);
   // Explicit, separate age/residency confirmation — required before payment.
   const [ageConfirmed, setAgeConfirmed] = useState(false);
+  const [termsConfirmed, setTermsConfirmed] = useState(false);
 
   useEffect(() => {
     try {
@@ -185,7 +186,13 @@ function CheckoutInner() {
           </label>
 
           <label className="flex items-start gap-2 text-sm">
-            <input type="checkbox" required className="mt-1 h-4 w-4 accent-clover" />
+            <input
+              type="checkbox"
+              required
+              checked={termsConfirmed}
+              onChange={(e) => setTermsConfirmed(e.target.checked)}
+              className="mt-1 h-4 w-4 accent-clover"
+            />
             <span>
               I've read the <Link to="/terms" className="underline">T&amp;Cs</Link>, I confirm I'm 18+ and
               I understand that tickets from an incorrect answer are not entered in the draw.
@@ -197,13 +204,15 @@ function CheckoutInner() {
             variant="gold"
             size="xl"
             className="w-full"
-            disabled={!answer || !ageConfirmed}
+            disabled={!answer || !ageConfirmed || !termsConfirmed}
           >
             {!answer
               ? "Answer the skill question to continue"
               : !ageConfirmed
                 ? "Confirm you're 18+ to continue"
-                : `Sort me out — ${gbp(subtotal)}`}
+                : !termsConfirmed
+                  ? "Tick the T&Cs box to continue"
+                  : `Sort me out — ${gbp(subtotal)}`}
           </Button>
           {answer && (
             <div className="rounded-md border-2 border-border bg-card p-3 text-xs text-muted-foreground">
