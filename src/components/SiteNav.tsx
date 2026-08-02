@@ -131,15 +131,14 @@ export function SiteNav() {
         style={{ padding: "8px 0" }}
       >
         <div
-          className="relative mx-auto overflow-hidden"
-          style={{ width: "88%", maxWidth: "640px", aspectRatio: "1306 / 411" }}
+          className="relative mx-auto"
+          style={{ width: "88%", maxWidth: "640px" }}
         >
           <img
             src={LOCKUP_HORIZONTAL_URL}
             alt="Lucky Git Comps"
             draggable={false}
-            className="absolute select-none pointer-events-none"
-            style={{ width: "105.36%", left: "-2.68%", top: "-46.72%" }}
+            className="block w-full h-auto select-none pointer-events-none"
           />
         </div>
       </Link>
