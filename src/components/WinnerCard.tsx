@@ -288,7 +288,7 @@ export function WinnerCard({
                   <dt className="text-[var(--color-ink-grey)]">Pool</dt>
                   <dd>{w.qualifying_pool_size} qualifying</dd>
                 </dl>
-                {canRehash && <InlineVerify seed={w.seed_revealed} hash={w.seed_hash} />}
+                {canRehash && <InlineVerify seed={w.seed_revealed} hash={w.seed_hash} drawId={w.id} />}
                 <Link
                   to="/draws/$id/reveal"
                   params={{ id: w.id }}
