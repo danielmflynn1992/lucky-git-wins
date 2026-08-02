@@ -9,9 +9,12 @@ import { Button } from "@/components/ui/button";
 import { StampSeal } from "@/components/Logo";
 import { allCompetitionsQueryOptions } from "@/lib/competitions-api";
 import { gbp, moneySlang } from "@/lib/format";
-import { CreditCard, Lock, ShieldCheck, Share2, CheckCircle2, AlertTriangle } from "lucide-react";
+import { CreditCard, Lock, ShieldCheck } from "lucide-react";
 import { SkillWarning } from "@/components/SkillWarning";
 import { SkillQuestionStep } from "@/components/SkillQuestionStep";
+import { EntryStampSequence } from "@/components/EntryStampSequence";
+import { formatDrawTime } from "@/lib/site-stats";
+import { hashSeed } from "@/lib/terry-verdicts";
 
 interface Reservation {
   token: string;
@@ -100,7 +103,18 @@ function CheckoutInner() {
   const effectiveQty = reservation?.numbers.length ?? qty;
   const subtotal = comp.pricePerTicket * effectiveQty;
 
-  if (done) return <SuccessScreen compTitle={comp.title} numbers={reservation?.numbers ?? []} />;
+  if (done) {
+    const nums = reservation?.numbers ?? [];
+    const ref = "LG-" + (hashSeed((reservation?.token ?? "") + nums.join(",")) % 900000 + 100000);
+    return (
+      <SuccessScreen
+        compTitle={comp.title}
+        numbers={nums}
+        entryRef={ref}
+        drawLine={`Drawn ${formatDrawTime(comp.endsAt)}.`}
+      />
+    );
+  }
 
   if (!reservation) {
     return <EmptyBasket />;
