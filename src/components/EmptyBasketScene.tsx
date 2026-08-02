@@ -92,7 +92,7 @@ function BlankCoupon({ compact = false }: { compact?: boolean }) {
   return (
     <div
       className={
-        "empty-coupon relative mx-auto " + (compact ? "max-w-[240px] pr-6" : "max-w-sm pr-8")
+        "empty-coupon relative mx-auto " + (compact ? "max-w-[220px] pr-6" : "max-w-[300px] pr-8")
       }
       role="img"
       aria-label="A blank Lucky Git Comps entry coupon: 499 empty squares, none marked, with an idle rubber stamp resting on its ink pad."
