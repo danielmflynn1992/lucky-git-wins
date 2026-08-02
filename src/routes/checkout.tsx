@@ -44,6 +44,8 @@ function Checkout() {
   const [done, setDone] = useState(false);
   const [reservation, setReservation] = useState<Reservation | null>(null);
   const [answer, setAnswer] = useState<{ isCorrect: boolean; orderRef: string } | null>(null);
+  // Explicit, separate age/residency confirmation — required before payment.
+  const [ageConfirmed, setAgeConfirmed] = useState(false);
 
   useEffect(() => {
     try {
@@ -62,27 +64,14 @@ function Checkout() {
     }
   }, [slug]);
 
-  if (!comp) return null;
+  if (!comp) return <EmptyBasket />;
   const effectiveQty = reservation?.numbers.length ?? qty;
   const subtotal = comp.pricePerTicket * effectiveQty;
 
   if (done) return <SuccessScreen compTitle={comp.title} numbers={reservation?.numbers ?? []} />;
 
   if (!reservation) {
-    return (
-      <div className="min-h-screen flex flex-col">
-        <SiteNav />
-        <main className="mx-auto max-w-xl px-4 py-16 w-full flex-1 text-center">
-          <LuckyMark className="mx-auto h-16 w-16" />
-          <h1 className="mt-4 font-display text-3xl font-semibold tracking-tight">Your basket's empty.</h1>
-          <p className="mt-2 text-muted-foreground">Nothing in here. Bit tragic, that.</p>
-          <Button asChild variant="gold" size="lg" className="mt-6">
-            <Link to="/competitions/$slug" params={{ slug: slug ?? comp.slug }}>Right, take me back</Link>
-          </Button>
-        </main>
-        <SiteFooter />
-      </div>
-    );
+    return <EmptyBasket />;
   }
 
   return (
@@ -137,6 +126,19 @@ function Checkout() {
             </div>
           </fieldset>
 
+          <label className="flex items-start gap-2 text-sm border-2 border-[var(--color-ink-black)] bg-[var(--color-paper-raised)] p-3">
+            <input
+              type="checkbox"
+              required
+              checked={ageConfirmed}
+              onChange={(e) => setAgeConfirmed(e.target.checked)}
+              className="mt-1 h-4 w-4 accent-clover"
+            />
+            <span className="font-semibold">
+              I confirm I am 18 or over and a UK resident.
+            </span>
+          </label>
+
           <label className="flex items-start gap-2 text-sm">
             <input type="checkbox" required className="mt-1 h-4 w-4 accent-clover" />
             <span>
@@ -150,11 +152,13 @@ function Checkout() {
             variant="gold"
             size="xl"
             className="w-full"
-            disabled={!answer}
+            disabled={!answer || !ageConfirmed}
           >
-            {answer
-              ? `Sort me out — ${gbp(subtotal)}`
-              : "Answer the skill question to continue"}
+            {!answer
+              ? "Answer the skill question to continue"
+              : !ageConfirmed
+                ? "Confirm you're 18+ to continue"
+                : `Sort me out — ${gbp(subtotal)}`}
           </Button>
           {answer && (
             <div className="rounded-md border-2 border-border bg-card p-3 text-xs text-muted-foreground">
