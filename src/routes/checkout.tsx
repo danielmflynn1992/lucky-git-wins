@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { z } from "zod";
-import terry from "@/assets/terry-cutout.webp";
+import terryImg from "@/assets/terry-cutout.webp.asset.json";
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
 import { Button } from "@/components/ui/button";
@@ -49,7 +49,7 @@ function EmptyBasket() {
       <SiteNav />
       <main className="mx-auto max-w-xl px-4 py-16 w-full flex-1 text-center">
         <img
-          src={terry}
+          src={terryImg.url}
           alt="Terry, empty-handed"
           width={180}
           height={180}
