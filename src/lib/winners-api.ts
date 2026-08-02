@@ -39,9 +39,22 @@ export type Winner = {
   seed_hash: string;
   total_tickets: number;
   qualifying_pool_size: number | null;
-  /** True for seeded demo rows: no linked competition and no revealed seed. */
+  /** True for seeded example rows. Illustration only — never counted. */
   isDemo: boolean;
 };
+
+/**
+ * Example records are illustration, never evidence: once a single real draw
+ * exists they disappear from every surface automatically.
+ */
+export function realOnly<T extends { isDemo: boolean }>(list: T[]): T[] {
+  return list.filter((w) => !w.isDemo);
+}
+
+export function displayWinners<T extends { isDemo: boolean }>(list: T[]): T[] {
+  const real = realOnly(list);
+  return real.length > 0 ? real : list;
+}
 
 export const winnersQuery = queryOptions({
   queryKey: ["winners"],
@@ -49,7 +62,7 @@ export const winnersQuery = queryOptions({
     const { data, error } = await supabase
       .from("draws")
       .select(
-        "id, competition_id, competition_title, prize, winning_number, winner_display_name, winner_town, drawn_at, winner_photo_url, photo_consent, winner_quote, verification_hash, seed_revealed, seed_hash, total_tickets, qualifying_pool_size, competitions(slug, image)",
+        "id, competition_id, competition_title, prize, winning_number, winner_display_name, winner_town, drawn_at, winner_photo_url, photo_consent, winner_quote, verification_hash, seed_revealed, seed_hash, total_tickets, qualifying_pool_size, is_demo, competitions(slug, image)",
       )
       .order("drawn_at", { ascending: false });
     if (error) throw error;
@@ -70,6 +83,7 @@ export const winnersQuery = queryOptions({
       seed_hash: string;
       total_tickets: number | null;
       qualifying_pool_size: number | null;
+      is_demo?: boolean | null;
       competitions: { slug: string; image: string } | null;
     }) => {
       const slug = d.competitions?.slug;
@@ -83,8 +97,8 @@ export const winnersQuery = queryOptions({
         competition_title: d.competition_title,
         prize: d.prize,
         winning_number: d.winning_number,
-        winner_display_name: d.winner_display_name,
-        winner_town: d.winner_town,
+        winner_display_name: d.is_demo ? "—" : d.winner_display_name,
+        winner_town: d.is_demo ? "Example entry" : d.winner_town,
         drawn_at: d.drawn_at,
         image,
         winner_photo_url: d.winner_photo_url,
@@ -95,7 +109,7 @@ export const winnersQuery = queryOptions({
         seed_hash: d.seed_hash ?? "",
         total_tickets: d.total_tickets ?? 499,
         qualifying_pool_size: d.qualifying_pool_size,
-        isDemo: !d.competition_id && !d.seed_revealed,
+        isDemo: d.is_demo ?? (!d.competition_id && !d.seed_revealed),
       };
     });
   },
