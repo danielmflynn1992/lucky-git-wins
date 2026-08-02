@@ -199,6 +199,8 @@ function CompDetail() {
 
             </div>
 
+            {isLive ? (
+              <>
             <div className="mt-6 rounded-2xl bg-card border-2 border-border p-4">
               <div className="mb-4"><SkillWarning compact /></div>
               <div className="flex gap-2 mb-4">
@@ -304,6 +306,10 @@ function CompDetail() {
 
             {/* Sample skill question — so the no-refund rule is understood before checkout. */}
             <SkillStub />
+              </>
+            ) : (
+              <ClosedPanel comp={c} phase={phase} result={result ?? null} />
+            )}
 
             <div className="mt-4 grid grid-cols-2 gap-3 text-xs">
               <div className="flex items-center gap-2"><Shield className="h-4 w-4 text-clover" /> Verifiable RNG draw</div>
