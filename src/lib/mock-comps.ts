@@ -24,6 +24,8 @@ export interface Competition {
   endsAt: string; // ISO
   hot?: boolean;
   description: string;
+  /** DB lifecycle status: "live" while it can still be drawn, "drawn" after. */
+  status?: string;
 }
 
 const inHours = (h: number) => new Date(Date.now() + h * 3_600_000).toISOString();
