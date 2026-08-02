@@ -42,9 +42,8 @@ export function EmptyBasketScene({ compact = false }: { compact?: boolean }) {
 
   const { data: comps = [] } = useQuery(allCompetitionsQueryOptions);
   const nearlyGone = useMemo(() => {
-    const live = comps.filter(
-      (c) => c.status === "live" && !c.isDemo && c.totalTickets > 0,
-    );
+    // The query already returns only live, non-demo competitions.
+    const live = comps.filter((c) => c.totalTickets > 0);
     const scored = live
       .map((c) => ({ c, pct: (c.ticketsSold / c.totalTickets) * 100 }))
       .filter((x) => x.pct >= 80)
