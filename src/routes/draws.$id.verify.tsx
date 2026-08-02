@@ -5,6 +5,9 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { CheckCircle2, XCircle, Loader2, ShieldCheck } from "lucide-react";
+import { useServerFn } from "@tanstack/react-start";
+import { verifyDraw } from "@/lib/verify.functions";
+import type { ServerVerification } from "@/lib/verify.server";
 
 type DrawRec = {
   id: string;
@@ -99,6 +102,9 @@ function VerifyDrawPage() {
   const [pick, setPick] = useState<{ digest: string; index: number } | null>(null);
   const [busy, setBusy] = useState(false);
   const [ran, setRan] = useState(false);
+  const [server, setServer] = useState<ServerVerification | null>(null);
+  const [serverErr, setServerErr] = useState(false);
+  const verifyOnServer = useServerFn(verifyDraw);
 
   const pool =
     d.drew_from === "qualifying"
@@ -108,6 +114,8 @@ function VerifyDrawPage() {
   const runCheck = async () => {
     if (!d.seed_revealed) return;
     setBusy(true);
+    setServer(null);
+    setServerErr(false);
     const seedDigest = hex(await sha256Bytes(d.seed_revealed));
     setComputed(seedDigest);
     if (d.competition_id && pool > 0) {
@@ -115,6 +123,11 @@ function VerifyDrawPage() {
       const n =
         ((bytes[0]! << 24) >>> 0) + (bytes[1]! << 16) + (bytes[2]! << 8) + bytes[3]!;
       setPick({ digest: hex(bytes), index: n % pool });
+    }
+    try {
+      setServer(await verifyOnServer({ data: { drawId: d.id } }));
+    } catch {
+      setServerErr(true);
     }
     setBusy(false);
     setRan(true);
@@ -214,6 +227,70 @@ function VerifyDrawPage() {
                   </div>
                 </div>
 
+                {/* Independent server-side re-hash */}
+                <div className="border-2 border-[var(--color-ink-black)] p-4">
+                  <div className="label text-[10px] font-mono uppercase tracking-[0.2em] text-[var(--color-ink-blue)]">
+                    Step 04 · Independent check on our server
+                  </div>
+                  {busy && !server && !serverErr ? (
+                    <p className="mt-2 font-mono text-[11px] text-muted-foreground">Asking the server…</p>
+                  ) : serverErr ? (
+                    <p className="mt-2 font-mono text-[11px] text-muted-foreground">
+                      Server check unavailable right now. The browser check above still stands — try again in a minute.
+                    </p>
+                  ) : server ? (
+                    <>
+                      <div className="mt-2 flex items-start gap-3">
+                        {server.status === "pass" ? (
+                          <CheckCircle2 className="h-5 w-5 shrink-0 text-[var(--color-ink-blue)]" />
+                        ) : server.status === "fail" ? (
+                          <XCircle className="h-5 w-5 shrink-0 text-[var(--color-coupon-red)]" />
+                        ) : (
+                          <ShieldCheck className="h-5 w-5 shrink-0 text-muted-foreground" />
+                        )}
+                        <div>
+                          <div className="font-display uppercase tracking-[0.16em] text-sm">
+                            {server.status === "pass"
+                              ? "Server says pass"
+                              : server.status === "fail"
+                                ? "Server says fail"
+                                : "Server can't verify"}
+                          </div>
+                          <p className="mt-1 font-mono text-[11px] leading-snug text-muted-foreground">
+                            {server.reason}
+                          </p>
+                        </div>
+                      </div>
+                      <dl className="mt-3 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 font-mono text-[11px] break-all">
+                        <dt className="text-muted-foreground">Server hash</dt>
+                        <dd>{server.computedHash ?? "—"}</dd>
+                        <dt className="text-muted-foreground">Matches browser</dt>
+                        <dd>
+                          {computed && server.computedHash
+                            ? computed.toLowerCase() === server.computedHash.toLowerCase()
+                              ? "yes"
+                              : "NO — tell us immediately"
+                            : "—"}
+                        </dd>
+                        {server.expectedIndex !== null && (
+                          <>
+                            <dt className="text-muted-foreground">Server index</dt>
+                            <dd>{server.expectedIndex} of {server.poolSize}</dd>
+                          </>
+                        )}
+                        <dt className="text-muted-foreground">Checked at</dt>
+                        <dd>{new Date(server.checkedAt).toLocaleString("en-GB")}</dd>
+                      </dl>
+                      <p className="mt-2 font-mono text-[10px] text-muted-foreground">
+                        Don't trust this page either — call it yourself:{" "}
+                        <code>/api/public/verify-draw?drawId={d.id}</code>
+                      </p>
+                    </>
+                  ) : (
+                    <p className="mt-2 font-mono text-[11px] text-muted-foreground">Not checked yet.</p>
+                  )}
+                </div>
+
                 {pick && (
                   <div className="border-2 border-[var(--color-ink-black)] p-4">
                     <div className="label text-[10px] font-mono uppercase tracking-[0.2em] text-[var(--color-ink-blue)]">
@@ -246,7 +323,8 @@ function VerifyDrawPage() {
         </article>
 
         <p className="mt-6 text-center font-mono text-[11px] text-muted-foreground">
-          All of this runs in your browser — check the network tab if you're the paranoid type.{" "}
+          Hashed twice: once in your browser, once on our server — and you can hit the public
+          endpoint yourself if you trust neither.{" "}
           <Link to="/verify" className="underline">How verification works</Link>.
         </p>
       </main>
