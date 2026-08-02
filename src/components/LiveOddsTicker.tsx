@@ -33,16 +33,14 @@ export function LiveOddsTicker() {
   return (
     <TooltipProvider delayDuration={150}>
       <div data-dynamic="ticker" className="relative overflow-hidden bg-clover-deep text-cream">
-        <div className="relative flex items-stretch">
-          <div className="relative z-20 shrink-0 bg-clover-deep pr-3">
-            <LiveChip />
-          </div>
+        <div className="flex items-stretch">
+          <LiveChip />
           {/* Wider left mask fade so the first item scrolls in cleanly
               instead of appearing mid-word at rest. */}
           {/* Wide left mask + matching left padding + trailing gap-8 spacer
               guarantee the first item is never mid-word at rest and the
               seamless loop hand-off never clips a partial word. */}
-          <div className="relative z-0 min-w-0 flex-1 overflow-hidden [mask-image:linear-gradient(90deg,transparent_0%,#000_2%,#000_98%,transparent_100%)] py-1.5">
+          <div className="relative flex-1 overflow-hidden [mask-image:linear-gradient(90deg,transparent_0%,#000_2%,#000_98%,transparent_100%)] py-1.5">
             <div className="ticker-scroll flex gap-8 whitespace-nowrap text-[11px] font-bold tracking-wide text-cream pl-6 pr-8">
               {items.map((it, i) => (
                 <TickerItem key={`${it.slug}-${i}`} c={it} delta={deltas[it.slug] ?? 0} />
