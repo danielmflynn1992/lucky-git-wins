@@ -1,4 +1,4 @@
-import { createFileRoute, notFound, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, notFound, redirect, Link, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useSuspenseQuery, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Ticket, Shuffle, Shield, PoundSterling, CheckCircle2, Info, Loader2, AlertTriangle } from "lucide-react";
