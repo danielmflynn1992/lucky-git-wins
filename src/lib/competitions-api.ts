@@ -79,6 +79,8 @@ export interface DbCompetition {
   takenNumbers: number[];
   /** "live" until the automatic draw lands, then "drawn". */
   status: string;
+  /** Seed/example competition — never shown on the stall. */
+  isDemo: boolean;
 }
 
 export async function fetchCompetitionBySlug(slug: string): Promise<DbCompetition | null> {
@@ -122,6 +124,7 @@ export async function fetchCompetitionBySlug(slug: string): Promise<DbCompetitio
     description: comp.description,
     takenNumbers,
     status: comp.status,
+    isDemo: Boolean((comp as { is_demo?: boolean }).is_demo),
   };
 }
 
@@ -144,6 +147,7 @@ export async function fetchAllCompetitions(): Promise<Competition[]> {
     .from("competitions")
     .select("*")
     .eq("status", "live")
+    .eq("is_demo", false)
     .order("ends_at", { ascending: true });
   if (error) throw error;
   if (!comps || comps.length === 0) return [];
@@ -211,6 +215,7 @@ export async function fetchLiveOdds(): Promise<LiveOdds[]> {
     .from("competitions")
     .select("id, slug, title, category, price_per_ticket, total_tickets, ends_at")
     .eq("status", "live")
+    .eq("is_demo", false)
     .gt("ends_at", new Date().toISOString())
     .order("ends_at", { ascending: true });
   if (error) throw error;
