@@ -75,3 +75,42 @@ export function formatCloseDate(iso: string | null): string {
   if (!iso) return "TBC";
   return new Date(iso).toLocaleDateString("en-GB", { day: "2-digit", month: "short" });
 }
+
+/**
+ * Competition lifecycle, derived from server data — never a manual flag.
+ *
+ *  LIVE    now < close time            → browse pages, buyable
+ *  DRAWING close time passed, no draw  → browse pages, pinned top, no buying
+ *  DRAWN   a draw record exists        → results only; detail page shows result
+ */
+export type Lifecycle = "live" | "drawing" | "drawn";
+
+export function lifecycleOf(c: {
+  endsAt?: string | null;
+  status?: string | null;
+  drawId?: string | null;
+}): Lifecycle {
+  if (c.drawId || (c.status && c.status !== "live")) return "drawn";
+  return isClosed(c.endsAt) ? "drawing" : "live";
+}
+
+/** Closed-but-undrawn comps stay on the shelf, pinned to the top. */
+export function pinDrawingFirst<T extends { endsAt?: string | null; status?: string | null }>(
+  list: T[],
+): T[] {
+  const rank = (c: T) => (lifecycleOf(c) === "drawing" ? 0 : 1);
+  return [...list].sort((a, b) => rank(a) - rank(b));
+}
+
+/** "8 Aug, 20:00" — the moment the draw fires. */
+export function formatDrawTime(iso: string | null | undefined): string {
+  if (!iso) return "shortly";
+  const d = new Date(iso);
+  if (!Number.isFinite(d.getTime())) return "shortly";
+  return d.toLocaleString("en-GB", {
+    day: "numeric",
+    month: "short",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
