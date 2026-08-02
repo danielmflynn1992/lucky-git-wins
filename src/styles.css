@@ -1062,7 +1062,7 @@
 }
 .terry-break.is-awake .terry-body { animation: terryChairDrop 420ms cubic-bezier(.2,.9,.3,1) forwards; }
 .terry-break.is-awake .terry-mug  { transform: rotate(-7deg) translateY(-1px); }
-.terry-break.is-awake .terry-paper { transform: translateY(14px) rotate(6deg); }
+.terry-break.is-awake .terry-paper { transform: translateY(10px) rotate(3deg); }
 @keyframes terryChairDrop {
   0%   { transform: rotate(-6deg); }
   55%  { transform: rotate(1.5deg) translateY(2px); }
