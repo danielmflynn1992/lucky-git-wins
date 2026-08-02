@@ -227,9 +227,6 @@ function VerifyDrawPage() {
                   </div>
                 </div>
 
-                {pick && (
-                  <></>
-                )}
                 {/* Independent server-side re-hash */}
                 <div className="border-2 border-[var(--color-ink-black)] p-4">
                   <div className="label text-[10px] font-mono uppercase tracking-[0.2em] text-[var(--color-ink-blue)]">
@@ -326,7 +323,8 @@ function VerifyDrawPage() {
         </article>
 
         <p className="mt-6 text-center font-mono text-[11px] text-muted-foreground">
-          All of this runs in your browser — check the network tab if you're the paranoid type.{" "}
+          Hashed twice: once in your browser, once on our server — and you can hit the public
+          endpoint yourself if you trust neither.{" "}
           <Link to="/verify" className="underline">How verification works</Link>.
         </p>
       </main>
