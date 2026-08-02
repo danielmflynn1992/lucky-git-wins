@@ -167,7 +167,7 @@ function CompDetail() {
 
       <main className="mx-auto max-w-7xl px-4 py-6 md:py-10 w-full">
         <div className="text-xs font-semibold text-muted-foreground mb-4">
-          <Link to="/" className="hover:text-clover">The stall</Link>
+          <Link to="/competitions" className="hover:text-clover">All comps</Link>
           <span className="mx-2">/</span>
           <span className="text-foreground">{c.category}</span>
           <span className="mx-2">/</span>
@@ -270,7 +270,6 @@ function CompDetail() {
                   sold={takenSet}
                   picked={picked}
                   onToggle={toggleNumber}
-                  onLuckyDip={doLuckyDip}
                 />
                 {picked.size > 0 && (
                   <button onClick={() => setPicked(new Set())} className="mt-2 text-xs font-mono underline text-muted-foreground">
@@ -321,6 +320,9 @@ function CompDetail() {
                 — this is a prize competition of skill under Section 14 of the Gambling Act 2005.
               </div>
             </div>
+
+            {/* Sample skill question — so the no-refund rule is understood before checkout. */}
+            <SkillStub />
 
             <div className="mt-4 grid grid-cols-2 gap-3 text-xs">
               <div className="flex items-center gap-2"><Shield className="h-4 w-4 text-clover" /> Verifiable RNG draw</div>
