@@ -36,6 +36,8 @@ export type Winner = {
   winner_quote: string | null;
   verification_hash: string;
   seed_revealed: string;
+  seed_hash: string;
+  total_tickets: number;
   qualifying_pool_size: number | null;
   /** True for seeded demo rows: no linked competition and no revealed seed. */
   isDemo: boolean;
@@ -47,7 +49,7 @@ export const winnersQuery = queryOptions({
     const { data, error } = await supabase
       .from("draws")
       .select(
-        "id, competition_id, competition_title, prize, winning_number, winner_display_name, winner_town, drawn_at, winner_photo_url, photo_consent, winner_quote, verification_hash, seed_revealed, qualifying_pool_size, competitions(slug, image)",
+        "id, competition_id, competition_title, prize, winning_number, winner_display_name, winner_town, drawn_at, winner_photo_url, photo_consent, winner_quote, verification_hash, seed_revealed, seed_hash, total_tickets, qualifying_pool_size, competitions(slug, image)",
       )
       .order("drawn_at", { ascending: false });
     if (error) throw error;
@@ -65,6 +67,8 @@ export const winnersQuery = queryOptions({
       winner_quote: string | null;
       verification_hash: string;
       seed_revealed: string;
+      seed_hash: string;
+      total_tickets: number | null;
       qualifying_pool_size: number | null;
       competitions: { slug: string; image: string } | null;
     }) => {
@@ -88,6 +92,8 @@ export const winnersQuery = queryOptions({
         winner_quote: d.winner_quote,
         verification_hash: d.verification_hash,
         seed_revealed: d.seed_revealed,
+        seed_hash: d.seed_hash ?? "",
+        total_tickets: d.total_tickets ?? 499,
         qualifying_pool_size: d.qualifying_pool_size,
         isDemo: !d.competition_id && !d.seed_revealed,
       };

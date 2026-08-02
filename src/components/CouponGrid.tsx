@@ -292,7 +292,7 @@ export function CouponGrid({
           type="submit"
           className="border border-[var(--color-ink-black)] bg-[var(--color-ink-red)] text-[var(--color-paper)] px-3 py-1 font-display uppercase tracking-[0.14em] text-xs"
         >
-          Mark
+          Add numbers
         </button>
         {note && (
           <span aria-live="polite" className="basis-full font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--color-ink-blue)]">
