@@ -13,6 +13,7 @@ import { Route as WinnersRouteImport } from './routes/winners'
 import { Route as VerifyRouteImport } from './routes/verify'
 import { Route as TransparencyRouteImport } from './routes/transparency'
 import { Route as TermsRouteImport } from './routes/terms'
+import { Route as ResultsRouteImport } from './routes/results'
 import { Route as ResponsiblePlayRouteImport } from './routes/responsible-play'
 import { Route as PromiseRouteImport } from './routes/promise'
 import { Route as PrivacyRouteImport } from './routes/privacy'
@@ -59,6 +60,11 @@ const TransparencyRoute = TransparencyRouteImport.update({
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
   path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResultsRoute = ResultsRouteImport.update({
+  id: '/results',
+  path: '/results',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ResponsiblePlayRoute = ResponsiblePlayRouteImport.update({
@@ -215,6 +221,7 @@ export interface FileRoutesByFullPath {
   '/privacy': typeof PrivacyRoute
   '/promise': typeof PromiseRoute
   '/responsible-play': typeof ResponsiblePlayRoute
+  '/results': typeof ResultsRoute
   '/terms': typeof TermsRoute
   '/transparency': typeof TransparencyRoute
   '/verify': typeof VerifyRoute
@@ -248,6 +255,7 @@ export interface FileRoutesByTo {
   '/privacy': typeof PrivacyRoute
   '/promise': typeof PromiseRoute
   '/responsible-play': typeof ResponsiblePlayRoute
+  '/results': typeof ResultsRoute
   '/terms': typeof TermsRoute
   '/transparency': typeof TransparencyRoute
   '/verify': typeof VerifyRoute
@@ -282,6 +290,7 @@ export interface FileRoutesById {
   '/privacy': typeof PrivacyRoute
   '/promise': typeof PromiseRoute
   '/responsible-play': typeof ResponsiblePlayRoute
+  '/results': typeof ResultsRoute
   '/terms': typeof TermsRoute
   '/transparency': typeof TransparencyRoute
   '/verify': typeof VerifyRoute
@@ -317,6 +326,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/promise'
     | '/responsible-play'
+    | '/results'
     | '/terms'
     | '/transparency'
     | '/verify'
@@ -350,6 +360,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/promise'
     | '/responsible-play'
+    | '/results'
     | '/terms'
     | '/transparency'
     | '/verify'
@@ -383,6 +394,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/promise'
     | '/responsible-play'
+    | '/results'
     | '/terms'
     | '/transparency'
     | '/verify'
@@ -417,6 +429,7 @@ export interface RootRouteChildren {
   PrivacyRoute: typeof PrivacyRoute
   PromiseRoute: typeof PromiseRoute
   ResponsiblePlayRoute: typeof ResponsiblePlayRoute
+  ResultsRoute: typeof ResultsRoute
   TermsRoute: typeof TermsRoute
   TransparencyRoute: typeof TransparencyRoute
   VerifyRoute: typeof VerifyRoute
@@ -462,6 +475,13 @@ declare module '@tanstack/react-router' {
       path: '/terms'
       fullPath: '/terms'
       preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/results': {
+      id: '/results'
+      path: '/results'
+      fullPath: '/results'
+      preLoaderRoute: typeof ResultsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/responsible-play': {
@@ -673,6 +693,7 @@ const rootRouteChildren: RootRouteChildren = {
   PrivacyRoute: PrivacyRoute,
   PromiseRoute: PromiseRoute,
   ResponsiblePlayRoute: ResponsiblePlayRoute,
+  ResultsRoute: ResultsRoute,
   TermsRoute: TermsRoute,
   TransparencyRoute: TransparencyRoute,
   VerifyRoute: VerifyRoute,

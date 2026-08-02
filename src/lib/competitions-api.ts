@@ -77,6 +77,8 @@ export interface DbCompetition {
   hot: boolean;
   description: string;
   takenNumbers: number[];
+  /** "live" until the automatic draw lands, then "drawn". */
+  status: string;
 }
 
 export async function fetchCompetitionBySlug(slug: string): Promise<DbCompetition | null> {
@@ -119,6 +121,7 @@ export async function fetchCompetitionBySlug(slug: string): Promise<DbCompetitio
     hot: comp.hot,
     description: comp.description,
     takenNumbers,
+    status: comp.status,
   };
 }
 
@@ -174,6 +177,7 @@ export async function fetchAllCompetitions(): Promise<Competition[]> {
       endsAt: c.ends_at,
       hot: c.hot,
       description: c.description,
+      status: c.status,
     } satisfies Competition;
   });
 }

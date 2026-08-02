@@ -8,6 +8,7 @@ import { CompCard } from "@/components/CompCard";
 import { CompRow } from "@/components/CompRow";
 import { allCompetitionsQueryOptions } from "@/lib/competitions-api";
 import { LuckyMark } from "@/components/GaryMascot";
+import { pinDrawingFirst } from "@/lib/site-stats";
 
 type SortKey = "ending-soon" | "highest-prize" | "best-odds" | "lowest-price" | "hot";
 
@@ -49,19 +50,19 @@ function CompetitionsPage() {
     const arr = COMPETITIONS.filter((c) => (activeCat ? c.category === activeCat : true));
     switch (sort) {
       case "ending-soon":
-        return arr.sort((a, b) => +new Date(a.endsAt) - +new Date(b.endsAt));
+        return pinDrawingFirst(arr.sort((a, b) => +new Date(a.endsAt) - +new Date(b.endsAt)));
       case "highest-prize":
-        return arr.sort((a, b) => b.cashAlternative - a.cashAlternative);
+        return pinDrawingFirst(arr.sort((a, b) => b.cashAlternative - a.cashAlternative));
       case "best-odds":
-        return arr.sort(
-          (a, b) => a.totalTickets - a.ticketsSold - (b.totalTickets - b.ticketsSold),
+        return pinDrawingFirst(
+          arr.sort((a, b) => a.totalTickets - a.ticketsSold - (b.totalTickets - b.ticketsSold)),
         );
       case "lowest-price":
-        return arr.sort((a, b) => a.pricePerTicket - b.pricePerTicket);
+        return pinDrawingFirst(arr.sort((a, b) => a.pricePerTicket - b.pricePerTicket));
       case "hot":
-        return arr.sort((a, b) => Number(!!b.hot) - Number(!!a.hot));
+        return pinDrawingFirst(arr.sort((a, b) => Number(!!b.hot) - Number(!!a.hot)));
       default:
-        return arr;
+        return pinDrawingFirst(arr);
     }
   }, [sort, activeCat, COMPETITIONS]);
   return (

@@ -17,6 +17,7 @@ import { NearMiss } from "@/components/NearMiss";
 import { PickHeatmap } from "@/components/PickHeatmap";
 import { RevealedAnswer } from "@/components/RevealedAnswer";
 import { competitionResultQuery } from "@/lib/results-api";
+import { lifecycleOf, formatDrawTime } from "@/lib/site-stats";
 import {
   competitionQueryOptions,
   allCompetitionsQueryOptions,
@@ -81,6 +82,9 @@ function CompDetail() {
   const [reservingQuip, setReservingQuip] = useState(pickLoadingQuip());
   const queryClient = useQueryClient();
   const { data: result } = useQuery(competitionResultQuery(slug));
+
+  const phase = lifecycleOf({ endsAt: c.endsAt, status: c.status, drawId: result?.drawId });
+  const isLive = phase === "live";
 
   const takenSet = useMemo(() => new Set(c.takenNumbers), [c.takenNumbers]);
   const soldTotal = c.totalTickets - c.ticketsAvailable;
@@ -195,6 +199,8 @@ function CompDetail() {
 
             </div>
 
+            {isLive ? (
+              <>
             <div className="mt-6 rounded-2xl bg-card border-2 border-border p-4">
               <div className="mb-4"><SkillWarning compact /></div>
               <div className="flex gap-2 mb-4">
@@ -300,6 +306,10 @@ function CompDetail() {
 
             {/* Sample skill question — so the no-refund rule is understood before checkout. */}
             <SkillStub />
+              </>
+            ) : (
+              <ClosedPanel comp={c} phase={phase} result={result ?? null} />
+            )}
 
             <div className="mt-4 grid grid-cols-2 gap-3 text-xs">
               <div className="flex items-center gap-2"><Shield className="h-4 w-4 text-clover" /> Verifiable RNG draw</div>
@@ -385,7 +395,8 @@ function CompDetail() {
         </section>
       </main>
 
-      {/* Mobile sticky basket bar — total and the button are always to hand. */}
+      {/* Mobile sticky basket bar — live comps only. */}
+      {isLive && (
       <div className="md:hidden fixed bottom-0 inset-x-0 z-40 border-t-2 border-[var(--color-ink-black)] bg-[var(--color-paper-raised)] px-4 py-2 flex items-center justify-between gap-3">
         <div className="min-w-0">
           <div className="text-[9px] uppercase tracking-[0.16em] font-bold text-muted-foreground">Total</div>
@@ -400,8 +411,90 @@ function CompDetail() {
           {reserving ? <><Loader2 className="h-4 w-4 animate-spin" /> {reservingQuip}</> : "Go on then"}
         </Button>
       </div>
+      )}
 
       <SiteFooter />
+    </div>
+  );
+}
+
+/**
+ * Closed / drawn state. Replaces the buy flow: the comp URL stays alive
+ * forever, it just stops selling and starts reporting.
+ */
+function ClosedPanel({
+  comp,
+  phase,
+  result,
+}: {
+  comp: DbCompetition;
+  phase: "drawing" | "drawn" | "live";
+  result: { winningNumber: number | null; drawId: string | null; drawnAt: string | null; winnerDisplayName: string | null; soldNumbers: number[] } | null;
+}) {
+  const drawn = phase === "drawn" && result?.winningNumber != null;
+  const soldSet = new Set(result?.soldNumbers ?? []);
+  return (
+    <div className="mt-6 border-[1.5px] border-[var(--color-ink-black)] bg-[var(--color-paper-raised)]">
+      <div className={"px-3 py-1.5 font-display uppercase tracking-[0.16em] text-[11px] text-[var(--color-paper)] " + (drawn ? "bg-[var(--color-ink-grey)]" : "bg-[var(--color-ink-blue)]")}>
+        {drawn ? "Drawn" : `Closed — drawing ${formatDrawTime(comp.endsAt)}`}
+      </div>
+      <div className="p-4">
+        {drawn ? (
+          <>
+            <div className="label text-[9px]">Winning number</div>
+            <div className="font-display text-5xl leading-none tabular-nums">
+              {result!.winningNumber}
+              <span className="text-base text-muted-foreground"> / {comp.totalTickets}</span>
+            </div>
+            <p className="mt-2 font-mono text-[12px] text-muted-foreground">
+              {result!.winnerDisplayName ? <>Winner: <b className="text-foreground">{result!.winnerDisplayName}</b> · </> : null}
+              Drawn {formatDrawTime(result!.drawnAt)}
+            </p>
+
+            <div className="mt-4">
+              <div className="label text-[9px] mb-2">The coupon, as it fell</div>
+              <CouponGrid
+                total={comp.totalTickets}
+                sold={soldSet}
+                picked={new Set([result!.winningNumber as number])}
+                onToggle={() => {}}
+              />
+            </div>
+
+            {result!.drawId && (
+              <div className="mt-4 flex flex-wrap gap-2">
+                <Link
+                  to="/draws/$id/verify"
+                  params={{ id: result!.drawId }}
+                  className="inline-flex items-center gap-1.5 bg-[var(--color-ink-blue)] text-[var(--color-paper)] px-3 py-2 font-display uppercase tracking-[0.14em] text-[11px] hover:bg-[var(--color-ink-black)]"
+                >
+                  <Shield className="h-3.5 w-3.5" /> Verify this draw
+                </Link>
+                <Link
+                  to="/results"
+                  className="inline-flex items-center gap-1.5 border-2 border-[var(--color-ink-black)] bg-[var(--color-paper)] px-3 py-2 font-display uppercase tracking-[0.14em] text-[11px] hover:bg-[var(--color-ink-yellow)]"
+                >
+                  All results
+                </Link>
+              </div>
+            )}
+          </>
+        ) : (
+          <>
+            <p className="font-display uppercase text-xl leading-tight">
+              Entries are closed on this one.
+            </p>
+            <p className="mt-2 text-sm text-muted-foreground">
+              The automatic draw runs off the sealed seed — nothing left for anyone to fiddle.
+              Hold tight, the result lands here and on{" "}
+              <Link to="/results" className="underline">results</Link>.
+            </p>
+            <p className="mt-3 font-mono text-[11px] uppercase tracking-[0.12em] text-[var(--color-ink-blue)]">
+              Closed {formatDrawTime(comp.endsAt)} · {comp.totalTickets - comp.ticketsAvailable} of {comp.totalTickets} tickets went
+            </p>
+          </>
+        )}
+      </div>
     </div>
   );
 }
