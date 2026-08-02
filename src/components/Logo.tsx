@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import lockupRed from "@/assets/lockups/lockup-horizontal-v3.png.asset.json";
-import lockupCream from "@/assets/lockups/lockup-cream.png.asset.json";
+import lockupRed from "@/assets/lockups/lockup-horizontal-v4.png.asset.json";
+import lockupCream from "@/assets/lockups/lockup-cream-v2.png.asset.json";
 import character from "@/assets/luckygit-character.png.asset.json";
 
 const LOCKUP_RED_URL = lockupRed.url;
