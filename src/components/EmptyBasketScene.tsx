@@ -169,8 +169,12 @@ function TerryOnBreak({ awake, className = "" }: { awake: boolean; className?: s
           <path d="M84 122 l14 -14 M120 122 l-4 -12" fill="none" />
 
           {/* legs, crossed, resting on the counter */}
-          <path d="M138 100 q30 6 48 7 q8 1 12 3" fill="none" strokeWidth="9" stroke={NAVY} />
+          {/* back leg — outlined, then the crossed front leg over it */}
+          <path d="M138 108 q32 9 50 3 q8 -3 12 -1" fill="none" strokeWidth="13" stroke="#111" />
           <path d="M138 108 q32 9 50 3 q8 -3 12 -1" fill="none" strokeWidth="9" stroke={NAVY} />
+          <path d="M138 100 q30 6 48 7 q8 1 12 3" fill="none" strokeWidth="13" stroke="#111" />
+          <path d="M138 100 q30 6 48 7 q8 1 12 3" fill="none" strokeWidth="9" stroke={NAVY} />
+          <path d="M182 102 l-2 8" strokeWidth="1.4" stroke="#111" fill="none" />
           {/* crossed shoes resting on the counter edge */}
           <path d="M196 100 q4 -4 8 -1 q2 3 8 4 q6 1 6 5 h-24 z" fill="#111" />
           <path d="M198 109 q4 -4 8 -1 q2 3 8 4 q6 1 6 5 h-24 z" fill="#111" />
@@ -186,9 +190,19 @@ function TerryOnBreak({ awake, className = "" }: { awake: boolean; className?: s
           {/* halftone shadow side of the jacket */}
           <path d="M132 74 q14 10 12 42 h-12 z" fill="url(#tb-halftone)" stroke="none" />
 
-          {/* head */}
-          <circle cx="120" cy="52" r="17" fill={CREAM} />
-          <path d="M133 42 a17 17 0 0 1 -3 25 q10 -12 3 -25 z" fill="url(#tb-halftone)" stroke="none" />
+          {/* head — strong jaw, not a circle */}
+          <path
+            d="M104 48 q0 -18 16 -18 q17 0 17 18 v5 q0 9 -6 14 q-7 5 -14 1 q-13 -7 -13 -20 z"
+            fill={CREAM}
+          />
+          <path
+            d="M131 34 q6 7 6 14 v5 q0 9 -6 14 q-4 3 -8 2 q9 -4 10 -17 q1 -11 -2 -18 z"
+            fill="url(#tb-halftone)"
+            stroke="none"
+          />
+          {/* ear + sideburn */}
+          <path d="M137 52 q5 1 4 6 q-1 4 -5 3" fill={CREAM} strokeWidth="1.8" />
+          <path d="M107 47 v9" strokeWidth="3" stroke="#111" />
           {/* dark quiff sweeping forward + cap pushed back off the forehead */}
           <path d="M104 46 q3 -16 20 -14 q10 1 13 8 q-9 -4 -18 -1 q-9 3 -12 9 z" fill="#111" />
           <path d="M114 33 q17 -7 27 4 l2 5 q-16 -7 -30 -3 z" fill={NAVY} />
@@ -200,8 +214,9 @@ function TerryOnBreak({ awake, className = "" }: { awake: boolean; className?: s
             <path d="M124 50 q4 -3 7 0" fill="none" strokeWidth="2" />
             <circle cx="127" cy="54" r="2" fill="#111" stroke="none" />
           </g>
-          <path d="M112 62 q8 5 15 -2" fill="none" strokeWidth="2" />
-          <path d="M108 63 q10 9 22 2" fill="none" strokeWidth="1.4" />
+          {/* knowing smirk — one corner higher than the other */}
+          <path d="M112 64 q9 5 16 -5" fill="none" strokeWidth="2" />
+          <path d="M128 59 l2 -2" fill="none" strokeWidth="1.6" />
 
           {/* arm + hand on the mug */}
           <path d="M136 88 q16 4 20 12" fill="none" strokeWidth="8" stroke={RED} />
