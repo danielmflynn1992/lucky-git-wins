@@ -17,7 +17,8 @@ import { allCompetitionsQueryOptions } from "@/lib/competitions-api";
 import { NewsletterSlip } from "@/components/NewsletterSlip";
 import { WinnerCard } from "@/components/WinnerCard";
 import { winnersQuery } from "@/lib/winners-api";
-import { useSiteStats, formatCloseDate } from "@/lib/site-stats";
+import { useSiteStats, formatCloseDate, pinDrawingFirst, lifecycleOf, formatDrawTime } from "@/lib/site-stats";
+import { drawnCompetitionsQuery } from "@/lib/results-api";
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { gbp } from "@/lib/format";
 import { Button } from "@/components/ui/button";
@@ -43,8 +44,9 @@ function Home() {
     () => [...new Set(COMPETITIONS.map((c) => c.category))],
     [COMPETITIONS],
   );
-  const hotOnes = COMPETITIONS.filter((c) => c.hot);
-  const hero = (hotOnes.length ? hotOnes : COMPETITIONS).slice(0, 3);
+  const openComps = COMPETITIONS.filter((c) => lifecycleOf(c) === "live");
+  const hotOnes = openComps.filter((c) => c.hot);
+  const hero = (hotOnes.length ? hotOnes : openComps).slice(0, 3);
   const [active, setActive] = useState(0);
   const [cat, setCat] = useState<Category | "All">("All");
   const [sort, setSort] = useState<"ending" | "popular" | "price">("ending");
@@ -52,6 +54,8 @@ function Home() {
   const [openWinnerId, setOpenWinnerId] = useState<string | null>(null);
   const { data: winners = [] } = useQuery(winnersQuery);
   const stats = useSiteStats();
+  const { data: drawnComps = [] } = useQuery(drawnCompetitionsQuery);
+  const lastDrawn = drawnComps[0] ?? null;
 
   const filtered = useMemo(() => {
     let list = cat === "All" ? COMPETITIONS : COMPETITIONS.filter((c) => c.category === cat);
@@ -59,7 +63,7 @@ function Home() {
     if (sort === "ending") list.sort((a, b) => +new Date(a.endsAt) - +new Date(b.endsAt));
     if (sort === "popular") list.sort((a, b) => b.ticketsSold / b.totalTickets - a.ticketsSold / a.totalTickets);
     if (sort === "price") list.sort((a, b) => a.pricePerTicket - b.pricePerTicket);
-    return list;
+    return pinDrawingFirst(list);
   }, [cat, sort, COMPETITIONS]);
 
   const featured = hero[active] ?? hero[0];
