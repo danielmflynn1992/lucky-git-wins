@@ -81,6 +81,17 @@ export function EntryStampSequence({
     mutedRef.current = next;
   };
 
+  const numbersSpoken = numbers.map((n) => String(n).padStart(4, "0")).join(", ");
+  /** Plain-language equivalent of whichever beat is on screen. */
+  const liveText =
+    phase >= 3
+      ? `Terry's verdict: ${verdict}`
+      : phase >= 2
+        ? `Entry stub. ${compTitle}. Entry reference ${entryRef}. Ticket numbers: ${numbersSpoken}.`
+        : phase >= 1
+          ? `Entered. Your coupon has been stamped.`
+          : "Stamping your entry coupon.";
+
   return (
     <div
       onClick={() => phase < 3 && skip()}
@@ -91,6 +102,23 @@ export function EntryStampSequence({
         animation: impact && phase < 2 ? "stampShake 120ms steps(4)" : undefined,
       }}
     >
+      {/* Screen-reader equivalent of the animation: the full outcome is always
+          available as text, and each beat is announced as it lands. */}
+      <h2 className="sr-only">Entry confirmed — ENTERED</h2>
+      <div className="sr-only">
+        <p>ENTERED. Your entry coupon has been stamped.</p>
+        <p>Competition: {compTitle}.</p>
+        <p>Entry reference: {entryRef}.</p>
+        <p>
+          {numbers.length} ticket {numbers.length === 1 ? "number" : "numbers"}: {numbersSpoken}.
+        </p>
+        <p>Terry's verdict: {verdict}</p>
+        <p>{drawLine} We'll email you either way.</p>
+      </div>
+      <div className="sr-only" role="status" aria-live="polite" aria-atomic="true">
+        {liveText}
+      </div>
+
       <button
         type="button"
         onClick={(e) => { e.stopPropagation(); toggleMute(); }}
@@ -103,7 +131,7 @@ export function EntryStampSequence({
       <SkipHint show={phase < 3} />
 
       {/* ── BEAT 1 / 2 stage ─────────────────────────────────────────── */}
-      <div className="relative mx-auto w-full max-w-md" style={{ minHeight: 260 }}>
+      <div className="relative mx-auto w-full max-w-md" style={{ minHeight: 260 }} aria-hidden>
         {phase < 2 ? (
           <Coupon
             compTitle={compTitle}
@@ -121,7 +149,7 @@ export function EntryStampSequence({
       {/* ── BEAT 3 — Terry's verdict ─────────────────────────────────── */}
       <div className="mx-auto mt-8 min-h-[3.5rem] max-w-md">
         {phase >= 3 && (
-          <p className="font-mono text-[13px] leading-relaxed text-[#F1E7CE]/85">
+          <p className="font-mono text-[13px] leading-relaxed text-[#F1E7CE]/85" aria-hidden>
             {typed}
             {typed.length < verdict.length && (
               <span className="ml-0.5 inline-block" style={{ animation: "stampCaret 700ms steps(1) infinite" }}>_</span>
@@ -138,7 +166,7 @@ export function EntryStampSequence({
               <Link to="/competitions">Back to the stall</Link>
             </Button>
           </div>
-          <p className="mt-5 font-mono text-[10px] uppercase tracking-[0.16em] text-[#F1E7CE]/50">
+          <p className="mt-5 font-mono text-[10px] uppercase tracking-[0.16em] text-[#F1E7CE]/50" aria-hidden>
             {drawLine} We'll email you either way.
           </p>
         </div>
