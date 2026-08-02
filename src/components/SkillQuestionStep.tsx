@@ -90,6 +90,13 @@ export function SkillQuestionStep({
             <p className="mt-1 text-sm text-foreground/85">
               You'll find out how you did when the draw goes off.
             </p>
+            <button
+              type="button"
+              onClick={() => setRecorded(false)}
+              className="mt-2 text-xs underline underline-offset-2 text-muted-foreground"
+            >
+              Change my answer (until you pay)
+            </button>
           </div>
         </div>
       </div>
@@ -144,8 +151,8 @@ export function SkillQuestionStep({
         className="mt-3 border-2 border-[var(--color-ink-red)] bg-[color:var(--color-ink-red)]/5 p-3 text-sm leading-relaxed"
       >
         <b>Answer correctly to enter the draw.</b> Tickets bought against an incorrect answer are
-        recorded as non-qualifying and will not be entered. Payment still completes. One attempt per
-        order.
+        recorded as non-qualifying and will not be entered. Payment still completes. You can change
+        your answer right up until you pay — after that it's locked.
       </div>
 
       <Button
@@ -159,7 +166,7 @@ export function SkillQuestionStep({
         {submitting ? <><Loader2 className="h-4 w-4 animate-spin" /> Submitting…</> : "Go on then"}
       </Button>
       <p className="mt-2 text-[11px] text-muted-foreground text-center">
-        No time limit. No retries within this order.
+        No time limit. Change it as often as you like before paying.
       </p>
     </div>
   );
