@@ -8,7 +8,7 @@
  */
 import { useQuery } from "@tanstack/react-query";
 import { allCompetitionsQueryOptions } from "@/lib/competitions-api";
-import { winnersQuery } from "@/lib/winners-api";
+import { winnersQuery, realOnly } from "@/lib/winners-api";
 import type { Competition } from "@/lib/mock-comps";
 
 /** The 499 Promise: a pool never exceeds this, so one ticket is never worse than 1 in 499. */
@@ -42,6 +42,8 @@ export interface SiteStats {
 export function useSiteStats(): SiteStats {
   const { data: comps = [], isLoading: cLoading } = useQuery(allCompetitionsQueryOptions);
   const { data: winners = [], isLoading: wLoading } = useQuery(winnersQuery);
+  // Example records are illustration only — they never reach a public number.
+  const realWinners = assertNoDemoCounted(realOnly(winners));
 
   const open = comps.filter((c) => !isClosed(c.endsAt));
   const closed = comps.filter((c) => isClosed(c.endsAt));
@@ -63,8 +65,8 @@ export function useSiteStats(): SiteStats {
     compsLive: open.length,
     prizesOnTable,
     ticketsSold,
-    drawsCompleted: winners.length,
-    gitsMadeLucky: winners.length,
+    drawsCompleted: realWinners.length,
+    gitsMadeLucky: realWinners.length,
     sellThroughPct,
     nextCloseAt,
     loading: cLoading || wLoading,
@@ -74,6 +76,21 @@ export function useSiteStats(): SiteStats {
 export function formatCloseDate(iso: string | null): string {
   if (!iso) return "TBC";
   return new Date(iso).toLocaleDateString("en-GB", { day: "2-digit", month: "short" });
+}
+
+/**
+ * Loud guard: any demo record that slips into a counted set is a
+ * transparency bug, so fail hard in dev and log in production.
+ */
+export function assertNoDemoCounted<T extends { isDemo?: boolean }>(rows: T[]): T[] {
+  const leaked = rows.filter((r) => r.isDemo);
+  if (leaked.length) {
+    const msg = `[site-stats] ${leaked.length} demo record(s) reached a public statistic`;
+    if (import.meta.env.DEV) throw new Error(msg);
+    console.error(msg);
+    return rows.filter((r) => !r.isDemo);
+  }
+  return rows;
 }
 
 /**

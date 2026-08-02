@@ -6,7 +6,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { CompCard } from "@/components/CompCard";
 import { Countdown } from "@/components/Countdown";
 import { allCompetitionsQueryOptions } from "@/lib/competitions-api";
-import { winnersQuery } from "@/lib/winners-api";
+import { winnersQuery, realOnly } from "@/lib/winners-api";
 import { Perforation } from "@/components/Perforation";
 
 export const Route = createFileRoute("/draw-day")({
@@ -50,7 +50,8 @@ const timeLabel = (d: Date) =>
 
 function DrawDay() {
   const { data: comps } = useSuspenseQuery(allCompetitionsQueryOptions);
-  const { data: winners = [] } = useQuery(winnersQuery);
+  const { data: allWinners = [] } = useQuery(winnersQuery);
+  const winners = realOnly(allWinners);
   const [now, setNow] = useState(() => Date.now());
   useEffect(() => {
     const i = setInterval(() => setNow(Date.now()), 1000);

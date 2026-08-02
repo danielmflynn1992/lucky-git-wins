@@ -108,6 +108,7 @@ export type Database = {
           hot: boolean
           id: string
           image: string
+          is_demo: boolean
           letterbox_style: Database["public"]["Enums"]["letterbox_style"]
           max_per_person: number
           price_per_ticket: number
@@ -130,6 +131,7 @@ export type Database = {
           hot?: boolean
           id?: string
           image?: string
+          is_demo?: boolean
           letterbox_style?: Database["public"]["Enums"]["letterbox_style"]
           max_per_person?: number
           price_per_ticket: number
@@ -152,6 +154,7 @@ export type Database = {
           hot?: boolean
           id?: string
           image?: string
+          is_demo?: boolean
           letterbox_style?: Database["public"]["Enums"]["letterbox_style"]
           max_per_person?: number
           price_per_ticket?: number
@@ -185,6 +188,7 @@ export type Database = {
           drawn_at: string
           drew_from: string
           id: string
+          is_demo: boolean
           notes: string
           photo_consent: boolean
           prize: string
@@ -209,6 +213,7 @@ export type Database = {
           drawn_at?: string
           drew_from?: string
           id?: string
+          is_demo?: boolean
           notes?: string
           photo_consent?: boolean
           prize: string
@@ -233,6 +238,7 @@ export type Database = {
           drawn_at?: string
           drew_from?: string
           id?: string
+          is_demo?: boolean
           notes?: string
           photo_consent?: boolean
           prize?: string
@@ -581,6 +587,7 @@ export type Database = {
           drawn_at: string
           drew_from: string
           id: string
+          is_demo: boolean
           notes: string
           photo_consent: boolean
           prize: string
@@ -652,6 +659,7 @@ export type Database = {
           drawn_at: string
           drew_from: string
           id: string
+          is_demo: boolean
           notes: string
           photo_consent: boolean
           prize: string
@@ -705,6 +713,7 @@ export type Database = {
       }
       normalise_numeric_answer: { Args: { p_raw: string }; Returns: number }
       pick_question_for_competition: { Args: never; Returns: string }
+      real_draw_count: { Args: never; Returns: number }
       release_reservation: { Args: { p_token: string }; Returns: undefined }
       reserve_lucky_dip: {
         Args: { p_qty: number; p_slug: string; p_token: string }

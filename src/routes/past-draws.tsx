@@ -25,6 +25,7 @@ type Draw = {
   draw_method: string;
   notes: string;
   drawn_at: string;
+  is_demo: boolean;
 };
 
 const drawsQuery = queryOptions({
@@ -32,10 +33,13 @@ const drawsQuery = queryOptions({
   queryFn: async (): Promise<Draw[]> => {
     const { data, error } = await supabase
       .from("draws")
-      .select("id, competition_id, competition_title, prize, winning_number, winner_display_name, winner_town, total_tickets, total_sold, qualifying_pool_size, draw_pool, draw_method, notes, drawn_at")
+      .select("id, competition_id, competition_title, prize, winning_number, winner_display_name, winner_town, total_tickets, total_sold, qualifying_pool_size, draw_pool, draw_method, notes, drawn_at, is_demo")
       .order("drawn_at", { ascending: false });
     if (error) throw error;
-    return ((data ?? []) as unknown) as Draw[];
+    const rows = ((data ?? []) as unknown) as Draw[];
+    // Examples only survive while no genuine draw exists.
+    const real = rows.filter((d) => !d.is_demo);
+    return real.length > 0 ? real : rows;
   },
 });
 
@@ -295,6 +299,11 @@ function PastDrawsPage() {
                       {d.competition_title}
                     </div>
                     <div className="text-sm text-foreground/70 mt-0.5">🏆 {d.prize}</div>
+                    {d.is_demo && (
+                      <div className="mt-1 inline-block -rotate-2 border-2 border-[var(--color-ink-red)] px-2 py-0.5 font-display uppercase tracking-[0.18em] text-[10px] text-[var(--color-ink-red)]">
+                        Example draw
+                      </div>
+                    )}
                   </div>
 
                   <div className="col-span-6 md:col-span-2">
@@ -319,10 +328,30 @@ function PastDrawsPage() {
                   </div>
 
                   <div className="col-span-6 md:col-span-3">
-                    <div className="font-bold">{d.winner_display_name}</div>
-                    {d.winner_town && (
-                      <div className="text-sm text-muted-foreground">{d.winner_town}</div>
+                    <div className="font-bold">{d.is_demo ? "—" : d.winner_display_name}</div>
+                    {d.is_demo ? (
+                      <div className="text-sm text-muted-foreground">Example entry</div>
+                    ) : (
+                      d.winner_town && (
+                        <div className="text-sm text-muted-foreground">{d.winner_town}</div>
+                      )
                     )}
+                    {d.is_demo ? (
+                      <>
+                        <button
+                          type="button"
+                          disabled
+                          title="Verification opens on real draws."
+                          className="mt-2 inline-flex cursor-not-allowed items-center gap-1 text-[11px] font-mono uppercase tracking-widest text-muted-foreground font-bold"
+                        >
+                          <Shield className="h-3 w-3" /> Verify this draw
+                        </button>
+                        <p className="mt-1 text-[11px] text-muted-foreground">
+                          This is how a result will look. No draw has taken place yet.
+                        </p>
+                      </>
+                    ) : (
+                    <>
                     <Link
                       to="/draws/$id/verify"
                       params={{ id: d.id }}
@@ -337,6 +366,8 @@ function PastDrawsPage() {
                     >
                       ▶ Watch the reveal
                     </Link>
+                    </>
+                    )}
                   </div>
                 </div>
 

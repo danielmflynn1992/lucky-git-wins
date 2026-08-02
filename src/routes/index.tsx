@@ -16,7 +16,7 @@ import type { Category } from "@/lib/mock-comps";
 import { allCompetitionsQueryOptions } from "@/lib/competitions-api";
 import { NewsletterSlip } from "@/components/NewsletterSlip";
 import { WinnerCard } from "@/components/WinnerCard";
-import { winnersQuery } from "@/lib/winners-api";
+import { winnersQuery, displayWinners } from "@/lib/winners-api";
 import { useSiteStats, formatCloseDate, pinDrawingFirst, lifecycleOf, formatDrawTime } from "@/lib/site-stats";
 import { drawnCompetitionsQuery } from "@/lib/results-api";
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
@@ -52,7 +52,8 @@ function Home() {
   const [sort, setSort] = useState<"ending" | "popular" | "price">("ending");
   const [view, setView] = useState<"grid" | "list">("grid");
   const [openWinnerId, setOpenWinnerId] = useState<string | null>(null);
-  const { data: winners = [] } = useQuery(winnersQuery);
+  const { data: allWinners = [] } = useQuery(winnersQuery);
+  const winners = displayWinners(allWinners);
   const stats = useSiteStats();
   const { data: drawnComps = [] } = useQuery(drawnCompetitionsQuery);
   const lastDrawn = drawnComps[0] ?? null;

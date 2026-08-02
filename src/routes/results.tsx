@@ -47,17 +47,28 @@ function Shell({ children }: { children: React.ReactNode }) {
 
 function ResultsPage() {
   const { data: drawn } = useSuspenseQuery(drawnCompetitionsQuery);
+  const real = drawn.filter((d) => !d.isDemo);
+  const demo = drawn.filter((d) => d.isDemo);
+  const hasReal = real.length > 0;
+  // Examples vanish the moment a genuine draw lands. No manual step.
+  const rows = hasReal ? real : demo;
 
   return (
     <Shell>
       <h1 className="font-display uppercase text-4xl md:text-5xl leading-[0.95] text-foreground">Results</h1>
       <p className="mt-2 text-muted-foreground text-sm max-w-xl">
-        Every comp that's been drawn. Winning number, winner, timestamp — and the maths to
-        check it, should you fancy it.{" "}
-        <Link to="/past-draws" className="underline">Full draw log</Link>.
+        {hasReal ? (
+          <>
+            Every comp that's been drawn. Winning number, winner, timestamp — and the maths to
+            check it, should you fancy it.{" "}
+            <Link to="/past-draws" className="underline">Full draw log</Link>.
+          </>
+        ) : (
+          <>No draws gone off yet — here's what results will look like when they do.</>
+        )}
       </p>
 
-      {drawn.length === 0 ? (
+      {rows.length === 0 ? (
         <div className="mt-10 border-[1.5px] border-[var(--color-ink-black)] bg-[var(--color-paper-raised)] p-6">
           <p className="font-display uppercase text-xl">Nothing's been drawn yet.</p>
           <p className="mt-2 text-sm text-muted-foreground">
@@ -66,7 +77,7 @@ function ResultsPage() {
         </div>
       ) : (
         <ul className="mt-8 flex flex-col gap-3">
-          {drawn.map((d) => (
+          {rows.map((d) => (
             <li
               key={d.drawId}
               className="border-[1.5px] border-[var(--color-ink-black)] bg-[var(--color-paper-raised)]"
@@ -75,6 +86,24 @@ function ResultsPage() {
                 <span className="font-display uppercase tracking-[0.14em] text-[11px] truncate">{d.title}</span>
                 <span className="font-mono text-[10px] shrink-0">{formatDrawTime(d.drawnAt)}</span>
               </div>
+              {d.image && (
+                <div className="relative overflow-hidden border-b-[1.5px] border-[var(--color-ink-black)]">
+                  <img
+                    src={d.image}
+                    alt={d.title}
+                    loading="lazy"
+                    className="h-40 w-full object-cover"
+                    style={d.isDemo ? { filter: "saturate(0.6)" } : undefined}
+                  />
+                  {d.isDemo && (
+                    <span
+                      className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 -rotate-[14deg] whitespace-nowrap border-2 border-[var(--color-ink-red)] bg-[var(--color-paper)]/85 px-6 py-1.5 font-display uppercase tracking-[0.2em] text-[13px] text-[var(--color-ink-red)]"
+                    >
+                      Example draw
+                    </span>
+                  )}
+                </div>
+              )}
               <div className="p-3 grid gap-3 sm:grid-cols-[auto_1fr_auto] items-center">
                 <div>
                   <div className="label text-[9px]">Winning number</div>
@@ -83,10 +112,11 @@ function ResultsPage() {
                   </div>
                 </div>
                 <div className="font-mono text-[12px] text-muted-foreground">
-                  Winner: <b className="text-foreground">{d.winnerDisplayName}</b>
+                  Winner: <b className="text-foreground">{d.isDemo ? "—" : d.winnerDisplayName}</b>
+                  {d.isDemo && <span className="block">Example entry</span>}
                 </div>
                 <div className="flex flex-wrap gap-2">
-                  {d.slug && (
+                  {d.slug && !d.isDemo && (
                     <Link
                       to="/competitions/$slug"
                       params={{ slug: d.slug }}
@@ -95,6 +125,16 @@ function ResultsPage() {
                       The comp <ArrowRight className="h-3.5 w-3.5" />
                     </Link>
                   )}
+                  {d.isDemo ? (
+                    <button
+                      type="button"
+                      disabled
+                      title="Verification opens on real draws."
+                      className="inline-flex cursor-not-allowed items-center gap-1.5 bg-[var(--color-ink-blue)]/40 text-[var(--color-paper)] px-3 py-2 font-display uppercase tracking-[0.14em] text-[11px]"
+                    >
+                      <Shield className="h-3.5 w-3.5" /> Verify
+                    </button>
+                  ) : (
                   <Link
                     to="/draws/$id/verify"
                     params={{ id: d.drawId }}
@@ -102,8 +142,14 @@ function ResultsPage() {
                   >
                     <Shield className="h-3.5 w-3.5" /> Verify
                   </Link>
+                  )}
                 </div>
               </div>
+              {d.isDemo && (
+                <p className="border-t border-dashed border-[var(--color-ink-black)]/40 px-3 py-2 font-mono text-[11px] text-muted-foreground">
+                  This is how a result will look. No draw has taken place yet.
+                </p>
+              )}
             </li>
           ))}
         </ul>
