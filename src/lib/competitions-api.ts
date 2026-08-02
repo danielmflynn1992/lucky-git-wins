@@ -26,7 +26,7 @@ import ebike from "@/assets/prize-ebike.jpg";
 
 // Slug → bundled asset. Keeps the DB free of build-time paths.
 export const IMAGES: Record<string, string> = {
-  "audi-rs3-25k-cash": audi,
+  "audi-rs3-45k-cash": audi,
   "apple-tech-bundle": tech,
   "10k-cash": cash,
   "maldives-getaway": holiday,
