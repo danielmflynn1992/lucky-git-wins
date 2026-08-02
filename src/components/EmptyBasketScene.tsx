@@ -89,7 +89,7 @@ export function EmptyBasketScene({ compact = false }: { compact?: boolean }) {
           <Button
             asChild
             size="lg"
-            className="rounded-none border-2 border-[#1B2A4A] bg-[#F5EFE0] px-5 font-bold text-[#1B2A4A] shadow-none hover:bg-[#EFE6D2]"
+            className="h-auto max-w-full whitespace-normal rounded-none border-2 border-[#1B2A4A] bg-[#F5EFE0] px-5 py-3 text-center font-bold leading-snug text-[#1B2A4A] shadow-none hover:bg-[#EFE6D2]"
           >
             <Link
               to="/competitions/$slug"
