@@ -79,7 +79,6 @@ function CompDetail() {
   const [availableLeft, setAvailableLeft] = useState<number | null>(null);
   const [soldOut, setSoldOut] = useState(false);
   const [reservingQuip, setReservingQuip] = useState(pickLoadingQuip());
-  const [luckyDipped, setLuckyDipped] = useState(false);
   const queryClient = useQueryClient();
   const { data: result } = useQuery(competitionResultQuery(slug));
 
@@ -93,29 +92,12 @@ function CompDetail() {
 
   const toggleNumber = (n: number) => {
     setPicker("manual");
-    setLuckyDipped(false);
     setPicked((prev) => {
       const next = new Set(prev);
       if (next.has(n)) next.delete(n);
       else if (next.size < Math.min(c.maxPerPerson, c.ticketsAvailable)) next.add(n);
       return next;
     });
-  };
-
-  const doLuckyDip = () => {
-    const available: number[] = [];
-    for (let n = 1; n <= c.totalTickets && available.length < c.ticketsAvailable; n++) {
-      if (!takenSet.has(n)) available.push(n);
-    }
-    const want = Math.min(qty || 5, available.length, c.maxPerPerson);
-    const next = new Set<number>();
-    while (next.size < want && available.length > 0) {
-      const i = Math.floor(Math.random() * available.length);
-      next.add(available.splice(i, 1)[0]);
-    }
-    setPicker("manual");
-    setPicked(next);
-    setLuckyDipped(next.size > 0);
   };
 
   const handleReserve = async () => {
@@ -275,11 +257,6 @@ function CompDetail() {
                   <button onClick={() => setPicked(new Set())} className="mt-2 text-xs font-mono underline text-muted-foreground">
                     clear selection
                   </button>
-                )}
-                {luckyDipped && picked.size > 0 && (
-                  <p className="mt-2 font-mono text-[11px] text-[var(--color-ink-blue)] leading-snug">
-                    The machine has chosen. The machine is never wrong. (The machine is frequently wrong.)
-                  </p>
                 )}
               </div>
 
