@@ -40,6 +40,7 @@ import { Route as AdminQuestionPerformanceRouteImport } from './routes/admin.que
 import { Route as AdminErrorsRouteImport } from './routes/admin.errors'
 import { Route as DrawsIdVerifyRouteImport } from './routes/draws.$id.verify'
 import { Route as DrawsIdRevealRouteImport } from './routes/draws.$id.reveal'
+import { Route as ApiPublicVerifyDrawRouteImport } from './routes/api/public/verify-draw'
 import { Route as AdminCompetitionsNewRouteImport } from './routes/admin.competitions.new'
 
 const WinnersRoute = WinnersRouteImport.update({
@@ -198,6 +199,11 @@ const DrawsIdRevealRoute = DrawsIdRevealRouteImport.update({
   path: '/draws/$id/reveal',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicVerifyDrawRoute = ApiPublicVerifyDrawRouteImport.update({
+  id: '/api/public/verify-draw',
+  path: '/api/public/verify-draw',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminCompetitionsNewRoute = AdminCompetitionsNewRouteImport.update({
   id: '/admin/competitions/new',
   path: '/admin/competitions/new',
@@ -235,6 +241,7 @@ export interface FileRoutesByFullPath {
   '/admin/': typeof AdminIndexRoute
   '/competitions/': typeof CompetitionsIndexRoute
   '/admin/competitions/new': typeof AdminCompetitionsNewRoute
+  '/api/public/verify-draw': typeof ApiPublicVerifyDrawRoute
   '/draws/$id/reveal': typeof DrawsIdRevealRoute
   '/draws/$id/verify': typeof DrawsIdVerifyRoute
 }
@@ -269,6 +276,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminIndexRoute
   '/competitions': typeof CompetitionsIndexRoute
   '/admin/competitions/new': typeof AdminCompetitionsNewRoute
+  '/api/public/verify-draw': typeof ApiPublicVerifyDrawRoute
   '/draws/$id/reveal': typeof DrawsIdRevealRoute
   '/draws/$id/verify': typeof DrawsIdVerifyRoute
 }
@@ -304,6 +312,7 @@ export interface FileRoutesById {
   '/admin/': typeof AdminIndexRoute
   '/competitions/': typeof CompetitionsIndexRoute
   '/admin/competitions/new': typeof AdminCompetitionsNewRoute
+  '/api/public/verify-draw': typeof ApiPublicVerifyDrawRoute
   '/draws/$id/reveal': typeof DrawsIdRevealRoute
   '/draws/$id/verify': typeof DrawsIdVerifyRoute
 }
@@ -340,6 +349,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/competitions/'
     | '/admin/competitions/new'
+    | '/api/public/verify-draw'
     | '/draws/$id/reveal'
     | '/draws/$id/verify'
   fileRoutesByTo: FileRoutesByTo
@@ -374,6 +384,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/competitions'
     | '/admin/competitions/new'
+    | '/api/public/verify-draw'
     | '/draws/$id/reveal'
     | '/draws/$id/verify'
   id:
@@ -408,6 +419,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/competitions/'
     | '/admin/competitions/new'
+    | '/api/public/verify-draw'
     | '/draws/$id/reveal'
     | '/draws/$id/verify'
   fileRoutesById: FileRoutesById
@@ -443,6 +455,7 @@ export interface RootRouteChildren {
   AdminIndexRoute: typeof AdminIndexRoute
   CompetitionsIndexRoute: typeof CompetitionsIndexRoute
   AdminCompetitionsNewRoute: typeof AdminCompetitionsNewRoute
+  ApiPublicVerifyDrawRoute: typeof ApiPublicVerifyDrawRoute
   DrawsIdRevealRoute: typeof DrawsIdRevealRoute
   DrawsIdVerifyRoute: typeof DrawsIdVerifyRoute
 }
@@ -666,6 +679,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DrawsIdRevealRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/verify-draw': {
+      id: '/api/public/verify-draw'
+      path: '/api/public/verify-draw'
+      fullPath: '/api/public/verify-draw'
+      preLoaderRoute: typeof ApiPublicVerifyDrawRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/competitions/new': {
       id: '/admin/competitions/new'
       path: '/admin/competitions/new'
@@ -707,19 +727,10 @@ const rootRouteChildren: RootRouteChildren = {
   AdminIndexRoute: AdminIndexRoute,
   CompetitionsIndexRoute: CompetitionsIndexRoute,
   AdminCompetitionsNewRoute: AdminCompetitionsNewRoute,
+  ApiPublicVerifyDrawRoute: ApiPublicVerifyDrawRoute,
   DrawsIdRevealRoute: DrawsIdRevealRoute,
   DrawsIdVerifyRoute: DrawsIdVerifyRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

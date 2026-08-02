@@ -5,6 +5,9 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { CheckCircle2, XCircle, Loader2, ShieldCheck } from "lucide-react";
+import { useServerFn } from "@tanstack/react-start";
+import { verifyDraw } from "@/lib/verify.functions";
+import type { ServerVerification } from "@/lib/verify.server";
 
 type DrawRec = {
   id: string;
@@ -99,6 +102,9 @@ function VerifyDrawPage() {
   const [pick, setPick] = useState<{ digest: string; index: number } | null>(null);
   const [busy, setBusy] = useState(false);
   const [ran, setRan] = useState(false);
+  const [server, setServer] = useState<ServerVerification | null>(null);
+  const [serverErr, setServerErr] = useState(false);
+  const verifyOnServer = useServerFn(verifyDraw);
 
   const pool =
     d.drew_from === "qualifying"
@@ -108,6 +114,8 @@ function VerifyDrawPage() {
   const runCheck = async () => {
     if (!d.seed_revealed) return;
     setBusy(true);
+    setServer(null);
+    setServerErr(false);
     const seedDigest = hex(await sha256Bytes(d.seed_revealed));
     setComputed(seedDigest);
     if (d.competition_id && pool > 0) {
@@ -115,6 +123,11 @@ function VerifyDrawPage() {
       const n =
         ((bytes[0]! << 24) >>> 0) + (bytes[1]! << 16) + (bytes[2]! << 8) + bytes[3]!;
       setPick({ digest: hex(bytes), index: n % pool });
+    }
+    try {
+      setServer(await verifyOnServer({ data: { drawId: d.id } }));
+    } catch {
+      setServerErr(true);
     }
     setBusy(false);
     setRan(true);
