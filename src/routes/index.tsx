@@ -17,6 +17,7 @@ import { allCompetitionsQueryOptions } from "@/lib/competitions-api";
 import { NewsletterSlip } from "@/components/NewsletterSlip";
 import { WinnerCard } from "@/components/WinnerCard";
 import { winnersQuery } from "@/lib/winners-api";
+import { useSiteStats, formatCloseDate } from "@/lib/site-stats";
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { gbp } from "@/lib/format";
 import { Button } from "@/components/ui/button";
