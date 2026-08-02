@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
-import { winnersQuery } from "@/lib/winners-api";
+import { winnersQuery, displayWinners } from "@/lib/winners-api";
 import { useSiteStats, formatCloseDate } from "@/lib/site-stats";
 import { gbp } from "@/lib/format";
 
@@ -20,7 +20,8 @@ export const Route = createFileRoute("/transparency")({
 });
 
 function TransparencyPage() {
-  const { data: winners = [] } = useQuery(winnersQuery);
+  const { data: allWinners = [] } = useQuery(winnersQuery);
+  const winners = displayWinners(allWinners);
   const stats = useSiteStats();
 
   return (
