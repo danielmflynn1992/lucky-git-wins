@@ -37,6 +37,7 @@ import { Route as CompetitionsSlugRouteImport } from './routes/competitions.$slu
 import { Route as AdminQuestionsRouteImport } from './routes/admin.questions'
 import { Route as AdminQuestionPerformanceRouteImport } from './routes/admin.question-performance'
 import { Route as AdminErrorsRouteImport } from './routes/admin.errors'
+import { Route as DrawsIdVerifyRouteImport } from './routes/draws.$id.verify'
 import { Route as DrawsIdRevealRouteImport } from './routes/draws.$id.reveal'
 import { Route as AdminCompetitionsNewRouteImport } from './routes/admin.competitions.new'
 
@@ -181,6 +182,11 @@ const AdminErrorsRoute = AdminErrorsRouteImport.update({
   path: '/admin/errors',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DrawsIdVerifyRoute = DrawsIdVerifyRouteImport.update({
+  id: '/draws/$id/verify',
+  path: '/draws/$id/verify',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DrawsIdRevealRoute = DrawsIdRevealRouteImport.update({
   id: '/draws/$id/reveal',
   path: '/draws/$id/reveal',
@@ -223,6 +229,7 @@ export interface FileRoutesByFullPath {
   '/competitions/': typeof CompetitionsIndexRoute
   '/admin/competitions/new': typeof AdminCompetitionsNewRoute
   '/draws/$id/reveal': typeof DrawsIdRevealRoute
+  '/draws/$id/verify': typeof DrawsIdVerifyRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -255,6 +262,7 @@ export interface FileRoutesByTo {
   '/competitions': typeof CompetitionsIndexRoute
   '/admin/competitions/new': typeof AdminCompetitionsNewRoute
   '/draws/$id/reveal': typeof DrawsIdRevealRoute
+  '/draws/$id/verify': typeof DrawsIdVerifyRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -288,6 +296,7 @@ export interface FileRoutesById {
   '/competitions/': typeof CompetitionsIndexRoute
   '/admin/competitions/new': typeof AdminCompetitionsNewRoute
   '/draws/$id/reveal': typeof DrawsIdRevealRoute
+  '/draws/$id/verify': typeof DrawsIdVerifyRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -322,6 +331,7 @@ export interface FileRouteTypes {
     | '/competitions/'
     | '/admin/competitions/new'
     | '/draws/$id/reveal'
+    | '/draws/$id/verify'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -354,6 +364,7 @@ export interface FileRouteTypes {
     | '/competitions'
     | '/admin/competitions/new'
     | '/draws/$id/reveal'
+    | '/draws/$id/verify'
   id:
     | '__root__'
     | '/'
@@ -386,6 +397,7 @@ export interface FileRouteTypes {
     | '/competitions/'
     | '/admin/competitions/new'
     | '/draws/$id/reveal'
+    | '/draws/$id/verify'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -419,6 +431,7 @@ export interface RootRouteChildren {
   CompetitionsIndexRoute: typeof CompetitionsIndexRoute
   AdminCompetitionsNewRoute: typeof AdminCompetitionsNewRoute
   DrawsIdRevealRoute: typeof DrawsIdRevealRoute
+  DrawsIdVerifyRoute: typeof DrawsIdVerifyRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -619,6 +632,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminErrorsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/draws/$id/verify': {
+      id: '/draws/$id/verify'
+      path: '/draws/$id/verify'
+      fullPath: '/draws/$id/verify'
+      preLoaderRoute: typeof DrawsIdVerifyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/draws/$id/reveal': {
       id: '/draws/$id/reveal'
       path: '/draws/$id/reveal'
@@ -667,6 +687,7 @@ const rootRouteChildren: RootRouteChildren = {
   CompetitionsIndexRoute: CompetitionsIndexRoute,
   AdminCompetitionsNewRoute: AdminCompetitionsNewRoute,
   DrawsIdRevealRoute: DrawsIdRevealRoute,
+  DrawsIdVerifyRoute: DrawsIdVerifyRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -43,7 +43,7 @@ function MiniCoupon({ total, winner }: { total: number; winner: number }) {
   );
 }
 
-function InlineVerify({ seed, hash }: { seed: string; hash: string }) {
+function InlineVerify({ seed, hash, drawId }: { seed: string; hash: string; drawId: string }) {
   const [state, setState] = useState<"idle" | "checking" | "ok" | "bad">("idle");
   const run = async () => {
     setState("checking");
@@ -73,6 +73,13 @@ function InlineVerify({ seed, hash }: { seed: string; hash: string }) {
           Hash mismatch — tell us immediately.
         </span>
       )}
+      <Link
+        to="/draws/$id/verify"
+        params={{ id: drawId }}
+        className="font-body uppercase tracking-[0.16em] text-[10px] font-bold text-[var(--color-ink-blue)] underline underline-offset-2"
+      >
+        Full verification page →
+      </Link>
     </div>
   );
 }
@@ -281,7 +288,7 @@ export function WinnerCard({
                   <dt className="text-[var(--color-ink-grey)]">Pool</dt>
                   <dd>{w.qualifying_pool_size} qualifying</dd>
                 </dl>
-                {canRehash && <InlineVerify seed={w.seed_revealed} hash={w.seed_hash} />}
+                {canRehash && <InlineVerify seed={w.seed_revealed} hash={w.seed_hash} drawId={w.id} />}
                 <Link
                   to="/draws/$id/reveal"
                   params={{ id: w.id }}
