@@ -6,7 +6,6 @@ import terryImg from "@/assets/terry-panel.png.asset.json";
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
 import { Button } from "@/components/ui/button";
-import { StampSeal } from "@/components/Logo";
 import { allCompetitionsQueryOptions } from "@/lib/competitions-api";
 import { gbp, moneySlang } from "@/lib/format";
 import { CreditCard, Lock, ShieldCheck } from "lucide-react";
