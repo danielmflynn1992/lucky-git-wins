@@ -1016,16 +1016,11 @@
 @keyframes stampCaret { 0%,49% { opacity: 1; } 50%,100% { opacity: 0; } }
 
 /* ============================================================
-   Empty basket — blank entry coupon. Geometry only, calm motion.
+   Empty basket — a single unmarked ticket stub. Geometry only.
    Neutralised by the global prefers-reduced-motion block above.
    ============================================================ */
 @keyframes couponLiftIn {
-  from { opacity: 0; transform: translateY(12px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(10px) rotate(-2deg); }
+  to   { opacity: 1; transform: translateY(0) rotate(-2deg); }
 }
-@keyframes couponSquarePulse {
-  0%, 70%, 100% { background-color: transparent; }
-  85%           { background-color: rgba(27, 42, 74, 0.22); }
-}
-.empty-coupon { animation: couponLiftIn 400ms ease-out both; }
-.coupon-square-pulse { animation: couponSquarePulse 4s ease-in-out infinite; }
+.empty-stub { animation: couponLiftIn 420ms ease-out both; }
