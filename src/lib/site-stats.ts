@@ -129,5 +129,6 @@ export function formatDrawTime(iso: string | null | undefined): string {
     month: "short",
     hour: "2-digit",
     minute: "2-digit",
+    timeZone: "Europe/London",
   });
 }
