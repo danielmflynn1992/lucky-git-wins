@@ -324,8 +324,8 @@ function PastDrawsPage() {
                       <div className="text-sm text-muted-foreground">{d.winner_town}</div>
                     )}
                     <Link
-                      to="/verify"
-                      search={{ draw: d.id }}
+                      to="/draws/$id/verify"
+                      params={{ id: d.id }}
                       className="mt-2 inline-flex items-center gap-1 text-[11px] font-mono uppercase tracking-widest text-clover font-bold hover:underline"
                     >
                       <Shield className="h-3 w-3" /> Verify this draw
