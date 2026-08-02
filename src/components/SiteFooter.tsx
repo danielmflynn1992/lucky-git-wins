@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Lockup } from "./Logo";
 import { useSiteStats } from "@/lib/site-stats";
+import { COMPANY_NAME, COMPANY_NUMBER, REGISTERED_OFFICE } from "@/lib/company";
 
 export function SiteFooter() {
   const { gitsMadeLucky } = useSiteStats();
@@ -59,7 +60,6 @@ export function SiteFooter() {
               className="mt-6 text-xs leading-relaxed"
               style={{ color: "var(--color-on-dark-fg)" }}
             >
-              Lucky Git Comps Ltd. Registered in England & Wales.<br />
               <span
                 className="inline-flex items-center gap-1 font-bold"
                 style={{ color: "var(--color-marker)" }}
@@ -82,6 +82,12 @@ export function SiteFooter() {
             color: "var(--color-on-dark-fg)",
           }}
         >
+          <div className="mx-auto max-w-4xl px-4 pb-3 text-[10px] leading-relaxed opacity-90 [overflow-wrap:anywhere]">
+            {COMPANY_NAME} · Company No. {COMPANY_NUMBER} · Registered office: {REGISTERED_OFFICE} ·
+            Registered in England &amp; Wales ·{" "}
+            <Link to="/terms" className="underline underline-offset-2">Terms</Link> ·{" "}
+            <Link to="/privacy" className="underline underline-offset-2">Privacy</Link>
+          </div>
           © {new Date().getFullYear()} LUCKYGITCOMPS
           {gitsMadeLucky > 0 && (
             <>

@@ -145,6 +145,19 @@ export function CompCard({ c }: { c: Competition }) {
             No refunds, no rollovers, no funny business.
           </p>
         )}
+        <p className="px-3 pb-2 text-[8px] font-mono uppercase tracking-[0.12em] text-[var(--color-ink-grey)]/80 leading-tight">
+          Closes {new Date(c.endsAt).toLocaleDateString("en-GB", { day: "2-digit", month: "short" })} · Max {c.maxPerPerson} per person ·{" "}
+          <Link
+            to="/competitions/$slug"
+            params={{ slug: c.slug }}
+            hash="rules"
+            data-no-card-click
+            onClick={(e) => e.stopPropagation()}
+            className="underline underline-offset-2 pointer-events-auto"
+          >
+            Rules
+          </Link>
+        </p>
         <Perforation color="var(--color-ink-black)" />
         {closed ? (
           <Link
