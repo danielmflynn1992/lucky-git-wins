@@ -17,6 +17,7 @@ import { allCompetitionsQueryOptions } from "@/lib/competitions-api";
 import { NewsletterSlip } from "@/components/NewsletterSlip";
 import { WinnerCard } from "@/components/WinnerCard";
 import { winnersQuery } from "@/lib/winners-api";
+import { useSiteStats, formatCloseDate } from "@/lib/site-stats";
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { gbp } from "@/lib/format";
 import { Button } from "@/components/ui/button";
@@ -50,6 +51,7 @@ function Home() {
   const [view, setView] = useState<"grid" | "list">("grid");
   const [openWinnerId, setOpenWinnerId] = useState<string | null>(null);
   const { data: winners = [] } = useQuery(winnersQuery);
+  const stats = useSiteStats();
 
   const filtered = useMemo(() => {
     let list = cat === "All" ? COMPETITIONS : COMPETITIONS.filter((c) => c.category === cat);
@@ -64,15 +66,6 @@ function Home() {
   const featuredPct = featured
     ? Math.round((featured.ticketsSold / featured.totalTickets) * 100)
     : 0;
-  const totals = COMPETITIONS.reduce(
-    (acc, c) => {
-      acc.sold += c.ticketsSold;
-      acc.revenue += c.ticketsSold * c.pricePerTicket;
-      acc.prizes += c.cashAlternative;
-      return acc;
-    },
-    { sold: 0, revenue: 0, prizes: 0 },
-  );
 
   return (
     <div className="min-h-screen flex flex-col bg-ambient">
@@ -156,10 +149,14 @@ function Home() {
             <div className="rounded-lg bg-card border border-border p-6 shadow-md">
               <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-muted-foreground">Platform stats · Live</div>
               <dl className="mt-6 grid grid-cols-2 gap-6">
-                <Stat label="Prizes on the table" value={gbp(totals.prizes)} tone="clover" />
-                <Stat label="Comps running" value={COMPETITIONS.length.toString().padStart(2, "0")} />
-                <Stat label="Tickets flogged" value={totals.sold.toLocaleString()} />
-                <Stat label="Draws gone off" value={winners.length.toString().padStart(2, "0")} />
+                <Stat label="Prizes on the table" value={gbp(stats.prizesOnTable)} tone="clover" />
+                <Stat label="Comps running" value={stats.compsLive.toString().padStart(2, "0")} />
+                <Stat label="Tickets flogged" value={stats.ticketsSold.toLocaleString()} />
+                {stats.drawsCompleted > 0 ? (
+                  <Stat label="Draws gone off" value={stats.drawsCompleted.toString().padStart(2, "0")} />
+                ) : (
+                  <Stat label="First draw" value={formatCloseDate(stats.nextCloseAt)} />
+                )}
               </dl>
               <div className="mt-6 pt-4 border-t border-border text-[11px] font-mono text-muted-foreground leading-relaxed">
                 Every draw automatic. Every ticket number published. No hidden reserves, no house tickets, no funny business.{" "}
@@ -199,7 +196,7 @@ function Home() {
       <section className="mx-auto max-w-7xl px-4 pt-3 pb-2 w-full">
         <div className="flex items-end justify-between gap-4 flex-wrap">
           <div>
-            <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-clover mb-2 font-bold">Live · {COMPETITIONS.length.toString().padStart(2, "0")}</div>
+            <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-clover mb-2 font-bold">Live · {stats.compsLive.toString().padStart(2, "0")}</div>
             <h2 className="font-display text-3xl md:text-4xl font-black tracking-tight text-foreground">Competitions</h2>
             <p className="text-muted-foreground text-sm mt-1">Every ticket accounted for, every close time public.</p>
           </div>

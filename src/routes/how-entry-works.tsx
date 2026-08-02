@@ -54,12 +54,11 @@ export const Route = createFileRoute("/how-entry-works")({
       <p>
         Because entry requires a genuine skill test, no free entry route is offered. There is no
         postal entry and no "no purchase necessary" option. The legal defensibility of the
-        competition rests on the skill test being genuinely difficult — we monitor question
-        performance across all draws and adjust question difficulty when necessary.
+        competition rests on the skill test being genuinely difficult.
       </p>
       <h2>Complaints</h2>
       <p>
-        Email <a href="mailto:legal@luckygitcomps.example" className="underline">legal@luckygitcomps.example</a>.
+        Email <a href="mailto:legal@luckygitcomps.co.uk" className="underline">legal@luckygitcomps.co.uk</a>.
       </p>
       <p className="text-xs opacity-60 mt-8">
         Plain-English explainer, not legal advice. The definitive terms are our{" "}

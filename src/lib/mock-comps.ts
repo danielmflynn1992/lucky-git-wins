@@ -30,7 +30,7 @@ const inHours = (h: number) => new Date(Date.now() + h * 3_600_000).toISOString(
 
 export const COMPETITIONS: Competition[] = [
   {
-    slug: "audi-rs3-25k-cash",
+    slug: "audi-rs3-45k-cash",
     title: "Audi RS3 (or £45,000 cash)",
     subtitle: "400bhp of German silliness. Yours if you're the lucky git.",
     category: "Motors",

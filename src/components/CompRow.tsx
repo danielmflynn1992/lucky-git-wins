@@ -6,17 +6,22 @@ import { Countdown } from "./Countdown";
 import { QuickAddDialog } from "./QuickAddDialog";
 import { ChevronRight, Plus } from "lucide-react";
 import { LetterboxImage } from "./LetterboxImage";
+import { isClosed } from "@/lib/site-stats";
 
 export function CompRow({ c }: { c: Competition }) {
   const pct = Math.round((c.ticketsSold / c.totalTickets) * 100);
   const remaining = c.totalTickets - c.ticketsSold;
+  const closed = isClosed(c.endsAt);
   const [quickOpen, setQuickOpen] = useState(false);
   return (
     <>
     <Link
-      to="/competitions/$slug"
-      params={{ slug: c.slug }}
-      className="group flex items-center gap-3 sm:gap-4 rounded-lg bg-card border border-border p-3 shadow-sm hover:shadow-md hover:border-clover/50 transition-all overflow-hidden min-w-0 max-w-full [overflow-wrap:anywhere]"
+      to={closed ? "/past-draws" : "/competitions/$slug"}
+      params={closed ? undefined : { slug: c.slug }}
+      className={
+        "group flex items-center gap-3 sm:gap-4 rounded-lg bg-card border border-border p-3 shadow-sm hover:shadow-md hover:border-clover/50 transition-all overflow-hidden min-w-0 max-w-full [overflow-wrap:anywhere] " +
+        (closed ? "opacity-70 saturate-[0.25]" : "")
+      }
     >
       {/* Thumb */}
       <LetterboxImage
@@ -48,6 +53,11 @@ export function CompRow({ c }: { c: Competition }) {
       {/* Right */}
       <div className="flex flex-col items-end gap-1.5 shrink-0">
         <Countdown target={c.endsAt} compact />
+        {closed ? (
+          <span className="inline-flex items-center gap-1 rounded-md bg-[var(--color-ink-grey)] text-[var(--color-paper)] px-3 py-2 text-xs font-bold uppercase tracking-wide">
+            Drawn — see result
+          </span>
+        ) : (
         <div className="flex items-center gap-1.5">
           <button
             type="button"
@@ -61,6 +71,7 @@ export function CompRow({ c }: { c: Competition }) {
             Enter <ChevronRight className="h-3.5 w-3.5" />
           </div>
         </div>
+        )}
       </div>
     </Link>
     <QuickAddDialog comp={c} open={quickOpen} onClose={() => setQuickOpen(false)} />

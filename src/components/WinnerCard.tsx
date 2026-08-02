@@ -69,7 +69,14 @@ export function WinnerCard({
         className="text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ink-blue)]"
       >
         <header className="bg-[var(--color-ink-red)] text-[var(--color-paper)] px-3 py-1.5 flex items-center justify-between gap-2">
-          <span className="font-body font-bold uppercase tracking-[0.16em] text-[10px]">Winner</span>
+          <span className="font-body font-bold uppercase tracking-[0.16em] text-[10px]">
+            Winner
+            {w.isDemo && (
+              <span className="ml-2 border border-current px-1 py-px text-[8px] tracking-[0.14em] opacity-90">
+                Demo data — removed at launch
+              </span>
+            )}
+          </span>
           <span className="flex items-center gap-2">
             <span className="font-mono tabular-nums text-[10px] opacity-95">
               {formatWinnerDate(w.drawn_at)}

@@ -9,6 +9,7 @@ import { LetterboxImage } from "./LetterboxImage";
 import { StampMark } from "./StampMark";
 import { Perforation } from "./Perforation";
 import { PrizeImage } from "./PrizeImage";
+import { isClosed } from "@/lib/site-stats";
 
 const pad = (n: number, w = 4) => n.toString().padStart(w, "0");
 
@@ -20,10 +21,11 @@ const pad = (n: number, w = 4) => n.toString().padStart(w, "0");
  */
 export function CompCard({ c }: { c: Competition }) {
   const pct = Math.round((c.ticketsSold / c.totalTickets) * 100);
+  const closed = isClosed(c.endsAt);
   const soldOut = pct >= 100;
   const almostGone = pct >= 80 && !soldOut;
   const remaining = c.totalTickets - c.ticketsSold;
-  const fresh = c.ticketsSold === 0;
+  const fresh = c.ticketsSold === 0 && !closed;
   const [quickOpen, setQuickOpen] = useState(false);
   const serialWidth = 4;
   const navigate = useNavigate();
@@ -32,7 +34,10 @@ export function CompCard({ c }: { c: Competition }) {
 
   return (
     <article
-      className="paper group relative flex h-full flex-col overflow-hidden min-w-0 max-w-full [overflow-wrap:anywhere] cursor-pointer [container-type:inline-size] border-[1.5px] border-[var(--color-ink-black)] bg-[var(--color-paper-raised)]"
+      className={
+        "paper group relative flex h-full flex-col overflow-hidden min-w-0 max-w-full [overflow-wrap:anywhere] cursor-pointer [container-type:inline-size] border-[1.5px] border-[var(--color-ink-black)] bg-[var(--color-paper-raised)] " +
+        (closed ? "opacity-70 saturate-[0.25]" : "")
+      }
       onClick={(e) => {
         const t = e.target as HTMLElement;
         if (t.closest("a,button,input,select,textarea,label,[data-no-card-click]")) return;
@@ -82,7 +87,11 @@ export function CompCard({ c }: { c: Competition }) {
             size="card"
           />
         </div>
-        {soldOut ? (
+        {closed ? (
+          <span className="pointer-events-none absolute z-[6]" style={{ right: "14px", bottom: "-14px" }}>
+            <StampMark variant="GONE" size="lg" angle={-8} />
+          </span>
+        ) : soldOut ? (
           <span className="pointer-events-none absolute z-[6]" style={{ right: "14px", bottom: "-14px" }}>
             <StampMark variant="GONE" size="lg" angle={-8} />
           </span>
@@ -123,7 +132,11 @@ export function CompCard({ c }: { c: Competition }) {
 
       {/* PERFORATED TEAR-OFF with CTAs */}
       <div className="relative z-10 mt-3">
-        {soldOut ? (
+        {closed ? (
+          <p className="px-3 pb-2 text-[10px] font-mono uppercase tracking-[0.1em] text-[var(--color-ink-grey)] leading-tight">
+            Entries closed. The automatic draw does the rest.
+          </p>
+        ) : soldOut ? (
           <p className="px-3 pb-2 text-[10px] font-mono uppercase tracking-[0.1em] text-[var(--color-ink-red)] leading-tight">
             {c.totalTickets} gits had a go. One of them's about to be insufferable.
           </p>
@@ -133,6 +146,17 @@ export function CompCard({ c }: { c: Competition }) {
           </p>
         )}
         <Perforation color="var(--color-ink-black)" />
+        {closed ? (
+          <Link
+            to="/past-draws"
+            data-no-card-click
+            onClick={(e) => e.stopPropagation()}
+            className="pointer-events-auto flex items-center justify-center gap-1.5 bg-[var(--color-ink-grey)] text-[var(--color-paper)] px-3 py-2.5 font-display uppercase tracking-[0.14em] text-xs whitespace-nowrap hover:bg-[var(--color-ink-black)]"
+          >
+            <span>Drawn — see result</span>
+            <ArrowRight className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+          </Link>
+        ) : (
         <div className="grid grid-cols-[1fr_auto] items-stretch">
           <div className="flex items-center justify-center gap-1.5 bg-[var(--color-ink-red)] text-[var(--color-paper)] px-3 py-2.5 font-display uppercase tracking-[0.14em] text-xs whitespace-nowrap">
             <span>Enter</span>
@@ -148,6 +172,7 @@ export function CompCard({ c }: { c: Competition }) {
             <span>Add</span>
           </button>
         </div>
+        )}
       </div>
 
       <QuickAddDialog comp={c} open={quickOpen} onClose={() => setQuickOpen(false)} />

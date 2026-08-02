@@ -37,6 +37,8 @@ export type Winner = {
   verification_hash: string;
   seed_revealed: string;
   qualifying_pool_size: number | null;
+  /** True for seeded demo rows: no linked competition and no revealed seed. */
+  isDemo: boolean;
 };
 
 export const winnersQuery = queryOptions({
@@ -51,6 +53,7 @@ export const winnersQuery = queryOptions({
     if (error) throw error;
     return (data ?? []).map((d: {
       id: string;
+      competition_id: string | null;
       competition_title: string;
       prize: string;
       winning_number: number;
@@ -86,6 +89,7 @@ export const winnersQuery = queryOptions({
         verification_hash: d.verification_hash,
         seed_revealed: d.seed_revealed,
         qualifying_pool_size: d.qualifying_pool_size,
+        isDemo: !d.competition_id && !d.seed_revealed,
       };
     });
   },

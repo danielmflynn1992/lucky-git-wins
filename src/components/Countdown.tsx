@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { timeLeft } from "@/lib/format";
+import { isClosed } from "@/lib/site-stats";
 
 export function Countdown({ target, compact = false }: { target: string; compact?: boolean }) {
   // Initialise lazily so the first paint (SSR and client) already shows real
@@ -14,6 +15,20 @@ export function Countdown({ target, compact = false }: { target: string; compact
   const pad = (n: number) => String(n).padStart(2, "0");
   const urgent = t.urgent;
   const digits = `${pad(t.d)}d ${pad(t.h)}:${pad(t.m)}:${pad(t.s)}`;
+
+  // A live comp must never show 00d 00:00:00 — that state is "closed".
+  if (isClosed(target) || t.total <= 0) {
+    return (
+      <span
+        data-dynamic="countdown"
+        suppressHydrationWarning
+        className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 font-mono font-bold uppercase tracking-[0.12em] shadow-sm bg-[var(--color-ink-grey)] text-[var(--color-paper)] ${compact ? "text-[11px]" : "text-xs"}`}
+      >
+        Closed
+      </span>
+    );
+  }
+
   return (
     <div
       data-dynamic="countdown"

@@ -3,14 +3,14 @@ import { useQuery } from "@tanstack/react-query";
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
 import { winnersQuery } from "@/lib/winners-api";
-import { COMPETITIONS } from "@/lib/mock-comps";
+import { useSiteStats, formatCloseDate } from "@/lib/site-stats";
 import { gbp } from "@/lib/format";
 
 export const Route = createFileRoute("/transparency")({
   head: () => ({
     meta: [
       { title: "Transparency — Lucky Git Comps" },
-      { name: "description", content: "The real numbers. Total prizes awarded, winners paid, average odds, and draws executed on schedule. Computed from live data, no rounding up." },
+      { name: "description", content: "The real numbers. Prizes on the table, comps running, draws completed and average sell-through. Computed from live data, no rounding up." },
       { property: "og:title", content: "Transparency — Lucky Git Comps" },
       { property: "og:description", content: "Real numbers from every draw we've published." },
       { property: "og:type", content: "website" },
@@ -21,16 +21,7 @@ export const Route = createFileRoute("/transparency")({
 
 function TransparencyPage() {
   const { data: winners = [] } = useQuery(winnersQuery);
-
-  const live = COMPETITIONS.length;
-  const prizesLive = COMPETITIONS.reduce((s, c) => s + (c.cashAlternative ?? 0), 0);
-  const drawsCount = winners.length;
-  const avgOdds = COMPETITIONS.length
-    ? Math.round(
-        COMPETITIONS.reduce((s, c) => s + c.totalTickets / Math.max(1, c.ticketsSold), 0) /
-          COMPETITIONS.length,
-      )
-    : 0;
+  const stats = useSiteStats();
 
   return (
     <div className="min-h-screen flex flex-col bg-ambient">
@@ -41,14 +32,21 @@ function TransparencyPage() {
           The numbers. All of them.
         </h1>
         <p className="mt-3 max-w-2xl text-muted-foreground">
-          Computed from live data. When a figure is zero, we show zero. Every completed draw links to its permanent verification page.
+          Computed from live data, from the same tables the rest of the site reads. When a figure is
+          zero, we show zero. Every completed draw links to its permanent verification page.
         </p>
 
         <dl className="mt-10 grid grid-cols-2 md:grid-cols-4 gap-6">
-          <Stat label="Prizes on the table" value={gbp(prizesLive)} />
-          <Stat label="Comps running" value={String(live).padStart(2, "0")} />
-          <Stat label="Draws gone off" value={String(drawsCount).padStart(3, "0")} />
-          <Stat label="Avg odds this week" value={drawsCount || live ? `1 : ${avgOdds}` : "—"} />
+          <Stat label="Prizes on the table" value={gbp(stats.prizesOnTable)} />
+          <Stat label="Comps running" value={String(stats.compsLive).padStart(2, "0")} />
+          <Stat
+            label={stats.drawsCompleted ? "Draws gone off" : "First draw"}
+            value={stats.drawsCompleted ? String(stats.drawsCompleted).padStart(3, "0") : formatCloseDate(stats.nextCloseAt)}
+          />
+          <Stat
+            label="Average sell-through"
+            value={stats.drawsCompleted ? `${stats.sellThroughPct}%` : "—"}
+          />
         </dl>
 
         <section className="mt-12">
@@ -65,6 +63,11 @@ function TransparencyPage() {
                     {new Date(w.drawn_at).toLocaleDateString("en-GB")}
                   </span>
                   <span className="font-bold">{w.competition_title}</span>
+                  {w.isDemo && (
+                    <span className="border border-[var(--color-ink-red)] px-1 text-[9px] uppercase tracking-[0.14em] text-[var(--color-ink-red)]">
+                      Demo data
+                    </span>
+                  )}
                   <span className="tabular-nums">#{String(w.winning_number).padStart(4, "0")}</span>
                   <span className="text-muted-foreground">{w.winner_display_name}</span>
                   <Link to="/draws/$id/reveal" params={{ id: w.id }} className="ml-auto underline text-clover">
