@@ -74,3 +74,50 @@ export const competitionResultQuery = (slug: string) =>
     queryFn: () => fetchCompetitionResult(slug),
     staleTime: 60_000,
   });
+
+export interface DrawnCompetition {
+  drawId: string;
+  competitionId: string | null;
+  slug: string | null;
+  title: string;
+  prize: string;
+  winningNumber: number;
+  winnerDisplayName: string;
+  totalTickets: number;
+  drawnAt: string;
+}
+
+/** Every competition that has actually been drawn, newest first. */
+export async function fetchDrawnCompetitions(): Promise<DrawnCompetition[]> {
+  const { data: draws, error } = await supabase
+    .from("draws")
+    .select("id, competition_id, competition_title, prize, winning_number, winner_display_name, total_tickets, drawn_at")
+    .order("drawn_at", { ascending: false });
+  if (error) throw error;
+  const rows = draws ?? [];
+  const ids = rows.map((d) => d.competition_id).filter(Boolean) as string[];
+
+  const slugs = new Map<string, string>();
+  if (ids.length) {
+    const { data: comps } = await supabase.from("competitions").select("id, slug").in("id", ids);
+    for (const c of comps ?? []) slugs.set(c.id, c.slug);
+  }
+
+  return rows.map((d) => ({
+    drawId: d.id,
+    competitionId: d.competition_id,
+    slug: d.competition_id ? slugs.get(d.competition_id) ?? null : null,
+    title: d.competition_title,
+    prize: d.prize,
+    winningNumber: d.winning_number,
+    winnerDisplayName: d.winner_display_name,
+    totalTickets: d.total_tickets,
+    drawnAt: d.drawn_at,
+  }));
+}
+
+export const drawnCompetitionsQuery = queryOptions({
+  queryKey: ["drawn-competitions"],
+  queryFn: fetchDrawnCompetitions,
+  staleTime: 60_000,
+});
