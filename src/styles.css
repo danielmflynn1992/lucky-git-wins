@@ -1036,24 +1036,36 @@
 
 .terry-break .steam-1 {
   animation: terrySteam 4s ease-in-out infinite;
-  transform-origin: 172px 164px;
+  transform-origin: 156px 94px;
 }
 .terry-break .steam-2 {
   animation: terrySteam 4s ease-in-out 1.6s infinite;
-  transform-origin: 182px 164px;
+  transform-origin: 166px 94px;
 }
 .terry-break .terry-eyes {
   animation: terryBlink 5.5s ease-in-out infinite;
-  transform-origin: 115px 101px;
+  transform-origin: 120px 53px;
 }
 .terry-break .paper-corner {
   animation: terryDraught 6s ease-in-out infinite;
-  transform-origin: 254px 168px;
+  transform-origin: 104px 82px;
 }
-.terry-break .terry-body,
+/* Chair rests tipped back on two legs; a nudge drops it flat with a jolt. */
+.terry-break .terry-body {
+  transform: rotate(-6deg);
+  transform-origin: 104px 122px;
+  transition: transform 260ms cubic-bezier(.2,.8,.25,1);
+}
 .terry-break .terry-mug,
-.terry-break .terry-legs {
+.terry-break .terry-paper {
   transition: transform 320ms cubic-bezier(.2,.8,.25,1);
 }
-.terry-break.is-awake .terry-body { transform: translateY(-6px) rotate(-2deg); }
-.terry-break.is-awake .terry-mug  { transform: rotate(-8deg) translateY(-2px); }
+.terry-break.is-awake .terry-body { animation: terryChairDrop 420ms cubic-bezier(.2,.9,.3,1) forwards; }
+.terry-break.is-awake .terry-mug  { transform: rotate(-7deg) translateY(-1px); }
+.terry-break.is-awake .terry-paper { transform: translateY(10px) rotate(3deg); }
+@keyframes terryChairDrop {
+  0%   { transform: rotate(-6deg); }
+  55%  { transform: rotate(1.5deg) translateY(2px); }
+  75%  { transform: rotate(-1deg); }
+  100% { transform: rotate(0deg); }
+}
