@@ -11,7 +11,7 @@ import watch from "@/assets/prize-watch.jpg";
 // Keyword → bundled asset. Used when a draw's competition has no image
 // (older seed rows, deleted comps) so the Smug Gits wall never shows an
 // empty typographic panel.
-function placeholderForPrize(prize: string, title: string): string {
+export function placeholderForPrize(prize: string, title: string): string {
   const s = `${prize} ${title}`.toLowerCase();
   if (/(rolex|watch|submariner|omega|tag|timepiece)/.test(s)) return watch;
   if (/(audi|bmw|merc|porsche|car|motor|rs3|golf|m3)/.test(s)) return audi;
