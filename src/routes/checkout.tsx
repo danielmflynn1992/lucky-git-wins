@@ -2,7 +2,6 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { z } from "zod";
-import terryImg from "@/assets/terry-panel.png.asset.json";
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
 import { Button } from "@/components/ui/button";
@@ -10,6 +9,7 @@ import { allCompetitionsQueryOptions } from "@/lib/competitions-api";
 import { gbp, moneySlang } from "@/lib/format";
 import { CreditCard, Lock, ShieldCheck } from "lucide-react";
 import { SkillWarning } from "@/components/SkillWarning";
+import { EmptyBasketScene } from "@/components/EmptyBasketScene";
 import { SkillQuestionStep } from "@/components/SkillQuestionStep";
 import { EntryStampSequence } from "@/components/EntryStampSequence";
 import { formatDrawTime } from "@/lib/site-stats";
@@ -43,28 +43,13 @@ function Checkout() {
   return <CheckoutInner />;
 }
 
-/** Never a blank page: Terry, a line, and a way back to the stall. */
+/** Never a blank page: Terry on his break, and a way back to the stall. */
 function EmptyBasket() {
   return (
     <div className="min-h-screen flex flex-col">
       <SiteNav />
-      <main className="mx-auto max-w-xl px-4 py-16 w-full flex-1 text-center">
-        <img
-          src={terryImg.url}
-          alt="Terry, empty-handed"
-          width={180}
-          height={180}
-          className="mx-auto h-40 w-auto object-contain"
-        />
-        <h1 className="mt-4 font-display text-3xl font-semibold tracking-tight">
-          Nothing in the basket, sunshine.
-        </h1>
-        <p className="mt-2 text-muted-foreground">
-          Terry can't sell you thin air. Pick some numbers and come back.
-        </p>
-        <Button asChild variant="gold" size="lg" className="mt-6">
-          <Link to="/competitions">Go and have a look</Link>
-        </Button>
+      <main className="mx-auto max-w-xl px-4 py-16 w-full flex-1">
+        <EmptyBasketScene />
       </main>
       <SiteFooter />
     </div>
