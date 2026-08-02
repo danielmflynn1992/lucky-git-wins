@@ -1,11 +1,10 @@
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { Lockup } from "./Logo";
-import { winnersQuery } from "@/lib/winners-api";
+import { useSiteStats } from "@/lib/site-stats";
 
 export function SiteFooter() {
-  const { data: winners = [] } = useQuery(winnersQuery);
-  const gitsCount = winners.length;
+  const { gitsMadeLucky } = useSiteStats();
   return (
     <footer className="relative mt-8 md:mt-12">
       {/* -------- INK-BLUE LINK GRID -------- */}
@@ -85,8 +84,12 @@ export function SiteFooter() {
           }}
         >
           © {new Date().getFullYear()} LUCKYGITCOMPS
-          <span className="mx-2 opacity-40">·</span>
-          GITS MADE LUCKY SO FAR: <b className="tabular-nums">{gitsCount.toString().padStart(3, "0")}</b>
+          {gitsMadeLucky > 0 && (
+            <>
+              <span className="mx-2 opacity-40">·</span>
+              GITS MADE LUCKY SO FAR: <b className="tabular-nums">{gitsMadeLucky.toString().padStart(3, "0")}</b>
+            </>
+          )}
           <div className="mt-1.5 text-[10px] tracking-[0.18em] uppercase opacity-70">
             Built in Britain. Fuelled by tea and other people's luck.
           </div>
