@@ -7,7 +7,6 @@ import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
 import { Button } from "@/components/ui/button";
 import { StampSeal } from "@/components/Logo";
-import { LuckyMark } from "@/components/GaryMascot";
 import { allCompetitionsQueryOptions } from "@/lib/competitions-api";
 import { gbp, moneySlang } from "@/lib/format";
 import { CreditCard, Lock, ShieldCheck, Share2, CheckCircle2, AlertTriangle } from "lucide-react";
