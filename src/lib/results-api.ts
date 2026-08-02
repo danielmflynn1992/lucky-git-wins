@@ -1,5 +1,7 @@
 import { queryOptions } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { IMAGES } from "@/lib/competitions-api";
+import { placeholderForPrize } from "@/lib/winners-api";
 
 export interface CompetitionResult {
   competitionId: string;
