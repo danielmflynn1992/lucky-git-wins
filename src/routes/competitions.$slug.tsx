@@ -364,14 +364,17 @@ function CompDetail() {
           </section>
         )}
 
-        <section className="mt-12 grid gap-8 lg:grid-cols-3">
+        <section id="rules" className="mt-12 grid gap-8 lg:grid-cols-3 scroll-mt-32">
           <div className="lg:col-span-2">
             <h2 className="font-display text-2xl font-black">What you're playing for</h2>
             <p className="mt-3 text-foreground/80 leading-relaxed">{c.description}</p>
 
-            <h3 className="mt-8 font-display text-xl font-black">The important bits</h3>
+            <h3 className="mt-8 font-display text-xl font-black">Rules for this competition</h3>
             <ul className="mt-3 space-y-2 text-sm text-foreground/80">
               <li className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-clover mt-0.5 shrink-0" /> Closing: <b>{new Date(c.endsAt).toLocaleString("en-GB")}</b> — or when sold out.</li>
+              <li className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-clover mt-0.5 shrink-0" /> Maximum entries per person: <b>{c.maxPerPerson}</b>.</li>
+              <li className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-clover mt-0.5 shrink-0" /> Total pool: <b>{c.totalTickets}</b> tickets — one ticket is 1 in {c.totalTickets}.</li>
+              <li className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-clover mt-0.5 shrink-0" /> A correct skill answer is required to qualify. Wrong answer, no entry, no refund.</li>
               <li className="flex gap-2">
                 <CheckCircle2 className="h-4 w-4 text-clover mt-0.5 shrink-0" />
                 <span>
