@@ -972,3 +972,45 @@
     display: none;
   }
 }
+
+/* ── Purchase confirmation: "The Stamp" ───────────────────────────────── */
+@keyframes stampCouponSlide {
+  0%   { transform: translateX(-120%) rotate(-6deg); opacity: 0; }
+  70%  { transform: translateX(2%)   rotate(-1deg); opacity: 1; }
+  100% { transform: translateX(0)    rotate(-2deg); opacity: 1; }
+}
+@keyframes stampDescend {
+  0%   { transform: translate(38%, -140%) rotate(12deg) scale(1.6); opacity: 0; }
+  10%  { opacity: 1; }
+  100% { transform: translate(0, 0) rotate(12deg) scale(1); opacity: 1; }
+}
+@keyframes stampArmIn {
+  0%   { transform: translate(60%, -120%) rotate(12deg); opacity: 0; }
+  30%  { opacity: 1; }
+  55%  { transform: translate(0, 0) rotate(12deg); opacity: 1; }
+  100% { transform: translate(60%, -120%) rotate(12deg); opacity: 0; }
+}
+@keyframes stampInkBleed {
+  0%   { transform: scale(0.86); opacity: 0; filter: blur(2px); }
+  40%  { transform: scale(1.06); opacity: 1; filter: blur(0.6px); }
+  100% { transform: scale(1);    opacity: 0.9; filter: blur(0); }
+}
+@keyframes stampShake {
+  0%,100% { transform: translate(0, 0); }
+  20% { transform: translate(-3px, 2px); }
+  40% { transform: translate(3px, -2px); }
+  60% { transform: translate(-2px, -3px); }
+  80% { transform: translate(2px, 3px); }
+}
+@keyframes stampJolt {
+  0%,100% { transform: rotate(-2deg) translateY(0); }
+  30% { transform: rotate(-2.8deg) translateY(4px); }
+  60% { transform: rotate(-1.6deg) translateY(-2px); }
+}
+@keyframes stubSettle {
+  0%   { transform: scale(1.18) rotate(-2deg); opacity: 0; }
+  60%  { transform: scale(0.96) rotate(0.6deg); opacity: 1; }
+  80%  { transform: scale(1.03) rotate(-0.4deg); }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+@keyframes stampCaret { 0%,49% { opacity: 1; } 50%,100% { opacity: 0; } }
