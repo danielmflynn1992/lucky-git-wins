@@ -32,6 +32,8 @@ export const Route = createFileRoute("/competitions/$slug")({
   loader: async ({ params, context }) => {
     const data = await context.queryClient.ensureQueryData(competitionQueryOptions(params.slug));
     if (!data) throw notFound();
+    // Example/seed comps live in the results archive only.
+    if (data.isDemo) throw redirect({ to: "/results" });
   },
   head: () => ({
     meta: [
