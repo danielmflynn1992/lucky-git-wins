@@ -82,6 +82,12 @@ export function SiteFooter() {
             color: "var(--color-on-dark-fg)",
           }}
         >
+          <div className="mx-auto max-w-4xl px-4 pb-3 text-[10px] leading-relaxed opacity-90 [overflow-wrap:anywhere]">
+            {COMPANY_NAME} · Company No. {COMPANY_NUMBER} · Registered office: {REGISTERED_OFFICE} ·
+            Registered in England &amp; Wales ·{" "}
+            <Link to="/terms" className="underline underline-offset-2">Terms</Link> ·{" "}
+            <Link to="/privacy" className="underline underline-offset-2">Privacy</Link>
+          </div>
           © {new Date().getFullYear()} LUCKYGITCOMPS
           {gitsMadeLucky > 0 && (
             <>
