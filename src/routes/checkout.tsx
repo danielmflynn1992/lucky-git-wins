@@ -38,6 +38,38 @@ export const Route = createFileRoute("/checkout")({
 });
 
 function Checkout() {
+  return <CheckoutInner />;
+}
+
+/** Never a blank page: Terry, a line, and a way back to the stall. */
+function EmptyBasket() {
+  return (
+    <div className="min-h-screen flex flex-col">
+      <SiteNav />
+      <main className="mx-auto max-w-xl px-4 py-16 w-full flex-1 text-center">
+        <img
+          src={terry}
+          alt="Terry, empty-handed"
+          width={180}
+          height={180}
+          className="mx-auto h-40 w-auto object-contain"
+        />
+        <h1 className="mt-4 font-display text-3xl font-semibold tracking-tight">
+          Nothing in the basket, sunshine.
+        </h1>
+        <p className="mt-2 text-muted-foreground">
+          Terry can't sell you thin air. Pick some numbers and come back.
+        </p>
+        <Button asChild variant="gold" size="lg" className="mt-6">
+          <Link to="/competitions">Go and have a look</Link>
+        </Button>
+      </main>
+      <SiteFooter />
+    </div>
+  );
+}
+
+function CheckoutInner() {
   const { slug, qty = 5 } = Route.useSearch();
   const { data: comps = [] } = useQuery(allCompetitionsQueryOptions);
   const comp = (slug ? comps.find((c) => c.slug === slug) : comps[0]) ?? null;
