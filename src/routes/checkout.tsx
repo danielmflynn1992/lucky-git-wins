@@ -260,66 +260,29 @@ function Input({ label, className = "", ...props }: React.InputHTMLAttributes<HT
   );
 }
 
-function SuccessScreen({ compTitle, numbers }: { compTitle: string; numbers: number[] }) {
+function SuccessScreen({
+  compTitle,
+  numbers,
+  entryRef,
+  drawLine,
+}: {
+  compTitle: string;
+  numbers: number[];
+  entryRef: string;
+  drawLine: string;
+}) {
   return (
     <div className="min-h-screen flex flex-col">
       <SiteNav />
-      <main className="mx-auto max-w-2xl px-4 py-16 w-full text-center relative overflow-hidden">
-        <Confetti />
-        {/* Stamped over the certificate at a slight angle. */}
-        <div className="mx-auto flex justify-center">
-          <StampSeal size={180} angle={-8} />
-        </div>
-        <div className="mx-auto mt-2 inline-flex h-10 w-10 items-center justify-center rounded-full bg-clover/15 text-clover">
-          <CheckCircle2 className="h-5 w-5" />
-        </div>
-        <div className="mt-6 text-[10px] font-mono uppercase tracking-[0.25em] text-clover">Entry confirmed · #{Math.floor(Math.random()*90000+10000)}</div>
-        <h1 className="mt-2 font-display text-4xl md:text-5xl font-semibold tracking-tight">You're in the draw,<br/><span className="text-clover">you lucky git.</span></h1>
-        <p className="mt-3 text-muted-foreground">Payment confirmed. Numbers assigned.</p>
-        <div className="mt-8 rounded-md bg-card border border-border p-6 text-left">
-          <div className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground">Your entry</div>
-          <div className="font-display text-xl font-semibold mt-1">{compTitle}</div>
-          <div className="mt-4">
-            <div className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground mb-2">Your ticket numbers</div>
-            <div className="flex flex-wrap gap-1.5">
-              {numbers.map((n) => (
-                <span key={n} className="rounded-sm bg-ink text-cream px-2 py-1 font-mono text-xs tabular-nums">
-                  {n.toString().padStart(4, "0")}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-        <div className="mt-6 flex flex-wrap gap-3 justify-center">
-          <Button variant="git" size="lg"><Share2 className="h-4 w-4" /> Tell the group chat</Button>
-          <Button asChild variant="cream" size="lg"><Link to="/">Back to comps</Link></Button>
-        </div>
-        <p className="mt-8 font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground/70">
-          Keep this somewhere safe. Or don't — we've got a copy.
-        </p>
+      <main className="mx-auto max-w-2xl px-4 py-10 md:py-16 w-full">
+        <EntryStampSequence
+          compTitle={compTitle}
+          numbers={numbers}
+          entryRef={entryRef}
+          drawLine={drawLine}
+        />
       </main>
       <SiteFooter />
-    </div>
-  );
-}
-
-function Confetti() {
-  const bits = Array.from({ length: 40 });
-  const colors = ["#12503A", "#C9A227", "#0A100D"];
-  return (
-    <div className="absolute inset-0 pointer-events-none" aria-hidden>
-      {bits.map((_, i) => (
-        <span
-          key={i}
-          className="absolute h-2 w-2 rounded-sm"
-          style={{
-            left: `${(i * 7) % 100}%`,
-            top: `-10px`,
-            background: colors[i % colors.length],
-            animation: `confettiFall ${1.5 + (i % 5) * 0.3}s ease-in ${i * 0.05}s forwards`,
-          }}
-        />
-      ))}
     </div>
   );
 }
