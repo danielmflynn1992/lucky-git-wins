@@ -17,6 +17,7 @@ import { NearMiss } from "@/components/NearMiss";
 import { PickHeatmap } from "@/components/PickHeatmap";
 import { RevealedAnswer } from "@/components/RevealedAnswer";
 import { competitionResultQuery } from "@/lib/results-api";
+import { lifecycleOf, formatDrawTime } from "@/lib/site-stats";
 import {
   competitionQueryOptions,
   allCompetitionsQueryOptions,
@@ -81,6 +82,9 @@ function CompDetail() {
   const [reservingQuip, setReservingQuip] = useState(pickLoadingQuip());
   const queryClient = useQueryClient();
   const { data: result } = useQuery(competitionResultQuery(slug));
+
+  const phase = lifecycleOf({ endsAt: c.endsAt, status: c.status, drawId: result?.drawId });
+  const isLive = phase === "live";
 
   const takenSet = useMemo(() => new Set(c.takenNumbers), [c.takenNumbers]);
   const soldTotal = c.totalTickets - c.ticketsAvailable;
