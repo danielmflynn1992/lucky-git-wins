@@ -27,7 +27,7 @@ const MONEY_SLANG: Record<number, string> = {
   1000: "a bag of sand",
   5000: "five bags",
   10000: "ten bags",
-  25000: "a lot of monkeys",
+  25000: "50 monkeys",
   50000: "a stack of bags",
 };
 export function moneySlang(amount: number): string | null {
