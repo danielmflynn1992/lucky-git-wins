@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { z } from "zod";
-import terryImg from "@/assets/terry-cutout.webp.asset.json";
+import terryImg from "@/assets/terry-cutout-v2.webp.asset.json";
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
 import { Button } from "@/components/ui/button";
