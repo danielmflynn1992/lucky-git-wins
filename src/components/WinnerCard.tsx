@@ -5,6 +5,78 @@ import type { Winner } from "@/lib/winners-api";
 import { formatWinnerDate } from "@/lib/winners-api";
 import { cn } from "@/lib/utils";
 
+async function sha256Hex(text: string): Promise<string> {
+  const buf = new TextEncoder().encode(text);
+  const hash = await crypto.subtle.digest("SHA-256", buf);
+  return Array.from(new Uint8Array(hash)).map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+/** Tiny 499-cell coupon with the winning number lit up. Decorative. */
+function MiniCoupon({ total, winner }: { total: number; winner: number }) {
+  const cells = Math.max(total, winner);
+  return (
+    <div aria-hidden className="bg-[var(--color-ink-black)] p-[2px]">
+      <div
+        className="grid gap-[1px]"
+        style={{ gridTemplateColumns: "repeat(25, minmax(0, 1fr))" }}
+      >
+        {Array.from({ length: cells }, (_, i) => {
+          const n = i + 1;
+          const win = n === winner;
+          return (
+            <span
+              key={n}
+              className={cn(
+                "aspect-square",
+                win && "relative z-10 outline outline-1 outline-[var(--color-ink-black)]",
+              )}
+              style={{
+                background: win
+                  ? "var(--color-ink-red)"
+                  : "color-mix(in srgb, var(--color-paper) 88%, var(--color-ink-blue))",
+              }}
+            />
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function InlineVerify({ seed, hash }: { seed: string; hash: string }) {
+  const [state, setState] = useState<"idle" | "checking" | "ok" | "bad">("idle");
+  const run = async () => {
+    setState("checking");
+    try {
+      const computed = await sha256Hex(seed);
+      setState(computed === hash ? "ok" : "bad");
+    } catch {
+      setState("bad");
+    }
+  };
+  return (
+    <div className="mt-2 flex flex-wrap items-center gap-2">
+      <button
+        type="button"
+        onClick={run}
+        className="border border-[var(--color-ink-black)] bg-[var(--color-ink-yellow)] text-[var(--color-ink-black)] px-2.5 py-1 font-display uppercase tracking-[0.14em] text-[10px]"
+      >
+        {state === "checking" ? "Checking…" : "Verify this draw"}
+      </button>
+      {state === "ok" && (
+        <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--color-ink-blue)]">
+          Hash matches. Seed was sealed before close.
+        </span>
+      )}
+      {state === "bad" && (
+        <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--color-ink-red)]">
+          Hash mismatch — tell us immediately.
+        </span>
+      )}
+    </div>
+  );
+}
+
 function slangForPrize(prize: string): string | null {
   // Pull the biggest £-figure out of the prize label ("Rolex + £2,000" → 2000)
   const nums = [...prize.matchAll(/£\s*([\d,]+)/g)].map((m) => Number(m[1].replace(/,/g, "")));
@@ -58,6 +130,7 @@ export function WinnerCard({
   const slang = slangForPrize(w.prize);
   const hasVerification =
     !!w.verification_hash && !!w.seed_revealed && w.qualifying_pool_size != null;
+  const canRehash = !!w.seed_revealed && !!w.seed_hash;
 
   return (
     <article className="flex flex-col border-[1.5px] border-[var(--color-ink-black)] bg-[var(--color-paper-raised)] overflow-hidden">
@@ -188,20 +261,33 @@ export function WinnerCard({
               <div className="mx-3 mt-3 rule-dotted" aria-hidden />
               <div className="px-3 pt-2 pb-4">
                 <div className="label text-[9px] text-[var(--color-ink-blue)] mb-1">Verification</div>
+                <MiniCoupon total={w.total_tickets} winner={w.winning_number} />
+                <div className="mt-1 mb-2 font-mono text-[10px] tabular-nums text-[var(--color-ink-black)]">
+                  Winning ticket <b className="text-[var(--color-ink-red)]">#{String(w.winning_number).padStart(3, "0")}</b>
+                  {" · "}
+                  {new Date(w.drawn_at).toLocaleString("en-GB")}
+                </div>
                 <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-0.5 font-mono text-[10px] text-[var(--color-ink-black)]">
                   <dt className="text-[var(--color-ink-grey)]">Commit</dt>
                   <dd className="truncate" title={w.verification_hash}>{w.verification_hash.slice(0, 24)}…</dd>
+                  {w.seed_hash ? (
+                    <>
+                      <dt className="text-[var(--color-ink-grey)]">Seed hash</dt>
+                      <dd className="truncate" title={w.seed_hash}>{w.seed_hash.slice(0, 24)}…</dd>
+                    </>
+                  ) : null}
                   <dt className="text-[var(--color-ink-grey)]">Seed</dt>
                   <dd className="truncate" title={w.seed_revealed}>{w.seed_revealed.slice(0, 24)}…</dd>
                   <dt className="text-[var(--color-ink-grey)]">Pool</dt>
                   <dd>{w.qualifying_pool_size} qualifying</dd>
                 </dl>
+                {canRehash && <InlineVerify seed={w.seed_revealed} hash={w.seed_hash} />}
                 <Link
                   to="/draws/$id/reveal"
                   params={{ id: w.id }}
                   className="mt-2 inline-block font-body uppercase tracking-[0.16em] text-[10px] font-bold text-[var(--color-ink-blue)] underline underline-offset-2"
                 >
-                  Verify this draw →
+                  Watch the full reveal →
                 </Link>
               </div>
             </>
