@@ -147,7 +147,7 @@ function CompDetail() {
     <div className="min-h-screen flex flex-col">
       <SiteNav />
 
-      <main className="mx-auto max-w-7xl px-4 py-6 md:py-10 w-full">
+      <main className="mx-auto max-w-7xl px-4 py-6 md:py-10 w-full pb-28 md:pb-10">
         <div className="text-xs font-semibold text-muted-foreground mb-4">
           <Link to="/competitions" className="hover:text-clover">All comps</Link>
           <span className="mx-2">/</span>
@@ -385,7 +385,54 @@ function CompDetail() {
         </section>
       </main>
 
+      {/* Mobile sticky basket bar — total and the button are always to hand. */}
+      <div className="md:hidden fixed bottom-0 inset-x-0 z-40 border-t-2 border-[var(--color-ink-black)] bg-[var(--color-paper-raised)] px-4 py-2 flex items-center justify-between gap-3">
+        <div className="min-w-0">
+          <div className="text-[9px] uppercase tracking-[0.16em] font-bold text-muted-foreground">Total</div>
+          <div className="font-display font-black text-xl leading-none tabular-nums">
+            {gbp(c.pricePerTicket * displayNumbers)}
+          </div>
+          <div className="font-mono text-[10px] text-muted-foreground tabular-nums">
+            {displayNumbers} ticket{displayNumbers === 1 ? "" : "s"}
+          </div>
+        </div>
+        <Button variant="gold" size="lg" onClick={handleReserve} disabled={displayNumbers === 0 || reserving || soldOut}>
+          {reserving ? <><Loader2 className="h-4 w-4 animate-spin" /> {reservingQuip}</> : "Go on then"}
+        </Button>
+      </div>
+
       <SiteFooter />
+    </div>
+  );
+}
+
+/**
+ * Sample skill question, styled as a coupon stub. Sets the expectation that a
+ * wrong answer means the tickets don't enter — before any money changes hands.
+ */
+function SkillStub() {
+  return (
+    <div className="mt-4 border-[1.5px] border-[var(--color-ink-black)] bg-[var(--color-paper-raised)]">
+      <div className="bg-[var(--color-ink-blue)] text-[var(--color-paper)] px-3 py-1.5 font-display uppercase tracking-[0.16em] text-[11px]">
+        The question will look like this
+      </div>
+      <div className="p-3">
+        <p className="font-mono text-[13px] text-foreground">
+          Example: <b>What is 14 + 9?</b>
+        </p>
+        <div className="mt-2 flex items-center gap-2">
+          <span className="inline-block border border-dashed border-[var(--color-ink-black)] px-6 py-1.5 font-mono text-sm text-muted-foreground">
+            your answer
+          </span>
+          <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+            Numbers only
+          </span>
+        </div>
+        <p className="mt-3 font-mono text-[11px] leading-snug text-[var(--color-ink-red)]">
+          Get it wrong and your tickets don't enter the draw. No refund. That's the
+          rule, and it's the same rule for everyone.
+        </p>
+      </div>
     </div>
   );
 }
