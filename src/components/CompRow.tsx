@@ -48,6 +48,9 @@ export function CompRow({ c }: { c: Competition }) {
           </div>
           <span className="text-[11px] font-mono tabular-nums text-muted-foreground font-semibold">{remaining.toLocaleString()} left</span>
         </div>
+        <div className="mt-1 text-[10px] font-mono uppercase tracking-[0.1em] text-muted-foreground/80">
+          Closes {new Date(c.endsAt).toLocaleDateString("en-GB", { day: "2-digit", month: "short" })} · Max {c.maxPerPerson} per person
+        </div>
       </div>
 
       {/* Right */}
