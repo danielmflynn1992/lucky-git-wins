@@ -16,7 +16,7 @@ import type { Category } from "@/lib/mock-comps";
 import { allCompetitionsQueryOptions } from "@/lib/competitions-api";
 import { NewsletterSlip } from "@/components/NewsletterSlip";
 import { WinnerCard } from "@/components/WinnerCard";
-import { winnersQuery, displayWinners } from "@/lib/winners-api";
+import { winnersQuery, realOnly } from "@/lib/winners-api";
 import { useSiteStats, formatCloseDate, pinDrawingFirst, lifecycleOf, formatDrawTime } from "@/lib/site-stats";
 import { drawnCompetitionsQuery } from "@/lib/results-api";
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
@@ -53,7 +53,7 @@ function Home() {
   const [view, setView] = useState<"grid" | "list">("grid");
   const [openWinnerId, setOpenWinnerId] = useState<string | null>(null);
   const { data: allWinners = [] } = useQuery(winnersQuery);
-  const winners = displayWinners(allWinners);
+  const winners = realOnly(allWinners);
   const stats = useSiteStats();
   const { data: drawnComps = [] } = useQuery(drawnCompetitionsQuery);
   const lastDrawn = drawnComps[0] ?? null;
@@ -347,7 +347,7 @@ function Home() {
           <Link to="/winners" className="text-sm font-bold text-clover hover:underline">Smug Gits (Our Winners) →</Link>
         </div>
         {winners.length > 0 ? (
-          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {winners.slice(0, 3).map((w) => (
               <WinnerCard
                 key={w.id}
@@ -358,7 +358,10 @@ function Home() {
             ))}
           </div>
         ) : (
-          <p className="mt-6 font-mono text-sm text-muted-foreground">No draws yet — first winners land after the next close.</p>
+          <p className="mt-6 font-mono text-sm text-muted-foreground">
+            No draws yet — first winners land after the next close.{" "}
+            <Link to="/winners" className="font-bold text-clover underline underline-offset-2">See the winners wall</Link>
+          </p>
         )}
       </section>
 

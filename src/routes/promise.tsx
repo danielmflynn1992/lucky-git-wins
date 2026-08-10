@@ -140,11 +140,11 @@ function PromisePage() {
             style={{ background: "var(--color-ink-blue)", color: "var(--color-on-dark-fg)" }}
           >
             <div className="text-[10px] font-mono uppercase tracking-[0.25em] font-bold" style={{ color: "var(--color-marker)" }}>The no-dead-comps bit</div>
-            <h2 className="mt-2 font-display text-3xl md:text-4xl font-black tracking-[-0.02em]">Nobody's postponing anything.</h2>
-            <p className="mt-4 leading-relaxed max-w-2xl opacity-90">
-              Because our draws are fully automated (see Promise #2), the draw literally cannot be delayed. When the timer hits zero the server runs the RNG, writes the winning number to the public log, and moves on. There's no button labelled "Push the draw back a week because ticket sales are slow" — that button doesn't exist in our code.
+            <h2 className="mt-2 font-display font-black tracking-[-0.02em]" style={{ color: "var(--color-paper)" }}>Nobody's postponing anything.</h2>
+            <p className="mt-4 leading-relaxed max-w-2xl" style={{ color: "color-mix(in oklab, var(--color-paper) 85%, transparent)" }}>
+              The draw runs itself. Timer hits zero, the server draws, the result goes in the public log. There's no button for pushing a draw back a week because sales are slow — it doesn't exist.
             </p>
-            <p className="mt-3 leading-relaxed max-w-2xl italic opacity-70">
+            <p className="mt-3 leading-relaxed max-w-2xl italic" style={{ color: "color-mix(in oklab, var(--color-paper) 70%, transparent)" }}>
               This isn't a promise we hope to keep. The system doesn't know how to delay a draw.
             </p>
           </div>

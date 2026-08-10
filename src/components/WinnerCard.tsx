@@ -148,21 +148,13 @@ export function WinnerCard({
         aria-controls={panelId}
         className="text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ink-blue)]"
       >
-        <header className="bg-[var(--color-ink-red)] text-[var(--color-paper)] px-3 py-1.5 flex items-center justify-between gap-2">
+        <header className="bg-[var(--color-ink-red)] text-[var(--color-paper)] px-5 py-1.5 flex items-center justify-between gap-2">
           <span className="font-body font-bold uppercase tracking-[0.16em] text-[10px]">
             Winner
-            {w.isDemo && (
-              <span className="ml-2 border border-current px-1 py-px text-[8px] tracking-[0.14em] opacity-90">
-                Demo data — removed at launch
-              </span>
-            )}
           </span>
           <span className="flex items-center gap-2">
             <span className="font-mono tabular-nums text-[10px] opacity-95">
               {formatWinnerDate(w.drawn_at)}
-            </span>
-            <span className="font-body uppercase tracking-[0.16em] text-[9px] opacity-90">
-              {expanded ? "Tap to close" : "Tap to open"}
             </span>
             <ChevronDown
               className="h-3.5 w-3.5 motion-safe:transition-transform motion-safe:duration-[220ms]"
@@ -171,26 +163,40 @@ export function WinnerCard({
             />
           </span>
         </header>
+        {w.isDemo && (
+          <div className="w-full bg-[var(--color-ink-blue)] text-[var(--color-paper)] px-5 py-1 font-body uppercase tracking-[0.16em] text-[10px] whitespace-nowrap overflow-hidden text-ellipsis">
+            Demo data — removed at launch
+          </div>
+        )}
 
-        <dl className="px-3 py-2 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1">
-          <dt className="label text-[9px] whitespace-nowrap self-center">NAME</dt>
-          <dd className="font-mono text-[12px] text-[var(--color-ink-black)] text-right self-center truncate">
-            <b>{w.winner_display_name}</b>
-            {w.winner_town ? <span> · {w.winner_town}</span> : null}
-          </dd>
-          <dt className="label text-[9px] whitespace-nowrap self-center">TICKET</dt>
-          <dd className="font-mono text-[12px] text-[var(--color-ink-black)] text-right self-center truncate">
-            <b>#{w.winning_number}</b>
-          </dd>
-          <dt className="label text-[9px] whitespace-nowrap self-start pt-[3px]">PRIZE</dt>
-          <dd className="font-mono text-[12px] text-[var(--color-ink-black)] text-right self-start leading-snug break-words">
-            <b>{w.prize}</b>
-            {slang && (
-              <span className="block font-mono text-[10px] text-[var(--color-ink-blue)]">
-                {slang}
-              </span>
-            )}
-          </dd>
+        <dl className="px-5 py-2">
+          <div className="leader-row">
+            <dt className="label text-[9px] whitespace-nowrap">NAME</dt>
+            <span className="leader-row__fill" aria-hidden />
+            <dd className="font-mono text-[12px] text-[var(--color-ink-black)] text-right truncate min-w-0">
+              <b>{w.winner_display_name}</b>
+              {w.winner_town ? <span> · {w.winner_town}</span> : null}
+            </dd>
+          </div>
+          <div className="leader-row">
+            <dt className="label text-[9px] whitespace-nowrap">TICKET</dt>
+            <span className="leader-row__fill" aria-hidden />
+            <dd className="font-mono text-[12px] text-[var(--color-ink-black)] text-right truncate min-w-0">
+              <b>#{w.winning_number}</b>
+            </dd>
+          </div>
+          <div className="leader-row">
+            <dt className="label text-[9px] whitespace-nowrap">PRIZE</dt>
+            <span className="leader-row__fill" aria-hidden />
+            <dd className="font-mono text-[12px] text-[var(--color-ink-black)] text-right leading-snug break-words min-w-0">
+              <b>{w.prize}</b>
+              {slang && (
+                <span className="block font-mono text-[10px] text-[var(--color-ink-blue)]">
+                  {slang}
+                </span>
+              )}
+            </dd>
+          </div>
         </dl>
       </button>
 
@@ -203,7 +209,7 @@ export function WinnerCard({
       >
         <div ref={panelRef} className="border-t-[1.5px] border-dashed border-[var(--color-ink-black)] relative pb-3">
           {w.image ? (
-            <div className="relative mx-3 mt-3 mb-8">
+            <div className="relative mx-5 mt-3 mb-8">
               <div className="prize-treatment pointer-events-none relative z-0 aspect-[4/3]">
                 <img
                   src={w.image}
@@ -232,7 +238,7 @@ export function WinnerCard({
           ) : null}
 
           {showWinnerPhoto ? (
-            <div className={cn("px-3 flex justify-center relative", w.image ? "-mt-10 z-10" : "pt-4") }>
+            <div className={cn("px-5 flex justify-center relative", w.image ? "-mt-10 z-10" : "pt-4") }>
               <figure
                 className="relative bg-[var(--color-card-white)] p-3 pb-10 shadow-[0_10px_24px_rgba(0,0,0,0.28)] border border-[var(--color-paper-edge)] w-full max-w-[320px]"
                 style={{ transform: "rotate(-2deg)" }}
@@ -258,15 +264,15 @@ export function WinnerCard({
           ) : null}
 
           {w.winner_quote ? (
-            <blockquote className="mx-3 mt-3 font-body italic text-[13px] text-[var(--color-ink-black)] leading-snug">
+            <blockquote className="mx-5 mt-3 font-body italic text-[13px] text-[var(--color-ink-black)] leading-snug">
               “{w.winner_quote}”
             </blockquote>
           ) : null}
 
           {hasVerification ? (
             <>
-              <div className="mx-3 mt-3 rule-dotted" aria-hidden />
-              <div className="px-3 pt-2 pb-4">
+              <div className="mx-5 mt-3 rule-dotted" aria-hidden />
+              <div className="px-5 pt-2 pb-4">
                 <div className="label text-[9px] text-[var(--color-ink-blue)] mb-1">Verification</div>
                 <MiniCoupon total={w.total_tickets} winner={w.winning_number} />
                 <div className="mt-1 mb-2 font-mono text-[10px] tabular-nums text-[var(--color-ink-black)]">
