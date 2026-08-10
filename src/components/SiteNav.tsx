@@ -153,8 +153,8 @@ export function SiteNav() {
                 src={LOCKUP_HORIZONTAL_URL}
                 alt="Lucky Git Comps"
                 draggable={false}
-                className="block h-auto w-full select-none pointer-events-none"
-                style={{ maxWidth: 560 }}
+                className="block w-auto max-w-full select-none pointer-events-none"
+                style={{ maxHeight: 88 }}
               />
             )}
           </Link>
