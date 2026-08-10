@@ -350,6 +350,45 @@ export type Database = {
           },
         ]
       }
+      player_limits: {
+        Row: {
+          cooloff_until: string | null
+          created_at: string
+          email_draw_results: boolean
+          email_drop_reminders: boolean
+          monthly_cap_pence: number | null
+          pending_cap_effective_at: string | null
+          pending_cap_pence: number | null
+          self_excluded_until: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          cooloff_until?: string | null
+          created_at?: string
+          email_draw_results?: boolean
+          email_drop_reminders?: boolean
+          monthly_cap_pence?: number | null
+          pending_cap_effective_at?: string | null
+          pending_cap_pence?: number | null
+          self_excluded_until?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          cooloff_until?: string | null
+          created_at?: string
+          email_draw_results?: boolean
+          email_drop_reminders?: boolean
+          monthly_cap_pence?: number | null
+          pending_cap_effective_at?: string | null
+          pending_cap_pence?: number | null
+          self_excluded_until?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
@@ -682,6 +721,7 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      export_my_data: { Args: never; Returns: Json }
       get_competition_question: {
         Args: { p_slug: string }
         Returns: {
@@ -711,8 +751,45 @@ export type Database = {
         }
         Returns: undefined
       }
+      my_entry_answers: {
+        Args: never
+        Returns: {
+          answered_at: string
+          competition_id: string
+          competition_slug: string
+          competition_title: string
+          draw_id: string
+          drawn: boolean
+          id: string
+          is_correct: boolean
+          raw_answer: string
+        }[]
+      }
+      my_limits: {
+        Args: never
+        Returns: {
+          cooloff_until: string | null
+          created_at: string
+          email_draw_results: boolean
+          email_drop_reminders: boolean
+          monthly_cap_pence: number | null
+          pending_cap_effective_at: string | null
+          pending_cap_pence: number | null
+          self_excluded_until: string | null
+          updated_at: string
+          user_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "player_limits"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      my_month_spend_pence: { Args: never; Returns: number }
       normalise_numeric_answer: { Args: { p_raw: string }; Returns: number }
       pick_question_for_competition: { Args: never; Returns: string }
+      purchase_allowance: { Args: { p_amount_pence: number }; Returns: Json }
       real_draw_count: { Args: never; Returns: number }
       release_reservation: { Args: { p_token: string }; Returns: undefined }
       reserve_lucky_dip: {
@@ -722,6 +799,90 @@ export type Database = {
       reserve_specific_numbers: {
         Args: { p_numbers: number[]; p_slug: string; p_token: string }
         Returns: number[]
+      }
+      self_exclude: {
+        Args: { p_months: number }
+        Returns: {
+          cooloff_until: string | null
+          created_at: string
+          email_draw_results: boolean
+          email_drop_reminders: boolean
+          monthly_cap_pence: number | null
+          pending_cap_effective_at: string | null
+          pending_cap_pence: number | null
+          self_excluded_until: string | null
+          updated_at: string
+          user_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "player_limits"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      set_email_prefs: {
+        Args: { p_draw_results: boolean; p_drop_reminders: boolean }
+        Returns: {
+          cooloff_until: string | null
+          created_at: string
+          email_draw_results: boolean
+          email_drop_reminders: boolean
+          monthly_cap_pence: number | null
+          pending_cap_effective_at: string | null
+          pending_cap_pence: number | null
+          self_excluded_until: string | null
+          updated_at: string
+          user_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "player_limits"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      set_monthly_cap: {
+        Args: { p_pence: number }
+        Returns: {
+          cooloff_until: string | null
+          created_at: string
+          email_draw_results: boolean
+          email_drop_reminders: boolean
+          monthly_cap_pence: number | null
+          pending_cap_effective_at: string | null
+          pending_cap_pence: number | null
+          self_excluded_until: string | null
+          updated_at: string
+          user_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "player_limits"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      start_cooloff: {
+        Args: { p_days: number }
+        Returns: {
+          cooloff_until: string | null
+          created_at: string
+          email_draw_results: boolean
+          email_drop_reminders: boolean
+          monthly_cap_pence: number | null
+          pending_cap_effective_at: string | null
+          pending_cap_pence: number | null
+          self_excluded_until: string | null
+          updated_at: string
+          user_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "player_limits"
+          isOneToOne: true
+          isSetofReturn: false
+        }
       }
       submit_skill_answer: {
         Args: {

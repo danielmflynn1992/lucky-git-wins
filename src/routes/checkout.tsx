@@ -14,6 +14,7 @@ import { SkillQuestionStep } from "@/components/SkillQuestionStep";
 import { EntryStampSequence } from "@/components/EntryStampSequence";
 import { formatDrawTime } from "@/lib/site-stats";
 import { hashSeed } from "@/lib/terry-verdicts";
+import { checkPurchaseAllowed, limitBlockMessage } from "@/lib/account-api";
 
 interface Reservation {
   token: string;
@@ -66,6 +67,8 @@ function CheckoutInner() {
   // Explicit, separate age/residency confirmation — required before payment.
   const [ageConfirmed, setAgeConfirmed] = useState(false);
   const [termsConfirmed, setTermsConfirmed] = useState(false);
+  const [limitBlock, setLimitBlock] = useState<string | null>(null);
+  const [checking, setChecking] = useState(false);
 
   useEffect(() => {
     try {
@@ -111,8 +114,24 @@ function CheckoutInner() {
       <main className="mx-auto max-w-5xl px-4 py-8 md:py-12 w-full grid gap-8 md:grid-cols-5">
         <form
           className="md:col-span-3 space-y-6"
-          onSubmit={(e) => {
+          onSubmit={async (e) => {
             e.preventDefault();
+            // Player-set limits are decided by the server; the client only reports them.
+            setChecking(true);
+            try {
+              const verdict = await checkPurchaseAllowed(Math.round(subtotal * 100));
+              const msg = limitBlockMessage(verdict);
+              if (msg) {
+                setLimitBlock(msg);
+                return;
+              }
+              setLimitBlock(null);
+            } catch {
+              // Not signed in / no limits row — nothing to enforce.
+              setLimitBlock(null);
+            } finally {
+              setChecking(false);
+            }
             setDone(true);
             sessionStorage.removeItem("lgc:reservation");
             window.dispatchEvent(new Event("lgc:basket-change"));
@@ -184,14 +203,26 @@ function CheckoutInner() {
             </span>
           </label>
 
+          {limitBlock && (
+            <div
+              role="alert"
+              className="rounded-md border-2 border-[color:var(--color-ink-red)] bg-[var(--color-paper-raised)] p-4 text-sm font-semibold"
+            >
+              {limitBlock}{" "}
+              <Link to="/account" className="underline">Manage your limits</Link>
+            </div>
+          )}
+
           <Button
             type="submit"
             variant="gold"
             size="xl"
             className="w-full"
-            disabled={!answer || !ageConfirmed || !termsConfirmed}
+            disabled={!answer || !ageConfirmed || !termsConfirmed || checking}
           >
-            {!answer
+            {checking
+              ? "Checking your limits…"
+              : !answer
               ? "Answer the skill question to continue"
               : !ageConfirmed
                 ? "Confirm you're 18+ to continue"
