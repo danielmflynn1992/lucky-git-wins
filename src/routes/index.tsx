@@ -358,7 +358,10 @@ function Home() {
             ))}
           </div>
         ) : (
-          <p className="mt-6 font-mono text-sm text-muted-foreground">No draws yet — first winners land after the next close.</p>
+          <p className="mt-6 font-mono text-sm text-muted-foreground">
+            No draws yet — first winners land after the next close.{" "}
+            <Link to="/winners" className="font-bold text-clover underline underline-offset-2">See the winners wall</Link>
+          </p>
         )}
       </section>
 
