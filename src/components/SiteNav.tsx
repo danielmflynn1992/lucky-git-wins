@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useRouterState } from "@tanstack/react-router";
 import { Instagram, Facebook, Mail, Menu, ShoppingBag, User, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { Lockup, LOCKUP_HORIZONTAL_URL } from "./Logo";
+import { Lockup, LOCKUP_HORIZONTAL_URL, StampSeal } from "./Logo";
 import { Guilloche } from "./Guilloche";
 import { useAuth } from "@/hooks/use-auth";
 import { useBasket } from "@/hooks/use-basket";
@@ -119,37 +119,17 @@ export function SiteNav() {
       {/* Tier 0 — live ticker, topmost element on the page, dark green strip. */}
       <LiveOddsTicker />
 
-      {/* Row 1 — full-bleed masthead banner. The source PNG carries baked-in
-          transparent padding (content bbox = 35..1341 x 192..603 of 1376x768).
-          We crop it with an aspect-ratio wrapper + absolutely positioned img
-          so the banner defines the row height, with only 8px breathing room
-          above/below. */}
-      <Link
-        to="/"
-        aria-label="Lucky Git Comps — home"
-        className="block w-full bg-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-clover"
-        style={{ padding: "8px 0" }}
+      {/* Single merged masthead row: burger left · logo centre · basket right.
+          At rest it shows the full banner lockup; past 80px of scroll it
+          collapses to a 52px compact bar with the square Terry mark. */}
+      <div
+        className="relative bg-card mast-transition"
+        style={{ transition: "height 200ms ease" }}
       >
         <div
-          className="relative mx-auto"
-          style={{ width: "88%", maxWidth: "640px" }}
+          className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 px-2 md:px-6"
+          style={{ padding: scrolled ? "0 8px" : "5px 8px", minHeight: scrolled ? 52 : undefined }}
         >
-          <img
-            src={LOCKUP_HORIZONTAL_URL}
-            alt="Lucky Git Comps"
-            draggable={false}
-            className="block w-full h-auto select-none pointer-events-none"
-          />
-        </div>
-      </Link>
-
-      {/* 2px black rule separating row 1 from row 2. */}
-      <div aria-hidden="true" className="h-[2px] bg-[var(--color-ink-black,#000)]" />
-
-      {/* Row 2 — 40px cream strip: hamburger · centred nav · basket.
-          Nav links hide under 380px; hamburger + basket always visible. */}
-      <div className="relative bg-card" style={{ height: 40 }}>
-        <div className="h-full px-2 md:px-6 flex items-center justify-between md:justify-center gap-2 md:gap-5">
           <button
             ref={toggleRef}
             onClick={() => setOpen((o) => !o)}
@@ -162,19 +142,23 @@ export function SiteNav() {
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
 
-          {/* Centred primary nav — hidden on mobile (use the hamburger) to stop
-              links running under the basket; centred from md up. */}
-          <nav
-            aria-label="Primary"
-            className="hidden md:flex min-w-0 flex-none items-center justify-center gap-5 text-[0.8125rem] tracking-[0.12em] font-bold uppercase"
-            style={{ color: "var(--color-ink-blue, #123)", scrollbarWidth: "none" }}
+          <Link
+            to="/"
+            aria-label="Lucky Git Comps — home"
+            className="min-w-0 flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-clover"
           >
-            <Link to="/competitions" className="hover:text-clover transition-colors whitespace-nowrap">Competitions</Link>
-            <Link to="/draw-day" className="hover:text-clover transition-colors whitespace-nowrap">Draw Day</Link>
-            <Link to="/winners" className="hover:text-clover transition-colors whitespace-nowrap">Winners</Link>
-            <Link to="/about" className="hover:text-clover transition-colors whitespace-nowrap">About</Link>
-            <Link to="/verify" className="hover:text-clover transition-colors whitespace-nowrap">Verify</Link>
-          </nav>
+            {scrolled ? (
+              <StampSeal size={40} />
+            ) : (
+              <img
+                src={LOCKUP_HORIZONTAL_URL}
+                alt="Lucky Git Comps"
+                draggable={false}
+                className="block h-auto w-full select-none pointer-events-none"
+                style={{ maxWidth: 560 }}
+              />
+            )}
+          </Link>
 
           <Link
             to="/checkout"
@@ -200,15 +184,23 @@ export function SiteNav() {
           </Link>
         </div>
 
-        {/* Double-rule bottom border — 2px clover + 1px paper-edge hairline 3px beneath. */}
-        <div aria-hidden="true" className="absolute left-0 right-0 bottom-0 pointer-events-none">
-          <div className="h-[2px] bg-clover" />
-          <div className="h-px bg-[var(--color-paper-edge)] mt-[3px]" />
-        </div>
-      </div>
+        {/* Desktop primary nav sits under the banner at rest only. */}
+        {!scrolled && (
+          <nav
+            aria-label="Primary"
+            className="hidden md:flex items-center justify-center gap-5 pb-1 text-[0.8125rem] tracking-[0.12em] font-bold uppercase"
+            style={{ color: "var(--color-ink-blue, #123)" }}
+          >
+            <Link to="/competitions" className="hover:text-clover transition-colors whitespace-nowrap">Competitions</Link>
+            <Link to="/draw-day" className="hover:text-clover transition-colors whitespace-nowrap">Draw Day</Link>
+            <Link to="/winners" className="hover:text-clover transition-colors whitespace-nowrap">Winners</Link>
+            <Link to="/about" className="hover:text-clover transition-colors whitespace-nowrap">About</Link>
+            <Link to="/verify" className="hover:text-clover transition-colors whitespace-nowrap">Verify</Link>
+          </nav>
+        )}
 
-      {/* Spacer for the double rule so it doesn't sit under the next section. */}
-      <div aria-hidden="true" className="h-[6px] bg-card" />
+        <div aria-hidden="true" className="h-[2px]" style={{ background: "var(--color-ink-blue, #123)" }} />
+      </div>
 
       {/* Screen-reader live region — announces basket changes globally */}
       <div
