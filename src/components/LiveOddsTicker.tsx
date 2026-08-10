@@ -3,7 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { Ticket, Clock, TrendingUp } from "lucide-react";
 import { liveOddsQueryOptions, type LiveOdds } from "@/lib/competitions-api";
-import { timeLeft } from "@/lib/format";
+import { timeLeft, humanTimeLeft, exactTimeLeft } from "@/lib/format";
 import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 
 /**
@@ -109,7 +109,8 @@ function useSalesDeltas(items: LiveOdds[]) {
 
 function TickerItem({ c, delta }: { c: LiveOdds; delta: number }) {
   const t = timeLeft(c.endsAt);
-  const closes = `${String(t.d).padStart(2, "0")}d ${String(t.h).padStart(2, "0")}h ${String(t.m).padStart(2, "0")}m`;
+  const closes = `Closes in ${humanTimeLeft(t)}`;
+  const exact = exactTimeLeft(t);
   const pctSold = Math.round((c.ticketsSold / c.totalTickets) * 100);
   return (
     <Tooltip>
@@ -117,6 +118,7 @@ function TickerItem({ c, delta }: { c: LiveOdds; delta: number }) {
         <Link
           to="/competitions/$slug"
           params={{ slug: c.slug }}
+          title={`${closes} (exactly ${exact})`}
           className="inline-flex items-center gap-3 shrink-0 hover:text-gold focus:text-gold focus:outline-none"
         >
           <span>{c.title.toUpperCase()}</span>
@@ -151,7 +153,7 @@ function TickerItem({ c, delta }: { c: LiveOdds; delta: number }) {
           <TooltipRow
             icon={<Clock className="h-3 w-3 text-urgent" />}
             label="Closes in"
-            value={closes}
+            value={humanTimeLeft(t)}
             hint="Automatic draw as soon as the timer hits zero."
           />
         </dl>

@@ -15,6 +15,24 @@ export function timeLeft(target: Date | string) {
 }
 
 /**
+ * Human countdown phrasing: "1d 4h" over a day, "18h 23m" over an hour,
+ * "23m" under the hour, "45s" in the last minute.
+ */
+export function humanTimeLeft(t: { d: number; h: number; m: number; s: number; total: number }) {
+  if (t.total <= 0) return "Closed";
+  if (t.d > 0) return `${t.d}d ${t.h}h`;
+  if (t.h > 0) return `${t.h}h ${t.m}m`;
+  if (t.m > 0) return `${t.m}m`;
+  return `${t.s}s`;
+}
+
+/** Precise digits, kept for tooltips/title attributes. */
+export function exactTimeLeft(t: { d: number; h: number; m: number; s: number }) {
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${pad(t.d)}d ${pad(t.h)}:${pad(t.m)}:${pad(t.s)}`;
+}
+
+/**
  * Cockney money slang. Exact matches for round figures; near-matches map
  * to the nearest bracket so real prize values ("£45,000", "£4,500") also
  * pick up a slang line without pretending the figure itself has changed.

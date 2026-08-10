@@ -12,6 +12,7 @@ import { LiveOddsTicker } from "./LiveOddsTicker";
 const leftLinks = [
   { to: "/competitions", label: "Get Tickets" },
   { to: "/odds", label: "Best Odds" },
+  { to: "/draw-day", label: "Draw Day", sub: "How we draw & publish results" },
   { to: "/winners", label: "Winners" },
   { to: "/how-it-works", label: "How It Works" },
 ];
@@ -21,7 +22,7 @@ const rightLinks = [
   { to: "/faq", label: "FAQ" },
   { to: "/", label: "Contact" },
 ];
-const allLinks = [...leftLinks, ...rightLinks];
+const allLinks: { to: string; label: string; sub?: string }[] = [...leftLinks, ...rightLinks];
 
 export function SiteNav() {
   const [open, setOpen] = useState(false);
@@ -191,7 +192,12 @@ export function SiteNav() {
             style={{ color: "var(--color-ink-blue, #123)" }}
           >
             <Link to="/competitions" className="hover:text-clover transition-colors whitespace-nowrap">Competitions</Link>
-            <Link to="/draw-day" className="hover:text-clover transition-colors whitespace-nowrap">Draw Day</Link>
+            <Link to="/draw-day" className="hover:text-clover transition-colors whitespace-nowrap text-center leading-tight">
+              <span className="block">Draw Day</span>
+              <span className="block text-[9px] font-medium normal-case tracking-[0.04em] text-muted-foreground">
+                How we draw &amp; publish results
+              </span>
+            </Link>
             <Link to="/winners" className="hover:text-clover transition-colors whitespace-nowrap">Winners</Link>
             <Link to="/about" className="hover:text-clover transition-colors whitespace-nowrap">About</Link>
             <Link to="/verify" className="hover:text-clover transition-colors whitespace-nowrap">Verify</Link>
@@ -237,7 +243,12 @@ export function SiteNav() {
                 }}
                 activeOptions={{ exact: l.to === "/" }}
               >
-                {l.label}
+                <span className="block">{l.label}</span>
+                {l.sub && (
+                  <span className="mt-0.5 block text-[11px] font-medium normal-case tracking-[0.02em] text-muted-foreground">
+                    {l.sub}
+                  </span>
+                )}
               </Link>
             ))}
           </nav>
