@@ -148,7 +148,7 @@ export function WinnerCard({
         aria-controls={panelId}
         className="text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ink-blue)]"
       >
-        <header className="bg-[var(--color-ink-red)] text-[var(--color-paper)] px-3 py-1.5 flex items-center justify-between gap-2">
+        <header className="bg-[var(--color-ink-red)] text-[var(--color-paper)] px-5 py-1.5 flex items-center justify-between gap-2">
           <span className="font-body font-bold uppercase tracking-[0.16em] text-[10px]">
             Winner
           </span>
