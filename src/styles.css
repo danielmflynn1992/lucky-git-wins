@@ -864,25 +864,31 @@
   border-bottom: 1px solid var(--color-n-200, #E6E2D6);
 }
 
-/* ---------- PERFORATED SECTION RULE ---------- */
+/* ---------- PERFORATED SECTION RULE (punch holes, no icon) ---------- */
 .perf-rule {
   position: relative;
-  height: 2px;
+  height: 24px;
   width: 100%;
-  border-top: 2px dashed color-mix(in oklab, var(--color-ink-black) 30%, transparent);
   margin-block: 32px;
+  background-image: radial-gradient(
+    circle at 7px 12px,
+    var(--color-paper, #F7F2E4) 0 3px,
+    color-mix(in oklab, var(--color-ink-black) 22%, transparent) 3px 3.9px,
+    transparent 4px
+  );
+  background-size: 14px 24px;
+  background-repeat: repeat-x;
+  background-position: center;
 }
+/* thin dashed tear line running behind the holes */
 .perf-rule::before {
-  content: '✂';
+  content: '';
   position: absolute;
-  left: 24px;
+  inset: 0;
   top: 50%;
-  transform: translateY(-55%);
-  font-size: 13px;
-  line-height: 1;
-  color: color-mix(in oklab, var(--color-ink-black) 65%, transparent);
-  background: var(--color-background);
-  padding: 0 8px;
+  height: 0;
+  border-top: 1px dashed color-mix(in oklab, var(--color-ink-black) 25%, transparent);
+  z-index: -1;
 }
 
 /* ---------- RUBBER STAMP (canonical .stamp) ---------- */
