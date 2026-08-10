@@ -112,8 +112,8 @@ export function CompCard({ c }: { c: Competition }) {
       </div>
 
       {/* FORM-STYLE DATA BLOCK */}
-      <div className="relative z-10 pointer-events-none px-3 pt-3 flex flex-1 flex-col gap-2 min-w-0 overflow-hidden">
-        <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 min-w-0">
+      <div className="relative z-10 pointer-events-none px-5 pt-3 flex flex-1 flex-col gap-2 min-w-0 overflow-hidden">
+        <dl className="min-w-0">
           <FormRow label="STAKE" value={<span className="font-bold text-[var(--color-ink-red)]">{gbp(c.pricePerTicket)}</span>} />
           <FormRow label="ODDS" value={<>1 in <b>{c.totalTickets}</b></>} />
           <FormRow label="SOLD" value={fresh ? <span className="text-[var(--color-ink-blue)]">First one's yours</span> : <b>{c.ticketsSold.toLocaleString()}</b>} />
