@@ -31,6 +31,17 @@ export const Route = createFileRoute("/terms")({
       <p>You must be aged 18 or over to enter. We capture date of birth at account creation and block accounts under 18. Guest checkout requires a positive 18+ confirmation.</p>
       <h2>8. Data & marketing</h2>
       <p>We process your personal data in line with our <a href="/privacy">Privacy Policy</a>.</p>
+      <h2 id="referrals">9. Referrals</h2>
+      <p>Each account is issued a unique referral code. Where a new entrant registers using your code, a £5 site credit is applied to each of you <b>after their first qualifying entry</b> — that is, after a paid ticket purchase with a correctly answered skill question in a competition that has not yet closed. Non-qualifying entries, cancelled orders and refunded purchases do not trigger credit.</p>
+      <ul>
+        <li>Credit is site credit only. It cannot be withdrawn or exchanged for cash.</li>
+        <li>Self-referral, duplicate accounts and shared payment details are not eligible, and we may withdraw credit obtained that way.</li>
+        <li>The referred entrant must be a new account, 18 or over and UK resident.</li>
+        <li>Credit is applied within 24 hours of the qualifying entry and expires 12 months after issue.</li>
+        <li>We may change or end the referral scheme at any time; credit already issued is unaffected.</li>
+      </ul>
+      <h2>10. Responsible play limits</h2>
+      <p>You may set a monthly spending limit, a cooling-off break or self-exclusion in your account. Reductions to a limit apply immediately; increases apply only after a 24-hour cooling-off period. Breaks and self-exclusion cannot be lifted early, and self-exclusion has a six-month minimum.</p>
       <p className="text-xs opacity-60 mt-8">This is a template. Replace with your finalised terms drafted by your solicitor before launch.</p>
     </StaticPage>
   ),
