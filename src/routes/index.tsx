@@ -67,6 +67,11 @@ function Home() {
     return pinDrawingFirst(list);
   }, [cat, sort, COMPETITIONS]);
 
+  // Filters, sorting and the grid/list toggle only earn their keep once
+  // there's a proper shelf to sort. Below four live comps we show a single
+  // featured layout instead. Controls return automatically at 4+.
+  const showControls = openComps.length >= 4;
+
   const featured = hero[active] ?? hero[0];
   const featuredPct = featured
     ? Math.round((featured.ticketsSold / featured.totalTickets) * 100)
