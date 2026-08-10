@@ -236,7 +236,7 @@ function Home() {
         <div className="flex items-end justify-between gap-4 flex-wrap">
           <div>
             <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-clover mb-2 font-bold">Live · {stats.compsLive.toString().padStart(2, "0")}</div>
-            <h2 className="font-display text-3xl md:text-4xl font-black tracking-tight text-foreground">Competitions</h2>
+            <h2 className="font-display font-black tracking-tight text-foreground">Competitions</h2>
             <p className="text-muted-foreground text-sm mt-1">Every ticket accounted for, every close time public.</p>
           </div>
           {showControls && (
@@ -312,7 +312,7 @@ function Home() {
       <section className="mx-auto max-w-7xl px-4 mt-4 md:mt-6 w-full">
         <div>
           <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-clover font-bold">How it works</div>
-          <h2 className="mt-2 font-display text-3xl md:text-5xl font-black tracking-[-0.02em] text-foreground">Three steps. One of them's a skill question.</h2>
+          <h2 className="mt-2 font-display font-black tracking-[-0.02em] text-foreground">Three steps. One of them's a skill question.</h2>
         </div>
         {/* Bento box */}
         <div className="mt-8 grid gap-4 md:grid-cols-6 md:grid-rows-2 md:auto-rows-fr">
@@ -341,7 +341,7 @@ function Home() {
         <div className="flex items-end justify-between gap-4 flex-wrap">
           <div>
             <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-clover mb-2 font-bold">Winners · Verified</div>
-            <h2 className="font-display text-3xl md:text-5xl font-black tracking-[-0.02em] text-foreground">Smug Gits.</h2>
+            <h2 className="font-display font-black tracking-[-0.02em] text-foreground">Smug Gits.</h2>
             <p className="text-muted-foreground mt-1">Real people who won real things. Try not to hate them.</p>
           </div>
           <Link to="/winners" className="text-sm font-bold text-clover hover:underline">Smug Gits (Our Winners) →</Link>
