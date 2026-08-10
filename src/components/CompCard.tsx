@@ -57,7 +57,7 @@ export function CompCard({ c }: { c: Competition }) {
       </Link>
 
       {/* RED MASTHEAD */}
-      <header className="relative z-10 bg-[var(--color-ink-red)] text-[var(--color-paper)] px-3 py-1.5 flex items-baseline justify-between gap-2 min-w-0">
+      <header className="relative z-10 bg-[var(--color-ink-red)] text-[var(--color-paper)] px-5 py-1.5 flex items-baseline justify-between gap-2 min-w-0">
         <span className="font-body font-bold uppercase tracking-[0.16em] text-[9px] min-w-0 truncate opacity-95">
           {c.category}
         </span>
@@ -67,7 +67,7 @@ export function CompCard({ c }: { c: Competition }) {
       </header>
 
       {/* Prize title in Anton */}
-      <div className="relative z-10 px-3 pt-2 pb-1 min-w-0">
+      <div className="relative z-10 px-5 pt-2 pb-1 min-w-0">
         <h3
           className="font-display uppercase leading-[0.95] tracking-[0.01em] text-[var(--color-ink-black)] break-words hyphens-auto line-clamp-2"
           style={{ fontSize: "clamp(1.25rem, 5.4cqi, 1.5rem)", minHeight: "calc(2em * 0.95)" }}
@@ -76,10 +76,10 @@ export function CompCard({ c }: { c: Competition }) {
         </h3>
       </div>
 
-      <div className="mx-3 rule-dotted" aria-hidden="true" />
+      <div className="mx-5 rule-dotted" aria-hidden="true" />
 
       {/* Prize image on the printed stage — enforced 4:3 + treatment. */}
-      <div className="relative z-0 mx-3 mt-2 mb-6">
+      <div className="relative z-0 mx-5 mt-2 mb-6">
         <div className="pointer-events-none">
           <PrizeImage
             src={(c as unknown as { thumbUrl?: string }).thumbUrl || c.image}
@@ -135,21 +135,21 @@ export function CompCard({ c }: { c: Competition }) {
       {/* PERFORATED TEAR-OFF with CTAs */}
       <div className="relative z-10 mt-3">
         {closed ? (
-          <p className="px-3 pb-2 text-[10px] font-mono uppercase tracking-[0.1em] text-[var(--color-ink-grey)] leading-tight">
+          <p className="px-5 pb-2 text-[10px] font-mono uppercase tracking-[0.1em] text-[var(--color-ink-grey)] leading-tight">
             {drawn
               ? "Drawn. Result's published, verify it yourself."
               : `Closed — drawing ${formatDrawTime(c.endsAt)}. The automatic draw does the rest.`}
           </p>
         ) : soldOut ? (
-          <p className="px-3 pb-2 text-[10px] font-mono uppercase tracking-[0.1em] text-[var(--color-ink-red)] leading-tight">
+          <p className="px-5 pb-2 text-[10px] font-mono uppercase tracking-[0.1em] text-[var(--color-ink-red)] leading-tight">
             {c.totalTickets} gits had a go. One of them's about to be insufferable.
           </p>
         ) : (
-          <p className="px-3 pb-2 text-[8px] font-mono uppercase tracking-[0.14em] text-[var(--color-ink-grey)]/70 leading-tight">
+          <p className="px-5 pb-2 text-[8px] font-mono uppercase tracking-[0.14em] text-[var(--color-ink-grey)]/70 leading-tight">
             No refunds, no rollovers, no funny business.
           </p>
         )}
-        <p className="px-3 pb-2 text-[8px] font-mono uppercase tracking-[0.12em] text-[var(--color-ink-grey)]/80 leading-tight">
+        <p className="px-5 pb-2 text-[8px] font-mono uppercase tracking-[0.12em] text-[var(--color-ink-grey)]/80 leading-tight">
           Closes {new Date(c.endsAt).toLocaleDateString("en-GB", { day: "2-digit", month: "short" })} · Max {c.maxPerPerson} per person ·{" "}
           <Link
             to="/competitions/$slug"
@@ -169,7 +169,7 @@ export function CompCard({ c }: { c: Competition }) {
               to="/results"
               data-no-card-click
               onClick={(e) => e.stopPropagation()}
-              className="pointer-events-auto flex items-center justify-center gap-1.5 bg-[var(--color-ink-grey)] text-[var(--color-paper)] px-3 py-2.5 font-display uppercase tracking-[0.14em] text-xs whitespace-nowrap hover:bg-[var(--color-ink-black)]"
+              className="pointer-events-auto flex items-center justify-center gap-1.5 bg-[var(--color-ink-grey)] text-[var(--color-paper)] px-5 py-2.5 font-display uppercase tracking-[0.14em] text-xs whitespace-nowrap hover:bg-[var(--color-ink-black)]"
             >
               <span>Drawn — see result</span>
               <ArrowRight className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
@@ -180,7 +180,7 @@ export function CompCard({ c }: { c: Competition }) {
               params={{ slug: c.slug }}
               data-no-card-click
               onClick={(e) => e.stopPropagation()}
-              className="pointer-events-auto flex items-center justify-center gap-1.5 bg-[var(--color-ink-blue)] text-[var(--color-paper)] px-3 py-2.5 font-display uppercase tracking-[0.14em] text-xs whitespace-nowrap hover:bg-[var(--color-ink-black)]"
+              className="pointer-events-auto flex items-center justify-center gap-1.5 bg-[var(--color-ink-blue)] text-[var(--color-paper)] px-5 py-2.5 font-display uppercase tracking-[0.14em] text-xs whitespace-nowrap hover:bg-[var(--color-ink-black)]"
             >
               <span>Closed — drawing {formatDrawTime(c.endsAt)}</span>
               <ArrowRight className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
@@ -188,7 +188,7 @@ export function CompCard({ c }: { c: Competition }) {
           )
         ) : (
         <div className="grid grid-cols-[1fr_auto] items-stretch">
-          <div className="flex items-center justify-center gap-1.5 bg-[var(--color-ink-red)] text-[var(--color-paper)] px-3 py-2.5 font-display uppercase tracking-[0.14em] text-xs whitespace-nowrap">
+          <div className="flex items-center justify-center gap-1.5 bg-[var(--color-ink-red)] text-[var(--color-paper)] px-5 py-2.5 font-display uppercase tracking-[0.14em] text-xs whitespace-nowrap">
             <span>Enter</span>
             <ArrowRight className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
           </div>
@@ -196,7 +196,7 @@ export function CompCard({ c }: { c: Competition }) {
             type="button"
             aria-label={`Quick add tickets for ${c.title}`}
             onClick={(e) => { e.preventDefault(); e.stopPropagation(); setQuickOpen(true); }}
-            className="pointer-events-auto border-l-2 border-[var(--color-ink-black)] bg-[var(--color-paper)] px-3 font-display uppercase tracking-[0.14em] text-xs inline-flex items-center gap-1.5 hover:bg-[var(--color-ink-yellow)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ink-red)]"
+            className="pointer-events-auto border-l-2 border-[var(--color-ink-black)] bg-[var(--color-paper)] px-5 font-display uppercase tracking-[0.14em] text-xs inline-flex items-center gap-1.5 hover:bg-[var(--color-ink-yellow)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ink-red)]"
           >
             <Plus className="h-3.5 w-3.5" aria-hidden="true" />
             <span>Add</span>
