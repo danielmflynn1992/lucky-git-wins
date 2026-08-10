@@ -154,7 +154,7 @@ export function SiteNav() {
                 alt="Lucky Git Comps"
                 draggable={false}
                 className="block w-auto max-w-full select-none pointer-events-none"
-                style={{ maxHeight: 88 }}
+                style={{ maxHeight: 72 }}
               />
             )}
           </Link>
