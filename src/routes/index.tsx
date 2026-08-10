@@ -83,12 +83,11 @@ function Home() {
           <div>
             <h1
               className="misreg font-display uppercase leading-[0.9] tracking-[0.01em] text-foreground"
-              style={{ fontSize: "clamp(2.75rem, 9vw, 6rem)" }}
             >
               Real odds.<br />
               Automatic draws.
             </h1>
-            <p className="mt-5 text-muted-foreground max-w-md text-base leading-relaxed">
+            <p className="mt-5 text-muted-foreground text-base md:text-lg leading-[1.55] max-w-[34ch]">
               <Marker><span className="text-foreground font-bold">Might as well be you.</span></Marker> Cars, cash, tech and holidays. Every ticket counted, every draw published. No smoke, no mirrors, no bloke pulling names out of a hat in a back room.
             </p>
 
@@ -141,9 +140,12 @@ function Home() {
               <Button asChild variant="git" size="lg">
                 <Link to="/competitions">See what's live →</Link>
               </Button>
-              <Button asChild variant="cream" size="lg">
-                <Link to="/odds">Best odds now</Link>
-              </Button>
+              <Link
+                to="/odds"
+                className="inline-flex h-11 items-center justify-center border-2 border-[var(--color-ink-blue)] bg-[var(--color-paper)] px-6 text-[15px] font-body font-bold uppercase tracking-[0.14em] text-[var(--color-ink-blue)] transition-colors hover:bg-[var(--color-ink-yellow)]"
+              >
+                Best odds now
+              </Link>
             </div>
           </div>
 
