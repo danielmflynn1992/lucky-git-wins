@@ -39,7 +39,7 @@ export function CompRow({ c }: { c: Competition }) {
       {/* Middle */}
       <div className="min-w-0 flex-1">
         <div className="text-[10px] uppercase tracking-[0.15em] font-semibold text-clover truncate">{c.category}</div>
-        <h3 className="font-display text-sm sm:text-base font-bold leading-tight text-foreground truncate">{c.title}</h3>
+        <h3 className="font-display text-[20px] font-bold leading-tight text-foreground truncate">{c.title}</h3>
         <div className="mt-1.5 flex items-center gap-3 flex-wrap">
           <div className="font-display font-black text-lg tabular-nums text-foreground">
             {gbp(c.pricePerTicket)}

@@ -46,6 +46,8 @@ function CompetitionsPage() {
   const [view, setView] = useState<"grid" | "list">("grid");
   const [sort, setSort] = useState<SortKey>("ending-soon");
   const [activeCat, setActiveCat] = useState<string | null>(null);
+  // Same rule as the homepage: controls appear once there are 4+ live comps.
+  const showControls = COMPETITIONS.length >= 4;
   const sorted = useMemo(() => {
     const arr = COMPETITIONS.filter((c) => (activeCat ? c.category === activeCat : true));
     switch (sort) {
@@ -69,8 +71,9 @@ function CompetitionsPage() {
     <div className="min-h-screen flex flex-col bg-background">
       <SiteNav />
       <main className="mx-auto max-w-7xl px-4 py-4 md:py-6 w-full">
-        <h1 className="font-display text-4xl md:text-5xl font-black text-foreground">Live Competitions</h1>
-        <p className="text-muted-foreground mt-1">All the current lot. Sort them, filter them, buy the lot.</p>
+        <h1 className="font-display font-black text-foreground">Live Competitions</h1>
+        <p className="text-muted-foreground mt-1 text-base leading-[1.55] max-w-[34ch]">All the current lot. Sort them, filter them, buy the lot.</p>
+        {showControls && (
         <div className="mt-6 flex items-center justify-between gap-3 flex-wrap">
           <div className="flex gap-2 flex-wrap">
             {["All", ...CATEGORIES].map((c) => {
@@ -97,7 +100,20 @@ function CompetitionsPage() {
             <ViewToggle view={view} onChange={setView} />
           </div>
         </div>
-        {view === "grid" ? (
+        )}
+        {!showControls ? (
+          sorted.length === 0 ? (
+            <EmptyStall />
+          ) : (
+            <div className="mt-8 flex flex-col gap-3">
+              {sorted.map((c) => (
+                <div key={c.slug} className="mx-auto w-full max-w-2xl">
+                  <CompCard c={c} />
+                </div>
+              ))}
+            </div>
+          )
+        ) : view === "grid" ? (
           sorted.length === 0 ? (
             <EmptyStall />
           ) : (

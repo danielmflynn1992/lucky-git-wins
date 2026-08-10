@@ -120,6 +120,22 @@ export function pinDrawingFirst<T extends { endsAt?: string | null; status?: str
 }
 
 /** "8 Aug, 20:00" — the moment the draw fires. */
+/**
+ * DRAWING is a state a comp passes through, not one it lives in. Anything
+ * still awaiting its draw 24h after close is a fault worth shouting about.
+ */
+export const STALE_DRAWING_MS = 24 * 60 * 60 * 1000;
+
+export function isStaleDrawing(c: {
+  endsAt?: string | null;
+  status?: string | null;
+  drawId?: string | null;
+}): boolean {
+  if (lifecycleOf(c) !== "drawing") return false;
+  const t = c.endsAt ? new Date(c.endsAt).getTime() : NaN;
+  return Number.isFinite(t) && Date.now() - t > STALE_DRAWING_MS;
+}
+
 export function formatDrawTime(iso: string | null | undefined): string {
   if (!iso) return "shortly";
   const d = new Date(iso);

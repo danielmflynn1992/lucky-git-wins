@@ -10,3 +10,20 @@ export const COMPANY_NUMBER = "[XXXXXXXX]";
 export const REGISTERED_OFFICE = "[Registered office address]";
 export const SUPPORT_EMAIL = "hello@luckygitcomps.co.uk";
 export const LEGAL_EMAIL = "legal@luckygitcomps.co.uk";
+
+/** A value is a placeholder if it's empty or still wrapped in brackets. */
+function isPlaceholder(v: string): boolean {
+  return !v.trim() || /^\[.*\]$/.test(v.trim());
+}
+
+export const HAS_REAL_COMPANY_DETAILS =
+  !isPlaceholder(COMPANY_NUMBER) && !isPlaceholder(REGISTERED_OFFICE);
+
+/**
+ * Statutory line for the footer. Until the real Companies House number and
+ * registered address are set above, we print the safe short form rather than
+ * leaking bracketed placeholders onto production.
+ */
+export const COMPANY_LINE = HAS_REAL_COMPANY_DETAILS
+  ? `${COMPANY_NAME} · Company No. ${COMPANY_NUMBER} · Registered office: ${REGISTERED_OFFICE} · Registered in England & Wales`
+  : `${COMPANY_NAME} · Registered in England & Wales`;

@@ -67,6 +67,11 @@ function Home() {
     return pinDrawingFirst(list);
   }, [cat, sort, COMPETITIONS]);
 
+  // Filters, sorting and the grid/list toggle only earn their keep once
+  // there's a proper shelf to sort. Below four live comps we show a single
+  // featured layout instead. Controls return automatically at 4+.
+  const showControls = openComps.length >= 4;
+
   const featured = hero[active] ?? hero[0];
   const featuredPct = featured
     ? Math.round((featured.ticketsSold / featured.totalTickets) * 100)
@@ -83,12 +88,11 @@ function Home() {
           <div>
             <h1
               className="misreg font-display uppercase leading-[0.9] tracking-[0.01em] text-foreground"
-              style={{ fontSize: "clamp(2.75rem, 9vw, 6rem)" }}
             >
               Real odds.<br />
               Automatic draws.
             </h1>
-            <p className="mt-5 text-muted-foreground max-w-md text-base leading-relaxed">
+            <p className="mt-5 text-muted-foreground text-base md:text-lg leading-[1.55] max-w-[34ch]">
               <Marker><span className="text-foreground font-bold">Might as well be you.</span></Marker> Cars, cash, tech and holidays. Every ticket counted, every draw published. No smoke, no mirrors, no bloke pulling names out of a hat in a back room.
             </p>
 
@@ -141,9 +145,12 @@ function Home() {
               <Button asChild variant="git" size="lg">
                 <Link to="/competitions">See what's live →</Link>
               </Button>
-              <Button asChild variant="cream" size="lg">
-                <Link to="/odds">Best odds now</Link>
-              </Button>
+              <Link
+                to="/odds"
+                className="inline-flex h-11 items-center justify-center border-2 border-[var(--color-ink-blue)] bg-[var(--color-paper)] px-6 text-[15px] font-body font-bold uppercase tracking-[0.14em] text-[var(--color-ink-blue)] transition-colors hover:bg-[var(--color-ink-yellow)]"
+              >
+                Best odds now
+              </Link>
             </div>
           </div>
 
@@ -229,9 +236,10 @@ function Home() {
         <div className="flex items-end justify-between gap-4 flex-wrap">
           <div>
             <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-clover mb-2 font-bold">Live · {stats.compsLive.toString().padStart(2, "0")}</div>
-            <h2 className="font-display text-3xl md:text-4xl font-black tracking-tight text-foreground">Competitions</h2>
+            <h2 className="font-display font-black tracking-tight text-foreground">Competitions</h2>
             <p className="text-muted-foreground text-sm mt-1">Every ticket accounted for, every close time public.</p>
           </div>
+          {showControls && (
           <div className="flex items-center gap-2 flex-wrap">
             <ViewToggle view={view} onChange={setView} />
             <select
@@ -244,8 +252,10 @@ function Home() {
               <option value="price">Cheapest first</option>
             </select>
           </div>
+          )}
         </div>
 
+        {showControls && (
         <div className="mt-5 flex gap-2 overflow-x-auto pb-2 -mx-4 px-4">
           {["All", ...CATEGORIES].map((c) => (
             <button
@@ -262,8 +272,22 @@ function Home() {
             </button>
           ))}
         </div>
+        )}
 
-        {view === "grid" ? (
+        {!showControls ? (
+          <div className="mt-6 flex flex-col gap-3">
+            {filtered.map((c) => (
+              <div key={c.slug} className="rise-in mx-auto w-full max-w-2xl">
+                <CompCard c={c} />
+              </div>
+            ))}
+            {filtered.length === 0 && (
+              <p className="mt-4 font-mono text-sm text-muted-foreground">
+                Nothing live this minute. Next lot's on its way.
+              </p>
+            )}
+          </div>
+        ) : view === "grid" ? (
           <div className="stall-grid mt-6 grid gap-3 sm:gap-5 grid-cols-2 md:grid-cols-3 items-stretch">
             {filtered.map((c) => (
               <div key={c.slug} className="rise-in h-full">
@@ -288,7 +312,7 @@ function Home() {
       <section className="mx-auto max-w-7xl px-4 mt-4 md:mt-6 w-full">
         <div>
           <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-clover font-bold">How it works</div>
-          <h2 className="mt-2 font-display text-3xl md:text-5xl font-black tracking-[-0.02em] text-foreground">Three steps. One of them's a skill question.</h2>
+          <h2 className="mt-2 font-display font-black tracking-[-0.02em] text-foreground">Three steps. One of them's a skill question.</h2>
         </div>
         {/* Bento box */}
         <div className="mt-8 grid gap-4 md:grid-cols-6 md:grid-rows-2 md:auto-rows-fr">
@@ -317,7 +341,7 @@ function Home() {
         <div className="flex items-end justify-between gap-4 flex-wrap">
           <div>
             <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-clover mb-2 font-bold">Winners · Verified</div>
-            <h2 className="font-display text-3xl md:text-5xl font-black tracking-[-0.02em] text-foreground">Smug Gits.</h2>
+            <h2 className="font-display font-black tracking-[-0.02em] text-foreground">Smug Gits.</h2>
             <p className="text-muted-foreground mt-1">Real people who won real things. Try not to hate them.</p>
           </div>
           <Link to="/winners" className="text-sm font-bold text-clover hover:underline">Smug Gits (Our Winners) →</Link>
