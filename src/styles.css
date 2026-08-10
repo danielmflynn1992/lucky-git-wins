@@ -307,6 +307,17 @@
   h3 { font-size: var(--text-display-md); }
   h4 { font-size: var(--text-display-sm); }
 
+  /* Desktop lets the hero grow, but never past 72px. */
+  @media (min-width: 768px) {
+    h1 { font-size: clamp(3rem, 6vw, 4.5rem); }
+  }
+
+  /* Floor: nothing on the site is smaller than 11px, whatever a utility
+     class asks for. */
+  .text-\[8px\], .text-\[9px\], .text-\[10px\], .text-\[10\.5px\], .text-xs {
+    font-size: 11px;
+  }
+
   .font-mono, .tabular-nums, .num, time, [data-numeral] {
     font-family: var(--font-mono);
     font-variant-numeric: tabular-nums;
