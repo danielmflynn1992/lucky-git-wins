@@ -1047,3 +1047,26 @@
   to   { opacity: 1; transform: translateY(0) rotate(-2deg); }
 }
 .empty-stub { animation: couponLiftIn 420ms ease-out both; }
+
+/* ============================================================
+   NAVY RULE (site-wide): anything sitting on an ink-blue panel
+   gets cream headlines, cream-85% body and yellow accents.
+   Black ink never sits on navy.
+   ============================================================ */
+.bg-clover,
+.on-navy {
+  color: var(--color-on-dark-fg);
+}
+.bg-clover :where(h1, h2, h3, h4, h5),
+.on-navy :where(h1, h2, h3, h4, h5) {
+  color: var(--color-on-dark-fg);
+}
+.bg-clover :where(p, li, dd, dt, small),
+.on-navy :where(p, li, dd, dt, small) {
+  color: color-mix(in oklab, var(--color-on-dark-fg) 85%, transparent);
+}
+.bg-clover :where(.accent, mark),
+.on-navy :where(.accent, mark) {
+  color: var(--color-marker);
+  background: transparent;
+}
