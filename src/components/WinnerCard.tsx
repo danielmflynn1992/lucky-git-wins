@@ -209,7 +209,7 @@ export function WinnerCard({
       >
         <div ref={panelRef} className="border-t-[1.5px] border-dashed border-[var(--color-ink-black)] relative pb-3">
           {w.image ? (
-            <div className="relative mx-3 mt-3 mb-8">
+            <div className="relative mx-5 mt-3 mb-8">
               <div className="prize-treatment pointer-events-none relative z-0 aspect-[4/3]">
                 <img
                   src={w.image}
@@ -238,7 +238,7 @@ export function WinnerCard({
           ) : null}
 
           {showWinnerPhoto ? (
-            <div className={cn("px-3 flex justify-center relative", w.image ? "-mt-10 z-10" : "pt-4") }>
+            <div className={cn("px-5 flex justify-center relative", w.image ? "-mt-10 z-10" : "pt-4") }>
               <figure
                 className="relative bg-[var(--color-card-white)] p-3 pb-10 shadow-[0_10px_24px_rgba(0,0,0,0.28)] border border-[var(--color-paper-edge)] w-full max-w-[320px]"
                 style={{ transform: "rotate(-2deg)" }}
@@ -264,15 +264,15 @@ export function WinnerCard({
           ) : null}
 
           {w.winner_quote ? (
-            <blockquote className="mx-3 mt-3 font-body italic text-[13px] text-[var(--color-ink-black)] leading-snug">
+            <blockquote className="mx-5 mt-3 font-body italic text-[13px] text-[var(--color-ink-black)] leading-snug">
               “{w.winner_quote}”
             </blockquote>
           ) : null}
 
           {hasVerification ? (
             <>
-              <div className="mx-3 mt-3 rule-dotted" aria-hidden />
-              <div className="px-3 pt-2 pb-4">
+              <div className="mx-5 mt-3 rule-dotted" aria-hidden />
+              <div className="px-5 pt-2 pb-4">
                 <div className="label text-[9px] text-[var(--color-ink-blue)] mb-1">Verification</div>
                 <MiniCoupon total={w.total_tickets} winner={w.winning_number} />
                 <div className="mt-1 mb-2 font-mono text-[10px] tabular-nums text-[var(--color-ink-black)]">
