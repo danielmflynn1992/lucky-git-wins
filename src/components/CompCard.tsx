@@ -212,11 +212,12 @@ export function CompCard({ c }: { c: Competition }) {
 
 function FormRow({ label, value }: { label: string; value: React.ReactNode }) {
   return (
-    <>
-      <dt className="label text-[9px] whitespace-nowrap self-center">{label}</dt>
-      <dd className="font-mono text-[12px] tabular-nums text-[var(--color-ink-black)] text-right whitespace-nowrap self-center min-w-0 truncate">
+    <div className="leader-row">
+      <dt className="label text-[9px] whitespace-nowrap">{label}</dt>
+      <span className="leader-row__fill" aria-hidden="true" />
+      <dd className="font-mono text-[12px] tabular-nums text-[var(--color-ink-black)] text-right whitespace-nowrap min-w-0 truncate">
         {value}
       </dd>
-    </>
+    </div>
   );
 }
