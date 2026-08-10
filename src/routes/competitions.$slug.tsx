@@ -18,6 +18,7 @@ import { PickHeatmap } from "@/components/PickHeatmap";
 import { RevealedAnswer } from "@/components/RevealedAnswer";
 import { competitionResultQuery } from "@/lib/results-api";
 import { lifecycleOf, formatDrawTime } from "@/lib/site-stats";
+import { usePlayBlock } from "@/hooks/use-play-block";
 import {
   competitionQueryOptions,
   allCompetitionsQueryOptions,
@@ -87,6 +88,7 @@ function CompDetail() {
 
   const phase = lifecycleOf({ endsAt: c.endsAt, status: c.status, drawId: result?.drawId });
   const isLive = phase === "live";
+  const play = usePlayBlock();
 
   const takenSet = useMemo(() => new Set(c.takenNumbers), [c.takenNumbers]);
   const soldTotal = c.totalTickets - c.ticketsAvailable;
@@ -295,10 +297,20 @@ function CompDetail() {
                   </div>
                   <div className="text-xs text-muted-foreground font-mono tabular-nums">{displayNumbers} ticket{displayNumbers === 1 ? "" : "s"}</div>
                 </div>
-                <Button variant="gold" size="xl" onClick={handleReserve} disabled={displayNumbers === 0 || reserving || soldOut}>
+                <Button variant="gold" size="xl" onClick={handleReserve} disabled={displayNumbers === 0 || reserving || soldOut || play.blocked}>
                   {reserving ? <><Loader2 className="h-4 w-4 animate-spin" /> {reservingQuip}</> : "Go on then"}
                 </Button>
               </div>
+
+              {play.message && (
+                <div
+                  role="status"
+                  className="mt-3 rounded-md border-2 border-[color:var(--color-ink-red)] bg-[var(--color-paper-raised)] p-3 text-[13px] font-semibold"
+                >
+                  {play.message}{" "}
+                  <Link to="/responsible-play" className="underline">Responsible play</Link>
+                </div>
+              )}
 
               <div className="mt-4 pt-4 border-t-2 border-dashed border-border text-[11px] text-muted-foreground">
                 <Link to="/how-entry-works" className="underline">How entry works</Link>{" "}
@@ -409,7 +421,7 @@ function CompDetail() {
             {displayNumbers} ticket{displayNumbers === 1 ? "" : "s"}
           </div>
         </div>
-        <Button variant="gold" size="lg" onClick={handleReserve} disabled={displayNumbers === 0 || reserving || soldOut}>
+        <Button variant="gold" size="lg" onClick={handleReserve} disabled={displayNumbers === 0 || reserving || soldOut || play.blocked}>
           {reserving ? <><Loader2 className="h-4 w-4 animate-spin" /> {reservingQuip}</> : "Go on then"}
         </Button>
       </div>
