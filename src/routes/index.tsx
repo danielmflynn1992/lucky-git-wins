@@ -239,6 +239,7 @@ function Home() {
             <h2 className="font-display text-3xl md:text-4xl font-black tracking-tight text-foreground">Competitions</h2>
             <p className="text-muted-foreground text-sm mt-1">Every ticket accounted for, every close time public.</p>
           </div>
+          {showControls && (
           <div className="flex items-center gap-2 flex-wrap">
             <ViewToggle view={view} onChange={setView} />
             <select
@@ -251,8 +252,10 @@ function Home() {
               <option value="price">Cheapest first</option>
             </select>
           </div>
+          )}
         </div>
 
+        {showControls && (
         <div className="mt-5 flex gap-2 overflow-x-auto pb-2 -mx-4 px-4">
           {["All", ...CATEGORIES].map((c) => (
             <button
@@ -269,8 +272,22 @@ function Home() {
             </button>
           ))}
         </div>
+        )}
 
-        {view === "grid" ? (
+        {!showControls ? (
+          <div className="mt-6 flex flex-col gap-3">
+            {filtered.map((c) => (
+              <div key={c.slug} className="rise-in mx-auto w-full max-w-2xl">
+                <CompCard c={c} />
+              </div>
+            ))}
+            {filtered.length === 0 && (
+              <p className="mt-4 font-mono text-sm text-muted-foreground">
+                Nothing live this minute. Next lot's on its way.
+              </p>
+            )}
+          </div>
+        ) : view === "grid" ? (
           <div className="stall-grid mt-6 grid gap-3 sm:gap-5 grid-cols-2 md:grid-cols-3 items-stretch">
             {filtered.map((c) => (
               <div key={c.slug} className="rise-in h-full">
