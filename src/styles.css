@@ -867,28 +867,22 @@
 /* ---------- PERFORATED SECTION RULE ---------- */
 .perf-rule {
   position: relative;
-  height: 1px;
+  height: 2px;
   width: 100%;
-  background-image: linear-gradient(
-    to right,
-    color-mix(in oklab, var(--color-print-black) 55%, transparent) 0 6px,
-    transparent 6px 12px
-  );
-  background-size: 12px 1px;
-  background-repeat: repeat-x;
-  margin-block: 1rem;
+  border-top: 2px dashed color-mix(in oklab, var(--color-ink-black) 30%, transparent);
+  margin-block: 32px;
 }
 .perf-rule::before {
   content: '✂';
   position: absolute;
-  left: 4px;
+  left: 24px;
   top: 50%;
   transform: translateY(-55%);
   font-size: 13px;
   line-height: 1;
-  color: color-mix(in oklab, var(--color-print-black) 65%, transparent);
+  color: color-mix(in oklab, var(--color-ink-black) 65%, transparent);
   background: var(--color-background);
-  padding: 0 6px 0 0;
+  padding: 0 8px;
 }
 
 /* ---------- RUBBER STAMP (canonical .stamp) ---------- */
