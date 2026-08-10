@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useRouterState } from "@tanstack/react-router";
 import { Instagram, Facebook, Mail, Menu, ShoppingBag, User, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { LOCKUP_HORIZONTAL_URL, StampSeal } from "./Logo";
+import { LOCKUP_HORIZONTAL_URL } from "./Logo";
 import { useAuth } from "@/hooks/use-auth";
 import { useBasket } from "@/hooks/use-basket";
 import { supabase } from "@/integrations/supabase/client";
@@ -57,18 +57,8 @@ export function SiteNav() {
   const toggleRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
 
-  // Scroll-condense: over 80px scroll the masthead compresses from 68/80px to
-  // 56px, the seal shrinks 44→34, and the flanking rules + guilloché fade out.
-  // Motion is CSS-driven so `prefers-reduced-motion` disables it via the
-  // `.mast-transition` utility in src/styles.css.
-  const [scrolled, setScrolled] = useState(false);
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const onScroll = () => setScrolled(window.scrollY > 80);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  // The masthead is a fixed height at every scroll position — no condense,
+  // no logo resize. Keeps the banner visually stable while scrolling.
 
   // Focus management + Escape + focus trap while the panel is open.
   useEffect(() => {
@@ -115,20 +105,17 @@ export function SiteNav() {
   }, [open]);
 
   return (
-    <header className="sticky top-0 z-40 bg-card" data-scrolled={scrolled ? "true" : "false"}>
+    <header className="sticky top-0 z-40 bg-card">
       {/* Tier 0 — live ticker, topmost element on the page, dark green strip. */}
       <LiveOddsTicker />
 
       {/* Single merged masthead row: burger left · logo centre · basket right.
           At rest it shows the full banner lockup; past 80px of scroll it
           collapses to a 52px compact bar with the square Terry mark. */}
-      <div
-        className="relative bg-card mast-transition"
-        style={{ transition: "height 200ms ease" }}
-      >
+      <div className="relative bg-card">
         <div
-          className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 px-2 md:px-6"
-          style={{ padding: scrolled ? "0 8px" : "5px 8px", minHeight: scrolled ? 52 : undefined }}
+          className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 md:px-6"
+          style={{ padding: "5px 8px" }}
         >
           <button
             ref={toggleRef}
@@ -147,17 +134,12 @@ export function SiteNav() {
             aria-label="Lucky Git Comps — home"
             className="min-w-0 flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-clover"
           >
-            {scrolled ? (
-              <StampSeal size={40} />
-            ) : (
-              <img
-                src={LOCKUP_HORIZONTAL_URL}
-                alt="Lucky Git Comps"
-                draggable={false}
-                className="block w-auto max-w-full select-none pointer-events-none"
-                style={{ maxHeight: 72 }}
-              />
-            )}
+            <img
+              src={LOCKUP_HORIZONTAL_URL}
+              alt="Lucky Git Comps"
+              draggable={false}
+              className="block w-auto max-w-full select-none pointer-events-none h-[56px] md:h-[72px]"
+            />
           </Link>
 
           <Link
@@ -184,9 +166,8 @@ export function SiteNav() {
           </Link>
         </div>
 
-        {/* Desktop primary nav sits under the banner at rest only. */}
-        {!scrolled && (
-          <nav
+        {/* Desktop primary nav sits under the banner. */}
+        <nav
             aria-label="Primary"
             className="hidden md:flex items-center justify-center gap-5 pb-1 text-[0.8125rem] tracking-[0.12em] font-bold uppercase"
             style={{ color: "var(--color-ink-blue, #123)" }}
@@ -201,8 +182,7 @@ export function SiteNav() {
             <Link to="/winners" className="hover:text-clover transition-colors whitespace-nowrap">Winners</Link>
             <Link to="/about" className="hover:text-clover transition-colors whitespace-nowrap">About</Link>
             <Link to="/verify" className="hover:text-clover transition-colors whitespace-nowrap">Verify</Link>
-          </nav>
-        )}
+        </nav>
 
         <div aria-hidden="true" className="h-[2px]" style={{ background: "var(--color-ink-blue, #123)" }} />
       </div>

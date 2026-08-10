@@ -282,7 +282,6 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color-scheme: light;
-    overflow-x: hidden;
     max-width: 100%;
   }
   body {
@@ -291,7 +290,8 @@
     font-family: var(--font-body);
     font-feature-settings: "kern";
     line-height: var(--leading-body);
-    overflow-x: hidden;
+    /* No overflow-x here: a non-visible overflow on <body> makes it the sticky
+       containing block and breaks the sticky header. html handles clipping. */
     max-width: 100%;
   }
   h1, h2, h3, h4, .display, .font-display, .font-serif {
