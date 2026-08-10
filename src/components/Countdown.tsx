@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { timeLeft } from "@/lib/format";
+import { timeLeft, humanTimeLeft, exactTimeLeft } from "@/lib/format";
 import { isClosed } from "@/lib/site-stats";
 
 export function Countdown({ target, compact = false }: { target: string; compact?: boolean }) {
@@ -12,9 +12,9 @@ export function Countdown({ target, compact = false }: { target: string; compact
     return () => clearInterval(i);
   }, [target]);
 
-  const pad = (n: number) => String(n).padStart(2, "0");
   const urgent = t.urgent;
-  const digits = `${pad(t.d)}d ${pad(t.h)}:${pad(t.m)}:${pad(t.s)}`;
+  const human = humanTimeLeft(t);
+  const exact = exactTimeLeft(t);
 
   // A live comp must never show 00d 00:00:00 — that state is "closed".
   if (isClosed(target) || t.total <= 0) {
@@ -33,6 +33,7 @@ export function Countdown({ target, compact = false }: { target: string; compact
     <div
       data-dynamic="countdown"
       suppressHydrationWarning
+      title={`Exactly ${exact} remaining`}
       className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 font-mono font-bold tabular-nums shadow-sm ${
         compact ? "text-[11px]" : "text-xs"
       } ${
@@ -42,7 +43,7 @@ export function Countdown({ target, compact = false }: { target: string; compact
       }`}
     >
       <span className={`h-1.5 w-1.5 rounded-full ${urgent ? "bg-white animate-pulse" : "bg-[var(--color-ink-yellow)]"}`} />
-      <span suppressHydrationWarning>{digits}</span>
+      <span suppressHydrationWarning>Closes in {human}</span>
     </div>
   );
 }
