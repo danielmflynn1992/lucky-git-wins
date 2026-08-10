@@ -102,10 +102,28 @@ function Admin() {
     refetchInterval: 30_000,
   });
   const now = Date.now();
+  // Comps that closed more than 24h ago and still have no draw record. This
+  // must never sit unnoticed for weeks.
+  const stuck = rows.filter(
+    (c) => c.status === "live" && now - new Date(c.ends_at).getTime() > 24 * 60 * 60 * 1000,
+  );
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <SiteNav />
       <main className="mx-auto max-w-7xl px-4 py-6 w-full flex-1">
+        {stuck.length > 0 && (
+          <div className="mb-6 rounded-2xl border-2 border-urgent bg-urgent/15 p-4 flex items-start gap-3">
+            <AlertTriangle className="h-5 w-5 text-urgent shrink-0 mt-0.5" />
+            <div className="text-sm">
+              <div className="font-display font-bold text-urgent">
+                {stuck.length} competition{stuck.length === 1 ? "" : "s"} stuck awaiting a draw for over 24 hours
+              </div>
+              <p className="mt-1 text-foreground/80">
+                {stuck.map((c) => c.title).join(", ")}. Run “Auto-draw expired” or draw them individually below.
+              </p>
+            </div>
+          </div>
+        )}
         <div className="mb-6 rounded-2xl border-2 border-urgent/50 bg-urgent/10 p-4 flex items-start gap-3">
           <AlertTriangle className="h-5 w-5 text-urgent shrink-0 mt-0.5" />
           <div className="text-sm">
