@@ -4,7 +4,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
 import { WinnerCard } from "@/components/WinnerCard";
-import { winnersQuery, displayWinners } from "@/lib/winners-api";
+import { winnersQuery, realOnly } from "@/lib/winners-api";
 
 export const Route = createFileRoute("/winners")({
   loader: ({ context }) => context.queryClient.ensureQueryData(winnersQuery),
@@ -32,7 +32,7 @@ export const Route = createFileRoute("/winners")({
 
 function WinnersPage() {
   const { data: allWinners } = useSuspenseQuery(winnersQuery);
-  const winners = displayWinners(allWinners);
+  const winners = realOnly(allWinners);
   const [openId, setOpenId] = useState<string | null>(null);
   return (
     <div className="min-h-screen flex flex-col bg-ambient">
@@ -51,7 +51,7 @@ function WinnersPage() {
             No winners yet — the first draw hasn't landed. Check back after the next competition closes.
           </div>
         ) : (
-          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {winners.map((w) => (
               <WinnerCard
                 key={w.id}
