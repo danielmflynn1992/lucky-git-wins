@@ -431,6 +431,22 @@
 .rule-dashed  { border-top: 1.5px dashed var(--color-ink-black); }
 .rule-double  { border-top: 3px double var(--color-ink-black); }
 
+/* ---------- RECEIPT DOT LEADERS ---------- */
+.leader-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding-block: 8px;
+  min-width: 0;
+}
+.leader-row__fill {
+  flex: 1 1 auto;
+  min-width: 12px;
+  align-self: flex-end;
+  margin-bottom: 4px;
+  border-bottom: 2px dotted color-mix(in oklab, var(--color-ink-black) 35%, transparent);
+}
+
 /* legacy — .on-light now a printed white panel with a black rule */
 .on-light { background-color: var(--color-paper-raised); color: var(--color-ink-black); position: relative; }
 .on-dark  { background-color: var(--color-paper-raised); color: var(--color-ink-black); }
