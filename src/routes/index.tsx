@@ -2,7 +2,7 @@ import { TerrysTip } from "@/components/TerrysTip";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { ChevronRight, Ticket, Shield, Radio, MessageSquareHeart } from "lucide-react";
+import { ChevronRight, Ticket, Shield, Radio, MessageSquareHeart, Dices, Handshake, Headset, ListOrdered } from "lucide-react";
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
 import { CompCard } from "@/components/CompCard";
@@ -184,18 +184,25 @@ function Home() {
 
       {/* TRUST STRIP */}
       <section className="border-y-[1.5px] border-[var(--color-ink-black)] bg-[var(--color-paper-raised)]">
-        <div className="mx-auto max-w-7xl px-4 py-6 grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3">
-          {[
-            "Automatic random draws",
-            "Verified winners, real handshakes",
-            "UK company, UK humans on support",
-            "Every ticket number published",
-          ].map((t) => (
-            <div key={t} className="flex items-baseline gap-3 text-[var(--color-ink-blue)]">
-              <span aria-hidden className="inline-block h-2 w-2 shrink-0 translate-y-[-1px] bg-[var(--color-coupon-red)]" />
-              <span className="font-display uppercase tracking-[0.14em] text-[13px] md:text-[14px] font-bold">{t}</span>
-            </div>
-          ))}
+        <div className="mx-auto max-w-7xl px-4 py-5">
+          <ul className="flex gap-3 overflow-x-auto -mx-4 px-4 pb-1 snap-x sm:mx-0 sm:px-0 sm:pb-0 sm:overflow-visible sm:grid sm:grid-cols-2 sm:gap-4">
+            {[
+              { icon: Dices, label: "Automatic random draws" },
+              { icon: Handshake, label: "Verified winners, real handshakes" },
+              { icon: Headset, label: "UK company, UK humans on support" },
+              { icon: ListOrdered, label: "Every ticket number published" },
+            ].map(({ icon: Icon, label }) => (
+              <li
+                key={label}
+                className="snap-start shrink-0 w-[150px] sm:w-auto flex flex-col gap-2 border-2 border-[var(--color-ink-blue)] bg-[var(--color-paper)] p-3"
+              >
+                <Icon aria-hidden className="h-5 w-5 text-[var(--color-coupon-red)]" />
+                <span className="font-display uppercase tracking-[0.1em] text-[13px] leading-snug font-bold text-[var(--color-ink-blue)]">
+                  {label}
+                </span>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 

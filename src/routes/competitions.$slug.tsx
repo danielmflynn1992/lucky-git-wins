@@ -302,6 +302,10 @@ function CompDetail() {
                 </Button>
               </div>
 
+              <p className="mt-3 text-[12px] leading-snug text-muted-foreground">
+                Draws automatically when the timer hits zero, from correct entries only.
+              </p>
+
               {play.message && (
                 <div
                   role="status"

@@ -118,6 +118,7 @@ function TickerItem({ c, delta }: { c: LiveOdds; delta: number }) {
         <Link
           to="/competitions/$slug"
           params={{ slug: c.slug }}
+          title={`${closes} (exactly ${exact})`}
           className="inline-flex items-center gap-3 shrink-0 hover:text-gold focus:text-gold focus:outline-none"
         >
           <span>{c.title.toUpperCase()}</span>
