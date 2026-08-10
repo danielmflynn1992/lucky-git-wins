@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Lockup } from "./Logo";
 import { useSiteStats } from "@/lib/site-stats";
-import { COMPANY_NAME, COMPANY_NUMBER, REGISTERED_OFFICE } from "@/lib/company";
+import { COMPANY_LINE } from "@/lib/company";
 
 export function SiteFooter() {
   const { gitsMadeLucky } = useSiteStats();
@@ -34,7 +34,6 @@ export function SiteFooter() {
             links={[
               { to: "/competitions", label: "Competitions" },
               { to: "/winners", label: "Winners" },
-              { to: "/about", label: "About" },
               { to: "/verify", label: "Verify" },
             ]}
           />
@@ -83,8 +82,7 @@ export function SiteFooter() {
           }}
         >
           <div className="mx-auto max-w-4xl px-4 pb-3 text-[10px] leading-relaxed opacity-90 [overflow-wrap:anywhere]">
-            {COMPANY_NAME} · Company No. {COMPANY_NUMBER} · Registered office: {REGISTERED_OFFICE} ·
-            Registered in England &amp; Wales ·{" "}
+            {COMPANY_LINE} ·{" "}
             <Link to="/terms" className="underline underline-offset-2">Terms</Link> ·{" "}
             <Link to="/privacy" className="underline underline-offset-2">Privacy</Link>
           </div>
