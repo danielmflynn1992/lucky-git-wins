@@ -79,6 +79,24 @@ function NewComp() {
     return errs;
   }, [title, derivedSlug, endsAt, pricePerTicket, totalTickets]);
 
+  // Extra bar a competition must clear before it can go LIVE. Drafts are exempt
+  // so half-built comps can still be parked. The same rules are re-checked
+  // server-side, so a poke at the DOM buys you nothing.
+  const complianceChecks = useMemo(
+    () => [
+      { label: "Cover image uploaded", ok: !!imageUrl },
+      { label: "Cash alternative filled", ok: cashAlternative > 0 },
+      { label: "Closing date in the future", ok: !!endsAt && new Date(endsAt).getTime() > Date.now() },
+      { label: "Prize title", ok: title.trim().length >= 2 },
+      { label: "Prize description (20+ characters)", ok: description.trim().length >= 20 },
+      { label: "Ticket cap within the 499 promise", ok: totalTickets >= 1 && totalTickets <= 499 },
+      { label: "Skill question available in the bank", ok: bank.some((q) => q.is_active) },
+    ],
+    [imageUrl, cashAlternative, endsAt, title, description, totalTickets, bank],
+  );
+  const complianceFailures = complianceChecks.filter((c) => !c.ok).map((c) => c.label);
+  const canPublishLive = validationErrors.length === 0 && complianceFailures.length === 0;
+
   async function uploadBlob(blob: Blob, contentType: string, ext: string): Promise<string> {
     const path = `${crypto.randomUUID()}.${ext}`;
     const { error: upErr } = await supabase.storage
@@ -171,6 +189,7 @@ function NewComp() {
 
   const submit = (publishAs: "draft" | "live" | "paused") => {
     if (validationErrors.length) return;
+    if (publishAs === "live" && !canPublishLive) return;
     setStatus(publishAs);
     mutation.mutate(publishAs);
   };
@@ -207,7 +226,8 @@ function NewComp() {
               type="button"
               variant="gold"
               size="lg"
-              disabled={isSubmitting || !!validationErrors.length}
+              disabled={isSubmitting || !canPublishLive}
+              title={canPublishLive ? undefined : `Compliance checklist incomplete: ${complianceFailures.join(", ")}`}
               onClick={() => submit("live")}
             >
               {isSubmitting && status === "live" ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
@@ -223,7 +243,7 @@ function NewComp() {
           </div>
         )}
 
-        <form onSubmit={(e) => { e.preventDefault(); submit("live"); }} className="mt-6 grid gap-6 lg:grid-cols-3">
+        <form onSubmit={(e) => { e.preventDefault(); if (canPublishLive) submit("live"); }} className="mt-6 grid gap-6 lg:grid-cols-3">
           {/* Main column */}
           <div className="lg:col-span-2 space-y-5">
             <Card title="The prize">
@@ -477,13 +497,10 @@ function NewComp() {
               </div>
             </Card>
             <Card title="Compliance checklist">
-              {[
-                { label: "Cover image uploaded", ok: !!imageUrl },
-                { label: "Cash alternative filled", ok: cashAlternative > 0 },
-                { label: "Closing date", ok: !!endsAt },
-                { label: "Prize title", ok: title.trim().length >= 2 },
-                { label: "Question available in the bank", ok: bank.some((q) => q.is_active) },
-              ].map((c) => (
+              <p className="-mt-2 mb-3 text-xs text-muted-foreground">
+                Every line must be green before “Publish live” unlocks. Drafts can be saved regardless.
+              </p>
+              {complianceChecks.map((c) => (
                 <div key={c.label} className="flex items-center gap-2 text-sm py-1">
                   {c.ok ? <CheckCircle2 className="h-4 w-4 text-clover" /> : <AlertTriangle className="h-4 w-4 text-urgent" />}
                   <span className={c.ok ? "" : "text-muted-foreground"}>{c.label}</span>
@@ -491,6 +508,11 @@ function NewComp() {
               ))}
               {validationErrors.length > 0 && (
                 <p className="mt-3 text-xs text-urgent">Missing: {validationErrors.join(", ")}</p>
+              )}
+              {complianceFailures.length > 0 && (
+                <p className="mt-2 text-xs text-urgent">
+                  Can't go live yet: {complianceFailures.join(", ")}.
+                </p>
               )}
             </Card>
           </div>
