@@ -659,6 +659,7 @@ export type Database = {
         }[]
       }
       admin_reset_rolling_demo: { Args: never; Returns: Json }
+      admin_set_daily_demo: { Args: { p_enabled: boolean }; Returns: boolean }
       admin_set_question_active: {
         Args: { p_active: boolean; p_id: string }
         Returns: undefined
@@ -707,6 +708,7 @@ export type Database = {
           isSetofReturn: true
         }
       }
+      check_missed_draws: { Args: never; Returns: number }
       claim_admin_if_empty: { Args: never; Returns: boolean }
       competition_revealed_answer: {
         Args: { p_slug: string }
@@ -745,6 +747,7 @@ export type Database = {
         }
         Returns: string
       }
+      demo_scheduler_tick: { Args: never; Returns: Json }
       draw_competition: {
         Args: { p_comp_id: string; p_notes?: string }
         Returns: {
@@ -847,6 +850,7 @@ export type Database = {
       my_month_spend_pence: { Args: never; Returns: number }
       normalise_numeric_answer: { Args: { p_raw: string }; Returns: number }
       pick_question_for_competition: { Args: never; Returns: string }
+      prune_daily_demos: { Args: never; Returns: number }
       purchase_allowance: { Args: { p_amount_pence: number }; Returns: Json }
       real_draw_count: { Args: never; Returns: number }
       release_reservation: { Args: { p_token: string }; Returns: undefined }
@@ -922,6 +926,7 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      spawn_daily_demo: { Args: never; Returns: string }
       spawn_rolling_demo: { Args: never; Returns: string }
       start_cooloff: {
         Args: { p_days: number }
