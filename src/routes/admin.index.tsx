@@ -7,9 +7,11 @@ import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
-import { drawCompetition, autoDrawExpired, closeCompetitionNow, resetRollingDemo, listDrawNotifications, getDailyDemoEnabled, setDailyDemoEnabled } from "@/lib/admin.functions";
-import { gbp, shortNumber } from "@/lib/format";
-import { Copy, Plus, Play, Pause, Trophy, Loader2, Zap, AlertTriangle, Bug, TimerReset, RotateCcw, Mail } from "lucide-react";
+import { drawCompetition, autoDrawExpired, closeCompetitionNow, resetRollingDemo, listDrawNotifications, getDailyDemoEnabled, setDailyDemoEnabled, sendQueuedNotifications, retryNotification } from "@/lib/admin.functions";
+import { gbp } from "@/lib/format";
+import { Copy, Plus, Play, Pause, Trophy, Loader2, Zap, AlertTriangle, Bug, TimerReset, RotateCcw, Mail, Send, RefreshCw } from "lucide-react";
+
+const exact = (n: number) => n.toLocaleString("en-GB");
 
 interface AdminRow {
   id: string;
@@ -21,12 +23,13 @@ interface AdminRow {
   total_tickets: number;
   ends_at: string;
   sold: number;
+  is_demo: boolean;
 }
 
 async function fetchAdminCompetitions(): Promise<AdminRow[]> {
   const { data: comps, error } = await supabase
     .from("competitions")
-    .select("id, slug, title, category, status, price_per_ticket, total_tickets, ends_at")
+    .select("id, slug, title, category, status, price_per_ticket, total_tickets, ends_at, is_demo")
     .order("ends_at", { ascending: true });
   if (error) throw error;
   if (!comps || comps.length === 0) return [];
@@ -49,6 +52,7 @@ async function fetchAdminCompetitions(): Promise<AdminRow[]> {
     total_tickets: c.total_tickets,
     ends_at: c.ends_at,
     sold: soldMap.get(c.id) ?? 0,
+    is_demo: Boolean((c as { is_demo?: boolean }).is_demo),
   }));
 }
 
@@ -130,9 +134,11 @@ function Admin() {
     },
     onError: (e: unknown) => toast.error(e instanceof Error ? e.message : "Could not change the daily cycle"),
   });
-  const totalRevenue = rows.reduce((s, c) => s + c.sold * c.price_per_ticket, 0);
-  const totalTickets = rows.reduce((s, c) => s + c.sold, 0);
-  const liveCount = rows.filter((c) => c.status === "live").length;
+  const realRows = rows.filter((c) => !c.is_demo);
+  const demoRows = rows.filter((c) => c.is_demo);
+  const revenueOf = (rs: AdminRow[]) => rs.reduce((s, c) => s + c.sold * c.price_per_ticket, 0);
+  const ticketsOf = (rs: AdminRow[]) => rs.reduce((s, c) => s + c.sold, 0);
+  const liveOf = (rs: AdminRow[]) => rs.filter((c) => c.status === "live").length;
   const { data: errCount = 0 } = useQuery({
     queryKey: ["admin", "errors-count"],
     queryFn: async () => {
@@ -222,9 +228,22 @@ function Admin() {
         </div>
 
         <div className="mt-6 grid gap-3 sm:grid-cols-3">
-          <Stat label="Live competitions" value={liveCount.toString()} />
-          <Stat label="Tickets sold" value={shortNumber(totalTickets)} />
-          <Stat label="Revenue" value={gbp(totalRevenue)} accent />
+          <Stat
+            label="Live competitions"
+            real={exact(liveOf(realRows))}
+            demo={exact(liveOf(demoRows))}
+          />
+          <Stat
+            label="Tickets sold"
+            real={exact(ticketsOf(realRows))}
+            demo={exact(ticketsOf(demoRows))}
+          />
+          <Stat
+            label="Revenue"
+            real={gbp(revenueOf(realRows))}
+            demo={gbp(revenueOf(demoRows))}
+            accent
+          />
         </div>
 
         <div className="mt-8 rounded-2xl bg-card border-2 border-border overflow-hidden">
@@ -278,7 +297,7 @@ function Admin() {
                           {c.status === "drawn" ? "Drawn" : expired ? "Expired" : c.status}
                         </span>
                       </td>
-                      <td className="p-3 tabular-nums">{shortNumber(c.sold)}/{shortNumber(c.total_tickets)}</td>
+                      <td className="p-3 tabular-nums">{exact(c.sold)}/{exact(c.total_tickets)}</td>
                       <td className="p-3 font-bold">{gbp(c.sold * c.price_per_ticket)}</td>
                       <td className="p-3 text-muted-foreground">{new Date(c.ends_at).toLocaleDateString("en-GB")}</td>
                       <td className="p-3">
@@ -348,11 +367,21 @@ function Admin() {
   );
 }
 
-function Stat({ label, value, accent = false }: { label: string; value: string; accent?: boolean }) {
+function Stat({ label, real, demo, accent = false }: { label: string; real: string; demo: string; accent?: boolean }) {
   return (
     <div className={`rounded-2xl p-5 border-2 ${accent ? "bg-clover text-cream border-clover" : "bg-card border-border"}`}>
       <div className={`text-xs uppercase tracking-widest font-bold ${accent ? "text-cream/70" : "text-muted-foreground"}`}>{label}</div>
-      <div className="font-display text-3xl font-black mt-1">{value}</div>
+      <div className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+        <div>
+          <div className={`text-[10px] font-mono uppercase tracking-widest ${accent ? "text-cream/70" : "text-muted-foreground"}`}>Real</div>
+          <div className="font-display text-2xl font-black tabular-nums">{real}</div>
+        </div>
+        <div className={accent ? "text-cream/70" : "text-muted-foreground"}>·</div>
+        <div>
+          <div className={`text-[10px] font-mono uppercase tracking-widest ${accent ? "text-cream/70" : "text-muted-foreground"}`}>Demo</div>
+          <div className="font-display text-2xl font-black tabular-nums opacity-70">{demo}</div>
+        </div>
+      </div>
     </div>
   );
 }
