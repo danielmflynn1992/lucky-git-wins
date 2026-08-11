@@ -109,6 +109,7 @@ export type Database = {
           id: string
           image: string
           is_demo: boolean
+          is_rolling_demo: boolean
           letterbox_style: Database["public"]["Enums"]["letterbox_style"]
           max_per_person: number
           price_per_ticket: number
@@ -132,6 +133,7 @@ export type Database = {
           id?: string
           image?: string
           is_demo?: boolean
+          is_rolling_demo?: boolean
           letterbox_style?: Database["public"]["Enums"]["letterbox_style"]
           max_per_person?: number
           price_per_ticket: number
@@ -155,6 +157,7 @@ export type Database = {
           id?: string
           image?: string
           is_demo?: boolean
+          is_rolling_demo?: boolean
           letterbox_style?: Database["public"]["Enums"]["letterbox_style"]
           max_per_person?: number
           price_per_ticket?: number
@@ -174,6 +177,56 @@ export type Database = {
             columns: ["question_id"]
             isOneToOne: false
             referencedRelation: "question_bank"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      draw_notifications: {
+        Row: {
+          body: string
+          competition_title: string
+          created_at: string
+          detail: string | null
+          draw_id: string | null
+          id: string
+          is_demo: boolean
+          recipient: string
+          sent_at: string | null
+          status: string
+          subject: string
+        }
+        Insert: {
+          body: string
+          competition_title: string
+          created_at?: string
+          detail?: string | null
+          draw_id?: string | null
+          id?: string
+          is_demo?: boolean
+          recipient: string
+          sent_at?: string | null
+          status?: string
+          subject: string
+        }
+        Update: {
+          body?: string
+          competition_title?: string
+          created_at?: string
+          detail?: string | null
+          draw_id?: string | null
+          id?: string
+          is_demo?: boolean
+          recipient?: string
+          sent_at?: string | null
+          status?: string
+          subject?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "draw_notifications_draw_id_fkey"
+            columns: ["draw_id"]
+            isOneToOne: false
+            referencedRelation: "draws"
             referencedColumns: ["id"]
           },
         ]
@@ -576,6 +629,10 @@ export type Database = {
           incorrect: number
         }[]
       }
+      admin_close_competition_now: {
+        Args: { p_id: string }
+        Returns: undefined
+      }
       admin_export_entry_answers: {
         Args: never
         Returns: {
@@ -601,6 +658,7 @@ export type Database = {
           times_served: number
         }[]
       }
+      admin_reset_rolling_demo: { Args: never; Returns: Json }
       admin_set_question_active: {
         Args: { p_active: boolean; p_id: string }
         Returns: undefined
@@ -800,6 +858,7 @@ export type Database = {
         Args: { p_numbers: number[]; p_slug: string; p_token: string }
         Returns: number[]
       }
+      rolling_demo_tick: { Args: never; Returns: Json }
       self_exclude: {
         Args: { p_months: number }
         Returns: {
@@ -863,6 +922,7 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      spawn_rolling_demo: { Args: never; Returns: string }
       start_cooloff: {
         Args: { p_days: number }
         Returns: {

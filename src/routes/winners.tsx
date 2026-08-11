@@ -4,7 +4,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
 import { WinnerCard } from "@/components/WinnerCard";
-import { winnersQuery, realOnly } from "@/lib/winners-api";
+import { winnersQuery, displayWinners } from "@/lib/winners-api";
 
 export const Route = createFileRoute("/winners")({
   loader: ({ context }) => context.queryClient.ensureQueryData(winnersQuery),
@@ -32,7 +32,8 @@ export const Route = createFileRoute("/winners")({
 
 function WinnersPage() {
   const { data: allWinners } = useSuspenseQuery(winnersQuery);
-  const winners = realOnly(allWinners);
+  // Examples show only while no real draw exists, always labelled as examples.
+  const winners = displayWinners(allWinners);
   const [openId, setOpenId] = useState<string | null>(null);
   return (
     <div className="min-h-screen flex flex-col bg-ambient">

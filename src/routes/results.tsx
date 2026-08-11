@@ -5,6 +5,7 @@ import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
 import { drawnCompetitionsQuery } from "@/lib/results-api";
 import { formatDrawTime } from "@/lib/site-stats";
+import { ExampleRibbon, demoImageStyle, DEMO_WINNER_NAME, DEMO_WINNER_TOWN } from "@/lib/demo";
 
 export const Route = createFileRoute("/results")({
   loader: ({ context }) => context.queryClient.ensureQueryData(drawnCompetitionsQuery),
@@ -50,8 +51,8 @@ function ResultsPage() {
   const real = drawn.filter((d) => !d.isDemo);
   const demo = drawn.filter((d) => d.isDemo);
   const hasReal = real.length > 0;
-  // Examples vanish the moment a genuine draw lands. No manual step.
-  const rows = hasReal ? real : demo;
+  // Real results lead; examples follow, always labelled, never counted.
+  const rows = [...real, ...demo];
 
   return (
     <Shell>
@@ -64,7 +65,10 @@ function ResultsPage() {
             <Link to="/past-draws" className="underline">Full draw log</Link>.
           </>
         ) : (
-          <>No draws gone off yet — here's what results will look like when they do.</>
+          <>
+            No real draws gone off yet. Everything below is an example — the draw, the seed and the
+            verification are genuine, the prize wasn't. <Link to="/demo" className="underline">See the examples running</Link>.
+          </>
         )}
       </p>
 
@@ -93,15 +97,9 @@ function ResultsPage() {
                     alt={d.title}
                     loading="lazy"
                     className="h-40 w-full object-cover"
-                    style={d.isDemo ? { filter: "saturate(0.6)" } : undefined}
+                    style={d.isDemo ? demoImageStyle : undefined}
                   />
-                  {d.isDemo && (
-                    <span
-                      className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 -rotate-[14deg] whitespace-nowrap border-2 border-[var(--color-ink-red)] bg-[var(--color-paper)]/85 px-6 py-1.5 font-display uppercase tracking-[0.2em] text-[13px] text-[var(--color-ink-red)]"
-                    >
-                      Example draw
-                    </span>
-                  )}
+                  {d.isDemo && <ExampleRibbon />}
                 </div>
               )}
               <div className="p-3 grid gap-3 sm:grid-cols-[auto_1fr_auto] items-center">
@@ -112,29 +110,19 @@ function ResultsPage() {
                   </div>
                 </div>
                 <div className="font-mono text-[12px] text-muted-foreground">
-                  Winner: <b className="text-foreground">{d.isDemo ? "—" : d.winnerDisplayName}</b>
-                  {d.isDemo && <span className="block">Example entry</span>}
+                  Winner: <b className="text-foreground">{d.isDemo ? DEMO_WINNER_NAME : d.winnerDisplayName}</b>
+                  {d.isDemo && <span className="block">{DEMO_WINNER_TOWN}</span>}
                 </div>
                 <div className="flex flex-wrap gap-2">
-                  {d.slug && !d.isDemo && (
+                  {d.slug && (
                     <Link
                       to="/competitions/$slug"
                       params={{ slug: d.slug }}
-                      className="inline-flex items-center gap-1.5 border-2 border-[var(--color-ink-black)] bg-[var(--color-paper)] px-3 py-2 font-display uppercase tracking-[0.14em] text-[11px] hover:bg-[var(--color-ink-yellow)]"
+                      className="inline-flex items-center gap-1.5 border-[1.5px] border-[var(--color-ink-black)] px-3 py-2 font-display uppercase tracking-[0.14em] text-[11px] hover:bg-[var(--color-ink-black)] hover:text-[var(--color-paper)]"
                     >
                       The comp <ArrowRight className="h-3.5 w-3.5" />
                     </Link>
                   )}
-                  {d.isDemo ? (
-                    <button
-                      type="button"
-                      disabled
-                      title="Verification opens on real draws."
-                      className="inline-flex cursor-not-allowed items-center gap-1.5 bg-[var(--color-ink-blue)]/40 text-[var(--color-paper)] px-3 py-2 font-display uppercase tracking-[0.14em] text-[11px]"
-                    >
-                      <Shield className="h-3.5 w-3.5" /> Verify
-                    </button>
-                  ) : (
                   <Link
                     to="/draws/$id/verify"
                     params={{ id: d.drawId }}
@@ -142,12 +130,11 @@ function ResultsPage() {
                   >
                     <Shield className="h-3.5 w-3.5" /> Verify
                   </Link>
-                  )}
                 </div>
               </div>
               {d.isDemo && (
                 <p className="border-t border-dashed border-[var(--color-ink-black)]/40 px-3 py-2 font-mono text-[11px] text-muted-foreground">
-                  This is how a result will look. No draw has taken place yet.
+                  Example draw. The draw, the sealed seed and the verification are real — the prize wasn't.
                 </p>
               )}
             </li>

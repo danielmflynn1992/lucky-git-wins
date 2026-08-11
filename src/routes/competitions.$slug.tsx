@@ -1,4 +1,4 @@
-import { createFileRoute, notFound, redirect, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, notFound, Link, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useSuspenseQuery, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Ticket, Shuffle, Shield, PoundSterling, CheckCircle2, Info, Loader2, AlertTriangle } from "lucide-react";
@@ -18,6 +18,7 @@ import { PickHeatmap } from "@/components/PickHeatmap";
 import { RevealedAnswer } from "@/components/RevealedAnswer";
 import { competitionResultQuery } from "@/lib/results-api";
 import { lifecycleOf, formatDrawTime } from "@/lib/site-stats";
+import { ExampleBanner, isDemo } from "@/lib/demo";
 import { usePlayBlock } from "@/hooks/use-play-block";
 import {
   competitionQueryOptions,
@@ -33,8 +34,6 @@ export const Route = createFileRoute("/competitions/$slug")({
   loader: async ({ params, context }) => {
     const data = await context.queryClient.ensureQueryData(competitionQueryOptions(params.slug));
     if (!data) throw notFound();
-    // Example/seed comps live in the results archive only.
-    if (data.isDemo) throw redirect({ to: "/results" });
   },
   head: () => ({
     meta: [
@@ -191,6 +190,12 @@ function CompDetail() {
               </div>
               <Countdown target={c.endsAt} />
             </div>
+
+            {isDemo(c) && (
+              <div className="mt-4">
+                <ExampleBanner />
+              </div>
+            )}
 
             <div className="mt-5">
               <div className="flex justify-between text-sm font-mono tabular-nums mb-1.5">

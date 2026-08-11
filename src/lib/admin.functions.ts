@@ -141,3 +141,55 @@ export const autoDrawExpired = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { drawn: (data as unknown[])?.length ?? 0 };
   });
+// --- Demo lifecycle controls -------------------------------------------------
+
+const idInput = z.object({ competitionId: z.string().uuid() });
+
+/** Bring a competition's close time forward to now, so the draw can be run. */
+export const closeCompetitionNow = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) => idInput.parse(data))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const { error } = await context.supabase.rpc("admin_close_competition_now", {
+      p_id: data.competitionId,
+    });
+    if (error) throw new Error(error.message);
+    return { closed: true };
+  });
+
+/** Close + draw the current rolling example, then spawn the next one. */
+export const resetRollingDemo = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await assertAdmin(context);
+    const { data, error } = await context.supabase.rpc("admin_reset_rolling_demo");
+    if (error) throw new Error(error.message);
+    return data as { drawn: number; live_id: string };
+  });
+
+export interface DrawNotification {
+  id: string;
+  competition_title: string;
+  is_demo: boolean;
+  recipient: string;
+  subject: string;
+  status: string;
+  detail: string | null;
+  created_at: string;
+  sent_at: string | null;
+}
+
+/** Draw-complete notification outbox. Admin recipients only, by construction. */
+export const listDrawNotifications = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await assertAdmin(context);
+    const { data, error } = await context.supabase
+      .from("draw_notifications")
+      .select("id, competition_title, is_demo, recipient, subject, status, detail, created_at, sent_at")
+      .order("created_at", { ascending: false })
+      .limit(50);
+    if (error) throw new Error(error.message);
+    return (data ?? []) as DrawNotification[];
+  });

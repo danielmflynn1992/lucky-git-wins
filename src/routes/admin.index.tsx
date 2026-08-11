@@ -7,9 +7,9 @@ import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
-import { drawCompetition, autoDrawExpired } from "@/lib/admin.functions";
+import { drawCompetition, autoDrawExpired, closeCompetitionNow, resetRollingDemo, listDrawNotifications } from "@/lib/admin.functions";
 import { gbp, shortNumber } from "@/lib/format";
-import { Copy, Plus, Play, Pause, Trophy, Loader2, Zap, AlertTriangle, Bug } from "lucide-react";
+import { Copy, Plus, Play, Pause, Trophy, Loader2, Zap, AlertTriangle, Bug, TimerReset, RotateCcw, Mail } from "lucide-react";
 
 interface AdminRow {
   id: string;
@@ -89,6 +89,32 @@ function Admin() {
     },
     onError: (e: unknown) => toast.error(e instanceof Error ? e.message : "Auto-draw failed"),
   });
+  const closeNow = useServerFn(closeCompetitionNow);
+  const resetDemo = useServerFn(resetRollingDemo);
+  const notifications = useServerFn(listDrawNotifications);
+  const closeMut = useMutation({
+    mutationFn: (id: string) => closeNow({ data: { competitionId: id } }),
+    onSuccess: () => {
+      toast.success("Closed. Draw it whenever you like.");
+      qc.invalidateQueries({ queryKey: ["admin", "competitions"] });
+    },
+    onError: (e: unknown) => toast.error(e instanceof Error ? e.message : "Close failed"),
+  });
+  const resetMut = useMutation({
+    mutationFn: () => resetDemo({ data: undefined }),
+    onSuccess: (res) => {
+      toast.success(`Rolling example reset — ${res.drawn} drawn, a fresh one is live.`);
+      qc.invalidateQueries({ queryKey: ["admin", "competitions"] });
+      qc.invalidateQueries({ queryKey: ["demo-comps"] });
+      qc.invalidateQueries({ queryKey: ["drawn-competitions"] });
+    },
+    onError: (e: unknown) => toast.error(e instanceof Error ? e.message : "Reset failed"),
+  });
+  const { data: outbox = [] } = useQuery({
+    queryKey: ["admin", "draw-notifications"],
+    queryFn: () => notifications({ data: undefined }),
+    staleTime: 15_000,
+  });
   const totalRevenue = rows.reduce((s, c) => s + c.sold * c.price_per_ticket, 0);
   const totalTickets = rows.reduce((s, c) => s + c.sold, 0);
   const liveCount = rows.filter((c) => c.status === "live").length;
@@ -153,6 +179,13 @@ function Admin() {
                   </span>
                 )}
               </Link>
+            </Button>
+            <Button asChild variant="cream" size="lg">
+              <Link to="/demo">Examples</Link>
+            </Button>
+            <Button variant="cream" size="lg" onClick={() => resetMut.mutate()} disabled={resetMut.isPending}>
+              {resetMut.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <RotateCcw className="h-4 w-4" />}
+              Reset rolling demo
             </Button>
             <Button variant="cream" size="lg" onClick={() => autoMut.mutate()} disabled={autoMut.isPending}>
               {autoMut.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Zap className="h-4 w-4" />}
@@ -229,6 +262,17 @@ function Admin() {
                           <button className="p-2 rounded-lg hover:bg-background" title="Duplicate"><Copy className="h-4 w-4" /></button>
                           <button
                             className="p-2 rounded-lg hover:bg-background disabled:opacity-40 disabled:cursor-not-allowed"
+                            title={expired || c.status === "drawn" ? "Already closed" : "Close comp now"}
+                            disabled={expired || c.status === "drawn" || closeMut.isPending}
+                            onClick={() => {
+                              if (!confirm(`Close "${c.title}" right now?`)) return;
+                              closeMut.mutate(c.id);
+                            }}
+                          >
+                            <TimerReset className="h-4 w-4" />
+                          </button>
+                          <button
+                            className="p-2 rounded-lg hover:bg-background disabled:opacity-40 disabled:cursor-not-allowed"
                             title={c.status === "drawn" ? "Already drawn" : "Draw winner now"}
                             disabled={!canDraw || isDrawing}
                             onClick={() => {
@@ -246,6 +290,33 @@ function Admin() {
               </tbody>
             </table>
           </div>
+        </div>
+        <div className="mt-8 rounded-2xl bg-card border-2 border-border overflow-hidden">
+          <div className="p-4 border-b border-border flex items-center gap-2">
+            <Mail className="h-4 w-4" />
+            <h2 className="font-display text-lg font-bold">Draw notifications</h2>
+            <span className="text-xs text-muted-foreground">
+              Admin/test addresses only. Example draws are prefixed [DEMO].
+            </span>
+          </div>
+          {outbox.length === 0 ? (
+            <p className="p-4 text-sm text-muted-foreground">Nothing queued yet.</p>
+          ) : (
+            <ul className="divide-y divide-border">
+              {outbox.slice(0, 12).map((n) => (
+                <li key={n.id} className="p-3 text-sm flex flex-wrap gap-x-3 gap-y-1 items-baseline">
+                  <span className="font-mono text-[10px] uppercase tracking-wider rounded-full px-2 py-0.5 bg-muted">
+                    {n.status}
+                  </span>
+                  <span className="font-semibold">{n.subject}</span>
+                  <span className="text-muted-foreground text-xs">→ {n.recipient}</span>
+                  <span className="text-muted-foreground text-xs ml-auto tabular-nums">
+                    {new Date(n.created_at).toLocaleString("en-GB")}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       </main>
       <SiteFooter />
