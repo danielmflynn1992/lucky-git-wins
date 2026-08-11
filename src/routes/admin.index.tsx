@@ -96,6 +96,30 @@ function Admin() {
   const closeNow = useServerFn(closeCompetitionNow);
   const resetDemo = useServerFn(resetRollingDemo);
   const notifications = useServerFn(listDrawNotifications);
+  const sendQueued = useServerFn(sendQueuedNotifications);
+  const retryOne = useServerFn(retryNotification);
+  const sendMut = useMutation({
+    mutationFn: () => sendQueued({ data: undefined }),
+    onSuccess: (res) => {
+      if (res.sent === 0 && res.failed === 0) toast.info("Nothing queued to send.");
+      else if (res.failed === 0) toast.success(`Sent ${res.sent}.`);
+      else toast.warning(`Sent ${res.sent}, failed ${res.failed}. Check the detail lines.`);
+      qc.invalidateQueries({ queryKey: ["admin", "draw-notifications"] });
+    },
+    onError: (e: unknown) => toast.error(e instanceof Error ? e.message : "Send failed"),
+  });
+  const [retryingId, setRetryingId] = useState<string | null>(null);
+  const retryMut = useMutation({
+    mutationFn: (id: string) => retryOne({ data: { id } }),
+    onMutate: (id: string) => setRetryingId(id),
+    onSettled: () => setRetryingId(null),
+    onSuccess: (res) => {
+      if (res.sent) toast.success("Sent.");
+      else toast.error("Still failing — see the detail line.");
+      qc.invalidateQueries({ queryKey: ["admin", "draw-notifications"] });
+    },
+    onError: (e: unknown) => toast.error(e instanceof Error ? e.message : "Retry failed"),
+  });
   const closeMut = useMutation({
     mutationFn: (id: string) => closeNow({ data: { competitionId: id } }),
     onSuccess: () => {
@@ -176,10 +200,12 @@ function Admin() {
           <div className="text-sm">
             <div className="font-display font-bold text-urgent">Do not enable live Stripe payments without a gambling-law review.</div>
             <p className="mt-1 text-foreground/80">
-              The site is structured as a prize competition of skill under Section 14 of the Gambling Act 2005:
-              every competition carries a free-text numeric skill question, and the draw runs only across correct
-              entries. Before accepting real money, have a UK gambling-law solicitor confirm the T&amp;Cs and
-              the question-authoring workflow. See{" "}
+              The site is structured as a prize competition of skill under Section 14 of the Gambling Act 2005.
+              Every competition must carry a skill question that a reasonable person could get wrong: the answer is
+              typed in free-text, never chosen from options, and it is marked server-side. Only entries that answer
+              correctly go into the draw — and if nobody answers correctly the question is treated as void and the
+              draw falls back to every sold ticket, exactly as written in the T&amp;Cs. Before accepting real money,
+              have a UK gambling-law solicitor confirm the T&amp;Cs and the question-authoring workflow. See{" "}
               <Link to="/admin/questions" className="underline font-bold">/admin/questions</Link>{" "}
               for the question bank, difficulty monitoring and the answer-log export.
             </p>
@@ -335,27 +361,71 @@ function Admin() {
           </div>
         </div>
         <div className="mt-8 rounded-2xl bg-card border-2 border-border overflow-hidden">
-          <div className="p-4 border-b border-border flex items-center gap-2">
+          <div className="p-4 border-b border-border flex items-center gap-2 flex-wrap">
             <Mail className="h-4 w-4" />
             <h2 className="font-display text-lg font-bold">Draw notifications</h2>
             <span className="text-xs text-muted-foreground">
               Admin/test addresses only. Example draws are prefixed [DEMO].
             </span>
+            <Button
+              variant="cream"
+              size="sm"
+              className="ml-auto"
+              onClick={() => sendMut.mutate()}
+              disabled={sendMut.isPending}
+            >
+              {sendMut.isPending ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Send className="h-3.5 w-3.5" />}
+              Send queued
+            </Button>
           </div>
           {outbox.length === 0 ? (
             <p className="p-4 text-sm text-muted-foreground">Nothing queued yet.</p>
           ) : (
             <ul className="divide-y divide-border">
               {outbox.slice(0, 12).map((n) => (
-                <li key={n.id} className="p-3 text-sm flex flex-wrap gap-x-3 gap-y-1 items-baseline">
-                  <span className="font-mono text-[10px] uppercase tracking-wider rounded-full px-2 py-0.5 bg-muted">
-                    {n.status}
-                  </span>
-                  <span className="font-semibold">{n.subject}</span>
-                  <span className="text-muted-foreground text-xs">→ {n.recipient}</span>
-                  <span className="text-muted-foreground text-xs ml-auto tabular-nums">
-                    {new Date(n.created_at).toLocaleString("en-GB")}
-                  </span>
+                <li key={n.id} className="p-3 text-sm">
+                  <div className="flex flex-wrap gap-x-3 gap-y-1 items-baseline">
+                    <span
+                      className={
+                        "font-mono text-[10px] uppercase tracking-wider rounded-full px-2 py-0.5 " +
+                        (n.status === "sent"
+                          ? "bg-clover/15 text-clover"
+                          : n.status === "failed"
+                            ? "bg-urgent/15 text-urgent"
+                            : n.status === "alert"
+                              ? "bg-gold/25 text-ink"
+                              : "bg-muted text-muted-foreground")
+                      }
+                    >
+                      {n.status}
+                    </span>
+                    <span className="font-semibold">{n.subject}</span>
+                    <span className="text-muted-foreground text-xs">&rarr; {n.recipient}</span>
+                    <span className="text-muted-foreground text-xs ml-auto tabular-nums">
+                      {n.sent_at
+                        ? `sent ${new Date(n.sent_at).toLocaleString("en-GB")}`
+                        : new Date(n.created_at).toLocaleString("en-GB")}
+                    </span>
+                  </div>
+                  {n.detail && (
+                    <p className="mt-1 text-xs text-muted-foreground break-words">{n.detail}</p>
+                  )}
+                  {n.status !== "sent" && (
+                    <Button
+                      variant="cream"
+                      size="sm"
+                      className="mt-2"
+                      onClick={() => retryMut.mutate(n.id)}
+                      disabled={retryingId === n.id && retryMut.isPending}
+                    >
+                      {retryingId === n.id && retryMut.isPending ? (
+                        <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                      ) : (
+                        <RefreshCw className="h-3.5 w-3.5" />
+                      )}
+                      Retry
+                    </Button>
+                  )}
                 </li>
               ))}
             </ul>
