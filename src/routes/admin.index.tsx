@@ -280,7 +280,69 @@ function Admin() {
               <Button variant="cream" size="sm"><Play className="h-3.5 w-3.5" /> Resume selected</Button>
             </div>
           </div>
-          <div className="overflow-x-auto">
+          {/* Mobile: stacked cards. Desktop: the full table below. */}
+          <ul className="md:hidden divide-y divide-border">
+            {isLoading && <li className="p-6 text-center text-muted-foreground text-sm">Loading…</li>}
+            {!isLoading && rows.length === 0 && (
+              <li className="p-6 text-center text-muted-foreground text-sm">No competitions yet.</li>
+            )}
+            {rows.map((c) => {
+              const expired = new Date(c.ends_at).getTime() <= now;
+              const isDrawing = drawingId === c.id && drawMut.isPending;
+              return (
+                <li key={`m-${c.slug}`} className="p-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <div className="font-semibold break-words">{c.title}</div>
+                      <div className="text-[11px] text-muted-foreground font-mono break-all">{c.slug}</div>
+                    </div>
+                    <span className={`shrink-0 inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-mono uppercase tracking-wider ${
+                      c.status === "drawn" ? "bg-clover/15 text-clover" :
+                      expired ? "bg-urgent/15 text-urgent" :
+                      c.status === "live" ? "bg-gold/20 text-ink" :
+                      "bg-muted text-muted-foreground"
+                    }`}>
+                      {c.status === "drawn" ? "Drawn" : expired ? "Expired" : c.status}
+                    </span>
+                  </div>
+                  <dl className="mt-3 grid grid-cols-2 gap-y-1 text-xs">
+                    <dt className="text-muted-foreground">Sold</dt>
+                    <dd className="text-right tabular-nums">{exact(c.sold)}/{exact(c.total_tickets)}</dd>
+                    <dt className="text-muted-foreground">Revenue</dt>
+                    <dd className="text-right font-bold">{gbp(c.sold * c.price_per_ticket)}</dd>
+                    <dt className="text-muted-foreground">Ends</dt>
+                    <dd className="text-right">{new Date(c.ends_at).toLocaleDateString("en-GB")}</dd>
+                  </dl>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    <Button
+                      variant="cream"
+                      size="sm"
+                      disabled={expired || c.status === "drawn" || closeMut.isPending}
+                      onClick={() => {
+                        if (!confirm(`Close "${c.title}" right now?`)) return;
+                        closeMut.mutate(c.id);
+                      }}
+                    >
+                      <TimerReset className="h-3.5 w-3.5" /> Close now
+                    </Button>
+                    <Button
+                      variant="cream"
+                      size="sm"
+                      disabled={c.status === "drawn" || isDrawing}
+                      onClick={() => {
+                        if (!confirm(`Draw the winner for "${c.title}" now? This can't be undone.`)) return;
+                        drawMut.mutate(c.id);
+                      }}
+                    >
+                      {isDrawing ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Trophy className="h-3.5 w-3.5" />}
+                      Draw
+                    </Button>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+          <div className="hidden md:block overflow-x-auto">
             <table className="w-full text-sm">
               <thead className="bg-background">
                 <tr className="text-left text-xs uppercase tracking-wider text-muted-foreground">
