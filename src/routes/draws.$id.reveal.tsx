@@ -306,7 +306,7 @@ function RevealPage() {
           </RevealStep>
 
           <RevealStep n="05" title="Derive — deterministic winner selection" active={step >= 3}>
-            <Mono label={`SHA-256("draw:${short(draw.competition_id ?? "")}:seed")`}>
+            <Mono label={`SHA-256("draw:${draw.competition_id ?? ""}:<revealed seed>")`}>
               {derivHash ?? "computing…"}
             </Mono>
             {pickIndex !== null && (
@@ -476,7 +476,7 @@ function VerdictPill({ matches, children }: { matches: boolean; children: React.
       }
     >
       {matches ? (
-        <CheckCircle2 className="h-4 w-4 mt-0.5 shrink-0 text-clover" />
+        <CheckCircle2 className="h-4 w-4 mt-0.5 shrink-0 text-cream" />
       ) : (
         <XCircle className="h-4 w-4 mt-0.5 shrink-0 text-urgent" />
       )}
@@ -487,8 +487,4 @@ function VerdictPill({ matches, children }: { matches: boolean; children: React.
 
 function wait(ms: number) {
   return new Promise((r) => setTimeout(r, ms));
-}
-
-function short(id: string) {
-  return id.length > 12 ? `${id.slice(0, 6)}…${id.slice(-4)}` : id;
 }
