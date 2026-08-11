@@ -8,6 +8,7 @@ import { CheckCircle2, XCircle, Loader2, ShieldCheck } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
 import { verifyDraw } from "@/lib/verify.functions";
 import type { ServerVerification } from "@/lib/verify.server";
+import { isDemo, DEMO_VERIFY_BANNER, DEMO_WINNER_NAME } from "@/lib/demo";
 
 type DrawRec = {
   id: string;
@@ -23,6 +24,7 @@ type DrawRec = {
   drawn_at: string;
   seed_hash: string;
   seed_revealed: string;
+  is_demo: boolean;
 };
 
 async function sha256Bytes(text: string): Promise<Uint8Array> {
@@ -36,7 +38,7 @@ async function fetchDraw(id: string): Promise<DrawRec> {
   const { data, error } = await supabase
     .from("draws")
     .select(
-      "id, competition_id, competition_title, prize, winning_number, winner_display_name, total_tickets, total_sold, qualifying_pool_size, drew_from, drawn_at, seed_hash, seed_revealed",
+      "id, competition_id, competition_title, prize, winning_number, winner_display_name, total_tickets, total_sold, qualifying_pool_size, drew_from, drawn_at, seed_hash, seed_revealed, is_demo",
     )
     .eq("id", id)
     .maybeSingle();
@@ -149,6 +151,15 @@ function VerifyDrawPage() {
           <span>Verification</span>
         </div>
 
+        {isDemo(d) && (
+          <div
+            role="note"
+            className="mb-4 border-[1.5px] border-[var(--color-ink-red)] bg-[var(--color-ink-red)]/10 px-3 py-2 font-mono text-[12px] text-[var(--color-ink-red)]"
+          >
+            {DEMO_VERIFY_BANNER}
+          </div>
+        )}
+
         {/* Certificate */}
         <article className="border-2 border-[var(--color-ink-black)] bg-[var(--color-paper-raised)]">
           <header className="bg-[var(--color-ink-red)] text-[var(--color-paper)] px-4 py-2 flex items-center gap-2">
@@ -170,7 +181,7 @@ function VerifyDrawPage() {
                 {String(d.winning_number).padStart(3, "0")}
               </div>
               <div className="mt-2 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                {d.winner_display_name} · drawn {new Date(d.drawn_at).toLocaleString("en-GB")}
+                {isDemo(d) ? DEMO_WINNER_NAME : d.winner_display_name} · drawn {new Date(d.drawn_at).toLocaleString("en-GB")}
               </div>
             </div>
 

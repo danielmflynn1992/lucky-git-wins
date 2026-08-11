@@ -24,6 +24,7 @@ import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as HowEntryWorksRouteImport } from './routes/how-entry-works'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as DrawDayRouteImport } from './routes/draw-day'
+import { Route as DemoRouteImport } from './routes/demo'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as AuthRouteImport } from './routes/auth'
@@ -42,6 +43,7 @@ import { Route as DrawsIdVerifyRouteImport } from './routes/draws.$id.verify'
 import { Route as DrawsIdRevealRouteImport } from './routes/draws.$id.reveal'
 import { Route as ApiPublicVerifyDrawRouteImport } from './routes/api/public/verify-draw'
 import { Route as AdminCompetitionsNewRouteImport } from './routes/admin.competitions.new'
+import { Route as ApiPublicHooksRollingDemoRouteImport } from './routes/api/public/hooks/rolling-demo'
 
 const WinnersRoute = WinnersRouteImport.update({
   id: '/winners',
@@ -116,6 +118,11 @@ const FaqRoute = FaqRouteImport.update({
 const DrawDayRoute = DrawDayRouteImport.update({
   id: '/draw-day',
   path: '/draw-day',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemoRoute = DemoRouteImport.update({
+  id: '/demo',
+  path: '/demo',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -209,6 +216,12 @@ const AdminCompetitionsNewRoute = AdminCompetitionsNewRouteImport.update({
   path: '/admin/competitions/new',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicHooksRollingDemoRoute =
+  ApiPublicHooksRollingDemoRouteImport.update({
+    id: '/api/public/hooks/rolling-demo',
+    path: '/api/public/hooks/rolling-demo',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -217,6 +230,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
+  '/demo': typeof DemoRoute
   '/draw-day': typeof DrawDayRoute
   '/faq': typeof FaqRoute
   '/how-entry-works': typeof HowEntryWorksRoute
@@ -244,6 +258,7 @@ export interface FileRoutesByFullPath {
   '/api/public/verify-draw': typeof ApiPublicVerifyDrawRoute
   '/draws/$id/reveal': typeof DrawsIdRevealRoute
   '/draws/$id/verify': typeof DrawsIdVerifyRoute
+  '/api/public/hooks/rolling-demo': typeof ApiPublicHooksRollingDemoRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -252,6 +267,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
+  '/demo': typeof DemoRoute
   '/draw-day': typeof DrawDayRoute
   '/faq': typeof FaqRoute
   '/how-entry-works': typeof HowEntryWorksRoute
@@ -279,6 +295,7 @@ export interface FileRoutesByTo {
   '/api/public/verify-draw': typeof ApiPublicVerifyDrawRoute
   '/draws/$id/reveal': typeof DrawsIdRevealRoute
   '/draws/$id/verify': typeof DrawsIdVerifyRoute
+  '/api/public/hooks/rolling-demo': typeof ApiPublicHooksRollingDemoRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -288,6 +305,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
+  '/demo': typeof DemoRoute
   '/draw-day': typeof DrawDayRoute
   '/faq': typeof FaqRoute
   '/how-entry-works': typeof HowEntryWorksRoute
@@ -315,6 +333,7 @@ export interface FileRoutesById {
   '/api/public/verify-draw': typeof ApiPublicVerifyDrawRoute
   '/draws/$id/reveal': typeof DrawsIdRevealRoute
   '/draws/$id/verify': typeof DrawsIdVerifyRoute
+  '/api/public/hooks/rolling-demo': typeof ApiPublicHooksRollingDemoRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -325,6 +344,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/checkout'
     | '/contact'
+    | '/demo'
     | '/draw-day'
     | '/faq'
     | '/how-entry-works'
@@ -352,6 +372,7 @@ export interface FileRouteTypes {
     | '/api/public/verify-draw'
     | '/draws/$id/reveal'
     | '/draws/$id/verify'
+    | '/api/public/hooks/rolling-demo'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -360,6 +381,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/checkout'
     | '/contact'
+    | '/demo'
     | '/draw-day'
     | '/faq'
     | '/how-entry-works'
@@ -387,6 +409,7 @@ export interface FileRouteTypes {
     | '/api/public/verify-draw'
     | '/draws/$id/reveal'
     | '/draws/$id/verify'
+    | '/api/public/hooks/rolling-demo'
   id:
     | '__root__'
     | '/'
@@ -395,6 +418,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/checkout'
     | '/contact'
+    | '/demo'
     | '/draw-day'
     | '/faq'
     | '/how-entry-works'
@@ -422,6 +446,7 @@ export interface FileRouteTypes {
     | '/api/public/verify-draw'
     | '/draws/$id/reveal'
     | '/draws/$id/verify'
+    | '/api/public/hooks/rolling-demo'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -431,6 +456,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   CheckoutRoute: typeof CheckoutRoute
   ContactRoute: typeof ContactRoute
+  DemoRoute: typeof DemoRoute
   DrawDayRoute: typeof DrawDayRoute
   FaqRoute: typeof FaqRoute
   HowEntryWorksRoute: typeof HowEntryWorksRoute
@@ -458,6 +484,7 @@ export interface RootRouteChildren {
   ApiPublicVerifyDrawRoute: typeof ApiPublicVerifyDrawRoute
   DrawsIdRevealRoute: typeof DrawsIdRevealRoute
   DrawsIdVerifyRoute: typeof DrawsIdVerifyRoute
+  ApiPublicHooksRollingDemoRoute: typeof ApiPublicHooksRollingDemoRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -565,6 +592,13 @@ declare module '@tanstack/react-router' {
       path: '/draw-day'
       fullPath: '/draw-day'
       preLoaderRoute: typeof DrawDayRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demo': {
+      id: '/demo'
+      path: '/demo'
+      fullPath: '/demo'
+      preLoaderRoute: typeof DemoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -693,6 +727,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminCompetitionsNewRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/hooks/rolling-demo': {
+      id: '/api/public/hooks/rolling-demo'
+      path: '/api/public/hooks/rolling-demo'
+      fullPath: '/api/public/hooks/rolling-demo'
+      preLoaderRoute: typeof ApiPublicHooksRollingDemoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -703,6 +744,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   CheckoutRoute: CheckoutRoute,
   ContactRoute: ContactRoute,
+  DemoRoute: DemoRoute,
   DrawDayRoute: DrawDayRoute,
   FaqRoute: FaqRoute,
   HowEntryWorksRoute: HowEntryWorksRoute,
@@ -730,6 +772,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicVerifyDrawRoute: ApiPublicVerifyDrawRoute,
   DrawsIdRevealRoute: DrawsIdRevealRoute,
   DrawsIdVerifyRoute: DrawsIdVerifyRoute,
+  ApiPublicHooksRollingDemoRoute: ApiPublicHooksRollingDemoRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
