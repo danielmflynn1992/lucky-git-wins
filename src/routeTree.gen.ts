@@ -28,6 +28,7 @@ import { Route as DemoRouteImport } from './routes/demo'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AccountRouteImport } from './routes/account'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
@@ -139,6 +140,11 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AccountRoute = AccountRouteImport.update({
   id: '/account',
   path: '/account',
@@ -160,9 +166,9 @@ const CompetitionsIndexRoute = CompetitionsIndexRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
-  id: '/admin/',
-  path: '/admin/',
-  getParentRoute: () => rootRouteImport,
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
 } as any)
 const SlipsIdRoute = SlipsIdRouteImport.update({
   id: '/slips/$id',
@@ -180,20 +186,20 @@ const CompetitionsSlugRoute = CompetitionsSlugRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminQuestionsRoute = AdminQuestionsRouteImport.update({
-  id: '/admin/questions',
-  path: '/admin/questions',
-  getParentRoute: () => rootRouteImport,
+  id: '/questions',
+  path: '/questions',
+  getParentRoute: () => AdminRoute,
 } as any)
 const AdminQuestionPerformanceRoute =
   AdminQuestionPerformanceRouteImport.update({
-    id: '/admin/question-performance',
-    path: '/admin/question-performance',
-    getParentRoute: () => rootRouteImport,
+    id: '/question-performance',
+    path: '/question-performance',
+    getParentRoute: () => AdminRoute,
   } as any)
 const AdminErrorsRoute = AdminErrorsRouteImport.update({
-  id: '/admin/errors',
-  path: '/admin/errors',
-  getParentRoute: () => rootRouteImport,
+  id: '/errors',
+  path: '/errors',
+  getParentRoute: () => AdminRoute,
 } as any)
 const DrawsIdVerifyRoute = DrawsIdVerifyRouteImport.update({
   id: '/draws/$id/verify',
@@ -211,15 +217,16 @@ const ApiPublicVerifyDrawRoute = ApiPublicVerifyDrawRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminCompetitionsNewRoute = AdminCompetitionsNewRouteImport.update({
-  id: '/admin/competitions/new',
-  path: '/admin/competitions/new',
-  getParentRoute: () => rootRouteImport,
+  id: '/competitions/new',
+  path: '/competitions/new',
+  getParentRoute: () => AdminRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/account': typeof AccountRoute
+  '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRoute
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
@@ -293,6 +300,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/account': typeof AccountRoute
+  '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRoute
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
@@ -331,6 +339,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/account'
+    | '/admin'
     | '/auth'
     | '/checkout'
     | '/contact'
@@ -403,6 +412,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/account'
+    | '/admin'
     | '/auth'
     | '/checkout'
     | '/contact'
@@ -440,6 +450,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   AccountRoute: typeof AccountRoute
+  AdminRoute: typeof AdminRouteWithChildren
   AuthRoute: typeof AuthRoute
   CheckoutRoute: typeof CheckoutRoute
   ContactRoute: typeof ContactRoute
@@ -459,15 +470,10 @@ export interface RootRouteChildren {
   TransparencyRoute: typeof TransparencyRoute
   VerifyRoute: typeof VerifyRoute
   WinnersRoute: typeof WinnersRoute
-  AdminErrorsRoute: typeof AdminErrorsRoute
-  AdminQuestionPerformanceRoute: typeof AdminQuestionPerformanceRoute
-  AdminQuestionsRoute: typeof AdminQuestionsRoute
   CompetitionsSlugRoute: typeof CompetitionsSlugRoute
   DevCompcardRoute: typeof DevCompcardRoute
   SlipsIdRoute: typeof SlipsIdRoute
-  AdminIndexRoute: typeof AdminIndexRoute
   CompetitionsIndexRoute: typeof CompetitionsIndexRoute
-  AdminCompetitionsNewRoute: typeof AdminCompetitionsNewRoute
   ApiPublicVerifyDrawRoute: typeof ApiPublicVerifyDrawRoute
   DrawsIdRevealRoute: typeof DrawsIdRevealRoute
   DrawsIdVerifyRoute: typeof DrawsIdVerifyRoute
@@ -608,6 +614,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/account': {
       id: '/account'
       path: '/account'
@@ -638,10 +651,10 @@ declare module '@tanstack/react-router' {
     }
     '/admin/': {
       id: '/admin/'
-      path: '/admin'
+      path: '/'
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/slips/$id': {
       id: '/slips/$id'
@@ -666,24 +679,24 @@ declare module '@tanstack/react-router' {
     }
     '/admin/questions': {
       id: '/admin/questions'
-      path: '/admin/questions'
+      path: '/questions'
       fullPath: '/admin/questions'
       preLoaderRoute: typeof AdminQuestionsRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/admin/question-performance': {
       id: '/admin/question-performance'
-      path: '/admin/question-performance'
+      path: '/question-performance'
       fullPath: '/admin/question-performance'
       preLoaderRoute: typeof AdminQuestionPerformanceRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/admin/errors': {
       id: '/admin/errors'
-      path: '/admin/errors'
+      path: '/errors'
       fullPath: '/admin/errors'
       preLoaderRoute: typeof AdminErrorsRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/draws/$id/verify': {
       id: '/draws/$id/verify'
@@ -708,18 +721,37 @@ declare module '@tanstack/react-router' {
     }
     '/admin/competitions/new': {
       id: '/admin/competitions/new'
-      path: '/admin/competitions/new'
+      path: '/competitions/new'
       fullPath: '/admin/competitions/new'
       preLoaderRoute: typeof AdminCompetitionsNewRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AdminRoute
     }
   }
 }
+
+interface AdminRouteChildren {
+  AdminErrorsRoute: typeof AdminErrorsRoute
+  AdminQuestionPerformanceRoute: typeof AdminQuestionPerformanceRoute
+  AdminQuestionsRoute: typeof AdminQuestionsRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+  AdminCompetitionsNewRoute: typeof AdminCompetitionsNewRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminErrorsRoute: AdminErrorsRoute,
+  AdminQuestionPerformanceRoute: AdminQuestionPerformanceRoute,
+  AdminQuestionsRoute: AdminQuestionsRoute,
+  AdminIndexRoute: AdminIndexRoute,
+  AdminCompetitionsNewRoute: AdminCompetitionsNewRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   AccountRoute: AccountRoute,
+  AdminRoute: AdminRouteWithChildren,
   AuthRoute: AuthRoute,
   CheckoutRoute: CheckoutRoute,
   ContactRoute: ContactRoute,
@@ -739,15 +771,10 @@ const rootRouteChildren: RootRouteChildren = {
   TransparencyRoute: TransparencyRoute,
   VerifyRoute: VerifyRoute,
   WinnersRoute: WinnersRoute,
-  AdminErrorsRoute: AdminErrorsRoute,
-  AdminQuestionPerformanceRoute: AdminQuestionPerformanceRoute,
-  AdminQuestionsRoute: AdminQuestionsRoute,
   CompetitionsSlugRoute: CompetitionsSlugRoute,
   DevCompcardRoute: DevCompcardRoute,
   SlipsIdRoute: SlipsIdRoute,
-  AdminIndexRoute: AdminIndexRoute,
   CompetitionsIndexRoute: CompetitionsIndexRoute,
-  AdminCompetitionsNewRoute: AdminCompetitionsNewRoute,
   ApiPublicVerifyDrawRoute: ApiPublicVerifyDrawRoute,
   DrawsIdRevealRoute: DrawsIdRevealRoute,
   DrawsIdVerifyRoute: DrawsIdVerifyRoute,

@@ -7,9 +7,11 @@ import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
-import { drawCompetition, autoDrawExpired, closeCompetitionNow, resetRollingDemo, listDrawNotifications, getDailyDemoEnabled, setDailyDemoEnabled } from "@/lib/admin.functions";
-import { gbp, shortNumber } from "@/lib/format";
-import { Copy, Plus, Play, Pause, Trophy, Loader2, Zap, AlertTriangle, Bug, TimerReset, RotateCcw, Mail } from "lucide-react";
+import { drawCompetition, autoDrawExpired, closeCompetitionNow, resetRollingDemo, listDrawNotifications, getDailyDemoEnabled, setDailyDemoEnabled, sendQueuedNotifications, retryNotification } from "@/lib/admin.functions";
+import { gbp } from "@/lib/format";
+import { Copy, Plus, Play, Pause, Trophy, Loader2, Zap, AlertTriangle, Bug, TimerReset, RotateCcw, Mail, Send, RefreshCw } from "lucide-react";
+
+const exact = (n: number) => n.toLocaleString("en-GB");
 
 interface AdminRow {
   id: string;
@@ -21,12 +23,13 @@ interface AdminRow {
   total_tickets: number;
   ends_at: string;
   sold: number;
+  is_demo: boolean;
 }
 
 async function fetchAdminCompetitions(): Promise<AdminRow[]> {
   const { data: comps, error } = await supabase
     .from("competitions")
-    .select("id, slug, title, category, status, price_per_ticket, total_tickets, ends_at")
+    .select("id, slug, title, category, status, price_per_ticket, total_tickets, ends_at, is_demo")
     .order("ends_at", { ascending: true });
   if (error) throw error;
   if (!comps || comps.length === 0) return [];
@@ -49,6 +52,7 @@ async function fetchAdminCompetitions(): Promise<AdminRow[]> {
     total_tickets: c.total_tickets,
     ends_at: c.ends_at,
     sold: soldMap.get(c.id) ?? 0,
+    is_demo: Boolean((c as { is_demo?: boolean }).is_demo),
   }));
 }
 
@@ -92,6 +96,30 @@ function Admin() {
   const closeNow = useServerFn(closeCompetitionNow);
   const resetDemo = useServerFn(resetRollingDemo);
   const notifications = useServerFn(listDrawNotifications);
+  const sendQueued = useServerFn(sendQueuedNotifications);
+  const retryOne = useServerFn(retryNotification);
+  const sendMut = useMutation({
+    mutationFn: () => sendQueued({ data: undefined }),
+    onSuccess: (res) => {
+      if (res.sent === 0 && res.failed === 0) toast.info("Nothing queued to send.");
+      else if (res.failed === 0) toast.success(`Sent ${res.sent}.`);
+      else toast.warning(`Sent ${res.sent}, failed ${res.failed}. Check the detail lines.`);
+      qc.invalidateQueries({ queryKey: ["admin", "draw-notifications"] });
+    },
+    onError: (e: unknown) => toast.error(e instanceof Error ? e.message : "Send failed"),
+  });
+  const [retryingId, setRetryingId] = useState<string | null>(null);
+  const retryMut = useMutation({
+    mutationFn: (id: string) => retryOne({ data: { id } }),
+    onMutate: (id: string) => setRetryingId(id),
+    onSettled: () => setRetryingId(null),
+    onSuccess: (res) => {
+      if (res.sent) toast.success("Sent.");
+      else toast.error("Still failing — see the detail line.");
+      qc.invalidateQueries({ queryKey: ["admin", "draw-notifications"] });
+    },
+    onError: (e: unknown) => toast.error(e instanceof Error ? e.message : "Retry failed"),
+  });
   const closeMut = useMutation({
     mutationFn: (id: string) => closeNow({ data: { competitionId: id } }),
     onSuccess: () => {
@@ -130,9 +158,11 @@ function Admin() {
     },
     onError: (e: unknown) => toast.error(e instanceof Error ? e.message : "Could not change the daily cycle"),
   });
-  const totalRevenue = rows.reduce((s, c) => s + c.sold * c.price_per_ticket, 0);
-  const totalTickets = rows.reduce((s, c) => s + c.sold, 0);
-  const liveCount = rows.filter((c) => c.status === "live").length;
+  const realRows = rows.filter((c) => !c.is_demo);
+  const demoRows = rows.filter((c) => c.is_demo);
+  const revenueOf = (rs: AdminRow[]) => rs.reduce((s, c) => s + c.sold * c.price_per_ticket, 0);
+  const ticketsOf = (rs: AdminRow[]) => rs.reduce((s, c) => s + c.sold, 0);
+  const liveOf = (rs: AdminRow[]) => rs.filter((c) => c.status === "live").length;
   const { data: errCount = 0 } = useQuery({
     queryKey: ["admin", "errors-count"],
     queryFn: async () => {
@@ -170,10 +200,12 @@ function Admin() {
           <div className="text-sm">
             <div className="font-display font-bold text-urgent">Do not enable live Stripe payments without a gambling-law review.</div>
             <p className="mt-1 text-foreground/80">
-              The site is structured as a prize competition of skill under Section 14 of the Gambling Act 2005:
-              every competition carries a free-text numeric skill question, and the draw runs only across correct
-              entries. Before accepting real money, have a UK gambling-law solicitor confirm the T&amp;Cs and
-              the question-authoring workflow. See{" "}
+              The site is structured as a prize competition of skill under Section 14 of the Gambling Act 2005.
+              Every competition must carry a skill question that a reasonable person could get wrong: the answer is
+              typed in free-text, never chosen from options, and it is marked server-side. Only entries that answer
+              correctly go into the draw — and if nobody answers correctly the question is treated as void and the
+              draw falls back to every sold ticket, exactly as written in the T&amp;Cs. Before accepting real money,
+              have a UK gambling-law solicitor confirm the T&amp;Cs and the question-authoring workflow. See{" "}
               <Link to="/admin/questions" className="underline font-bold">/admin/questions</Link>{" "}
               for the question bank, difficulty monitoring and the answer-log export.
             </p>
@@ -222,9 +254,22 @@ function Admin() {
         </div>
 
         <div className="mt-6 grid gap-3 sm:grid-cols-3">
-          <Stat label="Live competitions" value={liveCount.toString()} />
-          <Stat label="Tickets sold" value={shortNumber(totalTickets)} />
-          <Stat label="Revenue" value={gbp(totalRevenue)} accent />
+          <Stat
+            label="Live competitions"
+            real={exact(liveOf(realRows))}
+            demo={exact(liveOf(demoRows))}
+          />
+          <Stat
+            label="Tickets sold"
+            real={exact(ticketsOf(realRows))}
+            demo={exact(ticketsOf(demoRows))}
+          />
+          <Stat
+            label="Revenue"
+            real={gbp(revenueOf(realRows))}
+            demo={gbp(revenueOf(demoRows))}
+            accent
+          />
         </div>
 
         <div className="mt-8 rounded-2xl bg-card border-2 border-border overflow-hidden">
@@ -235,7 +280,69 @@ function Admin() {
               <Button variant="cream" size="sm"><Play className="h-3.5 w-3.5" /> Resume selected</Button>
             </div>
           </div>
-          <div className="overflow-x-auto">
+          {/* Mobile: stacked cards. Desktop: the full table below. */}
+          <ul className="md:hidden divide-y divide-border">
+            {isLoading && <li className="p-6 text-center text-muted-foreground text-sm">Loading…</li>}
+            {!isLoading && rows.length === 0 && (
+              <li className="p-6 text-center text-muted-foreground text-sm">No competitions yet.</li>
+            )}
+            {rows.map((c) => {
+              const expired = new Date(c.ends_at).getTime() <= now;
+              const isDrawing = drawingId === c.id && drawMut.isPending;
+              return (
+                <li key={`m-${c.slug}`} className="p-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <div className="font-semibold break-words">{c.title}</div>
+                      <div className="text-[11px] text-muted-foreground font-mono break-all">{c.slug}</div>
+                    </div>
+                    <span className={`shrink-0 inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-mono uppercase tracking-wider ${
+                      c.status === "drawn" ? "bg-clover/15 text-clover" :
+                      expired ? "bg-urgent/15 text-urgent" :
+                      c.status === "live" ? "bg-gold/20 text-ink" :
+                      "bg-muted text-muted-foreground"
+                    }`}>
+                      {c.status === "drawn" ? "Drawn" : expired ? "Expired" : c.status}
+                    </span>
+                  </div>
+                  <dl className="mt-3 grid grid-cols-2 gap-y-1 text-xs">
+                    <dt className="text-muted-foreground">Sold</dt>
+                    <dd className="text-right tabular-nums">{exact(c.sold)}/{exact(c.total_tickets)}</dd>
+                    <dt className="text-muted-foreground">Revenue</dt>
+                    <dd className="text-right font-bold">{gbp(c.sold * c.price_per_ticket)}</dd>
+                    <dt className="text-muted-foreground">Ends</dt>
+                    <dd className="text-right">{new Date(c.ends_at).toLocaleDateString("en-GB")}</dd>
+                  </dl>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    <Button
+                      variant="cream"
+                      size="sm"
+                      disabled={expired || c.status === "drawn" || closeMut.isPending}
+                      onClick={() => {
+                        if (!confirm(`Close "${c.title}" right now?`)) return;
+                        closeMut.mutate(c.id);
+                      }}
+                    >
+                      <TimerReset className="h-3.5 w-3.5" /> Close now
+                    </Button>
+                    <Button
+                      variant="cream"
+                      size="sm"
+                      disabled={c.status === "drawn" || isDrawing}
+                      onClick={() => {
+                        if (!confirm(`Draw the winner for "${c.title}" now? This can't be undone.`)) return;
+                        drawMut.mutate(c.id);
+                      }}
+                    >
+                      {isDrawing ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Trophy className="h-3.5 w-3.5" />}
+                      Draw
+                    </Button>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+          <div className="hidden md:block overflow-x-auto">
             <table className="w-full text-sm">
               <thead className="bg-background">
                 <tr className="text-left text-xs uppercase tracking-wider text-muted-foreground">
@@ -278,7 +385,7 @@ function Admin() {
                           {c.status === "drawn" ? "Drawn" : expired ? "Expired" : c.status}
                         </span>
                       </td>
-                      <td className="p-3 tabular-nums">{shortNumber(c.sold)}/{shortNumber(c.total_tickets)}</td>
+                      <td className="p-3 tabular-nums">{exact(c.sold)}/{exact(c.total_tickets)}</td>
                       <td className="p-3 font-bold">{gbp(c.sold * c.price_per_ticket)}</td>
                       <td className="p-3 text-muted-foreground">{new Date(c.ends_at).toLocaleDateString("en-GB")}</td>
                       <td className="p-3">
@@ -316,27 +423,71 @@ function Admin() {
           </div>
         </div>
         <div className="mt-8 rounded-2xl bg-card border-2 border-border overflow-hidden">
-          <div className="p-4 border-b border-border flex items-center gap-2">
+          <div className="p-4 border-b border-border flex items-center gap-2 flex-wrap">
             <Mail className="h-4 w-4" />
             <h2 className="font-display text-lg font-bold">Draw notifications</h2>
             <span className="text-xs text-muted-foreground">
               Admin/test addresses only. Example draws are prefixed [DEMO].
             </span>
+            <Button
+              variant="cream"
+              size="sm"
+              className="ml-auto"
+              onClick={() => sendMut.mutate()}
+              disabled={sendMut.isPending}
+            >
+              {sendMut.isPending ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Send className="h-3.5 w-3.5" />}
+              Send queued
+            </Button>
           </div>
           {outbox.length === 0 ? (
             <p className="p-4 text-sm text-muted-foreground">Nothing queued yet.</p>
           ) : (
             <ul className="divide-y divide-border">
               {outbox.slice(0, 12).map((n) => (
-                <li key={n.id} className="p-3 text-sm flex flex-wrap gap-x-3 gap-y-1 items-baseline">
-                  <span className="font-mono text-[10px] uppercase tracking-wider rounded-full px-2 py-0.5 bg-muted">
-                    {n.status}
-                  </span>
-                  <span className="font-semibold">{n.subject}</span>
-                  <span className="text-muted-foreground text-xs">→ {n.recipient}</span>
-                  <span className="text-muted-foreground text-xs ml-auto tabular-nums">
-                    {new Date(n.created_at).toLocaleString("en-GB")}
-                  </span>
+                <li key={n.id} className="p-3 text-sm">
+                  <div className="flex flex-wrap gap-x-3 gap-y-1 items-baseline">
+                    <span
+                      className={
+                        "font-mono text-[10px] uppercase tracking-wider rounded-full px-2 py-0.5 " +
+                        (n.status === "sent"
+                          ? "bg-clover/15 text-clover"
+                          : n.status === "failed"
+                            ? "bg-urgent/15 text-urgent"
+                            : n.status === "alert"
+                              ? "bg-gold/25 text-ink"
+                              : "bg-muted text-muted-foreground")
+                      }
+                    >
+                      {n.status}
+                    </span>
+                    <span className="font-semibold">{n.subject}</span>
+                    <span className="text-muted-foreground text-xs">&rarr; {n.recipient}</span>
+                    <span className="text-muted-foreground text-xs ml-auto tabular-nums">
+                      {n.sent_at
+                        ? `sent ${new Date(n.sent_at).toLocaleString("en-GB")}`
+                        : new Date(n.created_at).toLocaleString("en-GB")}
+                    </span>
+                  </div>
+                  {n.detail && (
+                    <p className="mt-1 text-xs text-muted-foreground break-words">{n.detail}</p>
+                  )}
+                  {n.status !== "sent" && (
+                    <Button
+                      variant="cream"
+                      size="sm"
+                      className="mt-2"
+                      onClick={() => retryMut.mutate(n.id)}
+                      disabled={retryingId === n.id && retryMut.isPending}
+                    >
+                      {retryingId === n.id && retryMut.isPending ? (
+                        <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                      ) : (
+                        <RefreshCw className="h-3.5 w-3.5" />
+                      )}
+                      Retry
+                    </Button>
+                  )}
                 </li>
               ))}
             </ul>
@@ -348,11 +499,21 @@ function Admin() {
   );
 }
 
-function Stat({ label, value, accent = false }: { label: string; value: string; accent?: boolean }) {
+function Stat({ label, real, demo, accent = false }: { label: string; real: string; demo: string; accent?: boolean }) {
   return (
     <div className={`rounded-2xl p-5 border-2 ${accent ? "bg-clover text-cream border-clover" : "bg-card border-border"}`}>
       <div className={`text-xs uppercase tracking-widest font-bold ${accent ? "text-cream/70" : "text-muted-foreground"}`}>{label}</div>
-      <div className="font-display text-3xl font-black mt-1">{value}</div>
+      <div className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+        <div>
+          <div className={`text-[10px] font-mono uppercase tracking-widest ${accent ? "text-cream/70" : "text-muted-foreground"}`}>Real</div>
+          <div className="font-display text-2xl font-black tabular-nums">{real}</div>
+        </div>
+        <div className={accent ? "text-cream/70" : "text-muted-foreground"}>·</div>
+        <div>
+          <div className={`text-[10px] font-mono uppercase tracking-widest ${accent ? "text-cream/70" : "text-muted-foreground"}`}>Demo</div>
+          <div className="font-display text-2xl font-black tabular-nums opacity-70">{demo}</div>
+        </div>
+      </div>
     </div>
   );
 }

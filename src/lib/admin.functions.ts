@@ -65,6 +65,21 @@ export const createCompetition = createServerFn({ method: "POST" })
     await assertAdmin(context);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
+    // Compliance gate: a competition may only go live with every required field
+    // present. This is enforced here regardless of what the UI allowed.
+    if (data.status === "live") {
+      const missing: string[] = [];
+      if (!data.image.trim()) missing.push("cover image");
+      if (!(data.cashAlternative > 0)) missing.push("cash alternative");
+      if (!data.endsAt) missing.push("closing date");
+      if (new Date(data.endsAt).getTime() <= Date.now()) missing.push("closing date in the future");
+      if (data.title.trim().length < 2) missing.push("prize title");
+      if (data.description.trim().length < 20) missing.push("prize description (20+ characters)");
+      if (missing.length) {
+        throw new Error(`Cannot publish live — missing: ${missing.join(", ")}.`);
+      }
+    }
+
     const slug = slugify(data.slug || data.title);
     if (!slug) throw new Error("Could not derive a URL slug from the title.");
 
@@ -196,6 +211,7 @@ export const setDailyDemoEnabled = createServerFn({ method: "POST" })
   });
 
 export interface DrawNotification {
+  body?: string;
   id: string;
   competition_title: string;
   is_demo: boolean;
@@ -219,4 +235,87 @@ export const listDrawNotifications = createServerFn({ method: "GET" })
       .limit(50);
     if (error) throw new Error(error.message);
     return (data ?? []) as DrawNotification[];
+  });
+
+
+// --- Notification delivery (Resend) -----------------------------------------
+
+const GATEWAY_URL = "https://connector-gateway.lovable.dev/resend";
+
+async function deliver(row: { id: string; recipient: string; subject: string; body: string }) {
+  const lovableKey = process.env["LOVABLE_API_KEY"];
+  const resendKey = process.env["RESEND_API_KEY"];
+  if (!lovableKey || !resendKey) {
+    return { ok: false, detail: "Email sending is not configured — connect Resend to drain the queue." };
+  }
+  if (!row.recipient.includes("@")) {
+    return { ok: false, detail: `No deliverable address (${row.recipient}).` };
+  }
+  try {
+    const res = await fetch(`${GATEWAY_URL}/emails`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${lovableKey}`,
+        "X-Connection-Api-Key": resendKey,
+      },
+      body: JSON.stringify({
+        from: "Lucky Git Comps <onboarding@resend.dev>",
+        to: [row.recipient],
+        subject: row.subject,
+        text: row.body,
+      }),
+    });
+    if (!res.ok) {
+      const text = await res.text();
+      return { ok: false, detail: `Resend ${res.status}: ${text.slice(0, 300)}` };
+    }
+    return { ok: true, detail: null as string | null };
+  } catch (e) {
+    return { ok: false, detail: e instanceof Error ? e.message : "Unknown send failure" };
+  }
+}
+
+async function drain(ids: string[] | null) {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  let q = supabaseAdmin
+    .from("draw_notifications")
+    .select("id, recipient, subject, body, status");
+  q = ids ? q.in("id", ids) : q.eq("status", "queued");
+  const { data, error } = await q.limit(25);
+  if (error) throw new Error(error.message);
+
+  let sent = 0;
+  let failed = 0;
+  for (const row of (data ?? []) as Array<{ id: string; recipient: string; subject: string; body: string }>) {
+    const result = await deliver(row);
+    await supabaseAdmin
+      .from("draw_notifications")
+      .update({
+        status: result.ok ? "sent" : "failed",
+        detail: result.detail,
+        sent_at: result.ok ? new Date().toISOString() : null,
+      })
+      .eq("id", row.id);
+    if (result.ok) sent += 1;
+    else failed += 1;
+  }
+  return { sent, failed };
+}
+
+/** Attempt delivery of every queued notification. */
+export const sendQueuedNotifications = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await assertAdmin(context);
+    return drain(null);
+  });
+
+/** Retry a single failed notification. */
+export const retryNotification = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) => z.object({ id: z.string().uuid() }).parse(data))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    return drain([data.id]);
   });
