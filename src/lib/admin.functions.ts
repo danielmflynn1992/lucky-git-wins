@@ -165,7 +165,34 @@ export const resetRollingDemo = createServerFn({ method: "POST" })
     await assertAdmin(context);
     const { data, error } = await context.supabase.rpc("admin_reset_rolling_demo");
     if (error) throw new Error(error.message);
-    return data as { drawn: number; live_id: string };
+    return data as { drawn: number; spawned: string | null; alerts: number };
+  });
+
+/** Kill switch for the daily example cycle. */
+export const getDailyDemoEnabled = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await assertAdmin(context);
+    const { data, error } = await context.supabase
+      .from("site_settings")
+      .select("value")
+      .eq("key", "daily_demo")
+      .maybeSingle();
+    if (error) throw new Error(error.message);
+    const value = (data?.value ?? {}) as { enabled?: boolean };
+    return { enabled: value.enabled !== false };
+  });
+
+export const setDailyDemoEnabled = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) => z.object({ enabled: z.boolean() }).parse(data))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const { error } = await context.supabase.rpc("admin_set_daily_demo", {
+      p_enabled: data.enabled,
+    });
+    if (error) throw new Error(error.message);
+    return { enabled: data.enabled };
   });
 
 export interface DrawNotification {

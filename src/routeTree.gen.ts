@@ -43,7 +43,6 @@ import { Route as DrawsIdVerifyRouteImport } from './routes/draws.$id.verify'
 import { Route as DrawsIdRevealRouteImport } from './routes/draws.$id.reveal'
 import { Route as ApiPublicVerifyDrawRouteImport } from './routes/api/public/verify-draw'
 import { Route as AdminCompetitionsNewRouteImport } from './routes/admin.competitions.new'
-import { Route as ApiPublicHooksRollingDemoRouteImport } from './routes/api/public/hooks/rolling-demo'
 
 const WinnersRoute = WinnersRouteImport.update({
   id: '/winners',
@@ -216,12 +215,6 @@ const AdminCompetitionsNewRoute = AdminCompetitionsNewRouteImport.update({
   path: '/admin/competitions/new',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiPublicHooksRollingDemoRoute =
-  ApiPublicHooksRollingDemoRouteImport.update({
-    id: '/api/public/hooks/rolling-demo',
-    path: '/api/public/hooks/rolling-demo',
-    getParentRoute: () => rootRouteImport,
-  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -258,7 +251,6 @@ export interface FileRoutesByFullPath {
   '/api/public/verify-draw': typeof ApiPublicVerifyDrawRoute
   '/draws/$id/reveal': typeof DrawsIdRevealRoute
   '/draws/$id/verify': typeof DrawsIdVerifyRoute
-  '/api/public/hooks/rolling-demo': typeof ApiPublicHooksRollingDemoRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -295,7 +287,6 @@ export interface FileRoutesByTo {
   '/api/public/verify-draw': typeof ApiPublicVerifyDrawRoute
   '/draws/$id/reveal': typeof DrawsIdRevealRoute
   '/draws/$id/verify': typeof DrawsIdVerifyRoute
-  '/api/public/hooks/rolling-demo': typeof ApiPublicHooksRollingDemoRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -333,7 +324,6 @@ export interface FileRoutesById {
   '/api/public/verify-draw': typeof ApiPublicVerifyDrawRoute
   '/draws/$id/reveal': typeof DrawsIdRevealRoute
   '/draws/$id/verify': typeof DrawsIdVerifyRoute
-  '/api/public/hooks/rolling-demo': typeof ApiPublicHooksRollingDemoRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -372,7 +362,6 @@ export interface FileRouteTypes {
     | '/api/public/verify-draw'
     | '/draws/$id/reveal'
     | '/draws/$id/verify'
-    | '/api/public/hooks/rolling-demo'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -409,7 +398,6 @@ export interface FileRouteTypes {
     | '/api/public/verify-draw'
     | '/draws/$id/reveal'
     | '/draws/$id/verify'
-    | '/api/public/hooks/rolling-demo'
   id:
     | '__root__'
     | '/'
@@ -446,7 +434,6 @@ export interface FileRouteTypes {
     | '/api/public/verify-draw'
     | '/draws/$id/reveal'
     | '/draws/$id/verify'
-    | '/api/public/hooks/rolling-demo'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -484,7 +471,6 @@ export interface RootRouteChildren {
   ApiPublicVerifyDrawRoute: typeof ApiPublicVerifyDrawRoute
   DrawsIdRevealRoute: typeof DrawsIdRevealRoute
   DrawsIdVerifyRoute: typeof DrawsIdVerifyRoute
-  ApiPublicHooksRollingDemoRoute: typeof ApiPublicHooksRollingDemoRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -727,13 +713,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminCompetitionsNewRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/hooks/rolling-demo': {
-      id: '/api/public/hooks/rolling-demo'
-      path: '/api/public/hooks/rolling-demo'
-      fullPath: '/api/public/hooks/rolling-demo'
-      preLoaderRoute: typeof ApiPublicHooksRollingDemoRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
@@ -772,18 +751,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicVerifyDrawRoute: ApiPublicVerifyDrawRoute,
   DrawsIdRevealRoute: DrawsIdRevealRoute,
   DrawsIdVerifyRoute: DrawsIdVerifyRoute,
-  ApiPublicHooksRollingDemoRoute: ApiPublicHooksRollingDemoRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

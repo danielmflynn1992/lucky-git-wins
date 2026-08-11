@@ -97,7 +97,7 @@ function Row({ c }: { c: DemoComp }) {
     <li className="border-[1.5px] border-[var(--color-ink-black)] bg-[var(--color-paper-raised)]">
       <div className="bg-[var(--color-ink-red)] text-[var(--color-paper)] px-3 py-1.5 flex items-baseline justify-between gap-2">
         <span className="font-display uppercase tracking-[0.14em] text-[11px] truncate">
-          {c.title}{c.isRolling && " · rolling"}
+          {c.title}{c.isRolling && " · daily"}
         </span>
         <span className="font-mono text-[10px] shrink-0">
           {c.phase === "drawn" ? formatDrawTime(c.drawnAt) : formatDrawTime(c.endsAt)}

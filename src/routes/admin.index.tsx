@@ -7,7 +7,7 @@ import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
-import { drawCompetition, autoDrawExpired, closeCompetitionNow, resetRollingDemo, listDrawNotifications } from "@/lib/admin.functions";
+import { drawCompetition, autoDrawExpired, closeCompetitionNow, resetRollingDemo, listDrawNotifications, getDailyDemoEnabled, setDailyDemoEnabled } from "@/lib/admin.functions";
 import { gbp, shortNumber } from "@/lib/format";
 import { Copy, Plus, Play, Pause, Trophy, Loader2, Zap, AlertTriangle, Bug, TimerReset, RotateCcw, Mail } from "lucide-react";
 
@@ -115,6 +115,21 @@ function Admin() {
     queryFn: () => notifications({ data: undefined }),
     staleTime: 15_000,
   });
+  const readDaily = useServerFn(getDailyDemoEnabled);
+  const writeDaily = useServerFn(setDailyDemoEnabled);
+  const { data: daily } = useQuery({
+    queryKey: ["admin", "daily-demo"],
+    queryFn: () => readDaily({ data: undefined }),
+    staleTime: 30_000,
+  });
+  const dailyMut = useMutation({
+    mutationFn: (enabled: boolean) => writeDaily({ data: { enabled } }),
+    onSuccess: (res) => {
+      toast.success(res.enabled ? "Daily example cycle resumed." : "Daily example cycle paused.");
+      qc.invalidateQueries({ queryKey: ["admin", "daily-demo"] });
+    },
+    onError: (e: unknown) => toast.error(e instanceof Error ? e.message : "Could not change the daily cycle"),
+  });
   const totalRevenue = rows.reduce((s, c) => s + c.sold * c.price_per_ticket, 0);
   const totalTickets = rows.reduce((s, c) => s + c.sold, 0);
   const liveCount = rows.filter((c) => c.status === "live").length;
@@ -185,7 +200,16 @@ function Admin() {
             </Button>
             <Button variant="cream" size="lg" onClick={() => resetMut.mutate()} disabled={resetMut.isPending}>
               {resetMut.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <RotateCcw className="h-4 w-4" />}
-              Reset rolling demo
+              Reset daily example
+            </Button>
+            <Button
+              variant="cream"
+              size="lg"
+              onClick={() => dailyMut.mutate(!(daily?.enabled ?? true))}
+              disabled={dailyMut.isPending || daily === undefined}
+            >
+              {dailyMut.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : daily?.enabled === false ? <Play className="h-4 w-4" /> : <Pause className="h-4 w-4" />}
+              {daily?.enabled === false ? "Resume daily cycle" : "Pause daily cycle"}
             </Button>
             <Button variant="cream" size="lg" onClick={() => autoMut.mutate()} disabled={autoMut.isPending}>
               {autoMut.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Zap className="h-4 w-4" />}
