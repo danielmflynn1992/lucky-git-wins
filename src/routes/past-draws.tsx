@@ -299,7 +299,7 @@ function PastDrawsPage() {
                     <div className="font-display text-lg font-bold leading-tight">
                       {d.competition_title}
                     </div>
-                    <div className="text-sm text-foreground/70 mt-0.5">🏆 {d.prize}</div>
+                    <div className="text-sm text-foreground/70 mt-0.5">{d.prize}</div>
                     {d.is_demo && (
                       <div className="mt-1 inline-block -rotate-2 border-2 border-[var(--color-ink-red)] px-2 py-0.5 font-display uppercase tracking-[0.18em] text-[10px] text-[var(--color-ink-red)]">
                         Example draw
