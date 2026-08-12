@@ -4,7 +4,16 @@
  */
 import { cn } from "@/lib/utils";
 
-type Variant = "DRAWN" | "SOLD OUT" | "GONE" | "VERIFIED" | "PAID" | "WINNER" | "LIVE" | "NEW";
+type Variant =
+  | "DRAWN"
+  | "SOLD OUT"
+  | "GONE"
+  | "VERIFIED"
+  | "PAID"
+  | "WINNER"
+  | "LIVE"
+  | "NEW"
+  | "DRAW PENDING";
 
 const inkFor: Record<Variant, string> = {
   DRAWN:        "var(--color-ink-blue)",
@@ -15,6 +24,7 @@ const inkFor: Record<Variant, string> = {
   WINNER:       "var(--color-ink-red)",
   LIVE:         "var(--color-ink-red)",
   NEW:          "var(--color-ink-blue)",
+  "DRAW PENDING": "var(--color-ink-blue)",
 };
 
 export function StampMark({

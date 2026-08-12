@@ -328,7 +328,7 @@ function SelfExclusion({
             >
               <option value={6}>6 months</option>
               <option value={12}>1 year</option>
-              <option value={60}>5 years</option>
+              <option value={1200}>Permanent</option>
             </select>
           </label>
           <div className="flex gap-2">

@@ -22,6 +22,7 @@ import { useSiteStats, formatCloseDate, pinDrawingFirst, lifecycleOf, formatDraw
 import { drawnCompetitionsQuery } from "@/lib/results-api";
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { gbp } from "@/lib/format";
+import { DRAW_AND_PAY_LINE, DRAW_DELAYED_LINE, DRAW_DELAY_GRACE_MS } from "@/lib/promises";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/")({
@@ -58,6 +59,10 @@ function Home() {
   const stats = useSiteStats();
   const { data: drawnComps = [] } = useQuery(drawnCompetitionsQuery);
   const lastDrawn = drawnComps[0] ?? null;
+  // Closed, past the grace period, and still no draw record. We say so.
+  const delayedDraws = stats.closed.filter(
+    (c) => Date.now() - new Date(c.endsAt).getTime() > DRAW_DELAY_GRACE_MS,
+  );
 
   const filtered = useMemo(() => {
     let list = cat === "All" ? COMPETITIONS : COMPETITIONS.filter((c) => c.category === cat);
@@ -213,7 +218,11 @@ function Home() {
         <div className="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between gap-3 flex-wrap">
           <div className="min-w-0">
             <div className="label text-[9px] text-[var(--color-ink-blue)]">Last drawn</div>
-            {lastDrawn ? (
+            {delayedDraws.length > 0 ? (
+              <p className="font-display uppercase text-sm md:text-base leading-tight text-[var(--color-ink-red)]">
+                {delayedDraws[0]!.title} — {DRAW_DELAYED_LINE}
+              </p>
+            ) : lastDrawn ? (
               <p className="font-display uppercase text-sm md:text-base leading-tight truncate">
                 {lastDrawn.title} — no. {lastDrawn.winningNumber} ·{" "}
                 <span className="font-mono text-[11px] text-muted-foreground normal-case">
@@ -347,7 +356,7 @@ function Home() {
           <div className="md:col-span-3 rounded-lg bg-card border border-border p-6 shadow-sm hover:shadow-md transition-all duration-200">
             <div className="font-mono text-[11px] tracking-[0.25em] text-clover font-bold">STEP 03</div>
             <h3 className="mt-3 font-display text-xl font-black text-foreground">Draw goes off automatically.</h3>
-            <p className="text-sm text-muted-foreground mt-2 leading-relaxed">Timer hits zero. Winner drawn from correct entries only. Pool size published for verification. Paid within 48 hours.</p>
+            <p className="text-sm text-muted-foreground mt-2 leading-relaxed">{DRAW_AND_PAY_LINE} Drawn from correct entries only, with the pool size published for verification.</p>
           </div>
         </div>
       </section>

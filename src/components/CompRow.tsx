@@ -6,7 +6,7 @@ import { Countdown } from "./Countdown";
 import { QuickAddDialog } from "./QuickAddDialog";
 import { ChevronRight, Plus } from "lucide-react";
 import { LetterboxImage } from "./LetterboxImage";
-import { lifecycleOf, formatDrawTime } from "@/lib/site-stats";
+import { lifecycleOf } from "@/lib/site-stats";
 import { OddsStamp, SoldCounter } from "./TicketOdds";
 
 export function CompRow({ c }: { c: Competition }) {
@@ -61,7 +61,11 @@ export function CompRow({ c }: { c: Competition }) {
         <Countdown target={c.endsAt} compact />
         {closed ? (
           <span className="inline-flex items-center gap-1 rounded-md bg-[var(--color-ink-grey)] text-[var(--color-paper)] px-3 py-2 text-xs font-bold uppercase tracking-wide text-right">
-            {drawn ? "Drawn — see result" : `Closed — drawing ${formatDrawTime(c.endsAt)}`}
+            {drawn
+              ? "Drawn — see result"
+              : remaining <= 0
+                ? "Sold out — draw pending"
+                : "Closed — draw pending"}
           </span>
         ) : (
         <div className="flex items-center gap-1.5">

@@ -3,10 +3,11 @@ import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
 import { GuaranteePanel } from "@/components/GuaranteePanel";
 import { NO_HIDDEN_TOTALS } from "@/components/TicketOdds";
+import { DRAW_AND_PAY_LINE } from "@/lib/promises";
 
 const TITLE = "Our Guarantee — Lucky Git Comps";
 const DESC =
-  "Draws run on the date shown, never extended. Winner within 24 hours, full stated cash alternative, cash paid same day by bank transfer.";
+  "Draws run on the date shown, never extended. Winner drawn automatically at close. Cash prizes paid within 48 hours by bank transfer.";
 
 export const Route = createFileRoute("/guarantee")({
   head: () => ({
@@ -33,6 +34,9 @@ function GuaranteePage() {
         <p className="mt-2 font-body text-[15px] text-[var(--color-ink-grey)]">
           Three promises, printed so you can hold us to them. {NO_HIDDEN_TOTALS}
         </p>
+        <p className="mt-2 font-mono text-[12px] uppercase tracking-[0.12em] text-[var(--color-ink-blue)]">
+          {DRAW_AND_PAY_LINE}
+        </p>
 
         <div className="mt-6">
           <GuaranteePanel compact />
@@ -50,7 +54,7 @@ function GuaranteePage() {
           <p>
             Every competition shows a cash alternative at a stated value. It is a fixed
             figure, not a share of what we took on the door. If you'd rather have the money
-            than the motor, say so and it's paid the same working day by bank transfer.
+            than the motor, say so — cash prizes are paid within 48 hours by bank transfer.
           </p>
           <h2 className="font-display uppercase text-[18px]">And if we ever get it wrong</h2>
           <p>
