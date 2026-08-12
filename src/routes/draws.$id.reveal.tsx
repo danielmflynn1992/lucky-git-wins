@@ -125,9 +125,9 @@ function RevealPage() {
   const [derivHash, setDerivHash] = useState<string | null>(null);
   const [entries, setEntries] = useState<number[] | null>(null);
   const [entriesHash, setEntriesHash] = useState<string | null>(null);
-  const [ownerId, setOwnerId] = useState<string | null>(null);
+  const [wonByMe, setWonByMe] = useState(false);
 
-  // Load the entries list the draw ran over, plus the winning ticket's holder.
+  // Load the entries list the draw ran over. Ownership is checked server-side.
   useEffect(() => {
     if (!draw.competition_id) return;
     let cancelled = false;
@@ -136,13 +136,21 @@ function RevealPage() {
       if (cancelled) return;
       setEntries(list);
       setEntriesHash(await sha256Hex(list.join(",")));
-      const owner = await fetchWinnerOwner(draw.competition_id!, draw.winning_number);
-      if (!cancelled) setOwnerId(owner);
+      if (!user) {
+        if (!cancelled) setWonByMe(false);
+        return;
+      }
+      try {
+        const res = await amIDrawWinner({ data: { drawId: draw.id } });
+        if (!cancelled) setWonByMe(res.won);
+      } catch {
+        if (!cancelled) setWonByMe(false);
+      }
     })();
     return () => {
       cancelled = true;
     };
-  }, [draw.competition_id, draw.winning_number, qualifyingOnly]);
+  }, [draw.competition_id, draw.id, qualifyingOnly, user]);
 
   useEffect(() => {
     if (!revealed) return;
