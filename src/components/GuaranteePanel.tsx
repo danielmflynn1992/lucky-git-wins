@@ -7,19 +7,17 @@ import { Link } from "@tanstack/react-router";
 import { Check } from "lucide-react";
 import terryImg from "@/assets/terry-panel.png.asset.json";
 
-export const DRAW_WITHIN_HOURS = 24;
-
 const LINES: { head: string; body: string }[] = [
   {
     head: "The draw happens on the date shown",
     body: "We never extend, never roll over, never re-list. If a pool doesn't sell out, the draw still runs and someone still wins.",
   },
   {
-    head: `Winner drawn within ${DRAW_WITHIN_HOURS} hours of close`,
+    head: "Winner drawn automatically at close",
     body: "Prize or the full cash alternative at the stated value — never a percentage of sales.",
   },
   {
-    head: "Cash prizes paid same-day by bank transfer",
+    head: "Cash prizes paid within 48 hours by bank transfer",
     body: "No vouchers, no waiting on a cheque, no quiet renegotiation.",
   },
 ];
