@@ -90,13 +90,17 @@ export function CompCard({ c }: { c: Competition }) {
             size="card"
           />
         </div>
-        {closed ? (
+        {drawn ? (
           <span className="pointer-events-none absolute z-[6]" style={{ right: "14px", bottom: "-14px" }}>
-            <StampMark variant="GONE" size="lg" angle={-8} />
+            <StampMark variant="DRAWN" size="lg" angle={-8} />
+          </span>
+        ) : closed ? (
+          <span className="pointer-events-none absolute z-[6]" style={{ right: "14px", bottom: "-14px" }}>
+            <StampMark variant={soldOut ? "SOLD OUT" : "DRAW PENDING"} size="md" angle={-8} />
           </span>
         ) : soldOut ? (
           <span className="pointer-events-none absolute z-[6]" style={{ right: "14px", bottom: "-14px" }}>
-            <StampMark variant="GONE" size="lg" angle={-8} />
+            <StampMark variant="SOLD OUT" size="lg" angle={-8} />
           </span>
         ) : finalRun ? (
           <span className="pointer-events-none absolute z-[6]" style={{ right: "14px", bottom: "-10px" }}>
@@ -135,7 +139,9 @@ export function CompCard({ c }: { c: Competition }) {
           <p className="px-5 pb-2 text-[10px] font-mono uppercase tracking-[0.1em] text-[var(--color-ink-grey)] leading-tight">
             {drawn
               ? "Drawn. Result's published, verify it yourself."
-              : `Closed — drawing ${formatDrawTime(c.endsAt)}. The automatic draw does the rest.`}
+              : soldOut
+                ? `Sold out and closed — drawing ${formatDrawTime(c.endsAt)}.`
+                : `Closed — draw pending. Drawing ${formatDrawTime(c.endsAt)}. ${remaining.toLocaleString()} tickets went unsold; the draw still runs.`}
           </p>
         ) : soldOut ? (
           <p className="px-5 pb-2 text-[10px] font-mono uppercase tracking-[0.1em] text-[var(--color-ink-red)] leading-tight">
@@ -179,7 +185,7 @@ export function CompCard({ c }: { c: Competition }) {
               onClick={(e) => e.stopPropagation()}
               className="pointer-events-auto flex items-center justify-center gap-1.5 bg-[var(--color-ink-blue)] text-[var(--color-paper)] px-5 py-2.5 font-display uppercase tracking-[0.14em] text-xs whitespace-nowrap hover:bg-[var(--color-ink-black)]"
             >
-              <span>Closed — drawing {formatDrawTime(c.endsAt)}</span>
+              <span>{soldOut ? "Sold out" : "Closed"} — draw pending</span>
               <ArrowRight className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
             </Link>
           )
