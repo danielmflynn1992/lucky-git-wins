@@ -926,6 +926,7 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      site_stats: { Args: never; Returns: Json }
       spawn_daily_demo: { Args: never; Returns: string }
       spawn_rolling_demo: { Args: never; Returns: string }
       start_cooloff: {
