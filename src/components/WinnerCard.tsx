@@ -296,6 +296,13 @@ export function WinnerCard({
                 </dl>
                 {canRehash && <InlineVerify seed={w.seed_revealed} hash={w.seed_hash} drawId={w.id} />}
                 <Link
+                  to="/draws/$id/board"
+                  params={{ id: w.id }}
+                  className="mt-2 mr-3 inline-block font-body uppercase tracking-[0.16em] text-[10px] font-bold text-[var(--color-ink-red)] underline underline-offset-2"
+                >
+                  ▶ Watch the draw
+                </Link>
+                <Link
                   to="/draws/$id/reveal"
                   params={{ id: w.id }}
                   className="mt-2 inline-block font-body uppercase tracking-[0.16em] text-[10px] font-bold text-[var(--color-ink-blue)] underline underline-offset-2"
