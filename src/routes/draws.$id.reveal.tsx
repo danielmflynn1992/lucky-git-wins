@@ -57,16 +57,6 @@ async function fetchEntries(competitionId: string, qualifyingOnly: boolean): Pro
   return (data ?? []).map((t) => t.number as number);
 }
 
-async function fetchWinnerOwner(competitionId: string, number: number): Promise<string | null> {
-  const { data } = await supabase
-    .from("tickets")
-    .select("owner_id")
-    .eq("competition_id", competitionId)
-    .eq("number", number)
-    .maybeSingle();
-  return (data?.owner_id as string | null) ?? null;
-}
-
 export const Route = createFileRoute("/draws/$id/reveal")({
   loader: ({ params }) => fetchDraw(params.id),
   head: ({ loaderData }) => {
