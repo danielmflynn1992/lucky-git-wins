@@ -5,6 +5,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
+import { amIDrawWinner } from "@/lib/reveal.functions";
 import { CheckCircle2, Shield, Share2, XCircle } from "lucide-react";
 
 type DrawRec = {
@@ -55,16 +56,6 @@ async function fetchEntries(competitionId: string, qualifyingOnly: boolean): Pro
   const { data, error } = await q.order("number", { ascending: true });
   if (error) throw error;
   return (data ?? []).map((t) => t.number as number);
-}
-
-async function fetchWinnerOwner(competitionId: string, number: number): Promise<string | null> {
-  const { data } = await supabase
-    .from("tickets")
-    .select("owner_id")
-    .eq("competition_id", competitionId)
-    .eq("number", number)
-    .maybeSingle();
-  return (data?.owner_id as string | null) ?? null;
 }
 
 export const Route = createFileRoute("/draws/$id/reveal")({
@@ -135,9 +126,9 @@ function RevealPage() {
   const [derivHash, setDerivHash] = useState<string | null>(null);
   const [entries, setEntries] = useState<number[] | null>(null);
   const [entriesHash, setEntriesHash] = useState<string | null>(null);
-  const [ownerId, setOwnerId] = useState<string | null>(null);
+  const [wonByMe, setWonByMe] = useState(false);
 
-  // Load the entries list the draw ran over, plus the winning ticket's holder.
+  // Load the entries list the draw ran over. Ownership is checked server-side.
   useEffect(() => {
     if (!draw.competition_id) return;
     let cancelled = false;
@@ -146,13 +137,21 @@ function RevealPage() {
       if (cancelled) return;
       setEntries(list);
       setEntriesHash(await sha256Hex(list.join(",")));
-      const owner = await fetchWinnerOwner(draw.competition_id!, draw.winning_number);
-      if (!cancelled) setOwnerId(owner);
+      if (!user) {
+        if (!cancelled) setWonByMe(false);
+        return;
+      }
+      try {
+        const res = await amIDrawWinner({ data: { drawId: draw.id } });
+        if (!cancelled) setWonByMe(res.won);
+      } catch {
+        if (!cancelled) setWonByMe(false);
+      }
     })();
     return () => {
       cancelled = true;
     };
-  }, [draw.competition_id, draw.winning_number, qualifyingOnly]);
+  }, [draw.competition_id, draw.id, qualifyingOnly, user]);
 
   useEffect(() => {
     if (!revealed) return;
@@ -198,7 +197,7 @@ function RevealPage() {
   const mappedTicket =
     pickIndex !== null && entries && entries.length > pickIndex ? entries[pickIndex]! : null;
   const mappingAgrees = mappedTicket !== null && mappedTicket === draw.winning_number;
-  const isWinner = Boolean(user && ownerId && user.id === ownerId);
+  const isWinner = Boolean(user && wonByMe);
 
   const shareUrl = useMemo(() => {
     if (typeof window === "undefined") return "";
