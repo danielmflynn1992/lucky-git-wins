@@ -8,6 +8,7 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
+import { useTicketsRealtime } from "@/hooks/use-tickets-realtime";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -125,12 +126,19 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
+/** Live ticket counts, mounted once inside the query provider. */
+function TicketsRealtime() {
+  useTicketsRealtime();
+  return null;
+}
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   useEffect(() => { installClientErrorMonitor(); }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
+      <TicketsRealtime />
       <StampFilterDefs />
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
