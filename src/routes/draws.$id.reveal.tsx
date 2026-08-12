@@ -5,6 +5,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
+import { amIDrawWinner } from "@/lib/reveal.functions";
 import { CheckCircle2, Shield, Share2, XCircle } from "lucide-react";
 
 type DrawRec = {
@@ -196,7 +197,7 @@ function RevealPage() {
   const mappedTicket =
     pickIndex !== null && entries && entries.length > pickIndex ? entries[pickIndex]! : null;
   const mappingAgrees = mappedTicket !== null && mappedTicket === draw.winning_number;
-  const isWinner = Boolean(user && ownerId && user.id === ownerId);
+  const isWinner = Boolean(user && wonByMe);
 
   const shareUrl = useMemo(() => {
     if (typeof window === "undefined") return "";
