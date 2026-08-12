@@ -5,6 +5,8 @@ import { Ticket, Shuffle, Shield, PoundSterling, CheckCircle2, Info, Loader2, Al
 import { SkillWarning } from "@/components/SkillWarning";
 import { SiteNav } from "@/components/SiteNav";
 import { DrawBoardForCompetition } from "@/components/DrawBoard";
+import { GuaranteePanel } from "@/components/GuaranteePanel";
+import { OddsStamp, SoldCounter } from "@/components/TicketOdds";
 import { SiteFooter } from "@/components/SiteFooter";
 import { Countdown } from "@/components/Countdown";
 import { CompCard } from "@/components/CompCard";
@@ -197,6 +199,18 @@ function CompDetail() {
                 <div className="font-display font-black text-2xl leading-none">{gbp(c.pricePerTicket)}</div>
               </div>
               <Countdown target={c.endsAt} />
+            </div>
+
+            {/* Odds and the exact count — stamped, above the fold, every time. */}
+            <div className="mt-4">
+              <OddsStamp total={c.totalTickets} />
+              <div className="mt-3">
+                <SoldCounter
+                  sold={c.totalTickets - c.ticketsAvailable}
+                  total={c.totalTickets}
+                  strapline
+                />
+              </div>
             </div>
 
             {isDemo(c) && (
@@ -418,10 +432,13 @@ function CompDetail() {
               <li className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-clover mt-0.5 shrink-0" /> UK entrants only, 18+. <Link to="/terms" className="underline">T&Cs apply</Link>.</li>
             </ul>
           </div>
-          <aside className="rounded-2xl bg-gold/10 border-2 border-gold/40 p-5">
+          <aside className="space-y-5">
+            <GuaranteePanel compact />
+            <div className="rounded-2xl bg-gold/10 border-2 border-gold/40 p-5">
             <h3 className="font-display text-lg font-black">How the draw goes off</h3>
             <p className="mt-2 text-sm text-foreground/80">Winners are picked automatically the moment the timer hits zero (or the last ticket sells). Provably random, verified, and published on the Winners Wall.</p>
             <Link to="/winners" className="mt-3 inline-block font-bold text-clover underline">See recent winners →</Link>
+            </div>
           </aside>
         </section>
 

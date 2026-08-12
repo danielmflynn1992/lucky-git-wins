@@ -10,6 +10,7 @@ import { StampMark } from "./StampMark";
 import { Perforation } from "./Perforation";
 import { PrizeImage } from "./PrizeImage";
 import { lifecycleOf, formatDrawTime } from "@/lib/site-stats";
+import { FinalStamp, OddsStamp, SoldCounter, isFinalRun } from "./TicketOdds";
 
 const pad = (n: number, w = 4) => n.toString().padStart(w, "0");
 
@@ -25,7 +26,7 @@ export function CompCard({ c }: { c: Competition }) {
   const drawn = phase === "drawn";
   const closed = phase !== "live";
   const soldOut = pct >= 100;
-  const almostGone = pct >= 80 && !soldOut;
+  const finalRun = isFinalRun(c.ticketsSold, c.totalTickets) && !soldOut && !closed;
   const remaining = c.totalTickets - c.ticketsSold;
   const fresh = c.ticketsSold === 0 && !closed;
   const [quickOpen, setQuickOpen] = useState(false);
@@ -97,9 +98,9 @@ export function CompCard({ c }: { c: Competition }) {
           <span className="pointer-events-none absolute z-[6]" style={{ right: "14px", bottom: "-14px" }}>
             <StampMark variant="GONE" size="lg" angle={-8} />
           </span>
-        ) : almostGone ? (
+        ) : finalRun ? (
           <span className="pointer-events-none absolute z-[6]" style={{ right: "14px", bottom: "-10px" }}>
-            <StampMark variant="LIVE" size="sm" angle={-4} />
+            <FinalStamp sold={c.ticketsSold} total={c.totalTickets} />
           </span>
         ) : fresh ? (
           <span
@@ -113,22 +114,18 @@ export function CompCard({ c }: { c: Competition }) {
 
       {/* FORM-STYLE DATA BLOCK */}
       <div className="relative z-10 pointer-events-none px-5 pt-3 flex flex-1 flex-col gap-2 min-w-0 overflow-hidden">
+        {/* Odds, stamped. Same wording and same slot on every single card. */}
+        <div className="pb-0.5">
+          <OddsStamp total={c.totalTickets} size="sm" />
+        </div>
+
         <dl className="min-w-0">
           <FormRow label="STAKE" value={<span className="font-bold text-[var(--color-ink-red)]">{gbp(c.pricePerTicket)}</span>} />
-          <FormRow label="ODDS" value={<>1 in <b>{c.totalTickets}</b></>} />
-          <FormRow label="SOLD" value={fresh ? <span className="text-[var(--color-ink-blue)]">First one's yours</span> : <b>{c.ticketsSold.toLocaleString()}</b>} />
-          <FormRow label="LEFT" value={<b>{remaining.toLocaleString()}</b>} />
           <FormRow label="CLOSES" value={<Countdown target={c.endsAt} compact />} />
         </dl>
 
         <div className="pt-1">
-          <div className="flex justify-between text-[9px] font-mono tabular-nums text-[var(--color-ink-grey)] mb-1">
-            <span>{c.ticketsSold.toLocaleString()} / {c.totalTickets.toLocaleString()}</span>
-            <span className="font-bold text-[var(--color-ink-red)]">{pct}%</span>
-          </div>
-          <div className="h-2 border border-[var(--color-ink-black)] bg-[var(--color-paper)]">
-            <div className="h-full bg-[var(--color-ink-red)]" style={{ width: `${pct}%` }} />
-          </div>
+          <SoldCounter sold={c.ticketsSold} total={c.totalTickets} />
         </div>
       </div>
 

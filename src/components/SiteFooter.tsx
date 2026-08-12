@@ -1,12 +1,15 @@
 import { Link } from "@tanstack/react-router";
 import { Lockup } from "./Logo";
 import { useSiteStats } from "@/lib/site-stats";
-import { COMPANY_LINE } from "@/lib/company";
+import { COMPANY_LINE, COMPANY_NAME, COMPANY_NUMBER, HAS_REAL_COMPANY_DETAILS } from "@/lib/company";
 
 export function SiteFooter() {
   const { gitsMadeLucky } = useSiteStats();
   return (
     <footer className="relative mt-8 md:mt-12">
+      {/* -------- TRUST BAR — on every page, above everything else -------- */}
+      <TrustBar />
+
       {/* -------- INK-BLUE LINK GRID -------- */}
       <div
         style={{
@@ -43,6 +46,7 @@ export function SiteFooter() {
               { to: "/terms", label: "Terms & Conditions" },
               { to: "/privacy", label: "Privacy Policy" },
               { to: "/responsible-play", label: "Responsible Play" },
+              { to: "/guarantee", label: "Our Guarantee" },
               { to: "/how-entry-works", label: "How entry works" },
               { to: "/faq", label: "FAQ" },
             ]}
@@ -100,6 +104,59 @@ export function SiteFooter() {
       </div>
     </footer>
   );
+}
+
+/**
+ * Persistent trust strip. Statutory bits, the age gate, the no-extension
+ * promise and the help lines — visible on every page without a click.
+ */
+function TrustBar() {
+  return (
+    <div className="border-y-[1.5px] border-[var(--color-ink-black)] bg-[var(--color-paper-raised)]">
+      <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-4 gap-y-2 px-4 py-2.5 text-center font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--color-ink-black)]">
+        <span className="inline-flex items-center gap-1.5">
+          <span
+            aria-label="18 plus only"
+            className="inline-flex h-5 min-w-8 items-center justify-center border-2 border-[var(--color-ink-red)] px-1 font-display text-[10px] leading-none text-[var(--color-ink-red)]"
+          >
+            18+
+          </span>
+          Only
+        </span>
+        <Sep />
+        <Link to="/guarantee" className="underline underline-offset-2">Never extended, ever</Link>
+        <Sep />
+        <Link to="/how-entry-works" className="underline underline-offset-2">How entry works</Link>
+        <Sep />
+        <span className="normal-case tracking-normal">
+          {HAS_REAL_COMPANY_DETAILS
+            ? `${COMPANY_NAME} · Company No. ${COMPANY_NUMBER}`
+            : `${COMPANY_NAME} · Registered in England & Wales`}
+        </span>
+        <Sep />
+        <a
+          href="https://www.gamcare.org.uk"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline underline-offset-2"
+        >
+          GamCare
+        </a>
+        <a
+          href="https://www.begambleaware.org"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline underline-offset-2"
+        >
+          BeGambleAware
+        </a>
+      </div>
+    </div>
+  );
+}
+
+function Sep() {
+  return <span aria-hidden className="opacity-30">·</span>;
 }
 
 function FooterCol({
