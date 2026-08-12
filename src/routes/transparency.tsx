@@ -5,6 +5,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { winnersQuery, displayWinners } from "@/lib/winners-api";
 import { useSiteStats, formatCloseDate } from "@/lib/site-stats";
 import { gbp } from "@/lib/format";
+import { FIXED_ODDS_LINE } from "@/lib/promises";
 
 export const Route = createFileRoute("/transparency")({
   head: () => ({
@@ -44,10 +45,7 @@ function TransparencyPage() {
             label={stats.drawsCompleted ? "Draws gone off" : "First draw"}
             value={stats.drawsCompleted ? String(stats.drawsCompleted).padStart(3, "0") : formatCloseDate(stats.nextCloseAt)}
           />
-          <Stat
-            label="Average sell-through"
-            value={stats.drawsCompleted ? `${stats.sellThroughPct}%` : "—"}
-          />
+          <Stat label="Odds, every comp" value={FIXED_ODDS_LINE} />
         </dl>
 
         <section className="mt-12">

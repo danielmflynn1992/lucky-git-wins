@@ -7,9 +7,34 @@
  * tables via the same two queries used everywhere else.
  */
 import { useQuery } from "@tanstack/react-query";
+import { queryOptions } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import { allCompetitionsQueryOptions } from "@/lib/competitions-api";
 import { winnersQuery, realOnly } from "@/lib/winners-api";
 import type { Competition } from "@/lib/mock-comps";
+
+/**
+ * The single source of truth for every headline figure. Computed server-side
+ * from the same tables, real (non-example) data only.
+ */
+export interface SiteStatRow {
+  comps_live: number;
+  prize_value_live: number;
+  tickets_sold: number;
+  draws_completed: number;
+  winners_paid: number;
+}
+
+export const siteStatsQuery = queryOptions({
+  queryKey: ["site-stats"],
+  queryFn: async (): Promise<SiteStatRow> => {
+    const { data, error } = await supabase.rpc("site_stats" as never);
+    if (error) throw error;
+    return data as unknown as SiteStatRow;
+  },
+  staleTime: 15_000,
+  refetchInterval: 60_000,
+});
 
 /** The 499 Promise: a pool never exceeds this, so one ticket is never worse than 1 in 499. */
 export const MAX_POOL = 499;
@@ -42,14 +67,15 @@ export interface SiteStats {
 export function useSiteStats(): SiteStats {
   const { data: comps = [], isLoading: cLoading } = useQuery(allCompetitionsQueryOptions);
   const { data: winners = [], isLoading: wLoading } = useQuery(winnersQuery);
+  const { data: server, isLoading: sLoading } = useQuery(siteStatsQuery);
   // Example records are illustration only — they never reach a public number.
   const realWinners = assertNoDemoCounted(realOnly(winners));
 
   const open = comps.filter((c) => !isClosed(c.endsAt));
   const closed = comps.filter((c) => isClosed(c.endsAt));
 
-  const prizesOnTable = open.reduce((s, c) => s + (c.cashAlternative ?? 0), 0);
-  const ticketsSold = comps.reduce((s, c) => s + c.ticketsSold, 0);
+  const prizesOnTable = server?.prize_value_live ?? open.reduce((s, c) => s + (c.cashAlternative ?? 0), 0);
+  const ticketsSold = server?.tickets_sold ?? comps.reduce((s, c) => s + c.ticketsSold, 0);
   const sellThroughPct = open.length
     ? Math.round(
         open.reduce((s, c) => s + c.ticketsSold / Math.max(1, c.totalTickets), 0) / open.length * 100,
@@ -62,14 +88,14 @@ export function useSiteStats(): SiteStats {
   return {
     open,
     closed,
-    compsLive: open.length,
+    compsLive: server?.comps_live ?? open.length,
     prizesOnTable,
     ticketsSold,
-    drawsCompleted: realWinners.length,
-    gitsMadeLucky: realWinners.length,
+    drawsCompleted: server?.draws_completed ?? realWinners.length,
+    gitsMadeLucky: server?.winners_paid ?? realWinners.length,
     sellThroughPct,
     nextCloseAt,
-    loading: cLoading || wLoading,
+    loading: cLoading || wLoading || sLoading,
   };
 }
 
