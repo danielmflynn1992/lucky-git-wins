@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { ChevronRight, Ticket, Shield, Radio, MessageSquareHeart, Dices, Handshake, Headset, ListOrdered } from "lucide-react";
 import { SiteNav } from "@/components/SiteNav";
+import { DrawBoardForDraw } from "@/components/DrawBoard";
 import { SiteFooter } from "@/components/SiteFooter";
 import { CompCard } from "@/components/CompCard";
 import { CompRow } from "@/components/CompRow";
@@ -233,6 +234,14 @@ function Home() {
           </Link>
         </div>
       </section>
+
+      {/* LATEST RESULT — the draw board, replayable by anyone. */}
+      {lastDrawn && (
+        <section className="mx-auto max-w-7xl px-4 pt-6 w-full">
+          <div className="label text-[9px] text-[var(--color-ink-blue)] mb-2">Latest result</div>
+          <DrawBoardForDraw drawId={lastDrawn.drawId} />
+        </section>
+      )}
 
       <section className="mx-auto max-w-7xl px-4 pt-6 w-full">
         <TerrysTip />

@@ -4,6 +4,7 @@ import { useSuspenseQuery, useQuery, useQueryClient } from "@tanstack/react-quer
 import { Ticket, Shuffle, Shield, PoundSterling, CheckCircle2, Info, Loader2, AlertTriangle } from "lucide-react";
 import { SkillWarning } from "@/components/SkillWarning";
 import { SiteNav } from "@/components/SiteNav";
+import { DrawBoardForCompetition } from "@/components/DrawBoard";
 import { SiteFooter } from "@/components/SiteFooter";
 import { Countdown } from "@/components/Countdown";
 import { CompCard } from "@/components/CompCard";
@@ -162,6 +163,13 @@ function CompDetail() {
           <span className="mx-2">/</span>
           <span className="text-foreground">{c.title}</span>
         </div>
+
+        {/* The Draw Board — headline act once the comp is closed or drawn. */}
+        {phase !== "live" && (
+          <div className="mb-8">
+            <DrawBoardForCompetition slug={c.slug} />
+          </div>
+        )}
 
         <div className="grid gap-8 lg:grid-cols-5">
           <div className="lg:col-span-3">
@@ -352,6 +360,13 @@ function CompDetail() {
             </div>
           </div>
         </div>
+
+        {/* Pre-draw board — the flaps are blank until the timer runs out. */}
+        {phase === "live" && (
+          <section className="mt-10">
+            <DrawBoardForCompetition slug={c.slug} />
+          </section>
+        )}
 
         {/* Post-close only: personal result, then the pick board. */}
         {result && (

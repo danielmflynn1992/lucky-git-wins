@@ -42,6 +42,7 @@ import { Route as AdminQuestionPerformanceRouteImport } from './routes/admin.que
 import { Route as AdminErrorsRouteImport } from './routes/admin.errors'
 import { Route as DrawsIdVerifyRouteImport } from './routes/draws.$id.verify'
 import { Route as DrawsIdRevealRouteImport } from './routes/draws.$id.reveal'
+import { Route as DrawsIdBoardRouteImport } from './routes/draws.$id.board'
 import { Route as ApiPublicVerifyDrawRouteImport } from './routes/api/public/verify-draw'
 import { Route as AdminCompetitionsNewRouteImport } from './routes/admin.competitions.new'
 
@@ -211,6 +212,11 @@ const DrawsIdRevealRoute = DrawsIdRevealRouteImport.update({
   path: '/draws/$id/reveal',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DrawsIdBoardRoute = DrawsIdBoardRouteImport.update({
+  id: '/draws/$id/board',
+  path: '/draws/$id/board',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicVerifyDrawRoute = ApiPublicVerifyDrawRouteImport.update({
   id: '/api/public/verify-draw',
   path: '/api/public/verify-draw',
@@ -256,6 +262,7 @@ export interface FileRoutesByFullPath {
   '/competitions/': typeof CompetitionsIndexRoute
   '/admin/competitions/new': typeof AdminCompetitionsNewRoute
   '/api/public/verify-draw': typeof ApiPublicVerifyDrawRoute
+  '/draws/$id/board': typeof DrawsIdBoardRoute
   '/draws/$id/reveal': typeof DrawsIdRevealRoute
   '/draws/$id/verify': typeof DrawsIdVerifyRoute
 }
@@ -292,6 +299,7 @@ export interface FileRoutesByTo {
   '/competitions': typeof CompetitionsIndexRoute
   '/admin/competitions/new': typeof AdminCompetitionsNewRoute
   '/api/public/verify-draw': typeof ApiPublicVerifyDrawRoute
+  '/draws/$id/board': typeof DrawsIdBoardRoute
   '/draws/$id/reveal': typeof DrawsIdRevealRoute
   '/draws/$id/verify': typeof DrawsIdVerifyRoute
 }
@@ -330,6 +338,7 @@ export interface FileRoutesById {
   '/competitions/': typeof CompetitionsIndexRoute
   '/admin/competitions/new': typeof AdminCompetitionsNewRoute
   '/api/public/verify-draw': typeof ApiPublicVerifyDrawRoute
+  '/draws/$id/board': typeof DrawsIdBoardRoute
   '/draws/$id/reveal': typeof DrawsIdRevealRoute
   '/draws/$id/verify': typeof DrawsIdVerifyRoute
 }
@@ -369,6 +378,7 @@ export interface FileRouteTypes {
     | '/competitions/'
     | '/admin/competitions/new'
     | '/api/public/verify-draw'
+    | '/draws/$id/board'
     | '/draws/$id/reveal'
     | '/draws/$id/verify'
   fileRoutesByTo: FileRoutesByTo
@@ -405,6 +415,7 @@ export interface FileRouteTypes {
     | '/competitions'
     | '/admin/competitions/new'
     | '/api/public/verify-draw'
+    | '/draws/$id/board'
     | '/draws/$id/reveal'
     | '/draws/$id/verify'
   id:
@@ -442,6 +453,7 @@ export interface FileRouteTypes {
     | '/competitions/'
     | '/admin/competitions/new'
     | '/api/public/verify-draw'
+    | '/draws/$id/board'
     | '/draws/$id/reveal'
     | '/draws/$id/verify'
   fileRoutesById: FileRoutesById
@@ -475,6 +487,7 @@ export interface RootRouteChildren {
   SlipsIdRoute: typeof SlipsIdRoute
   CompetitionsIndexRoute: typeof CompetitionsIndexRoute
   ApiPublicVerifyDrawRoute: typeof ApiPublicVerifyDrawRoute
+  DrawsIdBoardRoute: typeof DrawsIdBoardRoute
   DrawsIdRevealRoute: typeof DrawsIdRevealRoute
   DrawsIdVerifyRoute: typeof DrawsIdVerifyRoute
 }
@@ -712,6 +725,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DrawsIdRevealRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/draws/$id/board': {
+      id: '/draws/$id/board'
+      path: '/draws/$id/board'
+      fullPath: '/draws/$id/board'
+      preLoaderRoute: typeof DrawsIdBoardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/verify-draw': {
       id: '/api/public/verify-draw'
       path: '/api/public/verify-draw'
@@ -776,6 +796,7 @@ const rootRouteChildren: RootRouteChildren = {
   SlipsIdRoute: SlipsIdRoute,
   CompetitionsIndexRoute: CompetitionsIndexRoute,
   ApiPublicVerifyDrawRoute: ApiPublicVerifyDrawRoute,
+  DrawsIdBoardRoute: DrawsIdBoardRoute,
   DrawsIdRevealRoute: DrawsIdRevealRoute,
   DrawsIdVerifyRoute: DrawsIdVerifyRoute,
 }
