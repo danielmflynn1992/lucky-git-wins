@@ -6,7 +6,7 @@ import { Countdown } from "./Countdown";
 import { QuickAddDialog } from "./QuickAddDialog";
 import { ChevronRight, Plus } from "lucide-react";
 import { LetterboxImage } from "./LetterboxImage";
-import { lifecycleOf, formatDrawTime } from "@/lib/site-stats";
+import { lifecycleOf } from "@/lib/site-stats";
 import { OddsStamp, SoldCounter } from "./TicketOdds";
 
 export function CompRow({ c }: { c: Competition }) {

@@ -41,20 +41,21 @@ export const Route = createFileRoute("/how-entry-works")({
         At close, our system draws a winner deterministically from the pool of correct entries
         only, using a hash-then-reveal method. The winning number, the total sold and the
         qualifying pool size are all published on <Link to="/past-draws" className="underline">/past-draws</Link>{" "}
-        and the <Link to="/promise" className="underline">/promise</Link> page, so anyone can
-        independently verify the draw.
+        and summarised on our <Link to="/guarantee" className="underline">guarantee</Link> page, so
+        anyone can independently verify the draw.
       </p>
       <h2>If nobody answers correctly</h2>
       <p>
-        If a competition closes with zero correct answers, the question is treated as void and
-        the draw runs across all sold tickets as a fallback. This is stated in the T&amp;Cs and
-        the draw record is flagged distinctly on the results page.
+        If a competition closes with zero correct entries, the competition is void: every
+        entrant is refunded in full and no prize is awarded. The void draw record is still
+        published on <Link to="/past-draws" className="underline">/past-draws</Link>, flagged
+        as void, so the outcome is on the record like any other.
       </p>
       <h2>No free entry route</h2>
       <p>
         Because entry requires a genuine skill test, no free entry route is offered. There is no
-        postal entry and no "no purchase necessary" option. The legal defensibility of the
-        competition rests on the skill test being genuinely difficult.
+        postal entry and no "no purchase necessary" option. Every question requires genuine
+        skill, knowledge or judgement to answer, and pass rates are reviewed regularly.
       </p>
       <h2>Complaints</h2>
       <p>
