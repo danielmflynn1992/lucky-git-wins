@@ -22,6 +22,7 @@ import { Route as OddsRouteImport } from './routes/odds'
 import { Route as NextDropRouteImport } from './routes/next-drop'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as HowEntryWorksRouteImport } from './routes/how-entry-works'
+import { Route as GuaranteeRouteImport } from './routes/guarantee'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as DrawDayRouteImport } from './routes/draw-day'
 import { Route as DemoRouteImport } from './routes/demo'
@@ -109,6 +110,11 @@ const HowItWorksRoute = HowItWorksRouteImport.update({
 const HowEntryWorksRoute = HowEntryWorksRouteImport.update({
   id: '/how-entry-works',
   path: '/how-entry-works',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GuaranteeRoute = GuaranteeRouteImport.update({
+  id: '/guarantee',
+  path: '/guarantee',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FaqRoute = FaqRouteImport.update({
@@ -239,6 +245,7 @@ export interface FileRoutesByFullPath {
   '/demo': typeof DemoRoute
   '/draw-day': typeof DrawDayRoute
   '/faq': typeof FaqRoute
+  '/guarantee': typeof GuaranteeRoute
   '/how-entry-works': typeof HowEntryWorksRoute
   '/how-it-works': typeof HowItWorksRoute
   '/next-drop': typeof NextDropRoute
@@ -276,6 +283,7 @@ export interface FileRoutesByTo {
   '/demo': typeof DemoRoute
   '/draw-day': typeof DrawDayRoute
   '/faq': typeof FaqRoute
+  '/guarantee': typeof GuaranteeRoute
   '/how-entry-works': typeof HowEntryWorksRoute
   '/how-it-works': typeof HowItWorksRoute
   '/next-drop': typeof NextDropRoute
@@ -315,6 +323,7 @@ export interface FileRoutesById {
   '/demo': typeof DemoRoute
   '/draw-day': typeof DrawDayRoute
   '/faq': typeof FaqRoute
+  '/guarantee': typeof GuaranteeRoute
   '/how-entry-works': typeof HowEntryWorksRoute
   '/how-it-works': typeof HowItWorksRoute
   '/next-drop': typeof NextDropRoute
@@ -355,6 +364,7 @@ export interface FileRouteTypes {
     | '/demo'
     | '/draw-day'
     | '/faq'
+    | '/guarantee'
     | '/how-entry-works'
     | '/how-it-works'
     | '/next-drop'
@@ -392,6 +402,7 @@ export interface FileRouteTypes {
     | '/demo'
     | '/draw-day'
     | '/faq'
+    | '/guarantee'
     | '/how-entry-works'
     | '/how-it-works'
     | '/next-drop'
@@ -430,6 +441,7 @@ export interface FileRouteTypes {
     | '/demo'
     | '/draw-day'
     | '/faq'
+    | '/guarantee'
     | '/how-entry-works'
     | '/how-it-works'
     | '/next-drop'
@@ -469,6 +481,7 @@ export interface RootRouteChildren {
   DemoRoute: typeof DemoRoute
   DrawDayRoute: typeof DrawDayRoute
   FaqRoute: typeof FaqRoute
+  GuaranteeRoute: typeof GuaranteeRoute
   HowEntryWorksRoute: typeof HowEntryWorksRoute
   HowItWorksRoute: typeof HowItWorksRoute
   NextDropRoute: typeof NextDropRoute
@@ -583,6 +596,13 @@ declare module '@tanstack/react-router' {
       path: '/how-entry-works'
       fullPath: '/how-entry-works'
       preLoaderRoute: typeof HowEntryWorksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/guarantee': {
+      id: '/guarantee'
+      path: '/guarantee'
+      fullPath: '/guarantee'
+      preLoaderRoute: typeof GuaranteeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/faq': {
@@ -778,6 +798,7 @@ const rootRouteChildren: RootRouteChildren = {
   DemoRoute: DemoRoute,
   DrawDayRoute: DrawDayRoute,
   FaqRoute: FaqRoute,
+  GuaranteeRoute: GuaranteeRoute,
   HowEntryWorksRoute: HowEntryWorksRoute,
   HowItWorksRoute: HowItWorksRoute,
   NextDropRoute: NextDropRoute,
