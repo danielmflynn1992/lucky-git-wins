@@ -1114,8 +1114,8 @@
 }
 .draw-winner-stamp {
   position: absolute;
-  right: -6px;
-  bottom: 8px;
+  right: 10px;
+  bottom: 14px;
   transform: rotate(-11deg);
   padding: 4px 16px;
   border: 3px solid var(--color-ink-red);
