@@ -7,6 +7,7 @@ import { QuickAddDialog } from "./QuickAddDialog";
 import { ChevronRight, Plus } from "lucide-react";
 import { LetterboxImage } from "./LetterboxImage";
 import { lifecycleOf, formatDrawTime } from "@/lib/site-stats";
+import { OddsStamp, SoldCounter } from "./TicketOdds";
 
 export function CompRow({ c }: { c: Competition }) {
   const pct = Math.round((c.ticketsSold / c.totalTickets) * 100);
@@ -45,10 +46,10 @@ export function CompRow({ c }: { c: Competition }) {
             {gbp(c.pricePerTicket)}
             <span className="text-[10px] font-mono font-normal text-muted-foreground uppercase tracking-wider ml-1">/ticket</span>
           </div>
-          <div className="hidden sm:block h-1 flex-1 min-w-16 max-w-32 rounded-full bg-border overflow-hidden">
-            <div className="h-full shimmer" style={{ width: `${pct}%` }} />
-          </div>
-          <span className="text-[11px] font-mono tabular-nums text-muted-foreground font-semibold">{remaining.toLocaleString()} left</span>
+          <OddsStamp total={c.totalTickets} size="sm" />
+        </div>
+        <div className="mt-1.5 max-w-xs">
+          <SoldCounter sold={c.ticketsSold} total={c.totalTickets} />
         </div>
         <div className="mt-1 text-[10px] font-mono uppercase tracking-[0.1em] text-muted-foreground/80">
           Closes {new Date(c.endsAt).toLocaleDateString("en-GB", { day: "2-digit", month: "short" })} · Max {c.maxPerPerson} per person
