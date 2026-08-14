@@ -81,8 +81,9 @@ export function EmptyBasketScene({ compact = false }: { compact?: boolean }) {
 
 /**
  * UnmarkedStub — one small ticket stub: border, perforated edge, type.
+ * Exported as the site-wide empty-state device.
  */
-function UnmarkedStub({ compact = false }: { compact?: boolean }) {
+export function UnmarkedStub({ compact = false }: { compact?: boolean }) {
   return (
     <div
       className={
