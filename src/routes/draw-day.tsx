@@ -131,9 +131,7 @@ function DrawDay() {
 
         {recent.length > 0 && (
           <section className="mt-14">
-            <h2 className="font-display text-2xl uppercase">
-              {next ? "Last 24 hours" : "That's your lot."}
-            </h2>
+            <h2 className="font-display text-2xl uppercase">Last 24 hours</h2>
             {!next && (
               <p className="mt-1 font-mono text-xs uppercase tracking-[0.16em] text-[var(--color-ink-grey)]">
                 Next gates open when the next comp closes.
