@@ -112,12 +112,16 @@ export function SiteFooter() {
  */
 function TrustBar() {
   return (
-    <div className="border-y-[1.5px] border-[var(--color-ink-black)] bg-[var(--color-paper-raised)]">
-      <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-4 gap-y-2 px-4 py-2.5 text-center font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--color-ink-black)]">
+    <div style={{ borderBottom: "1px solid color-mix(in oklab, var(--color-on-dark-fg) 22%, transparent)" }}>
+      <div
+        className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-4 gap-y-2 px-4 py-2 text-center font-mono text-[11px] uppercase tracking-[0.14em]"
+        style={{ color: "var(--color-on-dark-fg)" }}
+      >
         <span className="inline-flex items-center gap-1.5">
           <span
             aria-label="18 plus only"
-            className="inline-flex h-5 min-w-8 items-center justify-center border-2 border-[var(--color-ink-red)] px-1 font-display text-[10px] leading-none text-[var(--color-ink-red)]"
+            className="inline-flex h-5 min-w-8 items-center justify-center border-2 border-current px-1 font-display text-[11px] leading-none"
+            style={{ color: "var(--color-marker)" }}
           >
             18+
           </span>
