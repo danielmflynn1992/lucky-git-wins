@@ -34,6 +34,21 @@ function pctIncorrect(r: QRow) {
   return ((r.times_served - r.times_correct) / r.times_served) * 100;
 }
 
+const MULTI_STEP_HINTS =
+  /\bthen\b|\bafter\b|\beach\b|\bsplit\b|\btotal\b|\bnext\b|sequence|\bplus\b.*\bminus\b|%|\bof\b.*\band\b/i;
+
+/**
+ * Difficulty guard: a question that performs one arithmetic operation and uses
+ * no multi-step language cannot carry the skill basis on its own.
+ */
+export function isSingleStep(text: string): boolean {
+  const t = (text ?? "").trim();
+  if (!t) return true;
+  if (MULTI_STEP_HINTS.test(t)) return false;
+  const operators = (t.match(/[+\-×x*÷/]|\bplus\b|\bminus\b|\btimes\b|\bdivided by\b/gi) ?? []).length;
+  return operators <= 1;
+}
+
 function QuestionBank() {
   const qc = useQueryClient();
   const [editing, setEditing] = useState<null | Partial<QRow> & { correct_answer?: string }>(null);
@@ -79,12 +94,28 @@ function QuestionBank() {
   });
 
   const toggle = useMutation({
-    mutationFn: async ({ id, active }: { id: string; active: boolean }) => {
+    mutationFn: async ({ id, active, reason, text }: { id: string; active: boolean; reason?: string; text?: string }) => {
       const { error } = await supabase.rpc("admin_set_question_active", { p_id: id, p_active: active });
       if (error) throw error;
+      if (reason) {
+        // Audit trail for the override — visible on the Client errors screen.
+        await supabase.rpc("log_client_error", {
+          _severity: "warning",
+          _kind: "question_activation_override",
+          _message: `Single-step question activated: "${text ?? id}"`,
+          _stack: null,
+          _route: "/admin/questions",
+          _user_agent: navigator.userAgent,
+          _viewport: `${window.innerWidth}x${window.innerHeight}`,
+          _extra: { question_id: id, reason },
+          _fingerprint: `question_activation_override:${id}`,
+        });
+      }
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ["question-bank"] }),
   });
+
+  const [override, setOverride] = useState<{ row: QRow; reason: string } | null>(null);
 
   const rows = useMemo(
     () => [...(questions.data ?? [])].sort((a, b) => pctIncorrect(a) - pctIncorrect(b)),
