@@ -24,7 +24,6 @@ const STATIC_PUBLIC_ROUTES: SitemapEntry[] = [
   { path: "/promise", changefreq: "monthly", priority: "0.7" },
   { path: "/transparency", changefreq: "monthly", priority: "0.7" },
   { path: "/odds", changefreq: "monthly", priority: "0.6" },
-  { path: "/next-drop", changefreq: "weekly", priority: "0.6" },
   { path: "/free-entry", changefreq: "monthly", priority: "0.6" },
   { path: "/responsible-play", changefreq: "monthly", priority: "0.6" },
   { path: "/faq", changefreq: "monthly", priority: "0.6" },
