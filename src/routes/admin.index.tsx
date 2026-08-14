@@ -101,10 +101,13 @@ function Admin() {
   const sendMut = useMutation({
     mutationFn: () => sendQueued({ data: undefined }),
     onSuccess: (res) => {
-      if (res.sent === 0 && res.failed === 0) toast.info("Nothing queued to send.");
+      if (!res.configured)
+        toast.error("Sending paused — no verified sending domain configured. Nothing was sent.");
+      else if (res.sent === 0 && res.failed === 0) toast.info("Nothing queued to send.");
       else if (res.failed === 0) toast.success(`Sent ${res.sent}.`);
       else toast.warning(`Sent ${res.sent}, failed ${res.failed}. Check the detail lines.`);
       qc.invalidateQueries({ queryKey: ["admin", "draw-notifications"] });
+      qc.invalidateQueries({ queryKey: ["admin", "email-config"] });
     },
     onError: (e: unknown) => toast.error(e instanceof Error ? e.message : "Send failed"),
   });
@@ -141,6 +144,12 @@ function Admin() {
   const { data: outbox = [] } = useQuery({
     queryKey: ["admin", "draw-notifications"],
     queryFn: () => notifications({ data: undefined }),
+    staleTime: 15_000,
+  });
+  const emailStatusFn = useServerFn(getEmailConfigStatus);
+  const { data: emailStatus } = useQuery({
+    queryKey: ["admin", "email-config"],
+    queryFn: () => emailStatusFn({ data: undefined }),
     staleTime: 15_000,
   });
   const readDaily = useServerFn(getDailyDemoEnabled);
@@ -440,12 +449,23 @@ function Admin() {
               size="sm"
               className="ml-auto"
               onClick={() => sendMut.mutate()}
-              disabled={sendMut.isPending}
+              disabled={sendMut.isPending || emailStatus?.configured === false}
             >
               {sendMut.isPending ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Send className="h-3.5 w-3.5" />}
               Send queued
             </Button>
           </div>
+          {emailStatus?.configured === false && (
+            <div className="border-b-2 border-[color:var(--color-ink-red)] bg-[color:var(--color-ink-red)]/10 p-3">
+              <p className="text-sm font-bold text-[color:var(--color-ink-red)]">
+                Sending paused — no verified domain configured.
+              </p>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                {emailStatus.queued} notification{emailStatus.queued === 1 ? "" : "s"} waiting. They stay
+                queued and flush automatically the moment a verified sending domain is connected.
+              </p>
+            </div>
+          )}
           {outbox.length === 0 ? (
             <p className="p-4 text-sm text-muted-foreground">Nothing queued yet.</p>
           ) : (
