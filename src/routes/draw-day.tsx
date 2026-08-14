@@ -8,6 +8,7 @@ import { Countdown } from "@/components/Countdown";
 import { allCompetitionsQueryOptions } from "@/lib/competitions-api";
 import { winnersQuery, realOnly } from "@/lib/winners-api";
 import { Perforation } from "@/components/Perforation";
+import { ukTime } from "@/lib/format";
 import { UnmarkedStub } from "@/components/EmptyBasketScene";
 import { Button } from "@/components/ui/button";
 
