@@ -142,12 +142,12 @@ function CompetitionsPage() {
 
 function EmptyStall() {
   return (
-    <div className="mt-10 text-center py-12">
-      <LuckyMark className="mx-auto h-14 w-14" />
-      <p className="mt-4 font-display text-2xl font-bold text-foreground">
+    <div className="mt-6 text-center py-6">
+      <UnmarkedStub compact />
+      <p className="mt-4 font-mono text-[13px] uppercase tracking-[0.12em] text-[var(--color-ink-black)]">
         Stall's empty. Back Monday.
       </p>
-      <p className="mt-1 text-sm text-muted-foreground">Nothing doing. Try something else.</p>
+      <p className="caption-micro mt-1">Nothing doing. Try something else.</p>
     </div>
   );
 }
