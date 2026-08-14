@@ -33,6 +33,11 @@ import {
   type DbCompetition,
 } from "@/lib/competitions-api";
 
+/** Retired slugs → the live page they should land on. Permanent redirects. */
+const LEGACY_SLUGS: Record<string, string> = {
+  "audi-rs3-25k-cash": "audi-rs3-45k-cash",
+};
+
 export const Route = createFileRoute("/competitions/$slug")({
   loader: async ({ params, context }) => {
     // Old URLs we've published in the past still have to land somewhere sensible.
