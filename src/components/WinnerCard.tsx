@@ -103,6 +103,14 @@ function slangForPrize(prize: string): string | null {
  * block, quote, and PAID OUT rubber stamp. Only one card open at a time when
  * `openId`/`onToggle` are wired by the parent.
  */
+/** A usable winner name: not blank, not a dash, not a "Ticket #x holder" stub. */
+function hasWinnerName(name?: string | null) {
+  if (!name) return false;
+  const n = name.trim();
+  if (!n || n === "—" || n === "-") return false;
+  return !/holder$/i.test(n);
+}
+
 export function WinnerCard({
   w,
   expanded: controlledExpanded,
@@ -170,14 +178,16 @@ export function WinnerCard({
         )}
 
         <dl className="px-5 py-2">
-          <div className="leader-row">
-            <dt className="label text-[9px] whitespace-nowrap">NAME</dt>
-            <span className="leader-row__fill" aria-hidden />
-            <dd className="font-mono text-[12px] text-[var(--color-ink-black)] text-right truncate min-w-0">
-              <b>{w.winner_display_name}</b>
-              {w.winner_town ? <span> · {w.winner_town}</span> : null}
-            </dd>
-          </div>
+          {hasWinnerName(w.winner_display_name) ? (
+            <div className="leader-row">
+              <dt className="label text-[9px] whitespace-nowrap">NAME</dt>
+              <span className="leader-row__fill" aria-hidden />
+              <dd className="font-mono text-[12px] text-[var(--color-ink-black)] text-right truncate min-w-0">
+                <b>{w.winner_display_name}</b>
+                {w.winner_town ? <span> · {w.winner_town}</span> : null}
+              </dd>
+            </div>
+          ) : null}
           <div className="leader-row">
             <dt className="label text-[9px] whitespace-nowrap">TICKET</dt>
             <span className="leader-row__fill" aria-hidden />
@@ -278,7 +288,7 @@ export function WinnerCard({
                 <div className="mt-1 mb-2 font-mono text-[10px] tabular-nums text-[var(--color-ink-black)]">
                   Winning ticket <b className="text-[var(--color-ink-red)]">#{String(w.winning_number).padStart(3, "0")}</b>
                   {" · "}
-                  {new Date(w.drawn_at).toLocaleString("en-GB")}
+                  {new Date(w.drawn_at).toLocaleString("en-GB", { timeZone: "Europe/London" })}
                 </div>
                 <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-0.5 font-mono text-[10px] text-[var(--color-ink-black)]">
                   <dt className="text-[var(--color-ink-grey)]">Commit</dt>

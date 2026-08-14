@@ -164,23 +164,21 @@ function Home() {
               one draw has been published, so nothing on the site claims
               100% of anything before we've done any of it. */}
           <div className="relative hidden md:block">
-            <div className="rounded-lg bg-card border border-border p-6 shadow-md">
-              <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-muted-foreground">Platform stats · Live</div>
-              <dl className="mt-6 grid grid-cols-2 gap-6">
-                <Stat label="Prizes on the table" value={gbp(stats.prizesOnTable)} tone="clover" />
-                <Stat label="Comps running" value={stats.compsLive.toString().padStart(2, "0")} />
-                <Stat label="Tickets flogged" value={stats.ticketsSold.toLocaleString()} />
-                {stats.drawsCompleted > 0 ? (
-                  <Stat label="Draws gone off" value={stats.drawsCompleted.toString().padStart(2, "0")} />
-                ) : (
-                  <Stat label="First draw" value={formatCloseDate(stats.nextCloseAt)} />
-                )}
-              </dl>
-              <div className="mt-6 pt-4 border-t border-border text-[11px] font-mono text-muted-foreground leading-relaxed">
-                Every draw automatic. Every ticket number published. No hidden reserves, no house tickets, no funny business.{" "}
-                <Link to="/transparency" className="underline">See the numbers</Link>.
-              </div>
-            </div>
+            <div className="caption-micro">Platform stats · Live</div>
+            <dl className="ledger mt-2">
+              <LedgerRow label="Prizes on the table" value={gbp(stats.prizesOnTable)} tone="red" />
+              <LedgerRow label="Comps running" value={stats.compsLive.toString().padStart(2, "0")} />
+              <LedgerRow label="Tickets flogged" value={stats.ticketsSold.toLocaleString()} />
+              {stats.drawsCompleted > 0 ? (
+                <LedgerRow label="Draws gone off" value={stats.drawsCompleted.toString().padStart(2, "0")} />
+              ) : (
+                <LedgerRow label="First draw" value={formatCloseDate(stats.nextCloseAt)} />
+              )}
+            </dl>
+            <p className="caption-micro mt-2 leading-[1.5] normal-case tracking-[0.06em]">
+              Every draw automatic. Every ticket number published.{" "}
+              <Link to="/transparency" className="underline">See the numbers</Link>.
+            </p>
           </div>
           </div>
         </div>
@@ -190,8 +188,8 @@ function Home() {
 
       {/* TRUST STRIP */}
       <section className="border-y-[1.5px] border-[var(--color-ink-black)] bg-[var(--color-paper-raised)]">
-        <div className="mx-auto max-w-7xl px-4 py-5">
-          <ul className="flex gap-3 overflow-x-auto -mx-4 px-4 pb-1 snap-x sm:mx-0 sm:px-0 sm:pb-0 sm:overflow-visible sm:grid sm:grid-cols-2 sm:gap-4">
+        <div className="mx-auto max-w-7xl px-4 py-2.5">
+          <ul className="flex gap-3 overflow-x-auto -mx-4 px-4 pb-1 snap-x sm:mx-0 sm:px-0 sm:pb-0 sm:overflow-visible sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-1">
             {[
               { icon: Dices, label: "Automatic random draws" },
               { icon: Handshake, label: "Verified winners, real handshakes" },
@@ -200,10 +198,10 @@ function Home() {
             ].map(({ icon: Icon, label }) => (
               <li
                 key={label}
-                className="snap-start shrink-0 w-[150px] sm:w-auto flex flex-col gap-2 border-2 border-[var(--color-ink-blue)] bg-[var(--color-paper)] p-3"
+                className="snap-start shrink-0 sm:w-auto flex items-center gap-2 py-1"
               >
-                <Icon aria-hidden className="h-5 w-5 text-[var(--color-coupon-red)]" />
-                <span className="font-display uppercase tracking-[0.1em] text-[13px] leading-snug font-bold text-[var(--color-ink-blue)]">
+                <Icon aria-hidden strokeWidth={1.75} className="h-5 w-5 shrink-0 text-[var(--color-ink-red)]" />
+                <span className="whitespace-nowrap font-mono text-[11px] uppercase tracking-[0.12em] text-[var(--color-ink-blue)]">
                   {label}
                 </span>
               </li>
@@ -302,7 +300,7 @@ function Home() {
         {!showControls ? (
           <div className="mt-6 flex flex-col gap-3">
             {filtered.map((c) => (
-              <div key={c.slug} className="rise-in mx-auto w-full max-w-2xl">
+              <div key={c.slug} className="mx-auto w-full max-w-2xl">
                 <CompCard c={c} />
               </div>
             ))}
@@ -315,7 +313,7 @@ function Home() {
         ) : view === "grid" ? (
           <div className="stall-grid mt-6 grid gap-3 sm:gap-5 grid-cols-2 md:grid-cols-3 items-stretch">
             {filtered.map((c) => (
-              <div key={c.slug} className="rise-in h-full">
+              <div key={c.slug} className="h-full">
                 <CompCard c={c} />
               </div>
             ))}
@@ -323,7 +321,7 @@ function Home() {
         ) : (
           <div className="mt-6 flex flex-col gap-2">
             {filtered.map((c) => (
-              <div key={c.slug} className="rise-in">
+              <div key={c.slug}>
                 <CompRow c={c} />
               </div>
             ))}
@@ -331,48 +329,51 @@ function Home() {
         )}
       </section>
 
-      <div className="mx-auto max-w-7xl px-4 mt-6 md:mt-10"><div role="separator" aria-hidden className="perf-rule" /></div>
+      <div className="mx-auto max-w-7xl px-4 mt-5"><div role="separator" aria-hidden className="perf-rule" /></div>
 
-      {/* HOW IT WORKS */}
-      <section className="mx-auto max-w-7xl px-4 mt-4 md:mt-6 w-full">
-        <div>
-          <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-clover font-bold">How it works</div>
-          <h2 className="mt-2 font-display font-black tracking-[-0.02em] text-foreground">Three steps. One of them's a skill question.</h2>
+      {/* HOW IT WORKS — one connected strip, numbered tabs, thin rules */}
+      <section className="mx-auto max-w-7xl px-4 mt-6 w-full">
+        <div className="bg-[var(--color-ink-red)] px-3 py-1.5">
+          <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--color-paper)]">How it works</span>
         </div>
-        {/* Bento box */}
-        <div className="mt-8 grid gap-4 md:grid-cols-6 md:grid-rows-2 md:auto-rows-fr">
-          <div className="md:col-span-3 md:row-span-2 rounded-lg bg-card border border-border p-8 shadow-sm hover:shadow-md transition-all duration-200">
-            <div className="font-mono text-[11px] tracking-[0.25em] text-clover font-bold">STEP 01</div>
-            <h3 className="mt-4 font-display text-3xl md:text-4xl font-black tracking-tight text-foreground">Pick your tickets.</h3>
-            <p className="text-base text-muted-foreground mt-3 leading-relaxed max-w-md">
-              Lucky Dip if you can't be bothered, or hand-pick your numbers like it matters. From a quid a go. Grid updates live so you can't nick a number someone else already has.
-            </p>
-          </div>
-          <div className="md:col-span-3 rounded-lg bg-card border border-border p-6 shadow-sm hover:shadow-md transition-all duration-200">
-            <div className="font-mono text-[11px] tracking-[0.25em] text-clover font-bold">STEP 02</div>
-            <h3 className="mt-3 font-display text-xl font-black text-foreground">Checkout, sorted.</h3>
-            <p className="text-sm text-muted-foreground mt-2 leading-relaxed">Answer a genuine skill question before paying. Get it right and you're in the draw. Get it wrong and your tickets don't qualify — stated unmissably before you pay.</p>
-          </div>
-          <div className="md:col-span-3 rounded-lg bg-card border border-border p-6 shadow-sm hover:shadow-md transition-all duration-200">
-            <div className="font-mono text-[11px] tracking-[0.25em] text-clover font-bold">STEP 03</div>
-            <h3 className="mt-3 font-display text-xl font-black text-foreground">Draw goes off automatically.</h3>
-            <p className="text-sm text-muted-foreground mt-2 leading-relaxed">{DRAW_AND_PAY_LINE} Drawn from correct entries only, with the pool size published for verification.</p>
-          </div>
+        <h2 className="mt-2 font-display text-foreground">Three steps. One of them's a skill question.</h2>
+        <div className="mt-3 border-t border-b-[3px] border-double border-[var(--color-ink-black)] border-t-[var(--color-ink-black)]">
+          {[
+            { n: "01", h: "Pick your tickets.", p: "Lucky Dip if you can't be bothered, or hand-pick your numbers like it matters. From a quid a go. Grid updates live so you can't nick a number someone else already has." },
+            { n: "02", h: "Checkout, sorted.", p: "Answer a genuine skill question before paying. Get it right and you're in the draw. Get it wrong and your tickets don't qualify — stated unmissably before you pay." },
+            { n: "03", h: "Draw goes off automatically.", p: `${DRAW_AND_PAY_LINE} Drawn from correct entries only, with the pool size published for verification.` },
+          ].map((s, i) => (
+            <div
+              key={s.n}
+              className={
+                "flex gap-3 py-2.5 " +
+                (i > 0 ? "border-t border-[color-mix(in_oklab,var(--color-ink-black)_25%,transparent)]" : "")
+              }
+            >
+              <span className="shrink-0 self-start border-2 border-[var(--color-ink-black)] bg-[var(--color-paper-raised)] px-1.5 py-0.5 font-mono text-[11px] tracking-[0.14em]">
+                {s.n}
+              </span>
+              <div className="min-w-0">
+                <h3 className="font-display text-[var(--text-display-sm)] leading-none text-foreground">{s.h}</h3>
+                <p className="mt-1 max-w-[62ch]">{s.p}</p>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 
       {/* WINNERS WALL */}
-      <section className="mx-auto max-w-7xl px-4 mt-8 md:mt-14 w-full">
+      <section className="mx-auto max-w-7xl px-4 mt-6 md:mt-10 w-full">
         <div className="flex items-end justify-between gap-4 flex-wrap">
           <div>
-            <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-clover mb-2 font-bold">Winners · Verified</div>
-            <h2 className="font-display font-black tracking-[-0.02em] text-foreground">Smug Gits.</h2>
-            <p className="text-muted-foreground mt-1">Real people who won real things. Try not to hate them.</p>
+            <div className="caption-micro caption-micro--red">Winners · Verified</div>
+            <h2 className="mt-1 font-display text-foreground">Smug Gits.</h2>
+            <p className="mt-1">Real people who won real things. Try not to hate them.</p>
           </div>
-          <Link to="/winners" className="text-sm font-bold text-clover hover:underline">Smug Gits (Our Winners) →</Link>
+          <Link to="/winners" className="font-mono text-[12px] underline underline-offset-4">All winners →</Link>
         </div>
         {winners.length > 0 ? (
-          <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {winners.slice(0, 3).map((w) => (
               <WinnerCard
                 key={w.id}
@@ -383,14 +384,18 @@ function Home() {
             ))}
           </div>
         ) : (
-          <p className="mt-6 font-mono text-sm text-muted-foreground">
-            No draws yet — first winners land after the next close.{" "}
-            <Link to="/winners" className="font-bold text-clover underline underline-offset-2">See the winners wall</Link>
-          </p>
+          <div className="mt-4 border-[1.5px] border-[var(--color-ink-black)] bg-[var(--color-paper-raised)] px-4 py-5 text-center">
+            <p className="font-mono text-[12px] uppercase tracking-[0.12em] text-[var(--color-ink-black)]">
+              No draws yet — first winners land after the next close.
+            </p>
+            <Link to="/winners" className="mt-2 inline-block font-mono text-[12px] underline underline-offset-4">
+              See the winners wall
+            </Link>
+          </div>
         )}
       </section>
 
-      <div className="mx-auto max-w-7xl px-4 mt-6 md:mt-10"><div role="separator" aria-hidden className="perf-rule" /></div>
+      <div className="mx-auto max-w-7xl px-4 mt-5"><div role="separator" aria-hidden className="perf-rule" /></div>
 
       <NewsletterSlip />
       <SiteFooter />
@@ -398,11 +403,15 @@ function Home() {
   );
 }
 
-function Stat({ label, value, tone }: { label: string; value: string; tone?: "clover" }) {
+/** One ruled ledger line: micro-caption label, typewriter value. */
+function LedgerRow({ label, value, tone }: { label: string; value: string; tone?: "red" }) {
   return (
-    <div>
-      <dt className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground">{label}</dt>
-      <dd className={"mt-1 font-display font-black tabular-nums text-3xl " + (tone === "clover" ? "text-clover" : "text-foreground")}>
+    <div className="ledger__row">
+      <dt className="ledger__label">{label}</dt>
+      <dd
+        className="ledger__value text-[15px]"
+        style={tone === "red" ? { color: "var(--color-ink-red)" } : undefined}
+      >
         {value}
       </dd>
     </div>

@@ -215,8 +215,8 @@ function DrawBoardView({ data }: { data: DrawBoardData }) {
         </div>
       )}
 
-      {/* Wooden framed board */}
-      <div className="p-3 sm:p-5">
+      {/* Wooden framed board — halftone print texture behind the frame */}
+      <div className="halftone p-3 sm:p-5">
         <div
           className={"draw-board-frame relative " + (stamped && t < T_WINNER_STAMP + 500 ? "draw-board-shake" : "")}
         >

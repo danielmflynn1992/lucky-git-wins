@@ -46,12 +46,17 @@ export function ExampleRibbon({ className = "" }: { className?: string }) {
 
 export function ExampleBanner({ children }: { children?: ReactNode }) {
   return (
-    <div
-      role="note"
-      className="border-[1.5px] border-[var(--color-ink-red)] bg-[var(--color-ink-red)]/10 px-3 py-2 font-mono text-[12px] text-[var(--color-ink-red)]"
-    >
-      <b className="font-display uppercase tracking-[0.16em] text-[11px]">Example</b>{" "}
-      {children ?? DEMO_COMP_BANNER}
+    <div role="note" className="flex flex-wrap items-center gap-3">
+      <span
+        aria-hidden
+        className="inline-flex shrink-0 rotate-[-4deg] items-center border-2 border-[var(--color-ink-red)] px-2 py-0.5 font-display uppercase tracking-[0.14em] text-[12px] text-[var(--color-ink-red)] opacity-85"
+        style={{ filter: "url(#stamp-noise)" }}
+      >
+        Example — no prize
+      </span>
+      <span className="min-w-0 font-mono text-[11px] uppercase tracking-[0.1em] text-[var(--color-ink-red)]">
+        {children ?? DEMO_COMP_BANNER}
+      </span>
     </div>
   );
 }
