@@ -452,7 +452,16 @@ function CheckoutInner() {
           <div className="rounded-2xl bg-card border-2 border-border p-5 sticky top-24">
             <h2 className="font-display text-lg font-bold">Your order</h2>
             <div className="mt-4 flex gap-3">
-              <img src={comp.image} alt="" width={72} height={72} className="h-16 w-16 rounded-lg object-cover" />
+              {comp.image?.trim() ? (
+                <img src={comp.image} alt="" width={72} height={72} className="h-16 w-16 rounded-lg object-cover" />
+              ) : (
+                <div
+                  aria-hidden
+                  className="h-16 w-16 rounded-lg bg-ink/10 border-2 border-border grid place-items-center font-mono text-[10px] uppercase text-muted-foreground"
+                >
+                  LGC
+                </div>
+              )}
               <div className="flex-1 min-w-0">
                 <div className="text-[10px] font-bold uppercase tracking-widest text-clover/70">{comp.category}</div>
                 <div className="font-display text-sm truncate">{comp.title}</div>
