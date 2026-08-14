@@ -288,7 +288,7 @@ export function WinnerCard({
                 <div className="mt-1 mb-2 font-mono text-[10px] tabular-nums text-[var(--color-ink-black)]">
                   Winning ticket <b className="text-[var(--color-ink-red)]">#{String(w.winning_number).padStart(3, "0")}</b>
                   {" · "}
-                  {new Date(w.drawn_at).toLocaleString("en-GB")}
+                  {new Date(w.drawn_at).toLocaleString("en-GB", { timeZone: "Europe/London" })}
                 </div>
                 <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-0.5 font-mono text-[10px] text-[var(--color-ink-black)]">
                   <dt className="text-[var(--color-ink-grey)]">Commit</dt>
