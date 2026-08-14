@@ -138,3 +138,11 @@ export const drawnCompetitionsQuery = queryOptions({
   queryFn: fetchDrawnCompetitions,
   staleTime: 60_000,
 });
+
+/**
+ * The draw to surface as "latest result". Real draws always win: an example
+ * only shows when no genuine draw exists anywhere.
+ */
+export function latestDrawn(list: DrawnCompetition[]): DrawnCompetition | null {
+  return list.find((d) => !d.isDemo) ?? list[0] ?? null;
+}
