@@ -259,7 +259,14 @@ export const getEmailConfigStatus = createServerFn({ method: "GET" })
       .from("draw_notifications")
       .select("id", { count: "exact", head: true })
       .eq("status", "queued");
-    return { configured: emailSendingConfigured(), queued: count ?? 0 };
+    const configured = emailSendingConfigured();
+    // Auto-flush: the moment sending becomes possible, the backlog goes out
+    // without an admin having to remember to press a button.
+    if (configured && (count ?? 0) > 0) {
+      const res = await drain(null);
+      return { configured, queued: Math.max(0, (count ?? 0) - res.sent), autoFlushed: res.sent };
+    }
+    return { configured, queued: count ?? 0, autoFlushed: 0 };
   });
 
 async function deliver(row: { id: string; recipient: string; subject: string; body: string }) {
