@@ -48,11 +48,12 @@ function Shell({ children }: { children: React.ReactNode }) {
 
 function ResultsPage() {
   const { data: drawn } = useSuspenseQuery(drawnCompetitionsQuery);
+  const [showExamples, setShowExamples] = useState(false);
   const real = drawn.filter((d) => !d.isDemo);
   const demo = drawn.filter((d) => d.isDemo);
   const hasReal = real.length > 0;
-  // Real results lead; examples follow, always labelled, never counted.
-  const rows = [...real, ...demo];
+  // Real results only by default. Examples are opt-in, always labelled, never counted.
+  const rows = showExamples ? [...real, ...demo] : real;
 
   return (
     <Shell>
@@ -66,11 +67,24 @@ function ResultsPage() {
           </>
         ) : (
           <>
-            No real draws gone off yet. Everything below is an example — the draw, the seed and the
-            verification are genuine, the prize wasn't. <Link to="/demo" className="underline">See the examples running</Link>.
+            No real draws gone off yet. Our example draws prove the pipeline end to end — the draw,
+            the seed and the verification are genuine, the prize wasn't.{" "}
+            <Link to="/demo" className="underline">See the examples running</Link>.
           </>
         )}
       </p>
+
+      {demo.length > 0 && (
+        <label className="mt-4 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground cursor-pointer">
+          <input
+            type="checkbox"
+            checked={showExamples}
+            onChange={(e) => setShowExamples(e.target.checked)}
+            className="h-3.5 w-3.5 accent-[var(--color-ink-red)]"
+          />
+          Show example draws ({demo.length})
+        </label>
+      )}
 
       {rows.length === 0 ? (
         <div className="mt-10 border-[1.5px] border-[var(--color-ink-black)] bg-[var(--color-paper-raised)] p-6">
