@@ -103,7 +103,7 @@ function QuestionBank() {
           _severity: "warning",
           _kind: "question_activation_override",
           _message: `Single-step question activated: "${text ?? id}"`,
-          _stack: null,
+          _stack: "",
           _route: "/admin/questions",
           _user_agent: navigator.userAgent,
           _viewport: `${window.innerWidth}x${window.innerHeight}`,
