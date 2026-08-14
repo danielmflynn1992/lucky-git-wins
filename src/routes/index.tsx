@@ -329,7 +329,7 @@ function Home() {
         )}
       </section>
 
-      <div className="mx-auto max-w-7xl px-4 mt-6 md:mt-10"><div role="separator" aria-hidden className="perf-rule" /></div>
+      <div className="mx-auto max-w-7xl px-4 mt-5"><div role="separator" aria-hidden className="perf-rule" /></div>
 
       {/* HOW IT WORKS — one connected strip, numbered tabs, thin rules */}
       <section className="mx-auto max-w-7xl px-4 mt-6 w-full">
@@ -363,17 +363,17 @@ function Home() {
       </section>
 
       {/* WINNERS WALL */}
-      <section className="mx-auto max-w-7xl px-4 mt-8 md:mt-14 w-full">
+      <section className="mx-auto max-w-7xl px-4 mt-6 md:mt-10 w-full">
         <div className="flex items-end justify-between gap-4 flex-wrap">
           <div>
-            <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-clover mb-2 font-bold">Winners · Verified</div>
-            <h2 className="font-display font-black tracking-[-0.02em] text-foreground">Smug Gits.</h2>
-            <p className="text-muted-foreground mt-1">Real people who won real things. Try not to hate them.</p>
+            <div className="caption-micro caption-micro--red">Winners · Verified</div>
+            <h2 className="mt-1 font-display text-foreground">Smug Gits.</h2>
+            <p className="mt-1">Real people who won real things. Try not to hate them.</p>
           </div>
-          <Link to="/winners" className="text-sm font-bold text-clover hover:underline">Smug Gits (Our Winners) →</Link>
+          <Link to="/winners" className="font-mono text-[12px] underline underline-offset-4">All winners →</Link>
         </div>
         {winners.length > 0 ? (
-          <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {winners.slice(0, 3).map((w) => (
               <WinnerCard
                 key={w.id}
@@ -384,14 +384,18 @@ function Home() {
             ))}
           </div>
         ) : (
-          <p className="mt-6 font-mono text-sm text-muted-foreground">
-            No draws yet — first winners land after the next close.{" "}
-            <Link to="/winners" className="font-bold text-clover underline underline-offset-2">See the winners wall</Link>
-          </p>
+          <div className="mt-4 border-[1.5px] border-[var(--color-ink-black)] bg-[var(--color-paper-raised)] px-4 py-5 text-center">
+            <p className="font-mono text-[12px] uppercase tracking-[0.12em] text-[var(--color-ink-black)]">
+              No draws yet — first winners land after the next close.
+            </p>
+            <Link to="/winners" className="mt-2 inline-block font-mono text-[12px] underline underline-offset-4">
+              See the winners wall
+            </Link>
+          </div>
         )}
       </section>
 
-      <div className="mx-auto max-w-7xl px-4 mt-6 md:mt-10"><div role="separator" aria-hidden className="perf-rule" /></div>
+      <div className="mx-auto max-w-7xl px-4 mt-5"><div role="separator" aria-hidden className="perf-rule" /></div>
 
       <NewsletterSlip />
       <SiteFooter />
