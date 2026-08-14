@@ -164,23 +164,21 @@ function Home() {
               one draw has been published, so nothing on the site claims
               100% of anything before we've done any of it. */}
           <div className="relative hidden md:block">
-            <div className="rounded-lg bg-card border border-border p-6 shadow-md">
-              <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-muted-foreground">Platform stats · Live</div>
-              <dl className="mt-6 grid grid-cols-2 gap-6">
-                <Stat label="Prizes on the table" value={gbp(stats.prizesOnTable)} tone="clover" />
-                <Stat label="Comps running" value={stats.compsLive.toString().padStart(2, "0")} />
-                <Stat label="Tickets flogged" value={stats.ticketsSold.toLocaleString()} />
-                {stats.drawsCompleted > 0 ? (
-                  <Stat label="Draws gone off" value={stats.drawsCompleted.toString().padStart(2, "0")} />
-                ) : (
-                  <Stat label="First draw" value={formatCloseDate(stats.nextCloseAt)} />
-                )}
-              </dl>
-              <div className="mt-6 pt-4 border-t border-border text-[11px] font-mono text-muted-foreground leading-relaxed">
-                Every draw automatic. Every ticket number published. No hidden reserves, no house tickets, no funny business.{" "}
-                <Link to="/transparency" className="underline">See the numbers</Link>.
-              </div>
-            </div>
+            <div className="caption-micro">Platform stats · Live</div>
+            <dl className="ledger mt-2">
+              <LedgerRow label="Prizes on the table" value={gbp(stats.prizesOnTable)} tone="red" />
+              <LedgerRow label="Comps running" value={stats.compsLive.toString().padStart(2, "0")} />
+              <LedgerRow label="Tickets flogged" value={stats.ticketsSold.toLocaleString()} />
+              {stats.drawsCompleted > 0 ? (
+                <LedgerRow label="Draws gone off" value={stats.drawsCompleted.toString().padStart(2, "0")} />
+              ) : (
+                <LedgerRow label="First draw" value={formatCloseDate(stats.nextCloseAt)} />
+              )}
+            </dl>
+            <p className="caption-micro mt-2 leading-[1.5] normal-case tracking-[0.06em]">
+              Every draw automatic. Every ticket number published.{" "}
+              <Link to="/transparency" className="underline">See the numbers</Link>.
+            </p>
           </div>
           </div>
         </div>
