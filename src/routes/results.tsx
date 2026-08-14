@@ -41,7 +41,7 @@ function Shell({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen flex flex-col">
       <SiteNav />
-      <main className="mx-auto max-w-5xl px-4 py-6 md:py-10 w-full flex-1">{children}</main>
+      <main className="mx-auto w-full max-w-[720px] px-4 py-6 md:py-10 flex-1">{children}</main>
       <SiteFooter />
     </div>
   );
