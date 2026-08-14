@@ -30,12 +30,9 @@ function QP() {
   const { data, isPending, error } = useQuery({
     queryKey: ["question-performance"],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("question_performance" as never)
-        .select("*")
-        .order("competition_title", { ascending: true });
+      const { data, error } = await supabase.rpc("admin_question_performance" as never);
       if (error) throw error;
-      return (data ?? []) as Row[];
+      return (data ?? []) as unknown as Row[];
     },
     staleTime: 15_000,
   });
@@ -119,8 +116,12 @@ function QP() {
               {error && (
                 <tr><td className="p-4 text-[color:var(--color-ink-red)]" colSpan={5}>{(error as Error).message}</td></tr>
               )}
-              {data?.length === 0 && (
-                <tr><td className="p-4 text-muted-foreground" colSpan={5}>No answers recorded yet.</td></tr>
+              {!isPending && !error && data?.length === 0 && (
+                <tr>
+                  <td className="p-4 text-muted-foreground" colSpan={5}>
+                    No skill answers recorded yet. This table fills up as entries come in.
+                  </td>
+                </tr>
               )}
               {data?.map((r) => {
                 const flag = r.total_answers >= 20 && r.pct_incorrect < 10;
