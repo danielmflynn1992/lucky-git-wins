@@ -12,7 +12,7 @@ import { Countdown } from "@/components/Countdown";
 import { CompCard } from "@/components/CompCard";
 import { Button } from "@/components/ui/button";
 import { PrizeGallery } from "@/components/PrizeImage";
-import { gbp, shortNumber, pickLoadingQuip, moneySlang } from "@/lib/format";
+import { gbp, shortNumber, pickLoadingQuip } from "@/lib/format";
 import { LuckyMark } from "@/components/GaryMascot";
 import { CouponGrid } from "@/components/CouponGrid";
 import { Odometer } from "@/components/Odometer";
@@ -362,11 +362,6 @@ function CompDetail() {
                 <PoundSterling className="h-4 w-4 text-clover" />
                 <span>
                   Cash alt: {gbp(c.cashAlternative)}
-                  {moneySlang(c.cashAlternative) && (
-                    <span className="ml-1.5 font-mono text-[10px] text-[var(--color-ink-blue)]">
-                      ({moneySlang(c.cashAlternative)})
-                    </span>
-                  )}
                 </span>
               </div>
               <div className="flex items-center gap-2"><Ticket className="h-4 w-4 text-clover" /> Max {c.maxPerPerson} per person</div>
@@ -419,13 +414,7 @@ function CompDetail() {
               <li className="flex gap-2">
                 <CheckCircle2 className="h-4 w-4 text-clover mt-0.5 shrink-0" />
                 <span>
-                  Cash alternative: <b>{gbp(c.cashAlternative)}</b>
-                  {moneySlang(c.cashAlternative) && (
-                    <span className="ml-1.5 font-mono text-[11px] text-[var(--color-ink-blue)]">
-                      ({moneySlang(c.cashAlternative)})
-                    </span>
-                  )}
-                  .
+                  Cash alternative: <b>{gbp(c.cashAlternative)}</b>.
                 </span>
               </li>
               <li className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-clover mt-0.5 shrink-0" /> Winner automatically drawn and announced within 24h of close.</li>

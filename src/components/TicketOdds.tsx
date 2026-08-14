@@ -10,7 +10,7 @@
 import { cn } from "@/lib/utils";
 
 export const NO_HIDDEN_TOTALS =
-  "No hidden totals. No moving targets. 499 tickets, every time.";
+  "No hidden totals. No moving targets. Never more than 499 tickets, and the exact pool is always shown.";
 
 /** Rubber-stamped odds badge. Same wording, same position, every card. */
 export function OddsStamp({

@@ -14,7 +14,7 @@ export const Route = createFileRoute("/odds")({
   head: () => ({
     meta: [
       { title: "Best odds live now — Lucky Git Comps" },
-      { name: "description", content: "Every live competition ranked by tickets remaining and time left. One ticket is never worse than 1 in 499." },
+      { name: "description", content: "Every live competition ranked by tickets remaining and time left. Pools are capped, so one ticket is never worse than 1 in 499." },
       { property: "og:title", content: "Best odds live now — Lucky Git Comps" },
       { property: "og:description", content: "Live leaderboard: tickets remaining against time left." },
       { property: "og:type", content: "website" },

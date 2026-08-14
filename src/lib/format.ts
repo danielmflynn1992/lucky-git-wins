@@ -32,37 +32,6 @@ export function exactTimeLeft(t: { d: number; h: number; m: number; s: number })
   return `${pad(t.d)}d ${pad(t.h)}:${pad(t.m)}:${pad(t.s)}`;
 }
 
-/**
- * Cockney money slang. Exact matches for round figures; near-matches map
- * to the nearest bracket so real prize values ("£45,000", "£4,500") also
- * pick up a slang line without pretending the figure itself has changed.
- */
-const MONEY_SLANG: Record<number, string> = {
-  25: "a pony",
-  50: "a bullseye",
-  100: "a ton",
-  500: "a monkey",
-  1000: "a bag of sand",
-  5000: "five bags",
-  10000: "ten bags",
-  25000: "50 monkeys",
-  50000: "a stack of bags",
-};
-export function moneySlang(amount: number): string | null {
-  if (!Number.isFinite(amount) || amount <= 0) return null;
-  if (MONEY_SLANG[amount]) return MONEY_SLANG[amount];
-  // Nearest bracket, ≥£25, ≤£100,000 and within 25% of the amount.
-  const brackets = Object.keys(MONEY_SLANG).map(Number).sort((a, b) => a - b);
-  let best: number | null = null;
-  let bestGap = Infinity;
-  for (const b of brackets) {
-    const gap = Math.abs(amount - b) / b;
-    if (gap < bestGap) { bestGap = gap; best = b; }
-  }
-  if (best !== null && bestGap <= 0.25) return `about ${MONEY_SLANG[best]}`;
-  return null;
-}
-
 /** Rotating deadpan loading lines. */
 export const LOADING_QUIPS = ["Hang about…", "Two ticks…", "Won't be a sec…"] as const;
 export function pickLoadingQuip() {
