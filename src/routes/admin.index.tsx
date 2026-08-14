@@ -1,5 +1,4 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ukDate, ukDateTime } from "@/lib/format";
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
@@ -9,7 +8,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { drawCompetition, autoDrawExpired, closeCompetitionNow, resetRollingDemo, listDrawNotifications, getDailyDemoEnabled, setDailyDemoEnabled, sendQueuedNotifications, retryNotification, getEmailConfigStatus } from "@/lib/admin.functions";
-import { gbp } from "@/lib/format";
+import { gbp, ukDate, ukDateTime } from "@/lib/format";
 import { Copy, Plus, Play, Pause, Trophy, Loader2, Zap, AlertTriangle, Bug, TimerReset, RotateCcw, Mail, Send, RefreshCw } from "lucide-react";
 
 const exact = (n: number) => n.toLocaleString("en-GB");

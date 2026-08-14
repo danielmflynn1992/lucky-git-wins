@@ -1,5 +1,4 @@
 import { createFileRoute, notFound, redirect, Link, useNavigate } from "@tanstack/react-router";
-import { ukDate, ukDateTime } from "@/lib/format";
 import { useMemo, useState } from "react";
 import { useSuspenseQuery, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Ticket, Shuffle, Shield, PoundSterling, CheckCircle2, Info, Loader2, AlertTriangle } from "lucide-react";
@@ -13,7 +12,7 @@ import { Countdown } from "@/components/Countdown";
 import { CompCard } from "@/components/CompCard";
 import { Button } from "@/components/ui/button";
 import { PrizeGallery } from "@/components/PrizeImage";
-import { gbp, shortNumber, pickLoadingQuip } from "@/lib/format";
+import { gbp, shortNumber, pickLoadingQuip, ukDate, ukDateTime } from "@/lib/format";
 import { LuckyMark } from "@/components/GaryMascot";
 import { CouponGrid } from "@/components/CouponGrid";
 import { Odometer } from "@/components/Odometer";

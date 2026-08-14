@@ -1,11 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ukDate } from "@/lib/format";
 import { useQuery } from "@tanstack/react-query";
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
 import { winnersQuery, realOnly } from "@/lib/winners-api";
 import { useSiteStats, formatCloseDate } from "@/lib/site-stats";
-import { gbp } from "@/lib/format";
+import { gbp, ukDate } from "@/lib/format";
 import { POOL_CAP_LINE } from "@/lib/promises";
 
 export const Route = createFileRoute("/transparency")({
