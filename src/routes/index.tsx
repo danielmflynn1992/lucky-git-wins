@@ -190,19 +190,16 @@ function Home() {
       {/* TRUST STRIP */}
       <section className="border-y-[1.5px] border-[var(--color-ink-black)] bg-[var(--color-paper-raised)]">
         <div className="mx-auto max-w-7xl px-4 py-2.5">
-          <ul className="flex gap-3 overflow-x-auto -mx-4 px-4 pb-1 snap-x sm:mx-0 sm:px-0 sm:pb-0 sm:overflow-visible sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-1">
+          <ul className="grid grid-cols-2 gap-x-3 gap-y-1 sm:gap-x-6">
             {[
               { icon: Dices, label: "Automatic random draws" },
               { icon: Handshake, label: "Verified winners, real handshakes" },
               { icon: Headset, label: "UK company, UK humans on support" },
               { icon: ListOrdered, label: "Every ticket number published" },
             ].map(({ icon: Icon, label }) => (
-              <li
-                key={label}
-                className="snap-start shrink-0 sm:w-auto flex items-center gap-2 py-1"
-              >
-                <Icon aria-hidden strokeWidth={1.75} className="h-5 w-5 shrink-0 text-[var(--color-ink-red)]" />
-                <span className="whitespace-nowrap font-mono text-[11px] uppercase tracking-[0.12em] text-[var(--color-ink-blue)]">
+              <li key={label} className="flex min-w-0 items-center gap-2 py-1">
+                <Icon aria-hidden strokeWidth={1.75} className="h-4 w-4 shrink-0 text-[var(--color-ink-red)] sm:h-5 sm:w-5" />
+                <span className="min-w-0 font-mono text-[10px] uppercase leading-tight tracking-[0.08em] text-[var(--color-ink-blue)] sm:whitespace-nowrap sm:text-[11px] sm:tracking-[0.12em]">
                   {label}
                 </span>
               </li>
