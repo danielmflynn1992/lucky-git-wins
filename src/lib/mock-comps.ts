@@ -25,3 +25,16 @@ export interface Competition {
   status?: string;
 }
 
+
+/**
+ * The canonical category list. One spelling each — admin, filters and the
+ * database all use these exact strings.
+ */
+export const CATEGORIES = [
+  "Motors",
+  "Cash",
+  "Tech",
+  "Holidays",
+  "Watches",
+  "Home",
+] as const;
