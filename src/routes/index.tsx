@@ -188,8 +188,8 @@ function Home() {
 
       {/* TRUST STRIP */}
       <section className="border-y-[1.5px] border-[var(--color-ink-black)] bg-[var(--color-paper-raised)]">
-        <div className="mx-auto max-w-7xl px-4 py-5">
-          <ul className="flex gap-3 overflow-x-auto -mx-4 px-4 pb-1 snap-x sm:mx-0 sm:px-0 sm:pb-0 sm:overflow-visible sm:grid sm:grid-cols-2 sm:gap-4">
+        <div className="mx-auto max-w-7xl px-4 py-2.5">
+          <ul className="flex gap-3 overflow-x-auto -mx-4 px-4 pb-1 snap-x sm:mx-0 sm:px-0 sm:pb-0 sm:overflow-visible sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-1">
             {[
               { icon: Dices, label: "Automatic random draws" },
               { icon: Handshake, label: "Verified winners, real handshakes" },
@@ -198,10 +198,10 @@ function Home() {
             ].map(({ icon: Icon, label }) => (
               <li
                 key={label}
-                className="snap-start shrink-0 w-[150px] sm:w-auto flex flex-col gap-2 border-2 border-[var(--color-ink-blue)] bg-[var(--color-paper)] p-3"
+                className="snap-start shrink-0 sm:w-auto flex items-center gap-2 py-1"
               >
-                <Icon aria-hidden className="h-5 w-5 text-[var(--color-coupon-red)]" />
-                <span className="font-display uppercase tracking-[0.1em] text-[13px] leading-snug font-bold text-[var(--color-ink-blue)]">
+                <Icon aria-hidden strokeWidth={1.75} className="h-5 w-5 shrink-0 text-[var(--color-ink-red)]" />
+                <span className="whitespace-nowrap font-mono text-[11px] uppercase tracking-[0.12em] text-[var(--color-ink-blue)]">
                   {label}
                 </span>
               </li>
