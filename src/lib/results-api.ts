@@ -1,5 +1,6 @@
 import { queryOptions } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { publicWinnerName } from "@/lib/winner-name";
 import { IMAGES } from "@/lib/competitions-api";
 import { placeholderForPrize } from "@/lib/winners-api";
 
@@ -65,7 +66,7 @@ export async function fetchCompetitionResult(slug: string): Promise<CompetitionR
     winningNumber: draw?.winning_number ?? null,
     drawId: draw?.id ?? null,
     drawnAt: draw?.drawn_at ?? null,
-    winnerDisplayName: draw?.winner_display_name ?? null,
+    winnerDisplayName: draw ? publicWinnerName(draw.winner_display_name, draw.winning_number) : null,
     winnerTown: draw?.winner_town ?? null,
   };
 }
@@ -122,7 +123,7 @@ export async function fetchDrawnCompetitions(): Promise<DrawnCompetition[]> {
       title: d.competition_title,
       prize: d.prize,
       winningNumber: d.winning_number,
-      winnerDisplayName: isDemo ? "—" : d.winner_display_name,
+      winnerDisplayName: isDemo ? "—" : publicWinnerName(d.winner_display_name, d.winning_number),
       totalTickets: d.total_tickets,
       drawnAt: d.drawn_at,
       isDemo,

@@ -1,5 +1,6 @@
 import { queryOptions } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { publicWinnerName } from "@/lib/winner-name";
 
 /**
  * Data behind The Draw Board. Pure presentation feed: it reads the already
@@ -60,7 +61,7 @@ function mapDraw(d: DrawRow | null): DrawBoardData["draw"] {
   return {
     id: String(d.id),
     winningNumber: Number(d.winning_number),
-    winnerDisplayName: String(d.winner_display_name ?? ""),
+    winnerDisplayName: publicWinnerName(d.winner_display_name as string | null, Number(d.winning_number)),
     winnerTown: String(d.winner_town ?? ""),
     drawnAt: String(d.drawn_at),
     seedHash: String(d.seed_hash ?? ""),
