@@ -140,6 +140,26 @@ function CheckoutInner() {
   // Returned from a hosted payment page — never show ENTERED until the order
   // itself says paid.
   const settled = useRef(false);
+
+  /** One place that turns any checkout failure into a visible, logged state. */
+  const failCheckout = useCallback(
+    (stage: string, err: unknown, ctx: Record<string, unknown>) => {
+      const ref = newRef();
+      const message = err instanceof Error ? err.message : String(err);
+      setErrorRef(ref);
+      setPayError(
+        "Something's jammed at the till. Nothing's been taken — try again, or contact support quoting this reference.",
+      );
+      capture("checkout_failure", `[${stage}] ${message}`, {
+        severity: "error",
+        stack: err instanceof Error ? err.stack : undefined,
+        extra: { ref, stage, ...ctx },
+      });
+      setPayState("idle");
+    },
+    [],
+  );
+
   useEffect(() => {
     if (!returnedOrderId || settled.current) return;
     settled.current = true;
@@ -152,11 +172,12 @@ function CheckoutInner() {
           clearBasket();
         } else {
           setPayError(s.failure_reason || "That payment didn't complete. Nothing has been charged.");
+          setErrorRef(null);
         }
       })
-      .catch((e) => setPayError(e instanceof Error ? e.message : "Could not confirm payment."))
+      .catch((e) => failCheckout("confirm_return", e, { orderId: returnedOrderId }))
       .finally(() => setPayState("idle"));
-  }, [returnedOrderId, clearBasket]);
+  }, [returnedOrderId, clearBasket, failCheckout]);
 
   if (paidOrder && comp) {
     return (
