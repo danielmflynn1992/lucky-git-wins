@@ -13,6 +13,7 @@ import { Route as WinnersRouteImport } from './routes/winners'
 import { Route as VerifyRouteImport } from './routes/verify'
 import { Route as TransparencyRouteImport } from './routes/transparency'
 import { Route as TermsRouteImport } from './routes/terms'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ResultsRouteImport } from './routes/results'
 import { Route as ResponsiblePlayRouteImport } from './routes/responsible-play'
 import { Route as PromiseRouteImport } from './routes/promise'
@@ -37,7 +38,6 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as CompetitionsIndexRouteImport } from './routes/competitions.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as SlipsIdRouteImport } from './routes/slips.$id'
-import { Route as SitemapXmlRouteImport } from './routes/sitemap.xml'
 import { Route as CompetitionsSlugRouteImport } from './routes/competitions.$slug'
 import { Route as AdminScanCheckRouteImport } from './routes/admin.scan-check'
 import { Route as AdminQuestionsRouteImport } from './routes/admin.questions'
@@ -68,6 +68,11 @@ const TransparencyRoute = TransparencyRouteImport.update({
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
   path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ResultsRoute = ResultsRouteImport.update({
@@ -190,11 +195,6 @@ const SlipsIdRoute = SlipsIdRouteImport.update({
   path: '/slips/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SitemapXmlRoute = SitemapXmlRouteImport.update({
-  id: '/sitemap/xml',
-  path: '/sitemap/xml',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const CompetitionsSlugRoute = CompetitionsSlugRouteImport.update({
   id: '/competitions/$slug',
   path: '/competitions/$slug',
@@ -274,6 +274,7 @@ export interface FileRoutesByFullPath {
   '/promise': typeof PromiseRoute
   '/responsible-play': typeof ResponsiblePlayRoute
   '/results': typeof ResultsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/transparency': typeof TransparencyRoute
   '/verify': typeof VerifyRoute
@@ -284,7 +285,6 @@ export interface FileRoutesByFullPath {
   '/admin/questions': typeof AdminQuestionsRoute
   '/admin/scan-check': typeof AdminScanCheckRoute
   '/competitions/$slug': typeof CompetitionsSlugRoute
-  '/sitemap/xml': typeof SitemapXmlRoute
   '/slips/$id': typeof SlipsIdRoute
   '/admin/': typeof AdminIndexRoute
   '/competitions/': typeof CompetitionsIndexRoute
@@ -315,6 +315,7 @@ export interface FileRoutesByTo {
   '/promise': typeof PromiseRoute
   '/responsible-play': typeof ResponsiblePlayRoute
   '/results': typeof ResultsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/transparency': typeof TransparencyRoute
   '/verify': typeof VerifyRoute
@@ -325,7 +326,6 @@ export interface FileRoutesByTo {
   '/admin/questions': typeof AdminQuestionsRoute
   '/admin/scan-check': typeof AdminScanCheckRoute
   '/competitions/$slug': typeof CompetitionsSlugRoute
-  '/sitemap/xml': typeof SitemapXmlRoute
   '/slips/$id': typeof SlipsIdRoute
   '/admin': typeof AdminIndexRoute
   '/competitions': typeof CompetitionsIndexRoute
@@ -358,6 +358,7 @@ export interface FileRoutesById {
   '/promise': typeof PromiseRoute
   '/responsible-play': typeof ResponsiblePlayRoute
   '/results': typeof ResultsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/transparency': typeof TransparencyRoute
   '/verify': typeof VerifyRoute
@@ -368,7 +369,6 @@ export interface FileRoutesById {
   '/admin/questions': typeof AdminQuestionsRoute
   '/admin/scan-check': typeof AdminScanCheckRoute
   '/competitions/$slug': typeof CompetitionsSlugRoute
-  '/sitemap/xml': typeof SitemapXmlRoute
   '/slips/$id': typeof SlipsIdRoute
   '/admin/': typeof AdminIndexRoute
   '/competitions/': typeof CompetitionsIndexRoute
@@ -402,6 +402,7 @@ export interface FileRouteTypes {
     | '/promise'
     | '/responsible-play'
     | '/results'
+    | '/sitemap.xml'
     | '/terms'
     | '/transparency'
     | '/verify'
@@ -412,7 +413,6 @@ export interface FileRouteTypes {
     | '/admin/questions'
     | '/admin/scan-check'
     | '/competitions/$slug'
-    | '/sitemap/xml'
     | '/slips/$id'
     | '/admin/'
     | '/competitions/'
@@ -443,6 +443,7 @@ export interface FileRouteTypes {
     | '/promise'
     | '/responsible-play'
     | '/results'
+    | '/sitemap.xml'
     | '/terms'
     | '/transparency'
     | '/verify'
@@ -453,7 +454,6 @@ export interface FileRouteTypes {
     | '/admin/questions'
     | '/admin/scan-check'
     | '/competitions/$slug'
-    | '/sitemap/xml'
     | '/slips/$id'
     | '/admin'
     | '/competitions'
@@ -485,6 +485,7 @@ export interface FileRouteTypes {
     | '/promise'
     | '/responsible-play'
     | '/results'
+    | '/sitemap.xml'
     | '/terms'
     | '/transparency'
     | '/verify'
@@ -495,7 +496,6 @@ export interface FileRouteTypes {
     | '/admin/questions'
     | '/admin/scan-check'
     | '/competitions/$slug'
-    | '/sitemap/xml'
     | '/slips/$id'
     | '/admin/'
     | '/competitions/'
@@ -528,12 +528,12 @@ export interface RootRouteChildren {
   PromiseRoute: typeof PromiseRoute
   ResponsiblePlayRoute: typeof ResponsiblePlayRoute
   ResultsRoute: typeof ResultsRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TermsRoute: typeof TermsRoute
   TransparencyRoute: typeof TransparencyRoute
   VerifyRoute: typeof VerifyRoute
   WinnersRoute: typeof WinnersRoute
   CompetitionsSlugRoute: typeof CompetitionsSlugRoute
-  SitemapXmlRoute: typeof SitemapXmlRoute
   SlipsIdRoute: typeof SlipsIdRoute
   CompetitionsIndexRoute: typeof CompetitionsIndexRoute
   ApiPublicVerifyDrawRoute: typeof ApiPublicVerifyDrawRoute
@@ -570,6 +570,13 @@ declare module '@tanstack/react-router' {
       path: '/terms'
       fullPath: '/terms'
       preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/results': {
@@ -740,13 +747,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SlipsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/sitemap/xml': {
-      id: '/sitemap/xml'
-      path: '/sitemap/xml'
-      fullPath: '/sitemap/xml'
-      preLoaderRoute: typeof SitemapXmlRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/competitions/$slug': {
       id: '/competitions/$slug'
       path: '/competitions/$slug'
@@ -871,12 +871,12 @@ const rootRouteChildren: RootRouteChildren = {
   PromiseRoute: PromiseRoute,
   ResponsiblePlayRoute: ResponsiblePlayRoute,
   ResultsRoute: ResultsRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   TermsRoute: TermsRoute,
   TransparencyRoute: TransparencyRoute,
   VerifyRoute: VerifyRoute,
   WinnersRoute: WinnersRoute,
   CompetitionsSlugRoute: CompetitionsSlugRoute,
-  SitemapXmlRoute: SitemapXmlRoute,
   SlipsIdRoute: SlipsIdRoute,
   CompetitionsIndexRoute: CompetitionsIndexRoute,
   ApiPublicVerifyDrawRoute: ApiPublicVerifyDrawRoute,
