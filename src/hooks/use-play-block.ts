@@ -22,7 +22,6 @@ export function usePlayBlock(): { blocked: boolean; message: string | null } {
       day: "numeric",
       month: "long",
       year: "numeric",
-      timeZone: "Europe/London",
     });
 
   if (data.self_excluded_until && new Date(data.self_excluded_until) > new Date()) {
