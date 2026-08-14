@@ -170,7 +170,7 @@ export function WinnerCard({
         )}
 
         <dl className="px-5 py-2">
-          {w.winner_display_name ? (
+          {hasWinnerName(w.winner_display_name) ? (
             <div className="leader-row">
               <dt className="label text-[9px] whitespace-nowrap">NAME</dt>
               <span className="leader-row__fill" aria-hidden />
