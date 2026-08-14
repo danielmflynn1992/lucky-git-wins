@@ -253,8 +253,19 @@ function PastDrawsPage() {
               />
             </div>
             <div className="md:col-span-6 flex items-end justify-between gap-3">
-              <div className="text-xs font-mono text-muted-foreground">
-                {filtered.length} of {draws.length} draws
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+                <div className="text-xs font-mono text-muted-foreground">
+                  {filtered.length} of {draws.filter((d) => examples || !d.is_demo).length} draws
+                </div>
+                <label className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-muted-foreground cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={examples}
+                    onChange={(e) => setParam("examples", e.target.checked)}
+                    className="h-3.5 w-3.5 accent-[var(--color-ink-red)]"
+                  />
+                  Show example draws
+                </label>
               </div>
               {activeFilters && (
                 <button
