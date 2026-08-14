@@ -103,6 +103,14 @@ function slangForPrize(prize: string): string | null {
  * block, quote, and PAID OUT rubber stamp. Only one card open at a time when
  * `openId`/`onToggle` are wired by the parent.
  */
+/** A usable winner name: not blank, not a dash, not a "Ticket #x holder" stub. */
+function hasWinnerName(name?: string | null) {
+  if (!name) return false;
+  const n = name.trim();
+  if (!n || n === "—" || n === "-") return false;
+  return !/holder$/i.test(n);
+}
+
 export function WinnerCard({
   w,
   expanded: controlledExpanded,
