@@ -7,9 +7,6 @@ export function SiteFooter() {
   const { gitsMadeLucky } = useSiteStats();
   return (
     <footer className="relative mt-8 md:mt-12">
-      {/* -------- TRUST BAR — on every page, above everything else -------- */}
-      <TrustBar />
-
       {/* -------- INK-BLUE LINK GRID -------- */}
       <div
         style={{
@@ -17,7 +14,9 @@ export function SiteFooter() {
           color: "var(--color-on-dark-fg)",
         }}
       >
-        <div className="mx-auto max-w-7xl px-4 pt-6 pb-10 md:pt-8 md:pb-12 grid gap-10 md:grid-cols-4">
+        {/* Trust line — top row of the single navy footer. */}
+        <TrustBar />
+        <div className="mx-auto max-w-7xl px-4 pt-5 pb-6 md:pt-6 md:pb-8 grid gap-6 md:grid-cols-4">
           <div className="md:col-span-1">
             <div
               className="flex"
