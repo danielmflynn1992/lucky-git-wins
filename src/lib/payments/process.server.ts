@@ -10,7 +10,7 @@ export async function applyPaymentEvent(provider: string, ev: WebhookEvent) {
       p_order_id: ev.orderId,
       p_provider: provider,
       p_event_id: ev.eventId,
-      p_provider_ref: ev.providerRef,
+      p_provider_ref: ev.providerRef ?? undefined,
     });
     if (error) throw new Error(error.message);
     return { handled: true as const, result: data };

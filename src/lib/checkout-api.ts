@@ -34,7 +34,7 @@ export async function createPendingOrder(input: {
     p_name: input.name,
     p_email: input.email,
     p_phone: input.phone ?? "",
-    p_display_name: input.displayName ?? null,
+    p_display_name: input.displayName ?? undefined,
     p_town: input.town ?? "",
   });
   if (error) throw new Error(error.message);
