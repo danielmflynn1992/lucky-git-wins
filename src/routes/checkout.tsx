@@ -204,6 +204,7 @@ function CheckoutInner() {
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setPayError(null);
+    setErrorRef(null);
 
     if (user && !displayName.trim()) {
       setPayError("Add the name you'd like shown if you win (e.g. Dave R.).");
@@ -211,9 +212,21 @@ function CheckoutInner() {
     }
 
     setPayState("creating");
+    const payload = {
+      slug: reservation.slug,
+      reservationToken: reservation.token,
+      quantity: effectiveQty,
+      amountPence: Math.round(subtotal * 100),
+      signedIn: !!user,
+      hasDisplayName: !!displayName.trim(),
+    };
     try {
       try {
-        const verdict = await checkPurchaseAllowed(Math.round(subtotal * 100));
+        const verdict = await withTimeout(
+          checkPurchaseAllowed(Math.round(subtotal * 100)),
+          STEP_TIMEOUT_MS,
+          "Spend-limit check",
+        );
         const msg = limitBlockMessage(verdict);
         if (msg) {
           setLimitBlock(msg);
@@ -225,19 +238,25 @@ function CheckoutInner() {
         setLimitBlock(null);
       }
 
-      const pending = await createPendingOrder({
-        reservationToken: reservation.token,
-        name,
-        email,
-        phone,
-        displayName: displayName.trim() || undefined,
-        town: town.trim() || undefined,
-      });
+      const pending = await withTimeout(
+        createPendingOrder({
+          reservationToken: reservation.token,
+          name,
+          email,
+          phone,
+          displayName: displayName.trim() || undefined,
+          town: town.trim() || undefined,
+        }),
+        STEP_TIMEOUT_MS,
+        "Creating your order",
+      );
 
       setPayState("paying");
-      const started = await startPayment({
-        data: { orderId: pending.order_id, origin: window.location.origin },
-      });
+      const started = await withTimeout(
+        startPayment({ data: { orderId: pending.order_id, origin: window.location.origin } }),
+        STEP_TIMEOUT_MS,
+        "Setting up payment",
+      );
 
       if (started.redirectUrl) {
         window.location.href = started.redirectUrl;
@@ -247,7 +266,11 @@ function CheckoutInner() {
       // No external provider configured (rehearsal mode): settle, then wait for
       // the order itself to flip to paid before anything says ENTERED.
       if (!started.alreadyPaid) {
-        await confirmSimulatedPayment({ data: { orderId: pending.order_id } });
+        await withTimeout(
+          confirmSimulatedPayment({ data: { orderId: pending.order_id } }),
+          STEP_TIMEOUT_MS,
+          "Settling payment",
+        );
       }
       setPayState("waiting");
       const status = await waitForPaidOrder(pending.order_id, 30_000);
@@ -259,8 +282,7 @@ function CheckoutInner() {
       setPaidOrder(status);
       clearBasket();
     } catch (err) {
-      setPayError(err instanceof Error ? err.message : "Payment could not be started.");
-      setPayState("idle");
+      failCheckout("submit", err, payload);
     }
   };
 
