@@ -47,8 +47,7 @@ export function nextDrawAt(comps: { endsAt: string }[], now = Date.now()): Date 
   return upcoming[0] ?? null;
 }
 
-const timeLabel = (d: Date) =>
-  d.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
+const timeLabel = (d: Date) => ukTime(d);
 
 function DrawDay() {
   const { data: comps } = useSuspenseQuery(allCompetitionsQueryOptions);
@@ -90,7 +89,12 @@ function DrawDay() {
               <Countdown target={next.toISOString()} />
             </div>
             <p className="mt-2 font-mono text-xs uppercase tracking-[0.16em] text-[var(--color-ink-grey)]">
-              {next.toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long" })}
+              {next.toLocaleDateString("en-GB", {
+                timeZone: "Europe/London",
+                weekday: "long",
+                day: "numeric",
+                month: "long",
+              })}
             </p>
 
             {doorsOpening && (
