@@ -37,6 +37,7 @@ import { Route as CompetitionsIndexRouteImport } from './routes/competitions.ind
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as SlipsIdRouteImport } from './routes/slips.$id'
 import { Route as CompetitionsSlugRouteImport } from './routes/competitions.$slug'
+import { Route as AdminScanCheckRouteImport } from './routes/admin.scan-check'
 import { Route as AdminQuestionsRouteImport } from './routes/admin.questions'
 import { Route as AdminQuestionPerformanceRouteImport } from './routes/admin.question-performance'
 import { Route as AdminErrorsRouteImport } from './routes/admin.errors'
@@ -186,6 +187,11 @@ const CompetitionsSlugRoute = CompetitionsSlugRouteImport.update({
   path: '/competitions/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminScanCheckRoute = AdminScanCheckRouteImport.update({
+  id: '/scan-check',
+  path: '/scan-check',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminQuestionsRoute = AdminQuestionsRouteImport.update({
   id: '/questions',
   path: '/questions',
@@ -256,6 +262,7 @@ export interface FileRoutesByFullPath {
   '/admin/errors': typeof AdminErrorsRoute
   '/admin/question-performance': typeof AdminQuestionPerformanceRoute
   '/admin/questions': typeof AdminQuestionsRoute
+  '/admin/scan-check': typeof AdminScanCheckRoute
   '/competitions/$slug': typeof CompetitionsSlugRoute
   '/slips/$id': typeof SlipsIdRoute
   '/admin/': typeof AdminIndexRoute
@@ -293,6 +300,7 @@ export interface FileRoutesByTo {
   '/admin/errors': typeof AdminErrorsRoute
   '/admin/question-performance': typeof AdminQuestionPerformanceRoute
   '/admin/questions': typeof AdminQuestionsRoute
+  '/admin/scan-check': typeof AdminScanCheckRoute
   '/competitions/$slug': typeof CompetitionsSlugRoute
   '/slips/$id': typeof SlipsIdRoute
   '/admin': typeof AdminIndexRoute
@@ -332,6 +340,7 @@ export interface FileRoutesById {
   '/admin/errors': typeof AdminErrorsRoute
   '/admin/question-performance': typeof AdminQuestionPerformanceRoute
   '/admin/questions': typeof AdminQuestionsRoute
+  '/admin/scan-check': typeof AdminScanCheckRoute
   '/competitions/$slug': typeof CompetitionsSlugRoute
   '/slips/$id': typeof SlipsIdRoute
   '/admin/': typeof AdminIndexRoute
@@ -372,6 +381,7 @@ export interface FileRouteTypes {
     | '/admin/errors'
     | '/admin/question-performance'
     | '/admin/questions'
+    | '/admin/scan-check'
     | '/competitions/$slug'
     | '/slips/$id'
     | '/admin/'
@@ -409,6 +419,7 @@ export interface FileRouteTypes {
     | '/admin/errors'
     | '/admin/question-performance'
     | '/admin/questions'
+    | '/admin/scan-check'
     | '/competitions/$slug'
     | '/slips/$id'
     | '/admin'
@@ -447,6 +458,7 @@ export interface FileRouteTypes {
     | '/admin/errors'
     | '/admin/question-performance'
     | '/admin/questions'
+    | '/admin/scan-check'
     | '/competitions/$slug'
     | '/slips/$id'
     | '/admin/'
@@ -690,6 +702,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CompetitionsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/scan-check': {
+      id: '/admin/scan-check'
+      path: '/scan-check'
+      fullPath: '/admin/scan-check'
+      preLoaderRoute: typeof AdminScanCheckRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/questions': {
       id: '/admin/questions'
       path: '/questions'
@@ -753,6 +772,7 @@ interface AdminRouteChildren {
   AdminErrorsRoute: typeof AdminErrorsRoute
   AdminQuestionPerformanceRoute: typeof AdminQuestionPerformanceRoute
   AdminQuestionsRoute: typeof AdminQuestionsRoute
+  AdminScanCheckRoute: typeof AdminScanCheckRoute
   AdminIndexRoute: typeof AdminIndexRoute
   AdminCompetitionsNewRoute: typeof AdminCompetitionsNewRoute
 }
@@ -761,6 +781,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminErrorsRoute: AdminErrorsRoute,
   AdminQuestionPerformanceRoute: AdminQuestionPerformanceRoute,
   AdminQuestionsRoute: AdminQuestionsRoute,
+  AdminScanCheckRoute: AdminScanCheckRoute,
   AdminIndexRoute: AdminIndexRoute,
   AdminCompetitionsNewRoute: AdminCompetitionsNewRoute,
 }
