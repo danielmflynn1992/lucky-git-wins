@@ -37,6 +37,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as CompetitionsIndexRouteImport } from './routes/competitions.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as SlipsIdRouteImport } from './routes/slips.$id'
+import { Route as SitemapXmlRouteImport } from './routes/sitemap.xml'
 import { Route as CompetitionsSlugRouteImport } from './routes/competitions.$slug'
 import { Route as AdminScanCheckRouteImport } from './routes/admin.scan-check'
 import { Route as AdminQuestionsRouteImport } from './routes/admin.questions'
@@ -189,6 +190,11 @@ const SlipsIdRoute = SlipsIdRouteImport.update({
   path: '/slips/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SitemapXmlRoute = SitemapXmlRouteImport.update({
+  id: '/sitemap/xml',
+  path: '/sitemap/xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CompetitionsSlugRoute = CompetitionsSlugRouteImport.update({
   id: '/competitions/$slug',
   path: '/competitions/$slug',
@@ -278,6 +284,7 @@ export interface FileRoutesByFullPath {
   '/admin/questions': typeof AdminQuestionsRoute
   '/admin/scan-check': typeof AdminScanCheckRoute
   '/competitions/$slug': typeof CompetitionsSlugRoute
+  '/sitemap/xml': typeof SitemapXmlRoute
   '/slips/$id': typeof SlipsIdRoute
   '/admin/': typeof AdminIndexRoute
   '/competitions/': typeof CompetitionsIndexRoute
@@ -318,6 +325,7 @@ export interface FileRoutesByTo {
   '/admin/questions': typeof AdminQuestionsRoute
   '/admin/scan-check': typeof AdminScanCheckRoute
   '/competitions/$slug': typeof CompetitionsSlugRoute
+  '/sitemap/xml': typeof SitemapXmlRoute
   '/slips/$id': typeof SlipsIdRoute
   '/admin': typeof AdminIndexRoute
   '/competitions': typeof CompetitionsIndexRoute
@@ -360,6 +368,7 @@ export interface FileRoutesById {
   '/admin/questions': typeof AdminQuestionsRoute
   '/admin/scan-check': typeof AdminScanCheckRoute
   '/competitions/$slug': typeof CompetitionsSlugRoute
+  '/sitemap/xml': typeof SitemapXmlRoute
   '/slips/$id': typeof SlipsIdRoute
   '/admin/': typeof AdminIndexRoute
   '/competitions/': typeof CompetitionsIndexRoute
@@ -403,6 +412,7 @@ export interface FileRouteTypes {
     | '/admin/questions'
     | '/admin/scan-check'
     | '/competitions/$slug'
+    | '/sitemap/xml'
     | '/slips/$id'
     | '/admin/'
     | '/competitions/'
@@ -443,6 +453,7 @@ export interface FileRouteTypes {
     | '/admin/questions'
     | '/admin/scan-check'
     | '/competitions/$slug'
+    | '/sitemap/xml'
     | '/slips/$id'
     | '/admin'
     | '/competitions'
@@ -484,6 +495,7 @@ export interface FileRouteTypes {
     | '/admin/questions'
     | '/admin/scan-check'
     | '/competitions/$slug'
+    | '/sitemap/xml'
     | '/slips/$id'
     | '/admin/'
     | '/competitions/'
@@ -521,6 +533,7 @@ export interface RootRouteChildren {
   VerifyRoute: typeof VerifyRoute
   WinnersRoute: typeof WinnersRoute
   CompetitionsSlugRoute: typeof CompetitionsSlugRoute
+  SitemapXmlRoute: typeof SitemapXmlRoute
   SlipsIdRoute: typeof SlipsIdRoute
   CompetitionsIndexRoute: typeof CompetitionsIndexRoute
   ApiPublicVerifyDrawRoute: typeof ApiPublicVerifyDrawRoute
@@ -727,6 +740,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SlipsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sitemap/xml': {
+      id: '/sitemap/xml'
+      path: '/sitemap/xml'
+      fullPath: '/sitemap/xml'
+      preLoaderRoute: typeof SitemapXmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/competitions/$slug': {
       id: '/competitions/$slug'
       path: '/competitions/$slug'
@@ -856,6 +876,7 @@ const rootRouteChildren: RootRouteChildren = {
   VerifyRoute: VerifyRoute,
   WinnersRoute: WinnersRoute,
   CompetitionsSlugRoute: CompetitionsSlugRoute,
+  SitemapXmlRoute: SitemapXmlRoute,
   SlipsIdRoute: SlipsIdRoute,
   CompetitionsIndexRoute: CompetitionsIndexRoute,
   ApiPublicVerifyDrawRoute: ApiPublicVerifyDrawRoute,

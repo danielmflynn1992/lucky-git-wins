@@ -34,7 +34,7 @@ const STATIC_PUBLIC_ROUTES: SitemapEntry[] = [
   { path: "/terms", changefreq: "monthly", priority: "0.5" },
 ];
 
-export const Route = createFileRoute("/sitemap.xml")({
+export const Route = createFileRoute("/sitemap/xml")({
   server: {
     handlers: {
       GET: async () => {
