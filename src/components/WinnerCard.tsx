@@ -170,14 +170,16 @@ export function WinnerCard({
         )}
 
         <dl className="px-5 py-2">
-          <div className="leader-row">
-            <dt className="label text-[9px] whitespace-nowrap">NAME</dt>
-            <span className="leader-row__fill" aria-hidden />
-            <dd className="font-mono text-[12px] text-[var(--color-ink-black)] text-right truncate min-w-0">
-              <b>{w.winner_display_name}</b>
-              {w.winner_town ? <span> · {w.winner_town}</span> : null}
-            </dd>
-          </div>
+          {w.winner_display_name ? (
+            <div className="leader-row">
+              <dt className="label text-[9px] whitespace-nowrap">NAME</dt>
+              <span className="leader-row__fill" aria-hidden />
+              <dd className="font-mono text-[12px] text-[var(--color-ink-black)] text-right truncate min-w-0">
+                <b>{w.winner_display_name}</b>
+                {w.winner_town ? <span> · {w.winner_town}</span> : null}
+              </dd>
+            </div>
+          ) : null}
           <div className="leader-row">
             <dt className="label text-[9px] whitespace-nowrap">TICKET</dt>
             <span className="leader-row__fill" aria-hidden />
