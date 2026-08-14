@@ -7,7 +7,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { CompCard } from "@/components/CompCard";
 import { CompRow } from "@/components/CompRow";
 import { allCompetitionsQueryOptions } from "@/lib/competitions-api";
-import { LuckyMark } from "@/components/GaryMascot";
+import { UnmarkedStub } from "@/components/EmptyBasketScene";
 import { pinDrawingFirst } from "@/lib/site-stats";
 
 type SortKey = "ending-soon" | "highest-prize" | "best-odds" | "lowest-price" | "hot";
