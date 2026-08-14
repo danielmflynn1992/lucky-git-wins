@@ -14,10 +14,18 @@ import { SkillQuestionStep } from "@/components/SkillQuestionStep";
 import { EntryStampSequence } from "@/components/EntryStampSequence";
 import { formatDrawTime } from "@/lib/site-stats";
 import { checkPurchaseAllowed, limitBlockMessage } from "@/lib/account-api";
-import { createPendingOrder, fetchOrderStatus, waitForPaidOrder, type OrderStatus } from "@/lib/checkout-api";
+import { createPendingOrder, fetchOrderStatus, waitForPaidOrder, withTimeout, type OrderStatus } from "@/lib/checkout-api";
 import { confirmSimulatedPayment, getPaymentMode, startPayment } from "@/lib/checkout.functions";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
+import { capture } from "@/lib/client-error-monitor";
+
+/** Hard ceiling on any single payment-setup step. */
+const STEP_TIMEOUT_MS = 15_000;
+
+function newRef() {
+  return "TILL-" + Math.random().toString(36).slice(2, 8).toUpperCase();
+}
 
 interface Reservation {
   token: string;
@@ -76,6 +84,7 @@ function CheckoutInner() {
   const [limitBlock, setLimitBlock] = useState<string | null>(null);
   const [payState, setPayState] = useState<"idle" | "creating" | "paying" | "waiting">("idle");
   const [payError, setPayError] = useState<string | null>(null);
+  const [errorRef, setErrorRef] = useState<string | null>(null);
   const [paidOrder, setPaidOrder] = useState<OrderStatus | null>(null);
 
   // Buyer details.
