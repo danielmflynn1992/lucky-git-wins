@@ -47,9 +47,9 @@ function Account() {
         </div>
 
         <div className="mt-8 grid grid-cols-3 gap-2">
-          <Stat label="Open entries" value={String(openEntries.length)} />
-          <Stat label="Comps entered" value={String(compsEntered)} />
-          <Stat label="Qualified draws" value={String(qualified)} />
+          <Stat label="Open" value={String(openEntries.length)} />
+          <Stat label="Entered" value={String(compsEntered)} />
+          <Stat label="Qualified" value={String(qualified)} />
         </div>
 
         <h2 className="mt-10 font-display text-2xl font-black">My entries</h2>
