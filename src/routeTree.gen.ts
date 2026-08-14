@@ -42,6 +42,7 @@ import { Route as CompetitionsSlugRouteImport } from './routes/competitions.$slu
 import { Route as AdminScanCheckRouteImport } from './routes/admin.scan-check'
 import { Route as AdminQuestionsRouteImport } from './routes/admin.questions'
 import { Route as AdminQuestionPerformanceRouteImport } from './routes/admin.question-performance'
+import { Route as AdminOrdersRouteImport } from './routes/admin.orders'
 import { Route as AdminFreeEntriesRouteImport } from './routes/admin.free-entries'
 import { Route as AdminErrorsRouteImport } from './routes/admin.errors'
 import { Route as DrawsIdVerifyRouteImport } from './routes/draws.$id.verify'
@@ -217,6 +218,11 @@ const AdminQuestionPerformanceRoute =
     path: '/question-performance',
     getParentRoute: () => AdminRoute,
   } as any)
+const AdminOrdersRoute = AdminOrdersRouteImport.update({
+  id: '/orders',
+  path: '/orders',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminFreeEntriesRoute = AdminFreeEntriesRouteImport.update({
   id: '/free-entries',
   path: '/free-entries',
@@ -288,6 +294,7 @@ export interface FileRoutesByFullPath {
   '/winners': typeof WinnersRoute
   '/admin/errors': typeof AdminErrorsRoute
   '/admin/free-entries': typeof AdminFreeEntriesRoute
+  '/admin/orders': typeof AdminOrdersRoute
   '/admin/question-performance': typeof AdminQuestionPerformanceRoute
   '/admin/questions': typeof AdminQuestionsRoute
   '/admin/scan-check': typeof AdminScanCheckRoute
@@ -330,6 +337,7 @@ export interface FileRoutesByTo {
   '/winners': typeof WinnersRoute
   '/admin/errors': typeof AdminErrorsRoute
   '/admin/free-entries': typeof AdminFreeEntriesRoute
+  '/admin/orders': typeof AdminOrdersRoute
   '/admin/question-performance': typeof AdminQuestionPerformanceRoute
   '/admin/questions': typeof AdminQuestionsRoute
   '/admin/scan-check': typeof AdminScanCheckRoute
@@ -374,6 +382,7 @@ export interface FileRoutesById {
   '/winners': typeof WinnersRoute
   '/admin/errors': typeof AdminErrorsRoute
   '/admin/free-entries': typeof AdminFreeEntriesRoute
+  '/admin/orders': typeof AdminOrdersRoute
   '/admin/question-performance': typeof AdminQuestionPerformanceRoute
   '/admin/questions': typeof AdminQuestionsRoute
   '/admin/scan-check': typeof AdminScanCheckRoute
@@ -419,6 +428,7 @@ export interface FileRouteTypes {
     | '/winners'
     | '/admin/errors'
     | '/admin/free-entries'
+    | '/admin/orders'
     | '/admin/question-performance'
     | '/admin/questions'
     | '/admin/scan-check'
@@ -461,6 +471,7 @@ export interface FileRouteTypes {
     | '/winners'
     | '/admin/errors'
     | '/admin/free-entries'
+    | '/admin/orders'
     | '/admin/question-performance'
     | '/admin/questions'
     | '/admin/scan-check'
@@ -504,6 +515,7 @@ export interface FileRouteTypes {
     | '/winners'
     | '/admin/errors'
     | '/admin/free-entries'
+    | '/admin/orders'
     | '/admin/question-performance'
     | '/admin/questions'
     | '/admin/scan-check'
@@ -789,6 +801,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminQuestionPerformanceRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/orders': {
+      id: '/admin/orders'
+      path: '/orders'
+      fullPath: '/admin/orders'
+      preLoaderRoute: typeof AdminOrdersRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/free-entries': {
       id: '/admin/free-entries'
       path: '/free-entries'
@@ -851,6 +870,7 @@ declare module '@tanstack/react-router' {
 interface AdminRouteChildren {
   AdminErrorsRoute: typeof AdminErrorsRoute
   AdminFreeEntriesRoute: typeof AdminFreeEntriesRoute
+  AdminOrdersRoute: typeof AdminOrdersRoute
   AdminQuestionPerformanceRoute: typeof AdminQuestionPerformanceRoute
   AdminQuestionsRoute: typeof AdminQuestionsRoute
   AdminScanCheckRoute: typeof AdminScanCheckRoute
@@ -861,6 +881,7 @@ interface AdminRouteChildren {
 const AdminRouteChildren: AdminRouteChildren = {
   AdminErrorsRoute: AdminErrorsRoute,
   AdminFreeEntriesRoute: AdminFreeEntriesRoute,
+  AdminOrdersRoute: AdminOrdersRoute,
   AdminQuestionPerformanceRoute: AdminQuestionPerformanceRoute,
   AdminQuestionsRoute: AdminQuestionsRoute,
   AdminScanCheckRoute: AdminScanCheckRoute,
