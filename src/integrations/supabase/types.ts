@@ -89,13 +89,6 @@ export type Database = {
             referencedRelation: "competitions"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "competition_secrets_competition_id_fkey"
-            columns: ["competition_id"]
-            isOneToOne: true
-            referencedRelation: "question_performance"
-            referencedColumns: ["competition_id"]
-          },
         ]
       }
       competitions: {
@@ -327,13 +320,6 @@ export type Database = {
             referencedRelation: "competitions"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "draws_competition_id_fkey"
-            columns: ["competition_id"]
-            isOneToOne: false
-            referencedRelation: "question_performance"
-            referencedColumns: ["competition_id"]
-          },
         ]
       }
       drop_subscribers: {
@@ -398,13 +384,6 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "competitions"
             referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "entry_answers_competition_id_fkey"
-            columns: ["competition_id"]
-            isOneToOne: false
-            referencedRelation: "question_performance"
-            referencedColumns: ["competition_id"]
           },
           {
             foreignKeyName: "entry_answers_question_id_fkey"
@@ -477,13 +456,6 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "competitions"
             referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "free_entries_competition_id_fkey"
-            columns: ["competition_id"]
-            isOneToOne: false
-            referencedRelation: "question_performance"
-            referencedColumns: ["competition_id"]
           },
         ]
       }
@@ -658,13 +630,6 @@ export type Database = {
             referencedRelation: "competitions"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "tickets_competition_id_fkey"
-            columns: ["competition_id"]
-            isOneToOne: false
-            referencedRelation: "question_performance"
-            referencedColumns: ["competition_id"]
-          },
         ]
       }
       user_roles: {
@@ -690,19 +655,7 @@ export type Database = {
       }
     }
     Views: {
-      question_performance: {
-        Row: {
-          competition_id: string | null
-          correct_count: number | null
-          incorrect_count: number | null
-          incorrect_pct: number | null
-          slug: string | null
-          status: string | null
-          title: string | null
-          total_answers: number | null
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Functions: {
       admin_answer_stats: {
@@ -787,6 +740,18 @@ export type Database = {
           p_route: string
         }
         Returns: Json
+      }
+      admin_question_performance: {
+        Args: never
+        Returns: {
+          competition_id: string
+          competition_slug: string
+          competition_title: string
+          correct_answers: number
+          incorrect_answers: number
+          pct_incorrect: number
+          total_answers: number
+        }[]
       }
       admin_reset_rolling_demo: { Args: never; Returns: Json }
       admin_set_daily_demo: { Args: { p_enabled: boolean }; Returns: boolean }
