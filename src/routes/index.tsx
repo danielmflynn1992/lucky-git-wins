@@ -19,7 +19,7 @@ import { NewsletterSlip } from "@/components/NewsletterSlip";
 import { WinnerCard } from "@/components/WinnerCard";
 import { winnersQuery, realOnly } from "@/lib/winners-api";
 import { useSiteStats, formatCloseDate, pinDrawingFirst, lifecycleOf, formatDrawTime } from "@/lib/site-stats";
-import { drawnCompetitionsQuery } from "@/lib/results-api";
+import { drawnCompetitionsQuery, latestDrawn } from "@/lib/results-api";
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { gbp } from "@/lib/format";
 import { DRAW_AND_PAY_LINE, DRAW_DELAYED_LINE, DRAW_DELAY_GRACE_MS } from "@/lib/promises";
@@ -58,7 +58,8 @@ function Home() {
   const winners = realOnly(allWinners);
   const stats = useSiteStats();
   const { data: drawnComps = [] } = useQuery(drawnCompetitionsQuery);
-  const lastDrawn = drawnComps[0] ?? null;
+  // Real draws always take precedence; examples only surface when there are none.
+  const lastDrawn = latestDrawn(drawnComps);
   // Closed, past the grace period, and still no draw record. We say so.
   const delayedDraws = stats.closed.filter(
     (c) => Date.now() - new Date(c.endsAt).getTime() > DRAW_DELAY_GRACE_MS,
