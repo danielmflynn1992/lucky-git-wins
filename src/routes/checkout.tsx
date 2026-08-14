@@ -407,6 +407,11 @@ function CheckoutInner() {
               className="rounded-md border-2 border-[color:var(--color-ink-red)] bg-[var(--color-paper-raised)] p-4 text-sm font-semibold"
             >
               {payError}
+              {errorRef && (
+                <div className="mt-2 font-mono text-xs font-normal">
+                  Reference: {errorRef} · <Link to="/contact" className="underline">Contact support</Link>
+                </div>
+              )}
             </div>
           )}
 
