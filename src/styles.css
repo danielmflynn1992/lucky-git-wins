@@ -186,16 +186,16 @@
   --text-display-lg: clamp(1.625rem, 6.5vw, 2.5rem);
   --text-display-md: clamp(1.375rem, 3.6vw, 1.75rem);
   --text-display-sm: clamp(1.125rem, 2.4vw, 1.25rem);
-  --text-body-lg:  1.125rem;
-  --text-body:     1rem;
-  --text-body-sm:  0.9375rem;
+  --text-body-lg:  1rem;
+  --text-body:     0.9375rem;
+  --text-body-sm:  0.875rem;
   --text-micro:    0.6875rem;
 
-  --tracking-display: 0.02em;
+  --tracking-display: 0.005em;
   --tracking-micro:   0.2em;
   --tracking-serial:  0.08em;
   --leading-display:  0.95;
-  --leading-body:     1.55;
+  --leading-body:     1.5;
 
   /* ---------- SHAPE — coupons are printed on grids, no rounded corners ---------- */
   --radius-sharp: 0px;
@@ -212,9 +212,9 @@
   --rule-heavy:   3px;
 
   /* ---------- SPACE ---------- */
-  --space-section: clamp(4.5rem, 10vw, 8rem);
-  --space-block:   clamp(2rem, 4.5vw, 3.25rem);
-  --space-gutter:  clamp(1.25rem, 4vw, 3rem);
+  --space-section: clamp(1.5rem, 4vw, 2.5rem);
+  --space-block:   clamp(1rem, 2.5vw, 1.5rem);
+  --space-gutter:  clamp(0.875rem, 2.5vw, 1.5rem);
   --width-content: 74rem;
   --width-prose:   40rem;
 
