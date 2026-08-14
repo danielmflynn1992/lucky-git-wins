@@ -222,7 +222,7 @@ function DrawBoardView({ data }: { data: DrawBoardData }) {
         <div
           className={"draw-board-frame relative " + (stamped && t < T_WINNER_STAMP + 500 ? "draw-board-shake" : "")}
         >
-          <div className="bg-[#101010] p-3 sm:p-5">
+          <div className="relative bg-[#101010] p-3 sm:p-5">
             <div className={"text-center " + (phase === "drawn" && t < T_HEADER ? "opacity-0" : "draw-board-stampin")}>
               <div className="font-display uppercase tracking-[0.18em] text-[11px] sm:text-[13px] text-[#E9DCB8]">
                 Official draw — Competition No. {data.compNumber}
@@ -288,11 +288,11 @@ function DrawBoardView({ data }: { data: DrawBoardData }) {
                 </div>
               )}
             </div>
-          </div>
 
-          {stamped && (
-            <span aria-hidden className="draw-winner-stamp">Winner</span>
-          )}
+            {stamped && (
+              <span aria-hidden className="draw-winner-stamp draw-winner-stamp--light">Winner</span>
+            )}
+          </div>
         </div>
 
         {/* Screen-reader equivalent — no animation required. */}
