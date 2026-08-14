@@ -4,7 +4,7 @@ import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
 import { winnersQuery, realOnly } from "@/lib/winners-api";
 import { useSiteStats, formatCloseDate } from "@/lib/site-stats";
-import { gbp } from "@/lib/format";
+import { gbp, ukDate } from "@/lib/format";
 import { POOL_CAP_LINE } from "@/lib/promises";
 
 export const Route = createFileRoute("/transparency")({
@@ -62,7 +62,7 @@ function TransparencyPage() {
               {winners.map((w) => (
                 <li key={w.id} className="py-3 flex flex-wrap items-baseline gap-x-4 gap-y-1 font-mono text-sm">
                   <span className="tabular-nums text-muted-foreground">
-                    {new Date(w.drawn_at).toLocaleDateString("en-GB")}
+                    {ukDate(w.drawn_at)}
                   </span>
                   <span className="font-bold">{w.competition_title}</span>
                   {w.isDemo && (

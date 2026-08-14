@@ -1,4 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { ukDateTime } from "@/lib/format";
 import { useEffect, useMemo, useState } from "react";
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -389,7 +390,7 @@ function RevealPage() {
 
           <p className="text-xs font-mono text-cream/70 text-center pt-4">
             Draw ID <span className="text-cream">{draw.id}</span> · drawn{" "}
-            {new Date(draw.drawn_at).toLocaleString("en-GB")}
+            {ukDateTime(draw.drawn_at)}
           </p>
         </section>
       </main>

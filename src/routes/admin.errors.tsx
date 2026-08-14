@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { ukDateTime } from "@/lib/format";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -139,7 +140,7 @@ function AdminErrors() {
                         ×{r.count}
                       </span>
                       <span className="text-xs text-muted-foreground">
-                        {new Date(r.last_seen_at).toLocaleString("en-GB")}
+                        {ukDateTime(r.last_seen_at)}
                       </span>
                     </div>
                     <div className="mt-1 font-semibold break-words">{r.message}</div>

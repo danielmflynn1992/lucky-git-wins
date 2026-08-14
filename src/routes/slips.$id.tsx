@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { ukDateTime } from "@/lib/format";
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
 import { Perforation } from "@/components/Perforation";
@@ -48,7 +49,7 @@ function SlipPage() {
                 <SlipRow label="Numbers" value={payload.numbers.map((n) => String(n).padStart(4, "0")).join("  ")} mono />
                 <SlipRow label="Stake" value={payload.stake} mono />
                 <SlipRow label="Odds" value={payload.odds} mono />
-                {payload.closesAt && <SlipRow label="Closes" value={new Date(payload.closesAt).toLocaleString("en-GB")} mono />}
+                {payload.closesAt && <SlipRow label="Closes" value={ukDateTime(payload.closesAt)} mono />}
               </dl>
             ) : (
               <p className="font-mono text-sm text-[var(--color-ink-black)]/70">

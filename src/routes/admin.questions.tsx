@@ -34,6 +34,21 @@ function pctIncorrect(r: QRow) {
   return ((r.times_served - r.times_correct) / r.times_served) * 100;
 }
 
+const MULTI_STEP_HINTS =
+  /\bthen\b|\bafter\b|\beach\b|\bsplit\b|\btotal\b|\bnext\b|sequence|\bplus\b.*\bminus\b|%|\bof\b.*\band\b/i;
+
+/**
+ * Difficulty guard: a question that performs one arithmetic operation and uses
+ * no multi-step language cannot carry the skill basis on its own.
+ */
+export function isSingleStep(text: string): boolean {
+  const t = (text ?? "").trim();
+  if (!t) return true;
+  if (MULTI_STEP_HINTS.test(t)) return false;
+  const operators = (t.match(/[+\-×x*÷/]|\bplus\b|\bminus\b|\btimes\b|\bdivided by\b/gi) ?? []).length;
+  return operators <= 1;
+}
+
 function QuestionBank() {
   const qc = useQueryClient();
   const [editing, setEditing] = useState<null | Partial<QRow> & { correct_answer?: string }>(null);
@@ -79,26 +94,45 @@ function QuestionBank() {
   });
 
   const toggle = useMutation({
-    mutationFn: async ({ id, active }: { id: string; active: boolean }) => {
+    mutationFn: async ({ id, active, reason, text }: { id: string; active: boolean; reason?: string; text?: string }) => {
       const { error } = await supabase.rpc("admin_set_question_active", { p_id: id, p_active: active });
       if (error) throw error;
+      if (reason) {
+        // Audit trail for the override — visible on the Client errors screen.
+        await supabase.rpc("log_client_error", {
+          _severity: "warning",
+          _kind: "question_activation_override",
+          _message: `Single-step question activated: "${text ?? id}"`,
+          _stack: "",
+          _route: "/admin/questions",
+          _user_agent: navigator.userAgent,
+          _viewport: `${window.innerWidth}x${window.innerHeight}`,
+          _extra: { question_id: id, reason },
+          _fingerprint: `question_activation_override:${id}`,
+        });
+      }
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ["question-bank"] }),
   });
+
+  const [override, setOverride] = useState<{ row: QRow; reason: string } | null>(null);
 
   const rows = useMemo(
     () => [...(questions.data ?? [])].sort((a, b) => pctIncorrect(a) - pctIncorrect(b)),
     [questions.data],
   );
 
+  // Single source of truth: recorded answers, exactly what Question performance
+  // reads. Per-question counters can drift; entry_answers cannot.
   const totals = useMemo(() => {
-    const attempts = (questions.data ?? []).reduce((s, r) => s + r.times_served, 0);
-    const correct = (questions.data ?? []).reduce((s, r) => s + r.times_correct, 0);
+    const rows = stats.data ?? [];
+    const attempts = rows.reduce((s, r) => s + Number(r.attempts), 0);
+    const incorrect = rows.reduce((s, r) => s + Number(r.incorrect), 0);
     return {
       attempts,
-      pctIncorrect: attempts ? Math.round(((attempts - correct) / attempts) * 100) : 0,
+      pctIncorrect: attempts ? Math.round((incorrect / attempts) * 100) : 0,
     };
-  }, [questions.data]);
+  }, [stats.data]);
 
   const exportCsv = async () => {
     const { data, error } = await supabase.rpc("admin_export_entry_answers");
@@ -166,6 +200,43 @@ function QuestionBank() {
             <Sparkline data={stats.data ?? []} />
           </div>
         </div>
+
+        {override && (
+          <div className="mt-6 rounded-2xl border-2 border-[color:var(--color-ink-red)] bg-card p-5 space-y-3">
+            <h2 className="font-display text-lg font-black inline-flex items-center gap-2">
+              <AlertTriangle className="h-4 w-4" /> This looks like a single-step question
+            </h2>
+            <p className="text-sm text-muted-foreground">
+              “{override.row.question_text}” performs one operation and uses no multi-step wording.
+              Activating it weakens the skill basis. Give a reason to override — it is logged.
+            </p>
+            <textarea
+              rows={2}
+              value={override.reason}
+              onChange={(e) => setOverride({ ...override, reason: e.target.value })}
+              placeholder="Why is this question acceptable?"
+              className="w-full rounded-xl border-2 border-border bg-background px-3 py-2 font-semibold"
+            />
+            <div className="flex gap-2">
+              <Button variant="cream" onClick={() => setOverride(null)}>Cancel</Button>
+              <Button
+                variant="gold"
+                disabled={override.reason.trim().length < 10}
+                onClick={() => {
+                  toggle.mutate({
+                    id: override.row.id,
+                    active: true,
+                    reason: override.reason.trim(),
+                    text: override.row.question_text,
+                  });
+                  setOverride(null);
+                }}
+              >
+                Activate anyway
+              </Button>
+            </div>
+          </div>
+        )}
 
         {editing && (
           <div className="mt-6 rounded-2xl border-2 border-[color:var(--color-ink-red)] bg-card p-5 space-y-3">
@@ -260,9 +331,15 @@ function QuestionBank() {
                     <td className="p-3 text-right font-mono tabular-nums">{r.times_correct}</td>
                     <td className="p-3 text-right font-mono tabular-nums font-bold">{pct.toFixed(1)}%</td>
                     <td className="p-3 text-right">
-                      <button
+                       <button
                         type="button"
-                        onClick={() => toggle.mutate({ id: r.id, active: !r.is_active })}
+                        onClick={() => {
+                          if (!r.is_active && isSingleStep(r.question_text)) {
+                            setOverride({ row: r, reason: "" });
+                            return;
+                          }
+                          toggle.mutate({ id: r.id, active: !r.is_active });
+                        }}
                         className={`px-2 py-1 text-xs font-bold border-2 ${r.is_active ? "border-clover text-clover" : "border-border text-muted-foreground"}`}
                       >
                         {r.is_active ? "Active" : "Retired"}

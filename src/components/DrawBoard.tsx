@@ -86,22 +86,24 @@ function Flap({
   spinning: boolean;
   locked: boolean;
 }) {
-  const [shown, setShown] = useState(spinning ? "0" : value);
+  const [shuffle, setShuffle] = useState("0");
   const [flip, setFlip] = useState(0);
 
   useEffect(() => {
-    if (!spinning) {
-      setShown(value);
-      return;
-    }
+    if (!spinning) return;
     let i = 0;
     const id = setInterval(() => {
       i += 1;
-      setShown(DIGITS[i % 10]!);
+      setShuffle(DIGITS[i % 10]!);
       setFlip((f) => f + 1);
     }, 70);
     return () => clearInterval(id);
-  }, [spinning, value]);
+  }, [spinning]);
+
+  // Settled state is derived from the draw record, never from the animation.
+  // The moment the flap stops spinning it shows its true digit — on replay,
+  // on slow devices, and after a backgrounded tab throttles the interval.
+  const shown = spinning ? shuffle : value;
 
   return (
     <span

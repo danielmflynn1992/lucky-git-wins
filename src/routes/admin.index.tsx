@@ -7,8 +7,8 @@ import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
-import { drawCompetition, autoDrawExpired, closeCompetitionNow, resetRollingDemo, listDrawNotifications, getDailyDemoEnabled, setDailyDemoEnabled, sendQueuedNotifications, retryNotification } from "@/lib/admin.functions";
-import { gbp } from "@/lib/format";
+import { drawCompetition, autoDrawExpired, closeCompetitionNow, resetRollingDemo, listDrawNotifications, getDailyDemoEnabled, setDailyDemoEnabled, sendQueuedNotifications, retryNotification, getEmailConfigStatus } from "@/lib/admin.functions";
+import { gbp, ukDate, ukDateTime } from "@/lib/format";
 import { Copy, Plus, Play, Pause, Trophy, Loader2, Zap, AlertTriangle, Bug, TimerReset, RotateCcw, Mail, Send, RefreshCw } from "lucide-react";
 
 const exact = (n: number) => n.toLocaleString("en-GB");
@@ -101,10 +101,13 @@ function Admin() {
   const sendMut = useMutation({
     mutationFn: () => sendQueued({ data: undefined }),
     onSuccess: (res) => {
-      if (res.sent === 0 && res.failed === 0) toast.info("Nothing queued to send.");
+      if (!res.configured)
+        toast.error("Sending paused — no verified sending domain configured. Nothing was sent.");
+      else if (res.sent === 0 && res.failed === 0) toast.info("Nothing queued to send.");
       else if (res.failed === 0) toast.success(`Sent ${res.sent}.`);
       else toast.warning(`Sent ${res.sent}, failed ${res.failed}. Check the detail lines.`);
       qc.invalidateQueries({ queryKey: ["admin", "draw-notifications"] });
+      qc.invalidateQueries({ queryKey: ["admin", "email-config"] });
     },
     onError: (e: unknown) => toast.error(e instanceof Error ? e.message : "Send failed"),
   });
@@ -141,6 +144,12 @@ function Admin() {
   const { data: outbox = [] } = useQuery({
     queryKey: ["admin", "draw-notifications"],
     queryFn: () => notifications({ data: undefined }),
+    staleTime: 15_000,
+  });
+  const emailStatusFn = useServerFn(getEmailConfigStatus);
+  const { data: emailStatus } = useQuery({
+    queryKey: ["admin", "email-config"],
+    queryFn: () => emailStatusFn({ data: undefined }),
     staleTime: 15_000,
   });
   const readDaily = useServerFn(getDailyDemoEnabled);
@@ -317,7 +326,7 @@ function Admin() {
                     <dt className="text-muted-foreground">Revenue</dt>
                     <dd className="text-right font-bold">{gbp(c.sold * c.price_per_ticket)}</dd>
                     <dt className="text-muted-foreground">Ends</dt>
-                    <dd className="text-right">{new Date(c.ends_at).toLocaleDateString("en-GB")}</dd>
+                    <dd className="text-right">{ukDate(c.ends_at)}</dd>
                   </dl>
                   <div className="mt-3 flex flex-wrap gap-2">
                     <Button
@@ -393,7 +402,7 @@ function Admin() {
                       </td>
                       <td className="p-3 tabular-nums">{exact(c.sold)}/{exact(c.total_tickets)}</td>
                       <td className="p-3 font-bold">{gbp(c.sold * c.price_per_ticket)}</td>
-                      <td className="p-3 text-muted-foreground">{new Date(c.ends_at).toLocaleDateString("en-GB")}</td>
+                      <td className="p-3 text-muted-foreground">{ukDate(c.ends_at)}</td>
                       <td className="p-3">
                         <div className="flex gap-1">
                           <button className="p-2 rounded-lg hover:bg-background" title="Duplicate"><Copy className="h-4 w-4" /></button>
@@ -440,12 +449,23 @@ function Admin() {
               size="sm"
               className="ml-auto"
               onClick={() => sendMut.mutate()}
-              disabled={sendMut.isPending}
+              disabled={sendMut.isPending || emailStatus?.configured === false}
             >
               {sendMut.isPending ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Send className="h-3.5 w-3.5" />}
               Send queued
             </Button>
           </div>
+          {emailStatus?.configured === false && (
+            <div className="border-b-2 border-[color:var(--color-ink-red)] bg-[color:var(--color-ink-red)]/10 p-3">
+              <p className="text-sm font-bold text-[color:var(--color-ink-red)]">
+                Sending paused — no verified domain configured.
+              </p>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                {emailStatus.queued} notification{emailStatus.queued === 1 ? "" : "s"} waiting. They stay
+                queued and flush automatically the moment a verified sending domain is connected.
+              </p>
+            </div>
+          )}
           {outbox.length === 0 ? (
             <p className="p-4 text-sm text-muted-foreground">Nothing queued yet.</p>
           ) : (
@@ -471,8 +491,8 @@ function Admin() {
                     <span className="text-muted-foreground text-xs">&rarr; {n.recipient}</span>
                     <span className="text-muted-foreground text-xs ml-auto tabular-nums">
                       {n.sent_at
-                        ? `sent ${new Date(n.sent_at).toLocaleString("en-GB")}`
-                        : new Date(n.created_at).toLocaleString("en-GB")}
+                        ? `sent ${ukDateTime(n.sent_at)}`
+                        : ukDateTime(n.created_at)}
                     </span>
                   </div>
                   {n.detail && (

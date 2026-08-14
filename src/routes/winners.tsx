@@ -38,7 +38,7 @@ function WinnersPage() {
   return (
     <div className="min-h-screen flex flex-col bg-ambient">
       <SiteNav />
-      <main className="mx-auto max-w-6xl px-4 py-10 w-full flex-1">
+      <main className="mx-auto w-full max-w-[720px] px-4 py-10 flex-1">
         <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-clover">Verified · Drawn · Paid out</div>
         <h1 className="mt-2 font-display text-5xl md:text-7xl font-semibold tracking-[-0.03em]">
           <span className="text-gradient-mint">Smug Gits.</span>
@@ -52,7 +52,7 @@ function WinnersPage() {
             Our first winners will appear here — and you'll be able to check every single draw.
           </div>
         ) : (
-          <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-8 grid gap-5 sm:grid-cols-2">
             {winners.map((w) => (
               <WinnerCard
                 key={w.id}

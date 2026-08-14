@@ -12,7 +12,7 @@ import { LiveOddsTicker } from "./LiveOddsTicker";
 const leftLinks = [
   { to: "/competitions", label: "Get Tickets" },
   { to: "/odds", label: "Best Odds" },
-  { to: "/draw-day", label: "Draw Day", sub: "How we draw & publish results" },
+  { to: "/draw-day", label: "Draw Day" },
   { to: "/winners", label: "Winners" },
   { to: "/how-it-works", label: "How It Works" },
 ];
@@ -173,12 +173,7 @@ export function SiteNav() {
             style={{ color: "var(--color-ink-blue, #123)" }}
           >
             <Link to="/competitions" className="hover:text-clover transition-colors whitespace-nowrap">Competitions</Link>
-            <Link to="/draw-day" className="hover:text-clover transition-colors whitespace-nowrap text-center leading-tight">
-              <span className="block">Draw Day</span>
-              <span className="block text-[9px] font-medium normal-case tracking-[0.04em] text-muted-foreground">
-                How we draw &amp; publish results
-              </span>
-            </Link>
+            <Link to="/draw-day" className="hover:text-clover transition-colors whitespace-nowrap">Draw Day</Link>
             <Link to="/winners" className="hover:text-clover transition-colors whitespace-nowrap">Winners</Link>
             <Link to="/about" className="hover:text-clover transition-colors whitespace-nowrap">About</Link>
             <Link to="/verify" className="hover:text-clover transition-colors whitespace-nowrap">Verify</Link>

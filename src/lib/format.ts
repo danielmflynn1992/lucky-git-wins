@@ -37,3 +37,32 @@ export const LOADING_QUIPS = ["Hang about…", "Two ticks…", "Won't be a sec�
 export function pickLoadingQuip() {
   return LOADING_QUIPS[Math.floor(Math.random() * LOADING_QUIPS.length)];
 }
+/**
+ * Dates are always rendered in UK time. The server runs in UTC and browsers
+ * run wherever the punter is — pinning the zone is what keeps SSR and the
+ * client byte-identical, so no hydration mismatch.
+ */
+const UK = "Europe/London";
+
+export function ukDate(iso: string | number | Date): string {
+  return new Date(iso).toLocaleDateString("en-GB", { timeZone: UK });
+}
+
+export function ukDateTime(iso: string | number | Date): string {
+  return new Date(iso).toLocaleString("en-GB", {
+    timeZone: UK,
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
+export function ukTime(iso: string | number | Date): string {
+  return new Date(iso).toLocaleTimeString("en-GB", {
+    timeZone: UK,
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
