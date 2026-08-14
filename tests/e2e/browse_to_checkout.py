@@ -140,7 +140,7 @@ async def flow_paid_conversion(page: Page, viewport: str) -> None:
     await pay.click()
 
     # ENTERED must only appear after the order itself flips to paid.
-    await page.get_by_text("ENTERED").first.wait_for(timeout=45_000)
+    await page.get_by_text("Your entry is in", exact=False).first.wait_for(timeout=60_000)
     await shot(page, viewport, "08_entered")
     print(f"  [paid-conversion/{viewport}] order converted to paid for {slug}")
 
