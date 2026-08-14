@@ -8,6 +8,8 @@ import { Countdown } from "@/components/Countdown";
 import { allCompetitionsQueryOptions } from "@/lib/competitions-api";
 import { winnersQuery, realOnly } from "@/lib/winners-api";
 import { Perforation } from "@/components/Perforation";
+import { UnmarkedStub } from "@/components/EmptyBasketScene";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/draw-day")({
   loader: ({ context }) => {
@@ -111,9 +113,20 @@ function DrawDay() {
             </div>
           </>
         ) : (
-          <h1 className="mt-1 font-display uppercase leading-[0.9]" style={{ fontSize: "clamp(2.5rem, 8vw, 5rem)" }}>
-            That's your lot.
-          </h1>
+          <div className="mx-auto max-w-[560px] text-center">
+            <h1 className="mt-1 font-display uppercase leading-[0.9]" style={{ fontSize: "clamp(2.25rem, 6vw, 3.5rem)" }}>
+              That's your lot.
+            </h1>
+            <div className="mt-5">
+              <UnmarkedStub compact />
+            </div>
+            <p className="mt-4 font-mono text-[12px] uppercase tracking-[0.12em] text-[var(--color-ink-grey)]">
+              Nothing closing today. Gates open again when the next comp closes.
+            </p>
+            <Button asChild variant="cream" size="default" className="mt-5">
+              <Link to="/competitions">See the comps</Link>
+            </Button>
+          </div>
         )}
 
         {recent.length > 0 && (
