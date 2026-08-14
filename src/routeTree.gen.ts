@@ -41,6 +41,7 @@ import { Route as CompetitionsSlugRouteImport } from './routes/competitions.$slu
 import { Route as AdminScanCheckRouteImport } from './routes/admin.scan-check'
 import { Route as AdminQuestionsRouteImport } from './routes/admin.questions'
 import { Route as AdminQuestionPerformanceRouteImport } from './routes/admin.question-performance'
+import { Route as AdminFreeEntriesRouteImport } from './routes/admin.free-entries'
 import { Route as AdminErrorsRouteImport } from './routes/admin.errors'
 import { Route as DrawsIdVerifyRouteImport } from './routes/draws.$id.verify'
 import { Route as DrawsIdRevealRouteImport } from './routes/draws.$id.reveal'
@@ -209,6 +210,11 @@ const AdminQuestionPerformanceRoute =
     path: '/question-performance',
     getParentRoute: () => AdminRoute,
   } as any)
+const AdminFreeEntriesRoute = AdminFreeEntriesRouteImport.update({
+  id: '/free-entries',
+  path: '/free-entries',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminErrorsRoute = AdminErrorsRouteImport.update({
   id: '/errors',
   path: '/errors',
@@ -267,6 +273,7 @@ export interface FileRoutesByFullPath {
   '/verify': typeof VerifyRoute
   '/winners': typeof WinnersRoute
   '/admin/errors': typeof AdminErrorsRoute
+  '/admin/free-entries': typeof AdminFreeEntriesRoute
   '/admin/question-performance': typeof AdminQuestionPerformanceRoute
   '/admin/questions': typeof AdminQuestionsRoute
   '/admin/scan-check': typeof AdminScanCheckRoute
@@ -306,6 +313,7 @@ export interface FileRoutesByTo {
   '/verify': typeof VerifyRoute
   '/winners': typeof WinnersRoute
   '/admin/errors': typeof AdminErrorsRoute
+  '/admin/free-entries': typeof AdminFreeEntriesRoute
   '/admin/question-performance': typeof AdminQuestionPerformanceRoute
   '/admin/questions': typeof AdminQuestionsRoute
   '/admin/scan-check': typeof AdminScanCheckRoute
@@ -347,6 +355,7 @@ export interface FileRoutesById {
   '/verify': typeof VerifyRoute
   '/winners': typeof WinnersRoute
   '/admin/errors': typeof AdminErrorsRoute
+  '/admin/free-entries': typeof AdminFreeEntriesRoute
   '/admin/question-performance': typeof AdminQuestionPerformanceRoute
   '/admin/questions': typeof AdminQuestionsRoute
   '/admin/scan-check': typeof AdminScanCheckRoute
@@ -389,6 +398,7 @@ export interface FileRouteTypes {
     | '/verify'
     | '/winners'
     | '/admin/errors'
+    | '/admin/free-entries'
     | '/admin/question-performance'
     | '/admin/questions'
     | '/admin/scan-check'
@@ -428,6 +438,7 @@ export interface FileRouteTypes {
     | '/verify'
     | '/winners'
     | '/admin/errors'
+    | '/admin/free-entries'
     | '/admin/question-performance'
     | '/admin/questions'
     | '/admin/scan-check'
@@ -468,6 +479,7 @@ export interface FileRouteTypes {
     | '/verify'
     | '/winners'
     | '/admin/errors'
+    | '/admin/free-entries'
     | '/admin/question-performance'
     | '/admin/questions'
     | '/admin/scan-check'
@@ -743,6 +755,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminQuestionPerformanceRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/free-entries': {
+      id: '/admin/free-entries'
+      path: '/free-entries'
+      fullPath: '/admin/free-entries'
+      preLoaderRoute: typeof AdminFreeEntriesRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/errors': {
       id: '/admin/errors'
       path: '/errors'
@@ -790,6 +809,7 @@ declare module '@tanstack/react-router' {
 
 interface AdminRouteChildren {
   AdminErrorsRoute: typeof AdminErrorsRoute
+  AdminFreeEntriesRoute: typeof AdminFreeEntriesRoute
   AdminQuestionPerformanceRoute: typeof AdminQuestionPerformanceRoute
   AdminQuestionsRoute: typeof AdminQuestionsRoute
   AdminScanCheckRoute: typeof AdminScanCheckRoute
@@ -799,6 +819,7 @@ interface AdminRouteChildren {
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminErrorsRoute: AdminErrorsRoute,
+  AdminFreeEntriesRoute: AdminFreeEntriesRoute,
   AdminQuestionPerformanceRoute: AdminQuestionPerformanceRoute,
   AdminQuestionsRoute: AdminQuestionsRoute,
   AdminScanCheckRoute: AdminScanCheckRoute,

@@ -40,8 +40,6 @@ interface CompOption {
   email_cutoff_at: string | null;
 }
 
-const localInput = (iso: string | null) => (iso ? new Date(iso).toISOString().slice(0, 16) : "");
-
 function FreeEntries() {
   const qc = useQueryClient();
   const log = useServerFn(logFreeEntry);
