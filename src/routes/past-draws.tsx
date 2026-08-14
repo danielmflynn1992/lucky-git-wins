@@ -112,11 +112,11 @@ function formatDate(iso: string) {
 
 function PastDrawsPage() {
   const { data: draws } = useSuspenseQuery(drawsQuery);
-  const { q, comp, from, to, type, num } = Route.useSearch();
+  const { q, comp, from, to, type, num, examples } = Route.useSearch();
   const navigate = useNavigate({ from: "/past-draws" });
 
-  type SearchState = { q: string; comp: string; from: string; to: string; type: string; num: string };
-  const setParam = (key: keyof SearchState, value: string) => {
+  type SearchState = { q: string; comp: string; from: string; to: string; type: string; num: string; examples: boolean };
+  const setParam = (key: keyof SearchState, value: string | boolean) => {
     navigate({ search: (prev: SearchState) => ({ ...prev, [key]: value }) });
   };
 
@@ -132,6 +132,7 @@ function PastDrawsPage() {
     const toMs = to ? new Date(to).getTime() + 24 * 60 * 60 * 1000 - 1 : null;
     const numTrim = num.trim();
     return draws.filter((d) => {
+      if (!examples && d.is_demo) return false;
       if (comp && d.competition_title !== comp) return false;
       if (type && classifyPrize(d.prize) !== type) return false;
       if (numTrim && String(d.winning_number) !== numTrim) return false;
@@ -144,11 +145,11 @@ function PastDrawsPage() {
       }
       return true;
     });
-  }, [draws, q, comp, from, to, type, num]);
+  }, [draws, q, comp, from, to, type, num, examples]);
 
-  const activeFilters = Boolean(q || comp || from || to || type || num);
+  const activeFilters = Boolean(q || comp || from || to || type || num || examples);
   const reset = () =>
-    navigate({ search: { q: "", comp: "", from: "", to: "", type: "", num: "" } });
+    navigate({ search: { q: "", comp: "", from: "", to: "", type: "", num: "", examples: false } });
 
   return (
     <div className="min-h-screen flex flex-col">
