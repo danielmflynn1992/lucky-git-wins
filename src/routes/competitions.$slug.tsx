@@ -1,4 +1,4 @@
-import { createFileRoute, notFound, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, notFound, redirect, Link, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useSuspenseQuery, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Ticket, Shuffle, Shield, PoundSterling, CheckCircle2, Info, Loader2, AlertTriangle } from "lucide-react";
@@ -35,6 +35,9 @@ import {
 
 export const Route = createFileRoute("/competitions/$slug")({
   loader: async ({ params, context }) => {
+    // Old URLs we've published in the past still have to land somewhere sensible.
+    const legacy = LEGACY_SLUGS[params.slug];
+    if (legacy) throw redirect({ to: "/competitions/$slug", params: { slug: legacy } });
     const data = await context.queryClient.ensureQueryData(competitionQueryOptions(params.slug));
     if (!data) throw notFound();
   },
