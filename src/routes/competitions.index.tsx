@@ -70,7 +70,7 @@ function CompetitionsPage() {
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <SiteNav />
-      <main className="mx-auto max-w-7xl px-4 py-4 md:py-6 w-full">
+      <main className="mx-auto max-w-7xl px-4 py-4 md:py-6 w-full flex-1">
         <h1 className="font-display font-black text-foreground">Live Competitions</h1>
         <p className="text-muted-foreground mt-1 text-base leading-[1.55] max-w-[34ch]">All the current lot. Sort them, filter them, buy the lot.</p>
         {showControls && (
