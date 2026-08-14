@@ -18,6 +18,7 @@ export function usePlayBlock(): { blocked: boolean; message: string | null } {
 
   const fmt = (iso: string) =>
     new Date(iso).toLocaleDateString("en-GB", {
+      timeZone: "Europe/London",
       day: "numeric",
       month: "long",
       year: "numeric",
