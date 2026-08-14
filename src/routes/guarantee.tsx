@@ -7,7 +7,7 @@ import { DRAW_AND_PAY_LINE } from "@/lib/promises";
 
 const TITLE = "Our Guarantee — Lucky Git Comps";
 const DESC =
-  "Draws run on the date shown, never extended. Winner drawn automatically at close. Cash prizes paid within 48 hours by bank transfer.";
+  "Draws run on the date shown, never extended. " + TIMING_LINE;
 
 export const Route = createFileRoute("/guarantee")({
   head: () => ({
