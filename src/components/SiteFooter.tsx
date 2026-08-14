@@ -88,7 +88,8 @@ export function SiteFooter() {
           <div className="mx-auto max-w-4xl px-4 pb-3 text-[10px] leading-relaxed opacity-90 [overflow-wrap:anywhere]">
             {COMPANY_LINE} ·{" "}
             <Link to="/terms" className="underline underline-offset-2">Terms</Link> ·{" "}
-            <Link to="/privacy" className="underline underline-offset-2">Privacy</Link>
+            <Link to="/privacy" className="underline underline-offset-2">Privacy</Link> ·{" "}
+            <a href="/sitemap.xml" className="underline underline-offset-2">Sitemap</a>
           </div>
           © {new Date().getFullYear()} LUCKYGITCOMPS
           {gitsMadeLucky > 0 && (
