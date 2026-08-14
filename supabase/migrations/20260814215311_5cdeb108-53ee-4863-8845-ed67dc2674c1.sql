@@ -1,0 +1,2 @@
+select set_config('request.jwt.claims', json_build_object('sub','d880a8bd-bdd7-48a3-afca-d43f842a1294','role','authenticated')::text, true);
+select public.admin_close_competition_now('5980dda1-3b03-489b-a96a-fd356e0512bc');
