@@ -1,5 +1,19 @@
 import { supabase } from "@/integrations/supabase/client";
 
+/**
+ * Never let a checkout step hang forever. Rejects with a readable message so
+ * the UI can show the jammed-till state instead of an endless spinner.
+ */
+export function withTimeout<T>(p: Promise<T>, ms: number, label: string): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    const t = setTimeout(() => reject(new Error(`${label} timed out after ${Math.round(ms / 1000)}s`)), ms);
+    p.then(
+      (v) => { clearTimeout(t); resolve(v); },
+      (e) => { clearTimeout(t); reject(e instanceof Error ? e : new Error(String(e))); },
+    );
+  });
+}
+
 export interface PendingOrder {
   order_id: string;
   order_ref: string;

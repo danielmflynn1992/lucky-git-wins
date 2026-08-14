@@ -14,10 +14,18 @@ import { SkillQuestionStep } from "@/components/SkillQuestionStep";
 import { EntryStampSequence } from "@/components/EntryStampSequence";
 import { formatDrawTime } from "@/lib/site-stats";
 import { checkPurchaseAllowed, limitBlockMessage } from "@/lib/account-api";
-import { createPendingOrder, fetchOrderStatus, waitForPaidOrder, type OrderStatus } from "@/lib/checkout-api";
+import { createPendingOrder, fetchOrderStatus, waitForPaidOrder, withTimeout, type OrderStatus } from "@/lib/checkout-api";
 import { confirmSimulatedPayment, getPaymentMode, startPayment } from "@/lib/checkout.functions";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
+import { capture } from "@/lib/client-error-monitor";
+
+/** Hard ceiling on any single payment-setup step. */
+const STEP_TIMEOUT_MS = 15_000;
+
+function newRef() {
+  return "TILL-" + Math.random().toString(36).slice(2, 8).toUpperCase();
+}
 
 interface Reservation {
   token: string;
@@ -76,6 +84,7 @@ function CheckoutInner() {
   const [limitBlock, setLimitBlock] = useState<string | null>(null);
   const [payState, setPayState] = useState<"idle" | "creating" | "paying" | "waiting">("idle");
   const [payError, setPayError] = useState<string | null>(null);
+  const [errorRef, setErrorRef] = useState<string | null>(null);
   const [paidOrder, setPaidOrder] = useState<OrderStatus | null>(null);
 
   // Buyer details.
@@ -131,6 +140,26 @@ function CheckoutInner() {
   // Returned from a hosted payment page — never show ENTERED until the order
   // itself says paid.
   const settled = useRef(false);
+
+  /** One place that turns any checkout failure into a visible, logged state. */
+  const failCheckout = useCallback(
+    (stage: string, err: unknown, ctx: Record<string, unknown>) => {
+      const ref = newRef();
+      const message = err instanceof Error ? err.message : String(err);
+      setErrorRef(ref);
+      setPayError(
+        "Something's jammed at the till. Nothing's been taken — try again, or contact support quoting this reference.",
+      );
+      capture("checkout_failure", `[${stage}] ${message}`, {
+        severity: "error",
+        stack: err instanceof Error ? err.stack : undefined,
+        extra: { ref, stage, ...ctx },
+      });
+      setPayState("idle");
+    },
+    [],
+  );
+
   useEffect(() => {
     if (!returnedOrderId || settled.current) return;
     settled.current = true;
@@ -143,11 +172,12 @@ function CheckoutInner() {
           clearBasket();
         } else {
           setPayError(s.failure_reason || "That payment didn't complete. Nothing has been charged.");
+          setErrorRef(null);
         }
       })
-      .catch((e) => setPayError(e instanceof Error ? e.message : "Could not confirm payment."))
+      .catch((e) => failCheckout("confirm_return", e, { orderId: returnedOrderId }))
       .finally(() => setPayState("idle"));
-  }, [returnedOrderId, clearBasket]);
+  }, [returnedOrderId, clearBasket, failCheckout]);
 
   if (paidOrder && comp) {
     return (
@@ -174,6 +204,7 @@ function CheckoutInner() {
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setPayError(null);
+    setErrorRef(null);
 
     if (user && !displayName.trim()) {
       setPayError("Add the name you'd like shown if you win (e.g. Dave R.).");
@@ -181,9 +212,21 @@ function CheckoutInner() {
     }
 
     setPayState("creating");
+    const payload = {
+      slug: reservation.slug,
+      reservationToken: reservation.token,
+      quantity: effectiveQty,
+      amountPence: Math.round(subtotal * 100),
+      signedIn: !!user,
+      hasDisplayName: !!displayName.trim(),
+    };
     try {
       try {
-        const verdict = await checkPurchaseAllowed(Math.round(subtotal * 100));
+        const verdict = await withTimeout(
+          checkPurchaseAllowed(Math.round(subtotal * 100)),
+          STEP_TIMEOUT_MS,
+          "Spend-limit check",
+        );
         const msg = limitBlockMessage(verdict);
         if (msg) {
           setLimitBlock(msg);
@@ -195,19 +238,25 @@ function CheckoutInner() {
         setLimitBlock(null);
       }
 
-      const pending = await createPendingOrder({
-        reservationToken: reservation.token,
-        name,
-        email,
-        phone,
-        displayName: displayName.trim() || undefined,
-        town: town.trim() || undefined,
-      });
+      const pending = await withTimeout(
+        createPendingOrder({
+          reservationToken: reservation.token,
+          name,
+          email,
+          phone,
+          displayName: displayName.trim() || undefined,
+          town: town.trim() || undefined,
+        }),
+        STEP_TIMEOUT_MS,
+        "Creating your order",
+      );
 
       setPayState("paying");
-      const started = await startPayment({
-        data: { orderId: pending.order_id, origin: window.location.origin },
-      });
+      const started = await withTimeout(
+        startPayment({ data: { orderId: pending.order_id, origin: window.location.origin } }),
+        STEP_TIMEOUT_MS,
+        "Setting up payment",
+      );
 
       if (started.redirectUrl) {
         window.location.href = started.redirectUrl;
@@ -217,7 +266,11 @@ function CheckoutInner() {
       // No external provider configured (rehearsal mode): settle, then wait for
       // the order itself to flip to paid before anything says ENTERED.
       if (!started.alreadyPaid) {
-        await confirmSimulatedPayment({ data: { orderId: pending.order_id } });
+        await withTimeout(
+          confirmSimulatedPayment({ data: { orderId: pending.order_id } }),
+          STEP_TIMEOUT_MS,
+          "Settling payment",
+        );
       }
       setPayState("waiting");
       const status = await waitForPaidOrder(pending.order_id, 30_000);
@@ -229,8 +282,7 @@ function CheckoutInner() {
       setPaidOrder(status);
       clearBasket();
     } catch (err) {
-      setPayError(err instanceof Error ? err.message : "Payment could not be started.");
-      setPayState("idle");
+      failCheckout("submit", err, payload);
     }
   };
 
@@ -355,6 +407,11 @@ function CheckoutInner() {
               className="rounded-md border-2 border-[color:var(--color-ink-red)] bg-[var(--color-paper-raised)] p-4 text-sm font-semibold"
             >
               {payError}
+              {errorRef && (
+                <div className="mt-2 font-mono text-xs font-normal">
+                  Reference: {errorRef} · <Link to="/contact" className="underline">Contact support</Link>
+                </div>
+              )}
             </div>
           )}
 
@@ -395,7 +452,16 @@ function CheckoutInner() {
           <div className="rounded-2xl bg-card border-2 border-border p-5 sticky top-24">
             <h2 className="font-display text-lg font-bold">Your order</h2>
             <div className="mt-4 flex gap-3">
-              <img src={comp.image} alt="" width={72} height={72} className="h-16 w-16 rounded-lg object-cover" />
+              {comp.image?.trim() ? (
+                <img src={comp.image} alt="" width={72} height={72} className="h-16 w-16 rounded-lg object-cover" />
+              ) : (
+                <div
+                  aria-hidden
+                  className="h-16 w-16 rounded-lg bg-ink/10 border-2 border-border grid place-items-center font-mono text-[10px] uppercase text-muted-foreground"
+                >
+                  LGC
+                </div>
+              )}
               <div className="flex-1 min-w-0">
                 <div className="text-[10px] font-bold uppercase tracking-widest text-clover/70">{comp.category}</div>
                 <div className="font-display text-sm truncate">{comp.title}</div>
