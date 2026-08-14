@@ -104,7 +104,6 @@ function slangForPrize(prize: string): string | null {
  * `openId`/`onToggle` are wired by the parent.
  */
 export function WinnerCard({
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   w,
   expanded: controlledExpanded,
   onToggle,
