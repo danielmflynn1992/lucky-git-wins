@@ -300,7 +300,7 @@ function Home() {
         {!showControls ? (
           <div className="mt-6 flex flex-col gap-3">
             {filtered.map((c) => (
-              <div key={c.slug} className="rise-in mx-auto w-full max-w-2xl">
+              <div key={c.slug} className="mx-auto w-full max-w-2xl">
                 <CompCard c={c} />
               </div>
             ))}
@@ -313,7 +313,7 @@ function Home() {
         ) : view === "grid" ? (
           <div className="stall-grid mt-6 grid gap-3 sm:gap-5 grid-cols-2 md:grid-cols-3 items-stretch">
             {filtered.map((c) => (
-              <div key={c.slug} className="rise-in h-full">
+              <div key={c.slug} className="h-full">
                 <CompCard c={c} />
               </div>
             ))}
@@ -321,7 +321,7 @@ function Home() {
         ) : (
           <div className="mt-6 flex flex-col gap-2">
             {filtered.map((c) => (
-              <div key={c.slug} className="rise-in">
+              <div key={c.slug}>
                 <CompRow c={c} />
               </div>
             ))}
