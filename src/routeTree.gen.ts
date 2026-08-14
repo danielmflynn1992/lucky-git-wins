@@ -49,6 +49,7 @@ import { Route as DrawsIdRevealRouteImport } from './routes/draws.$id.reveal'
 import { Route as DrawsIdBoardRouteImport } from './routes/draws.$id.board'
 import { Route as ApiPublicVerifyDrawRouteImport } from './routes/api/public/verify-draw'
 import { Route as AdminCompetitionsNewRouteImport } from './routes/admin.competitions.new'
+import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 
 const WinnersRoute = WinnersRouteImport.update({
   id: '/winners',
@@ -251,6 +252,12 @@ const AdminCompetitionsNewRoute = AdminCompetitionsNewRouteImport.update({
   path: '/competitions/new',
   getParentRoute: () => AdminRoute,
 } as any)
+const ApiPublicPaymentsWebhookRoute =
+  ApiPublicPaymentsWebhookRouteImport.update({
+    id: '/api/public/payments/webhook',
+    path: '/api/public/payments/webhook',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -293,6 +300,7 @@ export interface FileRoutesByFullPath {
   '/draws/$id/board': typeof DrawsIdBoardRoute
   '/draws/$id/reveal': typeof DrawsIdRevealRoute
   '/draws/$id/verify': typeof DrawsIdVerifyRoute
+  '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -334,6 +342,7 @@ export interface FileRoutesByTo {
   '/draws/$id/board': typeof DrawsIdBoardRoute
   '/draws/$id/reveal': typeof DrawsIdRevealRoute
   '/draws/$id/verify': typeof DrawsIdVerifyRoute
+  '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -377,6 +386,7 @@ export interface FileRoutesById {
   '/draws/$id/board': typeof DrawsIdBoardRoute
   '/draws/$id/reveal': typeof DrawsIdRevealRoute
   '/draws/$id/verify': typeof DrawsIdVerifyRoute
+  '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -421,6 +431,7 @@ export interface FileRouteTypes {
     | '/draws/$id/board'
     | '/draws/$id/reveal'
     | '/draws/$id/verify'
+    | '/api/public/payments/webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -462,6 +473,7 @@ export interface FileRouteTypes {
     | '/draws/$id/board'
     | '/draws/$id/reveal'
     | '/draws/$id/verify'
+    | '/api/public/payments/webhook'
   id:
     | '__root__'
     | '/'
@@ -504,6 +516,7 @@ export interface FileRouteTypes {
     | '/draws/$id/board'
     | '/draws/$id/reveal'
     | '/draws/$id/verify'
+    | '/api/public/payments/webhook'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -540,6 +553,7 @@ export interface RootRouteChildren {
   DrawsIdBoardRoute: typeof DrawsIdBoardRoute
   DrawsIdRevealRoute: typeof DrawsIdRevealRoute
   DrawsIdVerifyRoute: typeof DrawsIdVerifyRoute
+  ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -824,6 +838,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminCompetitionsNewRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/api/public/payments/webhook': {
+      id: '/api/public/payments/webhook'
+      path: '/api/public/payments/webhook'
+      fullPath: '/api/public/payments/webhook'
+      preLoaderRoute: typeof ApiPublicPaymentsWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -883,6 +904,7 @@ const rootRouteChildren: RootRouteChildren = {
   DrawsIdBoardRoute: DrawsIdBoardRoute,
   DrawsIdRevealRoute: DrawsIdRevealRoute,
   DrawsIdVerifyRoute: DrawsIdVerifyRoute,
+  ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
