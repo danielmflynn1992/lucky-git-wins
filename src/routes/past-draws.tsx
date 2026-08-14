@@ -37,9 +37,7 @@ const drawsQuery = queryOptions({
       .order("drawn_at", { ascending: false });
     if (error) throw error;
     const rows = ((data ?? []) as unknown) as Draw[];
-    // Examples only survive while no genuine draw exists.
-    const real = rows.filter((d) => !d.is_demo);
-    return real.length > 0 ? real : rows;
+    return rows;
   },
 });
 
@@ -63,6 +61,7 @@ const searchSchema = z.object({
   to: fallback(z.string(), "").default(""),
   type: fallback(z.string(), "").default(""),
   num: fallback(z.string(), "").default(""),
+  examples: fallback(z.boolean(), false).default(false),
 });
 
 export const Route = createFileRoute("/past-draws")({

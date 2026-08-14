@@ -44,16 +44,11 @@ export type Winner = {
 };
 
 /**
- * Example records are illustration, never evidence: once a single real draw
- * exists they disappear from every surface automatically.
+ * Example records are illustration, never evidence. They never appear on a
+ * public winners surface — not even when there are no real winners yet.
  */
 export function realOnly<T extends { isDemo: boolean }>(list: T[]): T[] {
   return list.filter((w) => !w.isDemo);
-}
-
-export function displayWinners<T extends { isDemo: boolean }>(list: T[]): T[] {
-  const real = realOnly(list);
-  return real.length > 0 ? real : list;
 }
 
 export const winnersQuery = queryOptions({
