@@ -98,8 +98,8 @@ export const setFreeEntryConfig = createServerFn({ method: "POST" })
     const { error } = await context.supabase.rpc("admin_set_free_entry_config", {
       p_competition_id: data.competitionId,
       p_slots: data.slots,
-      p_postal_cutoff: data.postalCutoff ? new Date(data.postalCutoff).toISOString() : undefined,
-      p_email_cutoff: data.emailCutoff ? new Date(data.emailCutoff).toISOString() : undefined,
+      p_postal_cutoff: data.postalCutoff ? new Date(data.postalCutoff).toISOString() : (null as unknown as string),
+      p_email_cutoff: data.emailCutoff ? new Date(data.emailCutoff).toISOString() : (null as unknown as string),
     });
     if (error) throw new Error(error.message);
     return { ok: true };
