@@ -21,7 +21,7 @@ export function LiveOddsTicker() {
    * so the marquee doesn't just loop the same title over and over.
    */
   const FILLER = [
-    "NEVER MORE THAN 499",
+    "NEVER MORE THAN 499 TICKETS",
     "SOMEONE'S GOT TO WIN IT",
     "THE ODDS ARE THE ODDS",
   ] as const;

@@ -250,6 +250,9 @@ function Admin() {
             <Button asChild variant="gold" size="lg">
               <Link to="/admin/competitions/new"><Plus className="h-4 w-4" /> New competition</Link>
             </Button>
+            <Button asChild variant="cream" size="lg">
+              <Link to="/admin/scan-check">Scan check</Link>
+            </Button>
           </div>
         </div>
 

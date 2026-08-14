@@ -18,9 +18,8 @@ export const Route = createFileRoute("/how-entry-works")({
     <StaticPage kicker="How entry works" title="A prize competition of skill">
       <p>
         Lucky Git Comps operates as a <b>prize competition</b> under Section 14 of the Gambling
-        Act 2005 (Great Britain). Section 14 competitions require the genuine exercise of skill,
-        knowledge or judgement to enter — and do not require a Gambling Commission licence,
-        provided they are structured correctly.
+        Act 2005 (Great Britain). Section 14 competitions require the genuine
+        exercise of skill, knowledge or judgement to enter.
       </p>
       <h2>How you enter</h2>
       <ul>
@@ -46,10 +45,10 @@ export const Route = createFileRoute("/how-entry-works")({
       </p>
       <h2>If nobody answers correctly</h2>
       <p>
-        If a competition closes with zero correct entries, the competition is void: every
-        entrant is refunded in full and no prize is awarded. The void draw record is still
-        published on <Link to="/past-draws" className="underline">/past-draws</Link>, flagged
-        as void, so the outcome is on the record like any other.
+        If a competition closes with zero correct entries the competition is void: every entrant
+        is refunded in full and no prize is awarded. The void record is still published on{" "}
+        <Link to="/past-draws" className="underline">/past-draws</Link>, flagged as void, so the
+        outcome is on the record like any other.
       </p>
       <h2>No free entry route</h2>
       <p>
@@ -59,7 +58,7 @@ export const Route = createFileRoute("/how-entry-works")({
       </p>
       <h2>Complaints</h2>
       <p>
-        Email <a href="mailto:legal@luckygitcomps.co.uk" className="underline">legal@luckygitcomps.co.uk</a>.
+        Email <a href="mailto:support@luckygitcomps.co.uk" className="underline">support@luckygitcomps.co.uk</a>.
       </p>
       <p className="text-xs opacity-60 mt-8">
         Plain-English explainer, not legal advice. The definitive terms are our{" "}

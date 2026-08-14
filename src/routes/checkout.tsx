@@ -6,7 +6,7 @@ import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
 import { Button } from "@/components/ui/button";
 import { allCompetitionsQueryOptions } from "@/lib/competitions-api";
-import { gbp, moneySlang } from "@/lib/format";
+import { gbp } from "@/lib/format";
 import { CreditCard, Lock, ShieldCheck } from "lucide-react";
 import { SkillWarning } from "@/components/SkillWarning";
 import { EmptyBasketScene } from "@/components/EmptyBasketScene";
@@ -272,11 +272,6 @@ function CheckoutInner() {
                 <dt className="font-display font-bold">Total</dt>
                 <dd className="font-display font-black text-2xl leading-none">{gbp(subtotal)}</dd>
               </div>
-              {moneySlang(subtotal) && (
-                <div className="flex justify-end -mt-1 font-mono text-[10px] text-[var(--color-ink-blue)]">
-                  {moneySlang(subtotal)}
-                </div>
-              )}
             </dl>
           </div>
         </aside>

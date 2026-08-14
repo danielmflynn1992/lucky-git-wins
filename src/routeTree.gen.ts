@@ -36,8 +36,8 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as CompetitionsIndexRouteImport } from './routes/competitions.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as SlipsIdRouteImport } from './routes/slips.$id'
-import { Route as DevCompcardRouteImport } from './routes/dev.compcard'
 import { Route as CompetitionsSlugRouteImport } from './routes/competitions.$slug'
+import { Route as AdminScanCheckRouteImport } from './routes/admin.scan-check'
 import { Route as AdminQuestionsRouteImport } from './routes/admin.questions'
 import { Route as AdminQuestionPerformanceRouteImport } from './routes/admin.question-performance'
 import { Route as AdminErrorsRouteImport } from './routes/admin.errors'
@@ -182,15 +182,15 @@ const SlipsIdRoute = SlipsIdRouteImport.update({
   path: '/slips/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DevCompcardRoute = DevCompcardRouteImport.update({
-  id: '/dev/compcard',
-  path: '/dev/compcard',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const CompetitionsSlugRoute = CompetitionsSlugRouteImport.update({
   id: '/competitions/$slug',
   path: '/competitions/$slug',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AdminScanCheckRoute = AdminScanCheckRouteImport.update({
+  id: '/scan-check',
+  path: '/scan-check',
+  getParentRoute: () => AdminRoute,
 } as any)
 const AdminQuestionsRoute = AdminQuestionsRouteImport.update({
   id: '/questions',
@@ -262,8 +262,8 @@ export interface FileRoutesByFullPath {
   '/admin/errors': typeof AdminErrorsRoute
   '/admin/question-performance': typeof AdminQuestionPerformanceRoute
   '/admin/questions': typeof AdminQuestionsRoute
+  '/admin/scan-check': typeof AdminScanCheckRoute
   '/competitions/$slug': typeof CompetitionsSlugRoute
-  '/dev/compcard': typeof DevCompcardRoute
   '/slips/$id': typeof SlipsIdRoute
   '/admin/': typeof AdminIndexRoute
   '/competitions/': typeof CompetitionsIndexRoute
@@ -300,8 +300,8 @@ export interface FileRoutesByTo {
   '/admin/errors': typeof AdminErrorsRoute
   '/admin/question-performance': typeof AdminQuestionPerformanceRoute
   '/admin/questions': typeof AdminQuestionsRoute
+  '/admin/scan-check': typeof AdminScanCheckRoute
   '/competitions/$slug': typeof CompetitionsSlugRoute
-  '/dev/compcard': typeof DevCompcardRoute
   '/slips/$id': typeof SlipsIdRoute
   '/admin': typeof AdminIndexRoute
   '/competitions': typeof CompetitionsIndexRoute
@@ -340,8 +340,8 @@ export interface FileRoutesById {
   '/admin/errors': typeof AdminErrorsRoute
   '/admin/question-performance': typeof AdminQuestionPerformanceRoute
   '/admin/questions': typeof AdminQuestionsRoute
+  '/admin/scan-check': typeof AdminScanCheckRoute
   '/competitions/$slug': typeof CompetitionsSlugRoute
-  '/dev/compcard': typeof DevCompcardRoute
   '/slips/$id': typeof SlipsIdRoute
   '/admin/': typeof AdminIndexRoute
   '/competitions/': typeof CompetitionsIndexRoute
@@ -381,8 +381,8 @@ export interface FileRouteTypes {
     | '/admin/errors'
     | '/admin/question-performance'
     | '/admin/questions'
+    | '/admin/scan-check'
     | '/competitions/$slug'
-    | '/dev/compcard'
     | '/slips/$id'
     | '/admin/'
     | '/competitions/'
@@ -419,8 +419,8 @@ export interface FileRouteTypes {
     | '/admin/errors'
     | '/admin/question-performance'
     | '/admin/questions'
+    | '/admin/scan-check'
     | '/competitions/$slug'
-    | '/dev/compcard'
     | '/slips/$id'
     | '/admin'
     | '/competitions'
@@ -458,8 +458,8 @@ export interface FileRouteTypes {
     | '/admin/errors'
     | '/admin/question-performance'
     | '/admin/questions'
+    | '/admin/scan-check'
     | '/competitions/$slug'
-    | '/dev/compcard'
     | '/slips/$id'
     | '/admin/'
     | '/competitions/'
@@ -496,7 +496,6 @@ export interface RootRouteChildren {
   VerifyRoute: typeof VerifyRoute
   WinnersRoute: typeof WinnersRoute
   CompetitionsSlugRoute: typeof CompetitionsSlugRoute
-  DevCompcardRoute: typeof DevCompcardRoute
   SlipsIdRoute: typeof SlipsIdRoute
   CompetitionsIndexRoute: typeof CompetitionsIndexRoute
   ApiPublicVerifyDrawRoute: typeof ApiPublicVerifyDrawRoute
@@ -696,19 +695,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SlipsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/dev/compcard': {
-      id: '/dev/compcard'
-      path: '/dev/compcard'
-      fullPath: '/dev/compcard'
-      preLoaderRoute: typeof DevCompcardRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/competitions/$slug': {
       id: '/competitions/$slug'
       path: '/competitions/$slug'
       fullPath: '/competitions/$slug'
       preLoaderRoute: typeof CompetitionsSlugRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/admin/scan-check': {
+      id: '/admin/scan-check'
+      path: '/scan-check'
+      fullPath: '/admin/scan-check'
+      preLoaderRoute: typeof AdminScanCheckRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/admin/questions': {
       id: '/admin/questions'
@@ -773,6 +772,7 @@ interface AdminRouteChildren {
   AdminErrorsRoute: typeof AdminErrorsRoute
   AdminQuestionPerformanceRoute: typeof AdminQuestionPerformanceRoute
   AdminQuestionsRoute: typeof AdminQuestionsRoute
+  AdminScanCheckRoute: typeof AdminScanCheckRoute
   AdminIndexRoute: typeof AdminIndexRoute
   AdminCompetitionsNewRoute: typeof AdminCompetitionsNewRoute
 }
@@ -781,6 +781,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminErrorsRoute: AdminErrorsRoute,
   AdminQuestionPerformanceRoute: AdminQuestionPerformanceRoute,
   AdminQuestionsRoute: AdminQuestionsRoute,
+  AdminScanCheckRoute: AdminScanCheckRoute,
   AdminIndexRoute: AdminIndexRoute,
   AdminCompetitionsNewRoute: AdminCompetitionsNewRoute,
 }
@@ -813,7 +814,6 @@ const rootRouteChildren: RootRouteChildren = {
   VerifyRoute: VerifyRoute,
   WinnersRoute: WinnersRoute,
   CompetitionsSlugRoute: CompetitionsSlugRoute,
-  DevCompcardRoute: DevCompcardRoute,
   SlipsIdRoute: SlipsIdRoute,
   CompetitionsIndexRoute: CompetitionsIndexRoute,
   ApiPublicVerifyDrawRoute: ApiPublicVerifyDrawRoute,

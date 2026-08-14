@@ -1,4 +1,4 @@
-import { createFileRoute, notFound, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, notFound, redirect, Link, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useSuspenseQuery, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Ticket, Shuffle, Shield, PoundSterling, CheckCircle2, Info, Loader2, AlertTriangle } from "lucide-react";
@@ -12,7 +12,7 @@ import { Countdown } from "@/components/Countdown";
 import { CompCard } from "@/components/CompCard";
 import { Button } from "@/components/ui/button";
 import { PrizeGallery } from "@/components/PrizeImage";
-import { gbp, shortNumber, pickLoadingQuip, moneySlang } from "@/lib/format";
+import { gbp, shortNumber, pickLoadingQuip } from "@/lib/format";
 import { LuckyMark } from "@/components/GaryMascot";
 import { CouponGrid } from "@/components/CouponGrid";
 import { Odometer } from "@/components/Odometer";
@@ -33,8 +33,16 @@ import {
   type DbCompetition,
 } from "@/lib/competitions-api";
 
+/** Retired slugs → the live page they should land on. Permanent redirects. */
+const LEGACY_SLUGS: Record<string, string> = {
+  "audi-rs3-25k-cash": "audi-rs3-45k-cash",
+};
+
 export const Route = createFileRoute("/competitions/$slug")({
   loader: async ({ params, context }) => {
+    // Old URLs we've published in the past still have to land somewhere sensible.
+    const legacy = LEGACY_SLUGS[params.slug];
+    if (legacy) throw redirect({ to: "/competitions/$slug", params: { slug: legacy } });
     const data = await context.queryClient.ensureQueryData(competitionQueryOptions(params.slug));
     if (!data) throw notFound();
   },
@@ -362,11 +370,6 @@ function CompDetail() {
                 <PoundSterling className="h-4 w-4 text-clover" />
                 <span>
                   Cash alt: {gbp(c.cashAlternative)}
-                  {moneySlang(c.cashAlternative) && (
-                    <span className="ml-1.5 font-mono text-[10px] text-[var(--color-ink-blue)]">
-                      ({moneySlang(c.cashAlternative)})
-                    </span>
-                  )}
                 </span>
               </div>
               <div className="flex items-center gap-2"><Ticket className="h-4 w-4 text-clover" /> Max {c.maxPerPerson} per person</div>
@@ -419,13 +422,7 @@ function CompDetail() {
               <li className="flex gap-2">
                 <CheckCircle2 className="h-4 w-4 text-clover mt-0.5 shrink-0" />
                 <span>
-                  Cash alternative: <b>{gbp(c.cashAlternative)}</b>
-                  {moneySlang(c.cashAlternative) && (
-                    <span className="ml-1.5 font-mono text-[11px] text-[var(--color-ink-blue)]">
-                      ({moneySlang(c.cashAlternative)})
-                    </span>
-                  )}
-                  .
+                  Cash alternative: <b>{gbp(c.cashAlternative)}</b>.
                 </span>
               </li>
               <li className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-clover mt-0.5 shrink-0" /> Winner automatically drawn and announced within 24h of close.</li>

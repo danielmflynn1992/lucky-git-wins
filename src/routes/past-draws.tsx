@@ -37,9 +37,7 @@ const drawsQuery = queryOptions({
       .order("drawn_at", { ascending: false });
     if (error) throw error;
     const rows = ((data ?? []) as unknown) as Draw[];
-    // Examples only survive while no genuine draw exists.
-    const real = rows.filter((d) => !d.is_demo);
-    return real.length > 0 ? real : rows;
+    return rows;
   },
 });
 
@@ -63,6 +61,7 @@ const searchSchema = z.object({
   to: fallback(z.string(), "").default(""),
   type: fallback(z.string(), "").default(""),
   num: fallback(z.string(), "").default(""),
+  examples: fallback(z.boolean(), false).default(false),
 });
 
 export const Route = createFileRoute("/past-draws")({
@@ -113,11 +112,11 @@ function formatDate(iso: string) {
 
 function PastDrawsPage() {
   const { data: draws } = useSuspenseQuery(drawsQuery);
-  const { q, comp, from, to, type, num } = Route.useSearch();
+  const { q, comp, from, to, type, num, examples } = Route.useSearch();
   const navigate = useNavigate({ from: "/past-draws" });
 
-  type SearchState = { q: string; comp: string; from: string; to: string; type: string; num: string };
-  const setParam = (key: keyof SearchState, value: string) => {
+  type SearchState = { q: string; comp: string; from: string; to: string; type: string; num: string; examples: boolean };
+  const setParam = (key: keyof SearchState, value: string | boolean) => {
     navigate({ search: (prev: SearchState) => ({ ...prev, [key]: value }) });
   };
 
@@ -133,6 +132,7 @@ function PastDrawsPage() {
     const toMs = to ? new Date(to).getTime() + 24 * 60 * 60 * 1000 - 1 : null;
     const numTrim = num.trim();
     return draws.filter((d) => {
+      if (!examples && d.is_demo) return false;
       if (comp && d.competition_title !== comp) return false;
       if (type && classifyPrize(d.prize) !== type) return false;
       if (numTrim && String(d.winning_number) !== numTrim) return false;
@@ -145,11 +145,11 @@ function PastDrawsPage() {
       }
       return true;
     });
-  }, [draws, q, comp, from, to, type, num]);
+  }, [draws, q, comp, from, to, type, num, examples]);
 
-  const activeFilters = Boolean(q || comp || from || to || type || num);
+  const activeFilters = Boolean(q || comp || from || to || type || num || examples);
   const reset = () =>
-    navigate({ search: { q: "", comp: "", from: "", to: "", type: "", num: "" } });
+    navigate({ search: { q: "", comp: "", from: "", to: "", type: "", num: "", examples: false } });
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -253,8 +253,19 @@ function PastDrawsPage() {
               />
             </div>
             <div className="md:col-span-6 flex items-end justify-between gap-3">
-              <div className="text-xs font-mono text-muted-foreground">
-                {filtered.length} of {draws.length} draws
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+                <div className="text-xs font-mono text-muted-foreground">
+                  {filtered.length} of {draws.filter((d) => examples || !d.is_demo).length} draws
+                </div>
+                <label className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-muted-foreground cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={examples}
+                    onChange={(e) => setParam("examples", e.target.checked)}
+                    className="h-3.5 w-3.5 accent-[var(--color-ink-red)]"
+                  />
+                  Show example draws
+                </label>
               </div>
               {activeFilters && (
                 <button

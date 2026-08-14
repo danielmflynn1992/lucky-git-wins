@@ -319,3 +319,54 @@ export const retryNotification = createServerFn({ method: "POST" })
     await assertAdmin(context);
     return drain([data.id]);
   });
+
+/**
+ * Launch scan: the handful of things that quietly break trust if they drift.
+ * Every check is computed on the server from live data, never asserted by hand.
+ */
+export const getScanCheck = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await assertAdmin(context);
+    const sb = context.supabase;
+
+    const [comps, draws] = await Promise.all([
+      sb.from("competitions").select("id,slug,title,total_tickets,status,ends_at,is_demo,question_id,seed_hash"),
+      sb.from("draws").select("id,competition_id,is_demo,drawn_at,drew_from"),
+    ]);
+    if (comps.error) throw new Error(comps.error.message);
+    if (draws.error) throw new Error(draws.error.message);
+
+    const now = Date.now();
+    const c = comps.data ?? [];
+    const d = draws.data ?? [];
+    const drawnIds = new Set(d.map((r: { competition_id: string | null }) => r.competition_id));
+
+    const overCap = c.filter((r: { total_tickets: number }) => r.total_tickets > 499);
+    const noQuestion = c.filter((r: { question_id: string | null; status: string }) => r.status !== "drawn" && !r.question_id);
+    const noSeed = c.filter((r: { seed_hash: string | null }) => !r.seed_hash);
+    const overdue = c.filter(
+      (r: { status: string; ends_at: string; id: string }) =>
+        r.status === "live" && new Date(r.ends_at).getTime() < now - 10 * 60 * 1000 && !drawnIds.has(r.id),
+    );
+
+    const checks = [
+      { label: "No pool exceeds the 499 cap", ok: overCap.length === 0, detail: overCap.map((r: { slug: string }) => r.slug).join(", ") },
+      { label: "Every open competition has a skill question", ok: noQuestion.length === 0, detail: noQuestion.map((r: { slug: string }) => r.slug).join(", ") },
+      { label: "Every competition has a committed seed hash", ok: noSeed.length === 0, detail: noSeed.map((r: { slug: string }) => r.slug).join(", ") },
+      { label: "No closed competition is more than 10 minutes undrawn", ok: overdue.length === 0, detail: overdue.map((r: { title: string }) => r.title).join(", ") },
+    ];
+
+    return {
+      checks,
+      counts: {
+        competitions: c.length,
+        realCompetitions: c.filter((r: { is_demo: boolean }) => !r.is_demo).length,
+        exampleCompetitions: c.filter((r: { is_demo: boolean }) => r.is_demo).length,
+        draws: d.length,
+        realDraws: d.filter((r: { is_demo: boolean }) => !r.is_demo).length,
+        exampleDraws: d.filter((r: { is_demo: boolean }) => r.is_demo).length,
+        fallbackDraws: d.filter((r: { drew_from: string | null }) => r.drew_from && r.drew_from !== "qualifying").length,
+      },
+    };
+  });

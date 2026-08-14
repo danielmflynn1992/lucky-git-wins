@@ -2,10 +2,10 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
-import { winnersQuery, displayWinners } from "@/lib/winners-api";
+import { winnersQuery, realOnly } from "@/lib/winners-api";
 import { useSiteStats, formatCloseDate } from "@/lib/site-stats";
 import { gbp } from "@/lib/format";
-import { FIXED_ODDS_LINE } from "@/lib/promises";
+import { POOL_CAP_LINE } from "@/lib/promises";
 
 export const Route = createFileRoute("/transparency")({
   head: () => ({
@@ -22,7 +22,7 @@ export const Route = createFileRoute("/transparency")({
 
 function TransparencyPage() {
   const { data: allWinners = [] } = useQuery(winnersQuery);
-  const winners = displayWinners(allWinners);
+  const winners = realOnly(allWinners);
   const stats = useSiteStats();
 
   return (
@@ -45,8 +45,11 @@ function TransparencyPage() {
             label={stats.drawsCompleted ? "Draws gone off" : "First draw"}
             value={stats.drawsCompleted ? String(stats.drawsCompleted).padStart(3, "0") : formatCloseDate(stats.nextCloseAt)}
           />
-          <Stat label="Odds, every comp" value={FIXED_ODDS_LINE} />
+          <Stat label="Pool cap" value="Max 499" />
         </dl>
+        <p className="mt-3 font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
+          {POOL_CAP_LINE}
+        </p>
 
         <section className="mt-12">
           <h2 className="font-display text-2xl font-black">Every completed draw</h2>
