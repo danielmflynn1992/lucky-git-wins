@@ -201,6 +201,43 @@ function QuestionBank() {
           </div>
         </div>
 
+        {override && (
+          <div className="mt-6 rounded-2xl border-2 border-[color:var(--color-ink-red)] bg-card p-5 space-y-3">
+            <h2 className="font-display text-lg font-black inline-flex items-center gap-2">
+              <AlertTriangle className="h-4 w-4" /> This looks like a single-step question
+            </h2>
+            <p className="text-sm text-muted-foreground">
+              “{override.row.question_text}” performs one operation and uses no multi-step wording.
+              Activating it weakens the skill basis. Give a reason to override — it is logged.
+            </p>
+            <textarea
+              rows={2}
+              value={override.reason}
+              onChange={(e) => setOverride({ ...override, reason: e.target.value })}
+              placeholder="Why is this question acceptable?"
+              className="w-full rounded-xl border-2 border-border bg-background px-3 py-2 font-semibold"
+            />
+            <div className="flex gap-2">
+              <Button variant="cream" onClick={() => setOverride(null)}>Cancel</Button>
+              <Button
+                variant="gold"
+                disabled={override.reason.trim().length < 10}
+                onClick={() => {
+                  toggle.mutate({
+                    id: override.row.id,
+                    active: true,
+                    reason: override.reason.trim(),
+                    text: override.row.question_text,
+                  });
+                  setOverride(null);
+                }}
+              >
+                Activate anyway
+              </Button>
+            </div>
+          </div>
+        )}
+
         {editing && (
           <div className="mt-6 rounded-2xl border-2 border-[color:var(--color-ink-red)] bg-card p-5 space-y-3">
             <h2 className="font-display text-lg font-black">{editing.id ? "Edit question" : "New question"}</h2>
@@ -294,9 +331,15 @@ function QuestionBank() {
                     <td className="p-3 text-right font-mono tabular-nums">{r.times_correct}</td>
                     <td className="p-3 text-right font-mono tabular-nums font-bold">{pct.toFixed(1)}%</td>
                     <td className="p-3 text-right">
-                      <button
+                       <button
                         type="button"
-                        onClick={() => toggle.mutate({ id: r.id, active: !r.is_active })}
+                        onClick={() => {
+                          if (!r.is_active && isSingleStep(r.question_text)) {
+                            setOverride({ row: r, reason: "" });
+                            return;
+                          }
+                          toggle.mutate({ id: r.id, active: !r.is_active });
+                        }}
                         className={`px-2 py-1 text-xs font-bold border-2 ${r.is_active ? "border-clover text-clover" : "border-border text-muted-foreground"}`}
                       >
                         {r.is_active ? "Active" : "Retired"}
