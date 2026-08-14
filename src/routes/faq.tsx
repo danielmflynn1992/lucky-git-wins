@@ -3,6 +3,8 @@ import { StaticPage } from "@/components/StaticPage";
 import { POOL_CAP_LINE, TIMING_LINE, VOID_QUESTION_LINE } from "@/lib/promises";
 
 const QAs: [string, string][] = [
+  ["Do I have to pay to enter?", "No — every competition can be entered for free, by post or email, with exactly the same odds as a paid ticket once logged. There's a limited number of free spots per competition, same as there's a limited number of tickets. See how free entry works at /free-entry."],
+  ["What if the free spots are gone by the time I enter?", "Your entry isn't logged for that competition, the same as if you'd missed out on a sold-out ticket. We won't put you into a different competition instead — that would mean entering you for a prize you didn't choose. You're welcome to try again on the next one."],
   ["Why is there a question?", "Lucky Git Comps is a prize competition of skill under Section 14 of the Gambling Act 2005. UK law requires the genuine exercise of skill, knowledge or judgement to enter. Every competition ships with a real question that isn't answerable by looking at the prize page."],
   ["What happens if I get the question wrong?", "Your tickets are recorded as non-qualifying and will not be entered in the draw. Payment still completes and no refund is given. This is stated unmissably before you pay — both on the competition page and on the payment button itself. Get it right, you're in the draw. Get it wrong, you're not."],
   ["Is this actually legit?", "Yes. Lucky Git Comps is a UK-registered company. Every competition is auto-drawn by a verifiable random process the moment the timer hits zero, and every winner is verified and published."],
