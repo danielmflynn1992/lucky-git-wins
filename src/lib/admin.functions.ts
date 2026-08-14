@@ -242,6 +242,26 @@ export const listDrawNotifications = createServerFn({ method: "GET" })
 
 const GATEWAY_URL = "https://connector-gateway.lovable.dev/resend";
 
+function emailSendingConfigured() {
+  return Boolean(process.env["LOVABLE_API_KEY"] && process.env["RESEND_API_KEY"]);
+}
+
+/**
+ * Whether the outbox can actually send. Admin needs this loudly: a queue that
+ * quietly fills up is a winner who never hears from us.
+ */
+export const getEmailConfigStatus = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await assertAdmin(context);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { count } = await supabaseAdmin
+      .from("draw_notifications")
+      .select("id", { count: "exact", head: true })
+      .eq("status", "queued");
+    return { configured: emailSendingConfigured(), queued: count ?? 0 };
+  });
+
 async function deliver(row: { id: string; recipient: string; subject: string; body: string }) {
   const lovableKey = process.env["LOVABLE_API_KEY"];
   const resendKey = process.env["RESEND_API_KEY"];
@@ -285,6 +305,12 @@ async function drain(ids: string[] | null) {
   const { data, error } = await q.limit(25);
   if (error) throw new Error(error.message);
 
+  if (!emailSendingConfigured()) {
+    // Leave rows queued — they must flush automatically once a domain/key is
+    // configured, not be buried as permanent failures.
+    return { sent: 0, failed: 0, blocked: (data ?? []).length, configured: false };
+  }
+
   let sent = 0;
   let failed = 0;
   for (const row of (data ?? []) as Array<{ id: string; recipient: string; subject: string; body: string }>) {
@@ -300,7 +326,7 @@ async function drain(ids: string[] | null) {
     if (result.ok) sent += 1;
     else failed += 1;
   }
-  return { sent, failed };
+  return { sent, failed, blocked: 0, configured: true };
 }
 
 /** Attempt delivery of every queued notification. */
