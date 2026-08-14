@@ -91,14 +91,17 @@ function QuestionBank() {
     [questions.data],
   );
 
+  // Single source of truth: recorded answers, exactly what Question performance
+  // reads. Per-question counters can drift; entry_answers cannot.
   const totals = useMemo(() => {
-    const attempts = (questions.data ?? []).reduce((s, r) => s + r.times_served, 0);
-    const correct = (questions.data ?? []).reduce((s, r) => s + r.times_correct, 0);
+    const rows = stats.data ?? [];
+    const attempts = rows.reduce((s, r) => s + Number(r.attempts), 0);
+    const incorrect = rows.reduce((s, r) => s + Number(r.incorrect), 0);
     return {
       attempts,
-      pctIncorrect: attempts ? Math.round(((attempts - correct) / attempts) * 100) : 0,
+      pctIncorrect: attempts ? Math.round((incorrect / attempts) * 100) : 0,
     };
-  }, [questions.data]);
+  }, [stats.data]);
 
   const exportCsv = async () => {
     const { data, error } = await supabase.rpc("admin_export_entry_answers");
