@@ -3,8 +3,6 @@ import { useQuery } from "@tanstack/react-query";
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
 import { Button } from "@/components/ui/button";
-import { COMPETITIONS } from "@/lib/mock-comps";
-import { gbp } from "@/lib/format";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { AccountSettings } from "@/components/AccountSettings";
@@ -17,8 +15,18 @@ export const Route = createFileRoute("/account")({
 });
 
 function Account() {
-  const entries = COMPETITIONS.slice(0, 2);
   const { user } = useAuth();
+  const { data: answers = [] } = useQuery<AnswerRecordRow[]>({
+    queryKey: ["my-answers"],
+    queryFn: fetchMyAnswers,
+    retry: false,
+  });
+
+  // Everything here is real: derived from your own answer + entry records.
+  const openEntries = answers.filter((a) => !a.drawn);
+  const compsEntered = new Set(answers.map((a) => a.competition_id)).size;
+  const qualified = answers.filter((a) => a.drawn && a.is_correct === true).length;
+
   return (
     <div className="min-h-screen flex flex-col">
       <SiteNav />
@@ -39,68 +47,50 @@ function Account() {
         </div>
 
         <div className="mt-8 grid grid-cols-3 gap-2">
-          <Stat label="Active entries" value="2" />
-          <Stat label="Referral rewards" value={gbp(5)} />
-          <Stat label="Wins to date" value="0" />
+          <Stat label="Open entries" value={String(openEntries.length)} />
+          <Stat label="Comps entered" value={String(compsEntered)} />
+          <Stat label="Qualified draws" value={String(qualified)} />
         </div>
 
-        <h2 className="mt-10 font-display text-2xl font-black">My Entries</h2>
-        <div className="mt-4 space-y-3">
-          {entries.map((c) => (
-            <div key={c.slug} className="rounded-2xl bg-card border-2 border-border p-5 flex items-start gap-4">
-              <img src={c.image} alt="" className="h-16 w-16 rounded-lg object-cover shrink-0" />
-              <div className="flex-1 min-w-0">
-                <div className="font-display text-lg leading-tight line-clamp-2">{c.title}</div>
-                <div className="mt-1">
+        <h2 className="mt-10 font-display text-2xl font-black">My entries</h2>
+        {openEntries.length === 0 ? (
+          <div className="mt-4 rounded-2xl bg-card border-2 border-border p-5 text-sm text-muted-foreground">
+            Nothing open at the moment.{" "}
+            <Link to="/competitions" className="underline">Have a look at what's running</Link>.
+          </div>
+        ) : (
+          <div className="mt-4 space-y-3">
+            {openEntries.map((a) => (
+              <div key={a.id} className="rounded-2xl bg-card border-2 border-border p-5 flex items-start gap-4">
+                <div className="flex-1 min-w-0">
+                  <div className="font-display text-lg leading-tight line-clamp-2">
+                    {a.competition_title ?? "Competition"}
+                  </div>
                   <div className="leader-row text-xs">
-                    <span className="uppercase tracking-widest font-bold text-muted-foreground">Draw</span>
+                    <span className="uppercase tracking-widest font-bold text-muted-foreground">Entered</span>
                     <span className="leader-row__fill" />
-                    <span className="font-mono tabular-nums">{formatDrawTime(c.endsAt)}</span>
+                    <span className="font-mono tabular-nums">{formatDrawTime(a.answered_at)}</span>
                   </div>
                   <div className="leader-row text-xs">
                     <span className="uppercase tracking-widest font-bold text-muted-foreground">Answer</span>
                     <span className="leader-row__fill" />
                     <span className="font-mono uppercase tracking-widest">Sealed</span>
                   </div>
+                  <p className="mt-1.5 text-[11px] text-muted-foreground">
+                    Sealed until the draw. Nobody peeks, including us.
+                  </p>
                 </div>
-                <div className="mt-1 flex gap-1 flex-wrap">
-                  {["00021","00022","00023"].map((n) => (
-                    <span
-                      key={n}
-                      className="rounded border-2 border-[color:var(--color-ink-blue)] bg-[var(--color-paper-raised)] text-[color:var(--color-ink-blue)] px-1.5 py-0.5 text-[11px] font-bold tabular-nums"
-                    >
-                      #{n}
-                    </span>
-                  ))}
-                </div>
-                <p className="mt-1.5 text-[11px] text-muted-foreground">
-                  Sealed until the draw. Nobody peeks, including us.
-                </p>
+                {a.competition_slug && (
+                  <Button asChild variant="cream" size="sm" className="shrink-0">
+                    <Link to="/competitions/$slug" params={{ slug: a.competition_slug }}>View</Link>
+                  </Button>
+                )}
               </div>
-              <Button asChild variant="cream" size="sm" className="shrink-0">
-                <Link to="/competitions/$slug" params={{ slug: c.slug }}>View</Link>
-              </Button>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
 
         <AnswerRecord />
-
-        <h2 className="mt-10 font-display text-2xl font-black">Refer a mate</h2>
-        <div className="mt-4 rounded-2xl bg-clover p-6 flex flex-wrap items-center justify-between gap-4" style={{ color: "var(--color-on-dark-fg)" }}>
-          <div className="min-w-0">
-            <div className="text-xs font-bold uppercase tracking-widest" style={{ color: "var(--color-marker)" }}>Your code</div>
-            <div className="font-display text-3xl font-black" style={{ color: "var(--color-on-dark-fg)" }}>GARY-9F2K</div>
-            <p className="text-sm mt-1" style={{ color: "color-mix(in oklab, var(--color-on-dark-fg) 85%, transparent)" }}>
-              £5 credit each when they buy their first ticket.
-            </p>
-            <p className="text-xs mt-1" style={{ color: "color-mix(in oklab, var(--color-on-dark-fg) 85%, transparent)" }}>
-              Credit applies after their first qualifying entry.{" "}
-              <a href="/terms#referrals" className="underline underline-offset-2 font-semibold">Full terms</a>
-            </p>
-          </div>
-          <Button variant="gold" size="lg">Copy link</Button>
-        </div>
 
         <AccountSettings email={user?.email ?? null} />
       </main>
