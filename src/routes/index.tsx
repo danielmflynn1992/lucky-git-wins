@@ -331,31 +331,34 @@ function Home() {
 
       <div className="mx-auto max-w-7xl px-4 mt-6 md:mt-10"><div role="separator" aria-hidden className="perf-rule" /></div>
 
-      {/* HOW IT WORKS */}
-      <section className="mx-auto max-w-7xl px-4 mt-4 md:mt-6 w-full">
-        <div>
-          <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-clover font-bold">How it works</div>
-          <h2 className="mt-2 font-display font-black tracking-[-0.02em] text-foreground">Three steps. One of them's a skill question.</h2>
+      {/* HOW IT WORKS — one connected strip, numbered tabs, thin rules */}
+      <section className="mx-auto max-w-7xl px-4 mt-6 w-full">
+        <div className="bg-[var(--color-ink-red)] px-3 py-1.5">
+          <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--color-paper)]">How it works</span>
         </div>
-        {/* Bento box */}
-        <div className="mt-8 grid gap-4 md:grid-cols-6 md:grid-rows-2 md:auto-rows-fr">
-          <div className="md:col-span-3 md:row-span-2 rounded-lg bg-card border border-border p-8 shadow-sm hover:shadow-md transition-all duration-200">
-            <div className="font-mono text-[11px] tracking-[0.25em] text-clover font-bold">STEP 01</div>
-            <h3 className="mt-4 font-display text-3xl md:text-4xl font-black tracking-tight text-foreground">Pick your tickets.</h3>
-            <p className="text-base text-muted-foreground mt-3 leading-relaxed max-w-md">
-              Lucky Dip if you can't be bothered, or hand-pick your numbers like it matters. From a quid a go. Grid updates live so you can't nick a number someone else already has.
-            </p>
-          </div>
-          <div className="md:col-span-3 rounded-lg bg-card border border-border p-6 shadow-sm hover:shadow-md transition-all duration-200">
-            <div className="font-mono text-[11px] tracking-[0.25em] text-clover font-bold">STEP 02</div>
-            <h3 className="mt-3 font-display text-xl font-black text-foreground">Checkout, sorted.</h3>
-            <p className="text-sm text-muted-foreground mt-2 leading-relaxed">Answer a genuine skill question before paying. Get it right and you're in the draw. Get it wrong and your tickets don't qualify — stated unmissably before you pay.</p>
-          </div>
-          <div className="md:col-span-3 rounded-lg bg-card border border-border p-6 shadow-sm hover:shadow-md transition-all duration-200">
-            <div className="font-mono text-[11px] tracking-[0.25em] text-clover font-bold">STEP 03</div>
-            <h3 className="mt-3 font-display text-xl font-black text-foreground">Draw goes off automatically.</h3>
-            <p className="text-sm text-muted-foreground mt-2 leading-relaxed">{DRAW_AND_PAY_LINE} Drawn from correct entries only, with the pool size published for verification.</p>
-          </div>
+        <h2 className="mt-2 font-display text-foreground">Three steps. One of them's a skill question.</h2>
+        <div className="mt-3 border-t border-b-[3px] border-double border-[var(--color-ink-black)] border-t-[var(--color-ink-black)]">
+          {[
+            { n: "01", h: "Pick your tickets.", p: "Lucky Dip if you can't be bothered, or hand-pick your numbers like it matters. From a quid a go. Grid updates live so you can't nick a number someone else already has." },
+            { n: "02", h: "Checkout, sorted.", p: "Answer a genuine skill question before paying. Get it right and you're in the draw. Get it wrong and your tickets don't qualify — stated unmissably before you pay." },
+            { n: "03", h: "Draw goes off automatically.", p: `${DRAW_AND_PAY_LINE} Drawn from correct entries only, with the pool size published for verification.` },
+          ].map((s, i) => (
+            <div
+              key={s.n}
+              className={
+                "flex gap-3 py-2.5 " +
+                (i > 0 ? "border-t border-[color-mix(in_oklab,var(--color-ink-black)_25%,transparent)]" : "")
+              }
+            >
+              <span className="shrink-0 self-start border-2 border-[var(--color-ink-black)] bg-[var(--color-paper-raised)] px-1.5 py-0.5 font-mono text-[11px] tracking-[0.14em]">
+                {s.n}
+              </span>
+              <div className="min-w-0">
+                <h3 className="font-display text-[var(--text-display-sm)] leading-none text-foreground">{s.h}</h3>
+                <p className="mt-1 max-w-[62ch]">{s.p}</p>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 
