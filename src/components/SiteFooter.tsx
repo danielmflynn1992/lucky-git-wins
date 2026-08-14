@@ -48,6 +48,7 @@ export function SiteFooter() {
               { to: "/responsible-play", label: "Responsible Play" },
               { to: "/guarantee", label: "Our Guarantee" },
               { to: "/how-entry-works", label: "How entry works" },
+              { to: "/free-entry", label: "Enter for free" },
               { to: "/faq", label: "FAQ" },
             ]}
           />
