@@ -36,7 +36,6 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as CompetitionsIndexRouteImport } from './routes/competitions.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as SlipsIdRouteImport } from './routes/slips.$id'
-import { Route as DevCompcardRouteImport } from './routes/dev.compcard'
 import { Route as CompetitionsSlugRouteImport } from './routes/competitions.$slug'
 import { Route as AdminQuestionsRouteImport } from './routes/admin.questions'
 import { Route as AdminQuestionPerformanceRouteImport } from './routes/admin.question-performance'
@@ -182,11 +181,6 @@ const SlipsIdRoute = SlipsIdRouteImport.update({
   path: '/slips/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DevCompcardRoute = DevCompcardRouteImport.update({
-  id: '/dev/compcard',
-  path: '/dev/compcard',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const CompetitionsSlugRoute = CompetitionsSlugRouteImport.update({
   id: '/competitions/$slug',
   path: '/competitions/$slug',
@@ -263,7 +257,6 @@ export interface FileRoutesByFullPath {
   '/admin/question-performance': typeof AdminQuestionPerformanceRoute
   '/admin/questions': typeof AdminQuestionsRoute
   '/competitions/$slug': typeof CompetitionsSlugRoute
-  '/dev/compcard': typeof DevCompcardRoute
   '/slips/$id': typeof SlipsIdRoute
   '/admin/': typeof AdminIndexRoute
   '/competitions/': typeof CompetitionsIndexRoute
@@ -301,7 +294,6 @@ export interface FileRoutesByTo {
   '/admin/question-performance': typeof AdminQuestionPerformanceRoute
   '/admin/questions': typeof AdminQuestionsRoute
   '/competitions/$slug': typeof CompetitionsSlugRoute
-  '/dev/compcard': typeof DevCompcardRoute
   '/slips/$id': typeof SlipsIdRoute
   '/admin': typeof AdminIndexRoute
   '/competitions': typeof CompetitionsIndexRoute
@@ -341,7 +333,6 @@ export interface FileRoutesById {
   '/admin/question-performance': typeof AdminQuestionPerformanceRoute
   '/admin/questions': typeof AdminQuestionsRoute
   '/competitions/$slug': typeof CompetitionsSlugRoute
-  '/dev/compcard': typeof DevCompcardRoute
   '/slips/$id': typeof SlipsIdRoute
   '/admin/': typeof AdminIndexRoute
   '/competitions/': typeof CompetitionsIndexRoute
@@ -382,7 +373,6 @@ export interface FileRouteTypes {
     | '/admin/question-performance'
     | '/admin/questions'
     | '/competitions/$slug'
-    | '/dev/compcard'
     | '/slips/$id'
     | '/admin/'
     | '/competitions/'
@@ -420,7 +410,6 @@ export interface FileRouteTypes {
     | '/admin/question-performance'
     | '/admin/questions'
     | '/competitions/$slug'
-    | '/dev/compcard'
     | '/slips/$id'
     | '/admin'
     | '/competitions'
@@ -459,7 +448,6 @@ export interface FileRouteTypes {
     | '/admin/question-performance'
     | '/admin/questions'
     | '/competitions/$slug'
-    | '/dev/compcard'
     | '/slips/$id'
     | '/admin/'
     | '/competitions/'
@@ -496,7 +484,6 @@ export interface RootRouteChildren {
   VerifyRoute: typeof VerifyRoute
   WinnersRoute: typeof WinnersRoute
   CompetitionsSlugRoute: typeof CompetitionsSlugRoute
-  DevCompcardRoute: typeof DevCompcardRoute
   SlipsIdRoute: typeof SlipsIdRoute
   CompetitionsIndexRoute: typeof CompetitionsIndexRoute
   ApiPublicVerifyDrawRoute: typeof ApiPublicVerifyDrawRoute
@@ -696,13 +683,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SlipsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/dev/compcard': {
-      id: '/dev/compcard'
-      path: '/dev/compcard'
-      fullPath: '/dev/compcard'
-      preLoaderRoute: typeof DevCompcardRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/competitions/$slug': {
       id: '/competitions/$slug'
       path: '/competitions/$slug'
@@ -813,7 +793,6 @@ const rootRouteChildren: RootRouteChildren = {
   VerifyRoute: VerifyRoute,
   WinnersRoute: WinnersRoute,
   CompetitionsSlugRoute: CompetitionsSlugRoute,
-  DevCompcardRoute: DevCompcardRoute,
   SlipsIdRoute: SlipsIdRoute,
   CompetitionsIndexRoute: CompetitionsIndexRoute,
   ApiPublicVerifyDrawRoute: ApiPublicVerifyDrawRoute,
