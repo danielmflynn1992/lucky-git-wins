@@ -255,18 +255,31 @@ export const getEmailConfigStatus = createServerFn({ method: "GET" })
   .handler(async ({ context }) => {
     await assertAdmin(context);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { count } = await supabaseAdmin
-      .from("draw_notifications")
-      .select("id", { count: "exact", head: true })
-      .eq("status", "queued");
+    const [{ count: adminCount }, { count: custCount }] = await Promise.all([
+      supabaseAdmin.from("draw_notifications").select("id", { count: "exact", head: true }).eq("status", "queued"),
+      supabaseAdmin.from("email_log").select("id", { count: "exact", head: true }).eq("status", "queued"),
+    ]);
+    const count = (adminCount ?? 0) + (custCount ?? 0);
     const configured = emailSendingConfigured();
     // Auto-flush: the moment sending becomes possible, the backlog goes out
     // without an admin having to remember to press a button.
     if (configured && (count ?? 0) > 0) {
       const res = await drain(null);
-      return { configured, queued: Math.max(0, (count ?? 0) - res.sent), autoFlushed: res.sent };
+      return {
+        configured,
+        queued: Math.max(0, count - res.sent),
+        autoFlushed: res.sent,
+        adminQueued: adminCount ?? 0,
+        customerQueued: custCount ?? 0,
+      };
     }
-    return { configured, queued: count ?? 0, autoFlushed: 0 };
+    return {
+      configured,
+      queued: count,
+      autoFlushed: 0,
+      adminQueued: adminCount ?? 0,
+      customerQueued: custCount ?? 0,
+    };
   });
 
 async function deliver(row: { id: string; recipient: string; subject: string; body: string }) {
@@ -333,8 +346,61 @@ async function drain(ids: string[] | null) {
     if (result.ok) sent += 1;
     else failed += 1;
   }
-  return { sent, failed, blocked: 0, configured: true };
+
+  // Customer-facing outbox: order confirmations, draw results, winner notices.
+  const customer = await drainCustomerEmails(ids);
+  return { sent: sent + customer.sent, failed: failed + customer.failed, blocked: 0, configured: true };
 }
+
+/** Order confirmations, draw results and winner notices queued in email_log. */
+async function drainCustomerEmails(ids: string[] | null) {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  let q = supabaseAdmin.from("email_log").select("id, recipient, subject, body, status");
+  q = ids ? q.in("id", ids) : q.eq("status", "queued");
+  const { data, error } = await q.limit(50);
+  if (error) throw new Error(error.message);
+  let sent = 0;
+  let failed = 0;
+  for (const row of (data ?? []) as Array<{ id: string; recipient: string; subject: string; body: string }>) {
+    const result = await deliver(row);
+    await supabaseAdmin
+      .from("email_log")
+      .update({
+        status: result.ok ? "sent" : "failed",
+        detail: result.detail,
+        sent_at: result.ok ? new Date().toISOString() : null,
+      })
+      .eq("id", row.id);
+    if (result.ok) sent += 1;
+    else failed += 1;
+  }
+  return { sent, failed };
+}
+
+export interface CustomerEmail {
+  id: string;
+  template: string;
+  recipient: string;
+  subject: string;
+  status: string;
+  detail: string | null;
+  created_at: string;
+  sent_at: string | null;
+}
+
+/** Customer outbox for admin visibility — entrants, not just admins. */
+export const listCustomerEmails = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await assertAdmin(context);
+    const { data, error } = await context.supabase
+      .from("email_log")
+      .select("id, template, recipient, subject, status, detail, created_at, sent_at")
+      .order("created_at", { ascending: false })
+      .limit(50);
+    if (error) throw new Error(error.message);
+    return (data ?? []) as CustomerEmail[];
+  });
 
 /** Attempt delivery of every queued notification. */
 export const sendQueuedNotifications = createServerFn({ method: "POST" })
