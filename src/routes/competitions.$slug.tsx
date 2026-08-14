@@ -341,6 +341,25 @@ function CompDetail() {
                 Draws automatically when the timer hits zero, from correct entries only.
               </p>
 
+              {/* Free route: findable, deliberately not a button of equal weight. */}
+              <div className="mt-3 text-[12px] leading-snug">
+                <span className="text-muted-foreground">Prefer not to pay? </span>
+                <Link to="/free-entry" className="underline font-semibold">
+                  Enter free by post or email →
+                </Link>
+                <div className="mt-1 font-mono text-[11px] tabular-nums text-muted-foreground">
+                  {c.freeSlotsClaimed >= c.freeEntrySlots
+                    ? "Free entry: fully claimed for this competition."
+                    : `Free spots: ${c.freeSlotsClaimed} of ${c.freeEntrySlots} claimed`}
+                </div>
+                {(c.postalCutoffAt || c.emailCutoffAt) && (
+                  <div className="mt-0.5 font-mono text-[11px] text-muted-foreground">
+                    {c.postalCutoffAt && <>Postal cut-off {new Date(c.postalCutoffAt).toLocaleDateString("en-GB")}. </>}
+                    {c.emailCutoffAt && <>Email cut-off {new Date(c.emailCutoffAt).toLocaleDateString("en-GB")}.</>}
+                  </div>
+                )}
+              </div>
+
               {play.message && (
                 <div
                   role="status"

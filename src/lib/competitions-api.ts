@@ -81,6 +81,11 @@ export interface DbCompetition {
   status: string;
   /** Seed/example competition — never shown on the stall. */
   isDemo: boolean;
+  /** Ticket numbers held back for postal/email free entries. */
+  freeEntrySlots: number;
+  freeSlotsClaimed: number;
+  postalCutoffAt: string | null;
+  emailCutoffAt: string | null;
 }
 
 export async function fetchCompetitionBySlug(slug: string): Promise<DbCompetition | null> {
@@ -125,6 +130,10 @@ export async function fetchCompetitionBySlug(slug: string): Promise<DbCompetitio
     takenNumbers,
     status: comp.status,
     isDemo: Boolean((comp as { is_demo?: boolean }).is_demo),
+    freeEntrySlots: Number((comp as { free_entry_slots?: number }).free_entry_slots ?? 0),
+    freeSlotsClaimed: Number((comp as { free_slots_claimed?: number }).free_slots_claimed ?? 0),
+    postalCutoffAt: (comp as { postal_cutoff_at?: string | null }).postal_cutoff_at ?? null,
+    emailCutoffAt: (comp as { email_cutoff_at?: string | null }).email_cutoff_at ?? null,
   };
 }
 

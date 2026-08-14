@@ -50,11 +50,18 @@ export const Route = createFileRoute("/how-entry-works")({
         <Link to="/past-draws" className="underline">/past-draws</Link>, flagged as void, so the
         outcome is on the record like any other.
       </p>
-      <h2>No free entry route</h2>
+      <h2>Two ways to enter</h2>
       <p>
-        Because entry requires a genuine skill test, no free entry route is offered. There is no
-        postal entry and no "no purchase necessary" option. Every question requires genuine
-        skill, knowledge or judgement to answer, and pass rates are reviewed regularly.
+        Every competition can be entered by buying a ticket, or for free by post or email — see{" "}
+        <Link to="/free-entry" className="underline">/free-entry</Link> for the full process. Both
+        routes go into the same numbered pool and carry identical odds once entered.
+      </p>
+      <p>
+        Free entries use the same skill question as paid tickets and are limited to a set number of
+        spots per competition, shown on the competition page. Once those spots are claimed, free
+        entry closes for that competition — the same way ticket sales close when a pool sells out.
+        We don't move unsuccessful free entrants into a different competition; that would mean
+        putting you in the running for a prize you never chose.
       </p>
       <h2>Complaints</h2>
       <p>

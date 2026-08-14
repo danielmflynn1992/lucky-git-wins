@@ -10,6 +10,10 @@ export const COMPANY_NUMBER = "[XXXXXXXX]";
 export const REGISTERED_OFFICE = "[Registered office address]";
 export const SUPPORT_EMAIL = "hello@luckygitcomps.co.uk";
 export const LEGAL_EMAIL = "legal@luckygitcomps.co.uk";
+export const FREE_ENTRY_EMAIL = "freeentry@luckygitcomps.co.uk";
+
+/** Postal address for free entries, printed on /free-entry. */
+export const FREE_ENTRY_ADDRESS = `${COMPANY_NAME} — Free Entry`;
 
 /** A value is a placeholder if it's empty or still wrapped in brackets. */
 function isPlaceholder(v: string): boolean {

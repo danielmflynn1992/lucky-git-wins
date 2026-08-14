@@ -104,7 +104,10 @@ export type Database = {
           category: string
           created_at: string
           description: string
+          email_cutoff_at: string | null
           ends_at: string
+          free_entry_slots: number
+          free_slots_claimed: number
           hot: boolean
           id: string
           image: string
@@ -112,6 +115,7 @@ export type Database = {
           is_rolling_demo: boolean
           letterbox_style: Database["public"]["Enums"]["letterbox_style"]
           max_per_person: number
+          postal_cutoff_at: string | null
           price_per_ticket: number
           question_id: string | null
           seed_hash: string
@@ -128,7 +132,10 @@ export type Database = {
           category: string
           created_at?: string
           description?: string
+          email_cutoff_at?: string | null
           ends_at: string
+          free_entry_slots?: number
+          free_slots_claimed?: number
           hot?: boolean
           id?: string
           image?: string
@@ -136,6 +143,7 @@ export type Database = {
           is_rolling_demo?: boolean
           letterbox_style?: Database["public"]["Enums"]["letterbox_style"]
           max_per_person?: number
+          postal_cutoff_at?: string | null
           price_per_ticket: number
           question_id?: string | null
           seed_hash?: string
@@ -152,7 +160,10 @@ export type Database = {
           category?: string
           created_at?: string
           description?: string
+          email_cutoff_at?: string | null
           ends_at?: string
+          free_entry_slots?: number
+          free_slots_claimed?: number
           hot?: boolean
           id?: string
           image?: string
@@ -160,6 +171,7 @@ export type Database = {
           is_rolling_demo?: boolean
           letterbox_style?: Database["public"]["Enums"]["letterbox_style"]
           max_per_person?: number
+          postal_cutoff_at?: string | null
           price_per_ticket?: number
           question_id?: string | null
           seed_hash?: string
@@ -400,6 +412,78 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "question_bank"
             referencedColumns: ["id"]
+          },
+        ]
+      }
+      free_entries: {
+        Row: {
+          assigned_ticket_number: number | null
+          competition_id: string
+          created_at: string
+          entrant_address: string
+          entrant_dob: string | null
+          entrant_email: string
+          entrant_name: string
+          entrant_phone: string
+          id: string
+          logged_at: string
+          logged_by: string | null
+          received_at: string
+          route: string
+          status: string
+          submitted_answer: string
+          updated_at: string
+        }
+        Insert: {
+          assigned_ticket_number?: number | null
+          competition_id: string
+          created_at?: string
+          entrant_address?: string
+          entrant_dob?: string | null
+          entrant_email: string
+          entrant_name: string
+          entrant_phone?: string
+          id?: string
+          logged_at?: string
+          logged_by?: string | null
+          received_at?: string
+          route: string
+          status: string
+          submitted_answer?: string
+          updated_at?: string
+        }
+        Update: {
+          assigned_ticket_number?: number | null
+          competition_id?: string
+          created_at?: string
+          entrant_address?: string
+          entrant_dob?: string | null
+          entrant_email?: string
+          entrant_name?: string
+          entrant_phone?: string
+          id?: string
+          logged_at?: string
+          logged_by?: string | null
+          received_at?: string
+          route?: string
+          status?: string
+          submitted_answer?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "free_entries_competition_id_fkey"
+            columns: ["competition_id"]
+            isOneToOne: false
+            referencedRelation: "competitions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "free_entries_competition_id_fkey"
+            columns: ["competition_id"]
+            isOneToOne: false
+            referencedRelation: "question_performance"
+            referencedColumns: ["competition_id"]
           },
         ]
       }
@@ -645,6 +729,38 @@ export type Database = {
           raw_answer: string
         }[]
       }
+      admin_free_entry_stats: {
+        Args: never
+        Returns: {
+          competition_id: string
+          competition_title: string
+          declined_duplicate: number
+          declined_frequency_cap: number
+          declined_full: number
+          declined_late: number
+          declined_wrong_answer: number
+          free_entry_slots: number
+          free_slots_claimed: number
+          is_demo: boolean
+          status: string
+        }[]
+      }
+      admin_list_free_entries: {
+        Args: never
+        Returns: {
+          assigned_ticket_number: number
+          competition_id: string
+          competition_title: string
+          entrant_email: string
+          entrant_name: string
+          id: string
+          logged_at: string
+          received_at: string
+          route: string
+          status: string
+          submitted_answer: string
+        }[]
+      }
       admin_list_questions: {
         Args: never
         Returns: {
@@ -658,8 +774,31 @@ export type Database = {
           times_served: number
         }[]
       }
+      admin_log_free_entry: {
+        Args: {
+          p_address: string
+          p_answer: string
+          p_competition_id: string
+          p_dob: string
+          p_email: string
+          p_name: string
+          p_phone: string
+          p_received_at: string
+          p_route: string
+        }
+        Returns: Json
+      }
       admin_reset_rolling_demo: { Args: never; Returns: Json }
       admin_set_daily_demo: { Args: { p_enabled: boolean }; Returns: boolean }
+      admin_set_free_entry_config: {
+        Args: {
+          p_competition_id: string
+          p_email_cutoff: string
+          p_postal_cutoff: string
+          p_slots: number
+        }
+        Returns: undefined
+      }
       admin_set_question_active: {
         Args: { p_active: boolean; p_id: string }
         Returns: undefined

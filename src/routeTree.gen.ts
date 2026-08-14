@@ -23,6 +23,7 @@ import { Route as NextDropRouteImport } from './routes/next-drop'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as HowEntryWorksRouteImport } from './routes/how-entry-works'
 import { Route as GuaranteeRouteImport } from './routes/guarantee'
+import { Route as FreeEntryRouteImport } from './routes/free-entry'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as DrawDayRouteImport } from './routes/draw-day'
 import { Route as DemoRouteImport } from './routes/demo'
@@ -40,6 +41,7 @@ import { Route as CompetitionsSlugRouteImport } from './routes/competitions.$slu
 import { Route as AdminScanCheckRouteImport } from './routes/admin.scan-check'
 import { Route as AdminQuestionsRouteImport } from './routes/admin.questions'
 import { Route as AdminQuestionPerformanceRouteImport } from './routes/admin.question-performance'
+import { Route as AdminFreeEntriesRouteImport } from './routes/admin.free-entries'
 import { Route as AdminErrorsRouteImport } from './routes/admin.errors'
 import { Route as DrawsIdVerifyRouteImport } from './routes/draws.$id.verify'
 import { Route as DrawsIdRevealRouteImport } from './routes/draws.$id.reveal'
@@ -115,6 +117,11 @@ const HowEntryWorksRoute = HowEntryWorksRouteImport.update({
 const GuaranteeRoute = GuaranteeRouteImport.update({
   id: '/guarantee',
   path: '/guarantee',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FreeEntryRoute = FreeEntryRouteImport.update({
+  id: '/free-entry',
+  path: '/free-entry',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FaqRoute = FaqRouteImport.update({
@@ -203,6 +210,11 @@ const AdminQuestionPerformanceRoute =
     path: '/question-performance',
     getParentRoute: () => AdminRoute,
   } as any)
+const AdminFreeEntriesRoute = AdminFreeEntriesRouteImport.update({
+  id: '/free-entries',
+  path: '/free-entries',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminErrorsRoute = AdminErrorsRouteImport.update({
   id: '/errors',
   path: '/errors',
@@ -245,6 +257,7 @@ export interface FileRoutesByFullPath {
   '/demo': typeof DemoRoute
   '/draw-day': typeof DrawDayRoute
   '/faq': typeof FaqRoute
+  '/free-entry': typeof FreeEntryRoute
   '/guarantee': typeof GuaranteeRoute
   '/how-entry-works': typeof HowEntryWorksRoute
   '/how-it-works': typeof HowItWorksRoute
@@ -260,6 +273,7 @@ export interface FileRoutesByFullPath {
   '/verify': typeof VerifyRoute
   '/winners': typeof WinnersRoute
   '/admin/errors': typeof AdminErrorsRoute
+  '/admin/free-entries': typeof AdminFreeEntriesRoute
   '/admin/question-performance': typeof AdminQuestionPerformanceRoute
   '/admin/questions': typeof AdminQuestionsRoute
   '/admin/scan-check': typeof AdminScanCheckRoute
@@ -283,6 +297,7 @@ export interface FileRoutesByTo {
   '/demo': typeof DemoRoute
   '/draw-day': typeof DrawDayRoute
   '/faq': typeof FaqRoute
+  '/free-entry': typeof FreeEntryRoute
   '/guarantee': typeof GuaranteeRoute
   '/how-entry-works': typeof HowEntryWorksRoute
   '/how-it-works': typeof HowItWorksRoute
@@ -298,6 +313,7 @@ export interface FileRoutesByTo {
   '/verify': typeof VerifyRoute
   '/winners': typeof WinnersRoute
   '/admin/errors': typeof AdminErrorsRoute
+  '/admin/free-entries': typeof AdminFreeEntriesRoute
   '/admin/question-performance': typeof AdminQuestionPerformanceRoute
   '/admin/questions': typeof AdminQuestionsRoute
   '/admin/scan-check': typeof AdminScanCheckRoute
@@ -323,6 +339,7 @@ export interface FileRoutesById {
   '/demo': typeof DemoRoute
   '/draw-day': typeof DrawDayRoute
   '/faq': typeof FaqRoute
+  '/free-entry': typeof FreeEntryRoute
   '/guarantee': typeof GuaranteeRoute
   '/how-entry-works': typeof HowEntryWorksRoute
   '/how-it-works': typeof HowItWorksRoute
@@ -338,6 +355,7 @@ export interface FileRoutesById {
   '/verify': typeof VerifyRoute
   '/winners': typeof WinnersRoute
   '/admin/errors': typeof AdminErrorsRoute
+  '/admin/free-entries': typeof AdminFreeEntriesRoute
   '/admin/question-performance': typeof AdminQuestionPerformanceRoute
   '/admin/questions': typeof AdminQuestionsRoute
   '/admin/scan-check': typeof AdminScanCheckRoute
@@ -364,6 +382,7 @@ export interface FileRouteTypes {
     | '/demo'
     | '/draw-day'
     | '/faq'
+    | '/free-entry'
     | '/guarantee'
     | '/how-entry-works'
     | '/how-it-works'
@@ -379,6 +398,7 @@ export interface FileRouteTypes {
     | '/verify'
     | '/winners'
     | '/admin/errors'
+    | '/admin/free-entries'
     | '/admin/question-performance'
     | '/admin/questions'
     | '/admin/scan-check'
@@ -402,6 +422,7 @@ export interface FileRouteTypes {
     | '/demo'
     | '/draw-day'
     | '/faq'
+    | '/free-entry'
     | '/guarantee'
     | '/how-entry-works'
     | '/how-it-works'
@@ -417,6 +438,7 @@ export interface FileRouteTypes {
     | '/verify'
     | '/winners'
     | '/admin/errors'
+    | '/admin/free-entries'
     | '/admin/question-performance'
     | '/admin/questions'
     | '/admin/scan-check'
@@ -441,6 +463,7 @@ export interface FileRouteTypes {
     | '/demo'
     | '/draw-day'
     | '/faq'
+    | '/free-entry'
     | '/guarantee'
     | '/how-entry-works'
     | '/how-it-works'
@@ -456,6 +479,7 @@ export interface FileRouteTypes {
     | '/verify'
     | '/winners'
     | '/admin/errors'
+    | '/admin/free-entries'
     | '/admin/question-performance'
     | '/admin/questions'
     | '/admin/scan-check'
@@ -481,6 +505,7 @@ export interface RootRouteChildren {
   DemoRoute: typeof DemoRoute
   DrawDayRoute: typeof DrawDayRoute
   FaqRoute: typeof FaqRoute
+  FreeEntryRoute: typeof FreeEntryRoute
   GuaranteeRoute: typeof GuaranteeRoute
   HowEntryWorksRoute: typeof HowEntryWorksRoute
   HowItWorksRoute: typeof HowItWorksRoute
@@ -604,6 +629,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GuaranteeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/free-entry': {
+      id: '/free-entry'
+      path: '/free-entry'
+      fullPath: '/free-entry'
+      preLoaderRoute: typeof FreeEntryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/faq': {
       id: '/faq'
       path: '/faq'
@@ -723,6 +755,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminQuestionPerformanceRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/free-entries': {
+      id: '/admin/free-entries'
+      path: '/free-entries'
+      fullPath: '/admin/free-entries'
+      preLoaderRoute: typeof AdminFreeEntriesRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/errors': {
       id: '/admin/errors'
       path: '/errors'
@@ -770,6 +809,7 @@ declare module '@tanstack/react-router' {
 
 interface AdminRouteChildren {
   AdminErrorsRoute: typeof AdminErrorsRoute
+  AdminFreeEntriesRoute: typeof AdminFreeEntriesRoute
   AdminQuestionPerformanceRoute: typeof AdminQuestionPerformanceRoute
   AdminQuestionsRoute: typeof AdminQuestionsRoute
   AdminScanCheckRoute: typeof AdminScanCheckRoute
@@ -779,6 +819,7 @@ interface AdminRouteChildren {
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminErrorsRoute: AdminErrorsRoute,
+  AdminFreeEntriesRoute: AdminFreeEntriesRoute,
   AdminQuestionPerformanceRoute: AdminQuestionPerformanceRoute,
   AdminQuestionsRoute: AdminQuestionsRoute,
   AdminScanCheckRoute: AdminScanCheckRoute,
@@ -799,6 +840,7 @@ const rootRouteChildren: RootRouteChildren = {
   DemoRoute: DemoRoute,
   DrawDayRoute: DrawDayRoute,
   FaqRoute: FaqRoute,
+  FreeEntryRoute: FreeEntryRoute,
   GuaranteeRoute: GuaranteeRoute,
   HowEntryWorksRoute: HowEntryWorksRoute,
   HowItWorksRoute: HowItWorksRoute,
