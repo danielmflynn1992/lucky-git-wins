@@ -32,7 +32,13 @@ function QP() {
     queryFn: async () => {
       const { data, error } = await supabase.rpc("admin_question_performance" as never);
       if (error) throw error;
-      return (data ?? []) as unknown as Row[];
+      return ((data ?? []) as unknown as Row[]).map((r) => ({
+        ...r,
+        total_answers: Number(r.total_answers),
+        correct_answers: Number(r.correct_answers),
+        incorrect_answers: Number(r.incorrect_answers),
+        pct_incorrect: Number(r.pct_incorrect),
+      }));
     },
     staleTime: 15_000,
   });
