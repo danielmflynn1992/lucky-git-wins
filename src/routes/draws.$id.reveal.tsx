@@ -1,3 +1,4 @@
+import { publicWinnerName } from "@/lib/winner-name";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ukDateTime } from "@/lib/format";
 import { useEffect, useMemo, useState } from "react";
@@ -362,7 +363,7 @@ function RevealPage() {
                   WINNER: TICKET #{String(draw.winning_number).padStart(3, "0")}
                 </span>
                 {draw.winner_display_name && (
-                  <span className="text-cream/70"> — {draw.winner_display_name}</span>
+                  <span className="text-cream/70"> — {publicWinnerName(draw.winner_display_name, draw.winning_number)}</span>
                 )}
                 <div className="text-cream/70 text-sm mt-1">
                   drawn from {pool.toLocaleString()} entries

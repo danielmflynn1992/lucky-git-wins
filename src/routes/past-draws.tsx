@@ -1,3 +1,4 @@
+import { publicWinnerName } from "@/lib/winner-name";
 import { createFileRoute } from "@tanstack/react-router";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
@@ -140,7 +141,7 @@ function PastDrawsPage() {
       if (fromMs !== null && t < fromMs) return false;
       if (toMs !== null && t > toMs) return false;
       if (qLower) {
-        const hay = `${d.competition_title} ${d.prize} ${d.winner_display_name} ${d.winner_town}`.toLowerCase();
+        const hay = `${d.competition_title} ${d.prize} ${publicWinnerName(d.winner_display_name, d.winning_number)} ${d.winner_town}`.toLowerCase();
         if (!hay.includes(qLower)) return false;
       }
       return true;

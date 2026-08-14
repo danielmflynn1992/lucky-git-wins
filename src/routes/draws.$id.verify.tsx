@@ -1,3 +1,4 @@
+import { publicWinnerName } from "@/lib/winner-name";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ukDateTime } from "@/lib/format";
 import { useEffect, useState } from "react";
@@ -182,7 +183,7 @@ function VerifyDrawPage() {
                 {String(d.winning_number).padStart(3, "0")}
               </div>
               <div className="mt-2 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                {isDemo(d) ? DEMO_WINNER_NAME : d.winner_display_name} · drawn {ukDateTime(d.drawn_at)}
+                {isDemo(d) ? DEMO_WINNER_NAME : publicWinnerName(d.winner_display_name, d.winning_number)} · drawn {ukDateTime(d.drawn_at)}
               </div>
             </div>
 
