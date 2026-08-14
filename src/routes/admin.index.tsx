@@ -263,6 +263,9 @@ function Admin() {
               <Link to="/admin/scan-check">Scan check</Link>
             </Button>
             <Button asChild variant="cream" size="lg">
+              <Link to="/admin/orders">Orders</Link>
+            </Button>
+            <Button asChild variant="cream">
               <Link to="/admin/free-entries">Free entries</Link>
             </Button>
           </div>

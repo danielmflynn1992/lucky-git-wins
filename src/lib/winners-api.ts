@@ -1,5 +1,6 @@
 import { queryOptions } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { publicWinnerName } from "@/lib/winner-name";
 import { IMAGES } from "@/lib/competitions-api";
 import audi from "@/assets/prize-audi.jpg";
 import tech from "@/assets/prize-tech.jpg";
@@ -92,7 +93,7 @@ export const winnersQuery = queryOptions({
         competition_title: d.competition_title,
         prize: d.prize,
         winning_number: d.winning_number,
-        winner_display_name: d.is_demo ? "—" : d.winner_display_name,
+        winner_display_name: d.is_demo ? "—" : publicWinnerName(d.winner_display_name, d.winning_number),
         winner_town: d.is_demo ? "Example entry" : d.winner_town,
         drawn_at: d.drawn_at,
         image,

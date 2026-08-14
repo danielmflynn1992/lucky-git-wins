@@ -343,12 +343,73 @@ export type Database = {
         }
         Relationships: []
       }
+      email_log: {
+        Row: {
+          body: string
+          created_at: string
+          dedupe_key: string | null
+          detail: string | null
+          draw_id: string | null
+          id: string
+          order_id: string | null
+          recipient: string
+          sent_at: string | null
+          status: string
+          subject: string
+          template: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          dedupe_key?: string | null
+          detail?: string | null
+          draw_id?: string | null
+          id?: string
+          order_id?: string | null
+          recipient: string
+          sent_at?: string | null
+          status?: string
+          subject: string
+          template?: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          dedupe_key?: string | null
+          detail?: string | null
+          draw_id?: string | null
+          id?: string
+          order_id?: string | null
+          recipient?: string
+          sent_at?: string | null
+          status?: string
+          subject?: string
+          template?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "email_log_draw_id_fkey"
+            columns: ["draw_id"]
+            isOneToOne: false
+            referencedRelation: "draws"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "email_log_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       entry_answers: {
         Row: {
           answered_at: string
           competition_id: string
           id: string
           is_correct: boolean
+          locked_at: string | null
           normalised_answer: number | null
           order_ref: string
           question_id: string | null
@@ -360,6 +421,7 @@ export type Database = {
           competition_id: string
           id?: string
           is_correct: boolean
+          locked_at?: string | null
           normalised_answer?: number | null
           order_ref: string
           question_id?: string | null
@@ -371,6 +433,7 @@ export type Database = {
           competition_id?: string
           id?: string
           is_correct?: boolean
+          locked_at?: string | null
           normalised_answer?: number | null
           order_ref?: string
           question_id?: string | null
@@ -459,6 +522,124 @@ export type Database = {
           },
         ]
       }
+      orders: {
+        Row: {
+          amount_pence: number
+          competition_id: string
+          contact_email: string
+          contact_name: string
+          contact_phone: string
+          created_at: string
+          display_name: string | null
+          failure_reason: string | null
+          id: string
+          is_guest: boolean
+          order_ref: string
+          paid_at: string | null
+          pending_expires_at: string
+          provider: string
+          provider_ref: string | null
+          quantity: number
+          reservation_token: string
+          status: string
+          town: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          amount_pence: number
+          competition_id: string
+          contact_email?: string
+          contact_name?: string
+          contact_phone?: string
+          created_at?: string
+          display_name?: string | null
+          failure_reason?: string | null
+          id?: string
+          is_guest?: boolean
+          order_ref: string
+          paid_at?: string | null
+          pending_expires_at?: string
+          provider?: string
+          provider_ref?: string | null
+          quantity: number
+          reservation_token: string
+          status?: string
+          town?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          amount_pence?: number
+          competition_id?: string
+          contact_email?: string
+          contact_name?: string
+          contact_phone?: string
+          created_at?: string
+          display_name?: string | null
+          failure_reason?: string | null
+          id?: string
+          is_guest?: boolean
+          order_ref?: string
+          paid_at?: string | null
+          pending_expires_at?: string
+          provider?: string
+          provider_ref?: string | null
+          quantity?: number
+          reservation_token?: string
+          status?: string
+          town?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "orders_competition_id_fkey"
+            columns: ["competition_id"]
+            isOneToOne: false
+            referencedRelation: "competitions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      payment_events: {
+        Row: {
+          created_at: string
+          event_id: string
+          event_type: string
+          id: string
+          order_id: string | null
+          payload: Json
+          provider: string
+        }
+        Insert: {
+          created_at?: string
+          event_id: string
+          event_type?: string
+          id?: string
+          order_id?: string | null
+          payload?: Json
+          provider: string
+        }
+        Update: {
+          created_at?: string
+          event_id?: string
+          event_type?: string
+          id?: string
+          order_id?: string | null
+          payload?: Json
+          provider?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payment_events_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       player_limits: {
         Row: {
           cooloff_until: string | null
@@ -503,6 +684,7 @@ export type Database = {
           created_at: string
           date_of_birth: string
           display_name: string | null
+          town: string
           updated_at: string
           user_id: string
         }
@@ -510,6 +692,7 @@ export type Database = {
           created_at?: string
           date_of_birth: string
           display_name?: string | null
+          town?: string
           updated_at?: string
           user_id: string
         }
@@ -517,6 +700,7 @@ export type Database = {
           created_at?: string
           date_of_birth?: string
           display_name?: string | null
+          town?: string
           updated_at?: string
           user_id?: string
         }
@@ -628,6 +812,13 @@ export type Database = {
             columns: ["competition_id"]
             isOneToOne: false
             referencedRelation: "competitions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tickets_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
             referencedColumns: ["id"]
           },
         ]
@@ -851,6 +1042,17 @@ export type Database = {
         }
         Returns: string
       }
+      create_pending_order: {
+        Args: {
+          p_display_name?: string
+          p_email: string
+          p_name: string
+          p_phone?: string
+          p_reservation_token: string
+          p_town?: string
+        }
+        Returns: Json
+      }
       demo_scheduler_tick: { Args: never; Returns: Json }
       draw_competition: {
         Args: { p_comp_id: string; p_notes?: string }
@@ -886,7 +1088,23 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      enqueue_email: {
+        Args: {
+          p_body: string
+          p_dedupe_key: string
+          p_draw_id?: string
+          p_order_id?: string
+          p_recipient: string
+          p_subject: string
+          p_template: string
+        }
+        Returns: undefined
+      }
       export_my_data: { Args: never; Returns: Json }
+      fail_order: {
+        Args: { p_order_id: string; p_reason?: string }
+        Returns: Json
+      }
       get_competition_question: {
         Args: { p_slug: string }
         Returns: {
@@ -915,6 +1133,15 @@ export type Database = {
           _viewport: string
         }
         Returns: undefined
+      }
+      mark_order_paid: {
+        Args: {
+          p_event_id: string
+          p_order_id: string
+          p_provider: string
+          p_provider_ref?: string
+        }
+        Returns: Json
       }
       my_entry_answers: {
         Args: never
@@ -953,6 +1180,7 @@ export type Database = {
       }
       my_month_spend_pence: { Args: never; Returns: number }
       normalise_numeric_answer: { Args: { p_raw: string }; Returns: number }
+      order_status: { Args: { p_order_id: string }; Returns: Json }
       pick_question_for_competition: { Args: never; Returns: string }
       prune_daily_demos: { Args: never; Returns: number }
       purchase_allowance: { Args: { p_amount_pence: number }; Returns: Json }

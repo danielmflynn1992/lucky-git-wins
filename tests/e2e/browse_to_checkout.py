@@ -47,7 +47,7 @@ async def open_first_competition(page: Page, viewport: str) -> str:
     # Wait for React hydration to attach event handlers — without this,
     # the SSR HTML is clickable but state-updating buttons silently no-op.
     await page.wait_for_load_state("networkidle")
-    await page.get_by_role("button", name="Enter now").first.wait_for(timeout=15_000)
+    await page.get_by_role("button", name="Go on then").first.wait_for(timeout=15_000)
     await shot(page, viewport, "02_detail")
     return href.rsplit("/", 1)[-1]
 
@@ -77,7 +77,7 @@ async def flow_lucky_dip(page: Page, viewport: str) -> None:
 
     await shot(page, viewport, "03_lucky_qty")
 
-    enter = page.get_by_role("button", name="Enter now").first
+    enter = page.get_by_role("button", name="Go on then").first
     await enter.scroll_into_view_if_needed()
     await enter.click()
     await page.wait_for_url("**/checkout*", timeout=20_000)
@@ -92,7 +92,7 @@ async def flow_pick_numbers(page: Page, viewport: str) -> None:
     await page.get_by_role("button", name="Pick numbers").click()
     # Give the picker mode a beat to swap in before querying tiles.
     await page.wait_for_timeout(300)
-    tiles = page.locator('[class*="grid-cols-10"] > button:not([disabled])')
+    tiles = page.locator('[data-coupon-grid] button:not([disabled])')
     await tiles.first.wait_for(timeout=10_000)
     n = await tiles.count()
     assert n >= 2, f"not enough available numbers to pick ({n})"
@@ -100,7 +100,7 @@ async def flow_pick_numbers(page: Page, viewport: str) -> None:
     await tiles.nth(1).click()
     await shot(page, viewport, "05_pick_two")
 
-    enter = page.get_by_role("button", name="Enter now").first
+    enter = page.get_by_role("button", name="Go on then").first
     await enter.scroll_into_view_if_needed()
     await enter.click()
     await page.wait_for_url("**/checkout*", timeout=20_000)
@@ -109,11 +109,47 @@ async def flow_pick_numbers(page: Page, viewport: str) -> None:
     print(f"  [pick-numbers/{viewport}] checkout reached for {slug}")
 
 
+async def flow_paid_conversion(page: Page, viewport: str) -> None:
+    """Lucky dip -> skill answer -> details -> pay -> ENTERED only once paid."""
+    slug = await open_first_competition(page, viewport)
+
+    await page.get_by_role("button", name="Lucky Dip").click()
+    enter = page.get_by_role("button", name="Go on then").first
+    await enter.scroll_into_view_if_needed()
+    await enter.click()
+    await page.wait_for_url("**/checkout*", timeout=20_000)
+
+    # Skill question — any numeric answer completes payment; a wrong one just
+    # makes the tickets non-qualifying.
+    answer = page.get_by_label("Your answer to the skill question")
+    await answer.wait_for(timeout=15_000)
+    await answer.fill("1")
+    await answer.press("Enter")
+    await page.get_by_text("Answer recorded").wait_for(timeout=15_000)
+
+    await page.get_by_label("Full name").fill("Test Buyer")
+    await page.get_by_label("Email", exact=True).fill("e2e@example.com")
+    await page.get_by_label("Mobile").fill("07700900000")
+    await page.get_by_label("Winner display name").fill("Test B.")
+    for box in await page.locator('input[type="checkbox"]').all():
+        await box.check()
+    await shot(page, viewport, "07_checkout_ready")
+
+    pay = page.get_by_role("button", name="Sort me out")
+    await pay.scroll_into_view_if_needed()
+    await pay.click()
+
+    # ENTERED must only appear after the order itself flips to paid.
+    await page.get_by_role("heading", name="Entry confirmed — ENTERED").wait_for(timeout=60_000)
+    await shot(page, viewport, "08_entered")
+    print(f"  [paid-conversion/{viewport}] order converted to paid for {slug}")
+
+
 async def run_viewport(pw, viewport: str) -> list[str]:
     failures: list[str] = []
     browser = await pw.chromium.launch(headless=True)
 
-    for name, flow in [("lucky_dip", flow_lucky_dip), ("pick_numbers", flow_pick_numbers)]:
+    for name, flow in [("lucky_dip", flow_lucky_dip), ("pick_numbers", flow_pick_numbers), ("paid_conversion", flow_paid_conversion)]:
         # Fresh context per flow so ticket reservations from the previous
         # flow don't shrink availability under our feet.
         ctx = await browser.new_context(viewport=VIEWPORTS[viewport])

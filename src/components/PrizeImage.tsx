@@ -30,7 +30,9 @@ export function PrizeImage({
   priority?: boolean;
   eyebrow?: string;
 }) {
-  const hasSrc = !!(src && src.trim().length > 0);
+  const [failed, setFailed] = useState(false);
+  useEffect(() => setFailed(false), [src]);
+  const hasSrc = !!(src && src.trim().length > 0) && !failed;
   return (
     <div
       className={`prize-treatment relative aspect-[4/3] w-full ${className}`}
@@ -47,6 +49,7 @@ export function PrizeImage({
           width={size === "thumb" ? 400 : 1280}
           height={size === "thumb" ? 300 : 960}
           draggable={false}
+          onError={() => setFailed(true)}
         />
       ) : (
         <TypographicFallback title={title} eyebrow={eyebrow} size={size} />

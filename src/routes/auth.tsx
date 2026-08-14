@@ -29,6 +29,8 @@ function AuthPage() {
   const [dob, setDob] = useState("");
   const [err, setErr] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [displayName, setDisplayName] = useState("");
+  const [town, setTown] = useState("");
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -57,6 +59,10 @@ function AuthPage() {
         setErr("You must be 18 or over to create an account.");
         return;
       }
+      if (!displayName.trim()) {
+        setErr("Add the name you'd like shown if you win, e.g. Dave R.");
+        return;
+      }
     }
     setBusy(true);
     try {
@@ -68,7 +74,7 @@ function AuthPage() {
           ? {
               options: {
                 emailRedirectTo: window.location.origin,
-                data: { date_of_birth: dob },
+                data: { date_of_birth: dob, display_name: displayName.trim(), town: town.trim() },
               },
             }
           : {}),
@@ -80,7 +86,12 @@ function AuthPage() {
         const { data: session } = await supabase.auth.getSession();
         const uid = session.session?.user.id;
         if (uid) {
-          await supabase.from("profiles" as never).upsert({ id: uid, date_of_birth: dob } as never);
+          await supabase.from("profiles").upsert({
+            user_id: uid,
+            date_of_birth: dob,
+            display_name: displayName.trim(),
+            town: town.trim(),
+          });
         }
       }
       navigate({ to: redirect || "/account", replace: true });
@@ -138,6 +149,40 @@ function AuthPage() {
                 className="w-full rounded-md bg-surface border border-border px-3 py-2 text-sm font-mono"
               />
             </label>
+          )}
+          {mode === "signup" && (
+            <>
+              <label className="block">
+                <div className="text-xs uppercase tracking-widest text-muted-foreground mb-1">
+                  Winner display name · first name + last initial
+                </div>
+                <input
+                  type="text"
+                  required
+                  maxLength={40}
+                  placeholder="Dave R."
+                  value={displayName}
+                  onChange={(e) => setDisplayName(e.target.value)}
+                  className="w-full rounded-md bg-surface border border-border px-3 py-2 text-sm"
+                />
+              </label>
+              <label className="block">
+                <div className="text-xs uppercase tracking-widest text-muted-foreground mb-1">
+                  Town (optional)
+                </div>
+                <input
+                  type="text"
+                  maxLength={60}
+                  placeholder="Romford"
+                  value={town}
+                  onChange={(e) => setTown(e.target.value)}
+                  className="w-full rounded-md bg-surface border border-border px-3 py-2 text-sm"
+                />
+              </label>
+              <p className="text-xs text-muted-foreground">
+                If you win we publish this name and town only — never your email address.
+              </p>
+            </>
           )}
           {err && <div className="text-sm text-signal">{err}</div>}
           <Button type="submit" disabled={busy} className="w-full">

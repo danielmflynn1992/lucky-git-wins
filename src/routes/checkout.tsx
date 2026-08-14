@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { z } from "zod";
 import { SiteNav } from "@/components/SiteNav";
@@ -7,14 +7,17 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { Button } from "@/components/ui/button";
 import { allCompetitionsQueryOptions } from "@/lib/competitions-api";
 import { gbp } from "@/lib/format";
-import { CreditCard, Lock, ShieldCheck } from "lucide-react";
+import { CreditCard, Loader2, Lock, ShieldCheck } from "lucide-react";
 import { SkillWarning } from "@/components/SkillWarning";
 import { EmptyBasketScene } from "@/components/EmptyBasketScene";
 import { SkillQuestionStep } from "@/components/SkillQuestionStep";
 import { EntryStampSequence } from "@/components/EntryStampSequence";
 import { formatDrawTime } from "@/lib/site-stats";
-import { hashSeed } from "@/lib/terry-verdicts";
 import { checkPurchaseAllowed, limitBlockMessage } from "@/lib/account-api";
+import { createPendingOrder, fetchOrderStatus, waitForPaidOrder, type OrderStatus } from "@/lib/checkout-api";
+import { confirmSimulatedPayment, getPaymentMode, startPayment } from "@/lib/checkout.functions";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/use-auth";
 
 interface Reservation {
   token: string;
@@ -26,6 +29,9 @@ interface Reservation {
 const searchSchema = z.object({
   slug: z.string().optional(),
   qty: z.coerce.number().int().positive().max(1000).optional(),
+  order: z.string().uuid().optional(),
+  paid: z.coerce.number().optional(),
+  cancelled: z.coerce.number().optional(),
 });
 
 export const Route = createFileRoute("/checkout")({
@@ -58,17 +64,32 @@ function EmptyBasket() {
 }
 
 function CheckoutInner() {
-  const { slug, qty = 5 } = Route.useSearch();
+  const { slug, qty = 5, order: returnedOrderId } = Route.useSearch();
   const { data: comps = [] } = useQuery(allCompetitionsQueryOptions);
   const comp = (slug ? comps.find((c) => c.slug === slug) : comps[0]) ?? null;
-  const [done, setDone] = useState(false);
+  const { user } = useAuth();
+
   const [reservation, setReservation] = useState<Reservation | null>(null);
   const [answer, setAnswer] = useState<{ isCorrect: boolean; orderRef: string } | null>(null);
-  // Explicit, separate age/residency confirmation — required before payment.
   const [ageConfirmed, setAgeConfirmed] = useState(false);
   const [termsConfirmed, setTermsConfirmed] = useState(false);
   const [limitBlock, setLimitBlock] = useState<string | null>(null);
-  const [checking, setChecking] = useState(false);
+  const [payState, setPayState] = useState<"idle" | "creating" | "paying" | "waiting">("idle");
+  const [payError, setPayError] = useState<string | null>(null);
+  const [paidOrder, setPaidOrder] = useState<OrderStatus | null>(null);
+
+  // Buyer details.
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [displayName, setDisplayName] = useState("");
+  const [town, setTown] = useState("");
+
+  const { data: mode } = useQuery({
+    queryKey: ["payment-mode"],
+    queryFn: () => getPaymentMode(),
+    staleTime: 5 * 60_000,
+  });
 
   useEffect(() => {
     try {
@@ -87,56 +108,137 @@ function CheckoutInner() {
     }
   }, [slug]);
 
-  if (!comp) return <EmptyBasket />;
-  const effectiveQty = reservation?.numbers.length ?? qty;
-  const subtotal = comp.pricePerTicket * effectiveQty;
+  // Signed-in buyers: prefill from profile; a display name is required.
+  useEffect(() => {
+    if (!user) return;
+    setEmail((e) => e || user.email || "");
+    supabase
+      .from("profiles")
+      .select("display_name, town")
+      .eq("user_id", user.id)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (data?.display_name) setDisplayName((d) => d || data.display_name || "");
+        if (data?.town) setTown((t) => t || data.town || "");
+      });
+  }, [user]);
 
-  if (done) {
-    const nums = reservation?.numbers ?? [];
-    const ref = "LG-" + (hashSeed((reservation?.token ?? "") + nums.join(",")) % 900000 + 100000);
+  const clearBasket = useCallback(() => {
+    sessionStorage.removeItem("lgc:reservation");
+    window.dispatchEvent(new Event("lgc:basket-change"));
+  }, []);
+
+  // Returned from a hosted payment page — never show ENTERED until the order
+  // itself says paid.
+  const settled = useRef(false);
+  useEffect(() => {
+    if (!returnedOrderId || settled.current) return;
+    settled.current = true;
+    setPayState("waiting");
+    fetchOrderStatus(returnedOrderId)
+      .then((s) => (s.status === "pending_payment" ? waitForPaidOrder(returnedOrderId) : s))
+      .then((s) => {
+        if (s.status === "paid") {
+          setPaidOrder(s);
+          clearBasket();
+        } else {
+          setPayError(s.failure_reason || "That payment didn't complete. Nothing has been charged.");
+        }
+      })
+      .catch((e) => setPayError(e instanceof Error ? e.message : "Could not confirm payment."))
+      .finally(() => setPayState("idle"));
+  }, [returnedOrderId, clearBasket]);
+
+  if (paidOrder && comp) {
     return (
       <SuccessScreen
         compTitle={comp.title}
-        numbers={nums}
-        entryRef={ref}
+        numbers={paidOrder.numbers}
+        entryRef={"LG-" + paidOrder.order_ref.slice(0, 8).toUpperCase()}
         drawLine={`Drawn ${formatDrawTime(comp.endsAt)}.`}
       />
     );
   }
 
+  if (!comp) return <EmptyBasket />;
+
   if (!reservation) {
+    if (payState === "waiting") return <ConfirmingScreen />;
     return <EmptyBasket />;
   }
+
+  const effectiveQty = reservation.numbers.length ?? qty;
+  const subtotal = comp.pricePerTicket * effectiveQty;
+  const busy = payState !== "idle";
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setPayError(null);
+
+    if (user && !displayName.trim()) {
+      setPayError("Add the name you'd like shown if you win (e.g. Dave R.).");
+      return;
+    }
+
+    setPayState("creating");
+    try {
+      try {
+        const verdict = await checkPurchaseAllowed(Math.round(subtotal * 100));
+        const msg = limitBlockMessage(verdict);
+        if (msg) {
+          setLimitBlock(msg);
+          setPayState("idle");
+          return;
+        }
+        setLimitBlock(null);
+      } catch {
+        setLimitBlock(null);
+      }
+
+      const pending = await createPendingOrder({
+        reservationToken: reservation.token,
+        name,
+        email,
+        phone,
+        displayName: displayName.trim() || undefined,
+        town: town.trim() || undefined,
+      });
+
+      setPayState("paying");
+      const started = await startPayment({
+        data: { orderId: pending.order_id, origin: window.location.origin },
+      });
+
+      if (started.redirectUrl) {
+        window.location.href = started.redirectUrl;
+        return;
+      }
+
+      // No external provider configured (rehearsal mode): settle, then wait for
+      // the order itself to flip to paid before anything says ENTERED.
+      if (!started.alreadyPaid) {
+        await confirmSimulatedPayment({ data: { orderId: pending.order_id } });
+      }
+      setPayState("waiting");
+      const status = await waitForPaidOrder(pending.order_id, 30_000);
+      if (status.status !== "paid") {
+        setPayError(status.failure_reason || "Payment didn't complete. Your tickets have been released.");
+        setPayState("idle");
+        return;
+      }
+      setPaidOrder(status);
+      clearBasket();
+    } catch (err) {
+      setPayError(err instanceof Error ? err.message : "Payment could not be started.");
+      setPayState("idle");
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
       <SiteNav />
       <main className="mx-auto max-w-5xl px-4 py-8 md:py-12 w-full grid gap-8 md:grid-cols-5">
-        <form
-          className="md:col-span-3 space-y-6"
-          onSubmit={async (e) => {
-            e.preventDefault();
-            // Player-set limits are decided by the server; the client only reports them.
-            setChecking(true);
-            try {
-              const verdict = await checkPurchaseAllowed(Math.round(subtotal * 100));
-              const msg = limitBlockMessage(verdict);
-              if (msg) {
-                setLimitBlock(msg);
-                return;
-              }
-              setLimitBlock(null);
-            } catch {
-              // Not signed in / no limits row — nothing to enforce.
-              setLimitBlock(null);
-            } finally {
-              setChecking(false);
-            }
-            setDone(true);
-            sessionStorage.removeItem("lgc:reservation");
-            window.dispatchEvent(new Event("lgc:basket-change"));
-          }}
-        >
+        <form className="md:col-span-3 space-y-6" onSubmit={submit}>
           <div>
             <h1 className="font-display text-3xl md:text-4xl font-semibold tracking-tight">Right then, checkout.</h1>
             <p className="text-muted-foreground mt-1">
@@ -155,15 +257,50 @@ function CheckoutInner() {
           <fieldset className="rounded-2xl bg-card border-2 border-border p-5 space-y-4">
             <legend className="px-2 font-display text-lg font-bold">Your details</legend>
             <div className="grid gap-3 sm:grid-cols-2">
-              <Input label="First name" required placeholder="Gary" />
-              <Input label="Last name" required placeholder="McClover" />
-              <Input label="Email" type="email" required className="sm:col-span-2" placeholder="you@somewhere.co.uk" />
-              <Input label="Mobile" type="tel" required className="sm:col-span-2" placeholder="07…" />
+              <Input
+                label="Full name"
+                required
+                placeholder="Gary McClover"
+                className="sm:col-span-2"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+              <Input
+                label="Email"
+                type="email"
+                required
+                className="sm:col-span-2"
+                placeholder="you@somewhere.co.uk"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <Input
+                label="Mobile"
+                type="tel"
+                required
+                className="sm:col-span-2"
+                placeholder="07…"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+              />
+              <Input
+                label="Winner display name"
+                required={!!user}
+                placeholder="Dave R."
+                value={displayName}
+                onChange={(e) => setDisplayName(e.target.value)}
+              />
+              <Input
+                label="Town (optional)"
+                placeholder="Romford"
+                value={town}
+                onChange={(e) => setTown(e.target.value)}
+              />
             </div>
-            <label className="flex items-start gap-2 text-sm">
-              <input type="checkbox" className="mt-1 h-4 w-4 accent-clover" />
-              <span>Create a free account so I can see my entries next time. (Optional.)</span>
-            </label>
+            <p className="text-xs text-muted-foreground">
+              If you win, we publish the display name and town only — never your email address.
+              Leave it blank and you'll appear as "Ticket #N holder".
+            </p>
           </fieldset>
 
           <fieldset className="rounded-2xl bg-card border-2 border-border p-5 space-y-4">
@@ -172,7 +309,9 @@ function CheckoutInner() {
             </legend>
             <div className="rounded-xl bg-background border-2 border-border p-4 text-sm text-muted-foreground">
               <CreditCard className="inline h-4 w-4 mr-1.5" />
-              Stripe payment form goes here (wired in Phase 2 — no real card charged today).
+              {mode?.external
+                ? "You'll be taken to our secure card page to pay (test mode — use a test card)."
+                : "No payment provider is connected yet, so this checkout settles in rehearsal mode. No card is charged."}
             </div>
           </fieldset>
 
@@ -184,9 +323,7 @@ function CheckoutInner() {
               onChange={(e) => setAgeConfirmed(e.target.checked)}
               className="mt-1 h-4 w-4 accent-clover"
             />
-            <span className="font-semibold">
-              I confirm I am 18 or over and a UK resident.
-            </span>
+            <span className="font-semibold">I confirm I am 18 or over and a UK resident.</span>
           </label>
 
           <label className="flex items-start gap-2 text-sm">
@@ -208,8 +345,16 @@ function CheckoutInner() {
               role="alert"
               className="rounded-md border-2 border-[color:var(--color-ink-red)] bg-[var(--color-paper-raised)] p-4 text-sm font-semibold"
             >
-              {limitBlock}{" "}
-              <Link to="/account" className="underline">Manage your limits</Link>
+              {limitBlock} <Link to="/account" className="underline">Manage your limits</Link>
+            </div>
+          )}
+
+          {payError && (
+            <div
+              role="alert"
+              className="rounded-md border-2 border-[color:var(--color-ink-red)] bg-[var(--color-paper-raised)] p-4 text-sm font-semibold"
+            >
+              {payError}
             </div>
           )}
 
@@ -218,17 +363,22 @@ function CheckoutInner() {
             variant="gold"
             size="xl"
             className="w-full"
-            disabled={!answer || !ageConfirmed || !termsConfirmed || checking}
+            disabled={!answer || !ageConfirmed || !termsConfirmed || busy}
           >
-            {checking
-              ? "Checking your limits…"
-              : !answer
-              ? "Answer the skill question to continue"
-              : !ageConfirmed
-                ? "Confirm you're 18+ to continue"
-                : !termsConfirmed
-                  ? "Tick the T&Cs box to continue"
-                  : `Sort me out — ${gbp(subtotal)}`}
+            {busy ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                {payState === "waiting" ? "Confirming your payment…" : "Setting up payment…"}
+              </>
+            ) : !answer ? (
+              "Answer the skill question to continue"
+            ) : !ageConfirmed ? (
+              "Confirm you're 18+ to continue"
+            ) : !termsConfirmed ? (
+              "Tick the T&Cs box to continue"
+            ) : (
+              `Sort me out — ${gbp(subtotal)}`
+            )}
           </Button>
           {answer && (
             <div className="rounded-md border-2 border-border bg-card p-3 text-xs text-muted-foreground">
@@ -275,6 +425,22 @@ function CheckoutInner() {
             </dl>
           </div>
         </aside>
+      </main>
+      <SiteFooter />
+    </div>
+  );
+}
+
+function ConfirmingScreen() {
+  return (
+    <div className="min-h-screen flex flex-col">
+      <SiteNav />
+      <main className="mx-auto max-w-xl px-4 py-24 w-full flex-1 text-center">
+        <Loader2 className="h-8 w-8 animate-spin mx-auto" />
+        <h1 className="mt-4 font-display text-2xl font-bold">Confirming your payment…</h1>
+        <p className="text-sm text-muted-foreground mt-2">
+          Hold on. We only stamp your entry once the payment has actually cleared.
+        </p>
       </main>
       <SiteFooter />
     </div>

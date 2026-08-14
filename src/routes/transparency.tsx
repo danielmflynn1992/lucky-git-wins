@@ -1,3 +1,4 @@
+import { publicWinnerName } from "@/lib/winner-name";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { SiteNav } from "@/components/SiteNav";
@@ -71,7 +72,7 @@ function TransparencyPage() {
                     </span>
                   )}
                   <span className="tabular-nums">#{String(w.winning_number).padStart(4, "0")}</span>
-                  <span className="text-muted-foreground">{w.winner_display_name}</span>
+                  <span className="text-muted-foreground">{publicWinnerName(w.winner_display_name, w.winning_number)}</span>
                   <Link to="/draws/$id/reveal" params={{ id: w.id }} className="ml-auto underline text-clover">
                     verify →
                   </Link>
