@@ -396,11 +396,15 @@ function Home() {
   );
 }
 
-function Stat({ label, value, tone }: { label: string; value: string; tone?: "clover" }) {
+/** One ruled ledger line: micro-caption label, typewriter value. */
+function LedgerRow({ label, value, tone }: { label: string; value: string; tone?: "red" }) {
   return (
-    <div>
-      <dt className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground">{label}</dt>
-      <dd className={"mt-1 font-display font-black tabular-nums text-3xl " + (tone === "clover" ? "text-clover" : "text-foreground")}>
+    <div className="ledger__row">
+      <dt className="ledger__label">{label}</dt>
+      <dd
+        className="ledger__value text-[15px]"
+        style={tone === "red" ? { color: "var(--color-ink-red)" } : undefined}
+      >
         {value}
       </dd>
     </div>
