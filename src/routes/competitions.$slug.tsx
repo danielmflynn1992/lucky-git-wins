@@ -1,4 +1,5 @@
 import { createFileRoute, notFound, redirect, Link, useNavigate } from "@tanstack/react-router";
+import { ukDate, ukDateTime } from "@/lib/format";
 import { useMemo, useState } from "react";
 import { useSuspenseQuery, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Ticket, Shuffle, Shield, PoundSterling, CheckCircle2, Info, Loader2, AlertTriangle } from "lucide-react";
@@ -354,8 +355,8 @@ function CompDetail() {
                 </div>
                 {(c.postalCutoffAt || c.emailCutoffAt) && (
                   <div className="mt-0.5 font-mono text-[11px] text-muted-foreground">
-                    {c.postalCutoffAt && <>Postal cut-off {new Date(c.postalCutoffAt).toLocaleDateString("en-GB")}. </>}
-                    {c.emailCutoffAt && <>Email cut-off {new Date(c.emailCutoffAt).toLocaleDateString("en-GB")}.</>}
+                    {c.postalCutoffAt && <>Postal cut-off {ukDate(c.postalCutoffAt)}. </>}
+                    {c.emailCutoffAt && <>Email cut-off {ukDate(c.emailCutoffAt)}.</>}
                   </div>
                 )}
               </div>
@@ -434,7 +435,7 @@ function CompDetail() {
 
             <h3 className="mt-8 font-display text-xl font-black">Rules for this competition</h3>
             <ul className="mt-3 space-y-2 text-sm text-foreground/80">
-              <li className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-clover mt-0.5 shrink-0" /> Closing: <b>{new Date(c.endsAt).toLocaleString("en-GB")}</b> — or when sold out.</li>
+              <li className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-clover mt-0.5 shrink-0" /> Closing: <b>{ukDateTime(c.endsAt)}</b> — or when sold out.</li>
               <li className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-clover mt-0.5 shrink-0" /> Maximum entries per person: <b>{c.maxPerPerson}</b>.</li>
               <li className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-clover mt-0.5 shrink-0" /> Total pool: <b>{c.totalTickets}</b> tickets — one ticket is 1 in {c.totalTickets}.</li>
               <li className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-clover mt-0.5 shrink-0" /> A correct skill answer is required to qualify. Wrong answer, no entry, no refund.</li>

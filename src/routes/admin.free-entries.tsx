@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { ukDateTime } from "@/lib/format";
 import { useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
@@ -186,8 +187,8 @@ function FreeEntries() {
           </div>
           {selected && (
             <p className="mt-3 text-xs text-muted-foreground font-mono">
-              Postal cut-off {selected.postal_cutoff_at ? new Date(selected.postal_cutoff_at).toLocaleString("en-GB") : "—"} ·
-              Email cut-off {selected.email_cutoff_at ? new Date(selected.email_cutoff_at).toLocaleString("en-GB") : "—"}
+              Postal cut-off {selected.postal_cutoff_at ? ukDateTime(selected.postal_cutoff_at) : "—"} ·
+              Email cut-off {selected.email_cutoff_at ? ukDateTime(selected.email_cutoff_at) : "—"}
             </p>
           )}
           <div className="mt-4">
@@ -277,7 +278,7 @@ function FreeEntries() {
                 <span className="font-mono text-xs">{STATUS_LABEL[r.status] ?? r.status}</span>
                 {r.assigned_ticket_number != null && <span className="font-mono text-xs">#{r.assigned_ticket_number}</span>}
                 <span className="ml-auto text-[11px] text-muted-foreground font-mono">
-                  {new Date(r.received_at).toLocaleString("en-GB")}
+                  {ukDateTime(r.received_at)}
                 </span>
               </li>
             ))}

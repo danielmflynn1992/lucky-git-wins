@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { ukDate } from "@/lib/format";
 import { useQuery } from "@tanstack/react-query";
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -62,7 +63,7 @@ function TransparencyPage() {
               {winners.map((w) => (
                 <li key={w.id} className="py-3 flex flex-wrap items-baseline gap-x-4 gap-y-1 font-mono text-sm">
                   <span className="tabular-nums text-muted-foreground">
-                    {new Date(w.drawn_at).toLocaleDateString("en-GB")}
+                    {ukDate(w.drawn_at)}
                   </span>
                   <span className="font-bold">{w.competition_title}</span>
                   {w.isDemo && (

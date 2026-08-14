@@ -1,4 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { ukDateTime } from "@/lib/format";
 import { useEffect, useState } from "react";
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -181,7 +182,7 @@ function VerifyDrawPage() {
                 {String(d.winning_number).padStart(3, "0")}
               </div>
               <div className="mt-2 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                {isDemo(d) ? DEMO_WINNER_NAME : d.winner_display_name} · drawn {new Date(d.drawn_at).toLocaleString("en-GB")}
+                {isDemo(d) ? DEMO_WINNER_NAME : d.winner_display_name} · drawn {ukDateTime(d.drawn_at)}
               </div>
             </div>
 
@@ -290,7 +291,7 @@ function VerifyDrawPage() {
                           </>
                         )}
                         <dt className="text-muted-foreground">Checked at</dt>
-                        <dd>{new Date(server.checkedAt).toLocaleString("en-GB")}</dd>
+                        <dd>{ukDateTime(server.checkedAt)}</dd>
                       </dl>
                       <p className="mt-2 font-mono text-[10px] text-muted-foreground">
                         Don't trust this page either — call it yourself:{" "}

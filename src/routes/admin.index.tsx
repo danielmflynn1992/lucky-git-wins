@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { ukDate, ukDateTime } from "@/lib/format";
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
@@ -326,7 +327,7 @@ function Admin() {
                     <dt className="text-muted-foreground">Revenue</dt>
                     <dd className="text-right font-bold">{gbp(c.sold * c.price_per_ticket)}</dd>
                     <dt className="text-muted-foreground">Ends</dt>
-                    <dd className="text-right">{new Date(c.ends_at).toLocaleDateString("en-GB")}</dd>
+                    <dd className="text-right">{ukDate(c.ends_at)}</dd>
                   </dl>
                   <div className="mt-3 flex flex-wrap gap-2">
                     <Button
@@ -402,7 +403,7 @@ function Admin() {
                       </td>
                       <td className="p-3 tabular-nums">{exact(c.sold)}/{exact(c.total_tickets)}</td>
                       <td className="p-3 font-bold">{gbp(c.sold * c.price_per_ticket)}</td>
-                      <td className="p-3 text-muted-foreground">{new Date(c.ends_at).toLocaleDateString("en-GB")}</td>
+                      <td className="p-3 text-muted-foreground">{ukDate(c.ends_at)}</td>
                       <td className="p-3">
                         <div className="flex gap-1">
                           <button className="p-2 rounded-lg hover:bg-background" title="Duplicate"><Copy className="h-4 w-4" /></button>
@@ -491,8 +492,8 @@ function Admin() {
                     <span className="text-muted-foreground text-xs">&rarr; {n.recipient}</span>
                     <span className="text-muted-foreground text-xs ml-auto tabular-nums">
                       {n.sent_at
-                        ? `sent ${new Date(n.sent_at).toLocaleString("en-GB")}`
-                        : new Date(n.created_at).toLocaleString("en-GB")}
+                        ? `sent ${ukDateTime(n.sent_at)}`
+                        : ukDateTime(n.created_at)}
                     </span>
                   </div>
                   {n.detail && (
