@@ -307,6 +307,20 @@
   h3 { font-size: var(--text-display-md); }
   h4 { font-size: var(--text-display-sm); }
 
+  /* Headings are typeset, not floated: no oversized margins. */
+  h1, h2, h3, h4 { margin-block: 0; }
+
+  /* PROSE — humanist sans, small, near-black ink. Never the typewriter. */
+  p, li, dd:not(.font-mono), blockquote {
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    line-height: 1.5;
+  }
+  p, li, blockquote { color: #1a1a1a; }
+  @media (min-width: 768px) {
+    p, li, blockquote { font-size: 1rem; }
+  }
+
   /* Desktop lets the hero grow, but never past 72px. */
   @media (min-width: 768px) {
     h1 { font-size: clamp(3rem, 6vw, 4.5rem); }
