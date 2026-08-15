@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import terryImg from "../assets/terry-panel.png.asset.json";
+import terryImg from "../assets/terry-cutout.png.asset.json";
 
 /**
  * Terry's Tip of the Week — rotates on the ISO week number so everyone sees
@@ -35,8 +35,8 @@ export function TerrysTip({ className = "" }: { className?: string }) {
         <img
           src={terryImg.url}
           alt="Terry, the Lucky Git Comps mascot"
-          width={230}
-          height={312}
+          width={545}
+          height={700}
           decoding="async"
           loading="lazy"
           className="pointer-events-none h-9 w-auto shrink-0 select-none object-contain"

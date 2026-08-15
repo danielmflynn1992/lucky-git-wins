@@ -5,7 +5,7 @@
  */
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import terryImg from "@/assets/terry-panel.png.asset.json";
+import terryImg from "@/assets/terry-cutout.png.asset.json";
 import { Button } from "@/components/ui/button";
 import { Perforation } from "@/components/Perforation";
 import { pickVerdict } from "@/lib/terry-verdicts";
@@ -337,7 +337,7 @@ function Stub({ compTitle, numbers, entryRef }: { compTitle: string; numbers: nu
         </div>
         <Perforation orientation="vertical" color="rgba(17,17,17,0.45)" />
         <div className="flex w-16 shrink-0 flex-col items-center justify-center gap-1 p-1.5">
-          <img src={terryImg.url} alt="Terry" width={230} height={312} className="h-10 w-auto object-contain" />
+          <img src={terryImg.url} alt="Terry" width={545} height={700} className="h-10 w-auto object-contain" />
           <span className="font-mono text-[7px] uppercase tracking-[0.16em] text-[#111]/60">Terry</span>
         </div>
       </div>
