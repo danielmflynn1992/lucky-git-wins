@@ -5,7 +5,7 @@
  */
 import { Link } from "@tanstack/react-router";
 import { Check } from "lucide-react";
-import terryImg from "@/assets/terry-panel.png.asset.json";
+import terryImg from "@/assets/terry-cutout.png.asset.json";
 
 const LINES: { head: string; body: string }[] = [
   {
@@ -79,8 +79,8 @@ export function GuaranteePanel({ compact = false }: { compact?: boolean }) {
           <img
             src={terryImg.url}
             alt="Terry, thumbs up"
-            width={230}
-            height={312}
+            width={545}
+            height={700}
             loading="lazy"
             decoding="async"
             className="h-16 w-auto shrink-0 select-none object-contain sm:h-20"

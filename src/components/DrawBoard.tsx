@@ -12,7 +12,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { drawBoardBySlugQuery, drawBoardByDrawIdQuery, type DrawBoardData } from "@/lib/draw-board-api";
 import { Perforation } from "@/components/Perforation";
 import { ExampleBanner } from "@/lib/demo";
-import terryImg from "@/assets/terry-panel.png.asset.json";
+import terryImg from "@/assets/terry-cutout.png.asset.json";
 
 /* ─────────────────────────── timings (ms) ─────────────────────────── */
 const T_HEADER = 200;
@@ -256,8 +256,8 @@ function DrawBoardView({ data }: { data: DrawBoardData }) {
               <img
                 src={terryImg.url}
                 alt="Terry, the Lucky Git Comps mascot, watching the board"
-                width={230}
-                height={312}
+                width={545}
+                height={700}
                 loading="lazy"
                 decoding="async"
                 className="hidden sm:block h-[clamp(70px,14vw,120px)] w-auto select-none object-contain"
